@@ -64,11 +64,11 @@ h1{-webkit-font-smoothing:antialiased;}
 h2{font-weight:bold;font-size:28px;}
 hr{clear:both;margin:20px 0 25px 0;border:none;border-top:1px solid #444;visibility:visible;display:block;}
 section{padding:50px 0;}
-body{background:#f5f5f5;background:#fff;color:#555;font:15px "Helvetica Nueue",sans-serif;}
-.wrapper{width:80%;margin:0 auto;box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;padding:60px 0;}.wrapper:after{content:" ";display:block;clear:both;}
-.wrapper article{min-height:310px;width:60%;float:left;}
-.wrapper aside{width:20%;float:right;}.wrapper aside ul{margin:2px 0 30px;}.wrapper aside ul a{display:block;padding:3px 0 3px 10px;margin:2px 0;border-left:4px solid #eee;}.wrapper aside ul a:hover{border-color:#80c846;}
-.wrapper aside h3{font-size:18px;color:#333;font-weight:bold;line-height:2em;margin:32px 9px 0;border-bottom:1px solid #eee;}
+body{background:#f5f5f5;background:#fff;color:#555;font:15px "Helvetica Nueue",sans-serif;padding:0px 0 0px;}
+.wrapper{width:960px;margin:0 auto;box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;padding:60px 0;}.wrapper:after{content:" ";display:block;clear:both;}
+.wrapper article{min-height:310px;width:650px;float:left;}
+.wrapper aside{width:270px;float:right;}.wrapper aside ul{margin:2px 0 30px;}.wrapper aside ul a{display:block;padding:3px 0 3px 10px;margin:2px 0;border-left:4px solid #eee;}.wrapper aside ul a:hover{border-color:#80c846;}
+.wrapper aside h3{font-size:18px;color:#333;font-weight:bold;line-height:2em;margin:9px 0;border-bottom:1px solid #eee;}
 .wrapper aside.stick{position:fixed;right:50%;margin-right:-480px;top:120px;bottom:0;overflow:hidden;}
 .half{width:50%;float:left;box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;}
 header{position:fixed;top:0;z-index:1000;width:100%;height:50px;line-height:50px;padding:30px 0;background:#fff;background:rgba(255, 255, 255, 0.95);border-bottom:1px solid #ccc;box-shadow:0 4px 0 rgba(0, 0, 0, 0.1);}header #logo{position:absolute;left:50%;margin-left:-480px;}
@@ -83,9 +83,9 @@ header nav a.download:active{box-shadow:0 1px 0 #6dae38;top:2px;-webkit-transiti
 #getLogo{top:85px;left:50%;padding:20px;margin-left:-480px;}#getLogo ul{margin:5px 0;}
 #getLogo li{margin:1px 0;}
 #news{background:#f5f5f5;color:#999;font-size:17px;box-shadow:0 1px 0 rgba(0, 0, 0, 0.1);position:relative;z-index:2;padding:3px 0;}#news ul{box-sizing:border-box;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;background:url(/assets/images/news.png) 10px center no-repeat;padding:19px 0 19px 60px;}
-#content{padding:15px 0;}
+#content{padding:30px 0;}
 #top{background:#80c846 url(/assets/images/header-pattern.png) fixed;box-shadow:0 -4px 0 rgba(0, 0, 0, 0.1) inset;padding:0;position:relative;}#top .wrapper{padding:30px 0;}
-#top h1{float:left;padding-top:15px;color:#fff;font-size:35px;line-height:48px;text-shadow:2px 2px 0 rgba(0, 0, 0, 0.1);margin-left:10px;}#top h1 a{text-decoration:none;color:#fff;}
+#top h1{float:left;color:#fff;font-size:35px;line-height:48px;text-shadow:2px 2px 0 rgba(0, 0, 0, 0.1);}#top h1 a{text-decoration:none;color:#fff;}
 #top nav{float:right;margin-top:10px;line-height:25px;}#top nav .versions,#top nav form{float:left;margin:0 5px;}
 #top nav .versions{height:25px;display:inline-block;border:1px solid #6dae38;border-radius:3px;background:#80c846;background:-moz-linear-gradient(top, #80c846 0%, #6dae38 100%);background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #80c846), color-stop(100%, #6dae38));background:-webkit-linear-gradient(top, #80c846 0%, #6dae38 100%);background:-o-linear-gradient(top, #80c846 0%, #6dae38 100%);background:-ms-linear-gradient(top, #80c846 0%, #6dae38 100%);background:linear-gradient(top, #80c846 0%, #6dae38 100%);filter:progid:DXImageTransform.Microsoft.gradient( startColorstr='#80c846', endColorstr='#6dae38',GradientType=0 );box-shadow:inset 0 -1px 1px #80c846;text-align:center;color:#fff;text-shadow:-1px -1px 0 #6dae38;}#top nav .versions span{padding:0 4px;position:absolute;}#top nav .versions span:before{content:"⬍";color:rgba(0, 0, 0, 0.4);text-shadow:1px 1px 0 #80c846;margin-right:4px;}
 #top nav .versions select{opacity:0;position:relative;z-index:9;}
@@ -125,4 +125,3 @@ form dl{padding:10px 0;}
 dd.info{color:#888;font-size:12px;}
 dd.error{color:#c00;}
 aside a[href^="http"]:after,.doc a[href^="http"]:after{content:url(/assets/images/external.png);vertical-align:middle;margin-left:5px;}
-img.resize{width:44.8px;height74.18px;float:left;}

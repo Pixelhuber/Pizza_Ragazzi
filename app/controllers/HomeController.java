@@ -1,12 +1,26 @@
 package controllers;
 
 import play.mvc.*;
+import play.db.*;
+
+import views.html.*;
+
+import javax.inject.Inject;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * This controller contains an action to handle HTTP requests
  * to the application's home page.
  */
 public class HomeController extends Controller {
+
+    private final AssetsFinder assetsFinder;
+
+    @Inject
+    public HomeController(AssetsFinder assetsFinder) {
+        this.assetsFinder = assetsFinder;
+    }
 
     /**
      * An action that renders an HTML page with a welcome message.
@@ -15,15 +29,11 @@ public class HomeController extends Controller {
      * <code>GET</code> request with a path of <code>/</code>.
      */
     public Result index() {
-        return ok(views.html.index.render());
-    }
-    
-    public Result explore() {
-        return ok(views.html.explore.render());
-    }
-    
-    public Result tutorial() {
-        return ok(views.html.tutorial.render());
+        return ok(
+            index.render(
+                "Your new application is ready.",
+                assetsFinder
+            ));
     }
 
 }
