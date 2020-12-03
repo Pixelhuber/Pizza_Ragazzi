@@ -1,0 +1,23 @@
+*{
+    font-family: "Arial Black", sans-serif;
+}
+table {
+    border-collapse: collapse;
+    width: 50%;
+    margin: auto;
+}
+th, td {
+    padding: 4px;
+    text-align: center;
+    border: 4px black solid;
+}
+
+tr:hover {
+    background-color: #4CAF50;
+}
+
+h2{
+    text-align: center;
+    font-size: 7vw;
+}
+
