@@ -43,6 +43,7 @@ public class HomeController extends Controller {
                 ));
     }
     public Result profile(){
-        return ok(views.html.profile.render());
+        return ok(profile.render("Profiles",
+                assetsFinder));
     }
 }
