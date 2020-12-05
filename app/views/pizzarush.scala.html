@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="stylesheet" type="text/css" href="style_pizzarush.css">
+  <link rel="stylesheet" href="navbar/styleNavbar.css">
+
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script type="text/javascript" src="navbar/loadNavbar.js"></script>
+  <script type="text/javascript" src="functions_pizzarush.js"></script>
+
+  <title>Pizza-Rush</title>
+</head>
+
+<body onload="populateIngredientSection(); populateOrderSection()">
+
+  <!--NAVIGATION BAR ------------->
+  <div id="nav-placeholder"></div>
+
+  <!------------------------------>
+
+  <div id="pizza_layer"> </div>
+
+  <!--diese Ebenen sorgen dafür, dass z.B Tomaten immer über Teig gerendert werden usw. -->
+  <div id="dough_layer"> </div>
+  <div id="tomato_layer"> </div>
+  <div id="cheese_layer"> </div>
+  <div id="salami_layer"> </div>
+
+
+
+  <div id="oven_container">
+    <img class="oven" src="tmp_images_in_src/oven.png" alt="Ofen"/>
+    <img class="oven" src="tmp_images_in_src/oven.png" alt="Ofen"/>
+    <img class="oven" src="tmp_images_in_src/oven.png" alt="Ofen"/>
+    <img class="oven" src="tmp_images_in_src/oven.png" alt="Ofen"/>
+  </div>
+
+  <section>
+
+    <div id="ingredientSection">
+      <h1>INGREDIENTI</h1>
+
+      <div class="scroll_container">
+
+        <!--INGREDIENT LIST POPULATED DYNAMICALLY -->
+
+      </div>
+
+    </div>
+
+    <div id="workSurface"></div>
+
+    <div id="orderSection">
+      <h1>ORDINI</h1>
+
+      <div class="scroll_container">
+
+        <!--ORDER LIST POPULATED DYNAMICALLY -->
+
+      </div>
+
+    </div>
+
+  </section>
+
+</body>
+</html>
