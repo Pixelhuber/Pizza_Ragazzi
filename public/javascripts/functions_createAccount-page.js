@@ -33,7 +33,7 @@ function validateCreateAccountData() {
     var password = document.forms['createAccountForm']['password'];
     var password2 = document.forms['createAccountForm']['password2'];
 
-    if (password.value === password2.value) {
+    if (password.value === password2.value && password.value !== "") {
         window.location.href = "profile";
     } else {
         alert("Passwörter stimmen nicht überein!")
