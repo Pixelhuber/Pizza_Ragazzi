@@ -36,4 +36,12 @@ public class HomeController extends Controller {
             ));
     }
 
+    public Result highscore() {
+        return ok(
+                highscore.render(
+                        "Highscores",
+                        assetsFinder
+                ));
+    }
+
 }
