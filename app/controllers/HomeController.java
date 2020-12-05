@@ -35,7 +35,6 @@ public class HomeController extends Controller {
                 assetsFinder
             ));
     }
-
     public Result highscore() {
         return ok(
                 highscore.render(
@@ -43,5 +42,7 @@ public class HomeController extends Controller {
                         assetsFinder
                 ));
     }
-
+    public Result profile(){
+        return ok(views.html.profile.render());
+    }
 }

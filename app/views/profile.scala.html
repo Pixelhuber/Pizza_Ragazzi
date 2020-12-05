@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+        <link rel="stylesheet" type="text/css" href=@routes.Assets.versioned("stylesheets/style.css")>
+        <link rel="stylesheet" type="text/css" href=@routes.Assets.versioned("stylesheets/style_profile-page-new.css")>
+
+        <!--
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script type="text/javascript" src="navbar/loadNavbar.js"></script>
+        <link rel="stylesheet" href="navbar/styleNavbar.css">
+        -->
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type="text/javascript" src=@routes.Assets.versioned("javascripts/functions_profile-page.js")></script>
+
+            <!--Bootstrap-->
+        <link rel="stylesheet" href=@routes.Assets.versioned("stylesheets/bootstrap.min.css")>
+
+        <title>Profile-Page</title>
+    </head>
+
+    <body id="body">
+            <!--Navigation bar--
+        <div id="nav-placeholder"></div>
+            !--end of Navigation bar-->
+
+        <h1 id="heading">Profile</h1>
+        <br>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-9">
+                    <img id="profile-picture" src=@routes.Assets.versioned("images/profile-icon.png") alt="profile-picture" width="300" height="300"/>
+                    <form name="userForm">
+                        <h1 id="username">Username</h1>
+                    </form>
+                    <div id="p-image">
+            </div>
+                    <button id="profileButton">Edit Profile</button>
+                </div>
+
+                <div class=col-md-3">
+                    <h1 id="rank">Rank</h1>
+                    <div id="level">Level 2</div>
+                    XP: 150
+                </div>
+            </div>
+        </div>
+
+
+        <br>
+        <br>
+        <br>
+
+        <h1 id="achievements">Achievements:</h1>
+
+        <script >
+        displayAchievements()
+        </script>
+
+    </body>
+</html>
