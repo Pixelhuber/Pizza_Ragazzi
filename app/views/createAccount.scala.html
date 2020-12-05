@@ -3,18 +3,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="style_createAccount-page.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.js"></script>
-    <script type="text/javascript" src="functions_createAccount-page.js"></script>
-    <script type="text/javascript" src="functions.js"></script>
+    <link rel="stylesheet" media="screen" href="@assetsFinder.path("stylesheets/style_createAccount-page.css")">
+    <script src="@assetsFinder.path("javascripts/functions_createAccount-page.js")" type="text/javascript"></script>
+    <script src="@assetsFinder.path("javascripts/functions.js")" type="text/javascript"></script>
     <title>Account erstellen</title>
 </head>
 <body>
 
 <h1>PIZZA RAGAZZI</h1>
 
-<form action="index.html" name="loginForm" onsubmit="return validateCreateAccountData()">
+<form name="createAccountForm">
 
     <br><br><br>
     <label for="username">BENUTZERNAME</label>
@@ -43,9 +43,10 @@
         </span>
     </div>
     <br><br>
-    <input class="inputExceptPasswords" id="createAccount_button" type="submit" value="CREATE ACCOUNT">
 
 </form>
+
+    <input class="inputExceptPasswords" type="button" id="createAccount_button" value="CREATE ACCOUNT" onclick="validateCreateAccountData()">
 
 </body>
 </html>

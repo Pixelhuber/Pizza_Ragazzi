@@ -44,6 +44,8 @@ button{
 #createAccount_button {
     display: block;
     margin: auto;
+    font-size: 115%;
+    text-align: center;
     width: 267px;
     height: 45px;
 }

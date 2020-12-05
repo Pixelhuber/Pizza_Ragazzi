@@ -20,11 +20,14 @@ function validateLoginData() {
     var password = document.forms['loginForm']['password'];
 
     if (username.value === "admin" && password.value === "admin") {
-        return true;
+        window.location.href = "profile";
     }
     else {
         alert("Ungültige Zugangsdaten!")
-        return false;
     }
+}
+
+function changePage() {
+    window.location.href = "createAccount";
 }
 

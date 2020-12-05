@@ -28,15 +28,14 @@ $(function() {
 });
 
 function validateCreateAccountData() {
-    var username = document.forms['loginForm']['username'];
-    var email = document.forms['loginForm']['email'];
-    var password = document.forms['loginForm']['password'];
-    var password2 = document.forms['loginForm']['password2'];
+    var username = document.forms['createAccountForm']['createAccountForm'];
+    var email = document.forms['createAccountForm']['email'];
+    var password = document.forms['createAccountForm']['password'];
+    var password2 = document.forms['createAccountForm']['password2'];
 
     if (password.value === password2.value) {
-        return true;
+        window.location.href = "profile";
     } else {
         alert("Passwörter stimmen nicht überein!")
-        return false;
     }
 }

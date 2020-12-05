@@ -47,6 +47,8 @@ button{
 }
 
 #login_button {
+    font-size: 115%;
+    text-align: center;
     width: 267px;
     height: 45px;
 }
