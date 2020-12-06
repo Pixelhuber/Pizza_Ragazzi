@@ -4,12 +4,11 @@
 <head>
   <meta charset="UTF-8">
 
-  <link rel="stylesheet" type="text/css" href="style_pizzarush.css">
-  <link rel="stylesheet" href="navbar/styleNavbar.css">
+  <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_pizzarush.css")">
+  <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/styleNavbar.css")">
 
-  <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.js"></script>
-  <script type="text/javascript" src="navbar/loadNavbar.js"></script>
-  <script type="text/javascript" src="functions_pizzarush.js"></script>
+  <script type="text/javascript" src="@routes.Assets.versioned("javascripts/loadNavbar.js")"></script>
+  <script type="text/javascript" src="@routes.Assets.versioned("javascripts/functions_pizzarush.js")"></script>
 
   <title>Pizza-Rush</title>
 </head>
@@ -32,10 +31,10 @@
 
 
   <div id="oven_container">
-    <img class="oven" src="tmp_images_in_src/oven.png" alt="Ofen"/>
-    <img class="oven" src="tmp_images_in_src/oven.png" alt="Ofen"/>
-    <img class="oven" src="tmp_images_in_src/oven.png" alt="Ofen"/>
-    <img class="oven" src="tmp_images_in_src/oven.png" alt="Ofen"/>
+    <img class="oven" src=@routes.Assets.versioned("images/oven.png") alt="Ofen"/>
+    <img class="oven" src=@routes.Assets.versioned("images/oven.png") alt="Ofen"/>
+    <img class="oven" src=@routes.Assets.versioned("images/oven.png") alt="Ofen"/>
+    <img class="oven" src=@routes.Assets.versioned("images/oven.png") alt="Ofen"/>
   </div>
 
   <section>

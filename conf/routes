@@ -15,3 +15,5 @@ GET     /assets/*file               controllers.Assets.versioned(file)
 GET     /highscore                  controllers.HomeController.highscore
 
 GET     /profile                    controllers.HomeController.profile
+
+GET     /main                       controllers.HomeController.main
