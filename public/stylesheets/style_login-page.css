@@ -72,3 +72,16 @@ span {
     -ms-user-select: none;
     user-select: none;
 }
+
+#username_error, #password_error, #login_error {
+    width: 345px;
+    color: #c8290d;
+    display: none;
+    margin-bottom: -18px;
+}
+
+#login_error {
+    text-align: center;
+    margin: auto;
+    font-size: 18px;
+}

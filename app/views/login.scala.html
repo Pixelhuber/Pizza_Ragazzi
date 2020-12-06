@@ -19,21 +19,24 @@
     <br><br><br>
     <label for="username">BENUTZERNAME</label>
     <br>
-    <input class="inputExceptPasswords" type="text" id="username" name="username" required>
-    <br><br>
+    <input class="inputExceptPasswords" type="text" id="username" name="username">
+    <div id="username_error">Bitte Nutzernamen eintragen!</div>
+    <br><br><br>
     <label for="password">PASSWORT</label>
     <div class="divPasswordInputs">
-        <br>
-        <input class="inputPasswords" type="password" id="password" name="password" required>
+        <br><br>
+        <input class="inputPasswords" type="password" id="password" name="password">
         <span id="visibilityButton1" class="material-icons">
         visibility_off
         </span>
     </div>
-    <br><br>
+    <div id="password_error">Bitte Passwort eintragen!</div>
+    <br><br><br>
 
 </form>
 
     <input class="submitButtons inputExceptPasswords" type="button" id="login_button" value="ANMELDEN" onclick="validateLoginData()">
+    <div id="login_error">Falsche Zugansdaten!</div>
     <br><br>
 
 <form name="createAccountForm">
