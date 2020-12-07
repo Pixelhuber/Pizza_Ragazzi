@@ -34,7 +34,7 @@ function validateCreateAccountData() {
     var password2 = document.forms['createAccountForm']['password2'];
 
     if (password.value === password2.value && password.value !== "") {
-        window.location.href = "pizzarush";
+        window.location.href = "main";
     } else {
         alert("Passwörter stimmen nicht überein!")
     }

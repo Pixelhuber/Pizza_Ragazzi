@@ -41,7 +41,7 @@ function validateLoginData() {
     var login_error = document.getElementById("login_error");
 
     if (username.value === "admin" && password.value === "admin") {
-        window.location.href = "pizzarush";
+        window.location.href = "main";
     }
 
     let usernameTyped = username.value.length >= 1;
