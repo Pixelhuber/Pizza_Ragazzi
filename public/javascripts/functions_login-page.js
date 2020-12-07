@@ -1,7 +1,9 @@
 $(function() {
     var visibilityToggle1 = document.getElementById("visibilityButton1");
+
     var username = document.getElementById("username");
     var password = document.getElementById("password");
+
     var username_error = document.getElementById("username_error");
     var password_error = document.getElementById("password_error");
     var login_error = document.getElementById("login_error");
@@ -14,7 +16,6 @@ $(function() {
     });
 
     password.addEventListener('input', function() {
-
         if (password.value.length >= 1) {
             password_error.style.display = "none";
             login_error.style.display = "none";
@@ -36,6 +37,7 @@ $(function() {
 function validateLoginData() {
     var username = document.forms['loginForm']['username'];
     var password = document.forms['loginForm']['password'];
+
     var username_error = document.getElementById("username_error");
     var password_error = document.getElementById("password_error");
     var login_error = document.getElementById("login_error");

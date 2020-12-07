@@ -54,7 +54,7 @@ button{
 }
 
 #createAccount_button {
-    width: 200px;
+    width: 210px;
 }
 
 .divPasswordInputs {
@@ -73,11 +73,11 @@ span {
     user-select: none;
 }
 
-#username_error, #password_error, #login_error {
+.error {
     width: 345px;
     color: #c8290d;
     display: none;
-    margin-bottom: -18px;
+    margin-bottom: -20px;
 }
 
 #login_error {

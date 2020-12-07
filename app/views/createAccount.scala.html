@@ -19,34 +19,49 @@
     <br><br><br>
     <label for="username">BENUTZERNAME</label>
     <br>
-    <input class="inputExceptPasswords" type="text" id="username" name="username" required>
+    <input class="inputExceptPasswords" type="text" id="username" name="username">
+    <div class="error" id="username_error">Bitte Nutzernamen eintragen!</div>
     <br><br>
     <label for="email">EMAIL</label>
     <br>
-    <input class="inputExceptPasswords" type="email" id="email" name="email" required>
+    <input class="inputExceptPasswords" type="email" id="email" name="email">
+    <div class="error" id="email_error">Bitte Email eintragen!</div>
     <br><br>
     <label for="password">PASSWORT</label>
     <div class="divPasswordInputs">
         <br>
-        <input class="inputPasswords" type="password" id="password" name="password" required>
+        <input class="inputPasswords" type="password" id="password" name="password">
         <span id="visibilityButton1" class="material-icons">
         visibility_off
         </span>
+    </div>
+    <div class="error" id="password_error">Bitte Passwort eintragen!
+    <br><br>
     </div>
     <br>
     <label for="password2">PASSWORT WIEDERHOLEN</label>
     <div class="divPasswordInputs">
         <br>
-        <input class="inputPasswords" type="password" id="password2" name="password2" required>
+        <input class="inputPasswords" type="password" id="password2" name="password2">
         <span id="visibilityButton2" class="material-icons">
         visibility_off
         </span>
     </div>
+    <div class="error" id="password_error2">Bitte Passwort eintragen!
     <br><br>
+    </div>
+    <br><br><br>
 
 </form>
 
-    <input class="inputExceptPasswords" type="button" id="createAccount_button" value="CREATE ACCOUNT" onclick="validateCreateAccountData()">
+    <input class="submitButtons inputExceptPasswords" type="button" id="createAccount_button" value="CREATE ACCOUNT" onclick="validateCreateAccountData()">
+    <br><br>
 
+<form name="loginForm">
+
+        <label for="createAccount_button">Bereits einen Account?</label>
+        <input class="submitButtons inputExceptPasswords" type="button" id="login_button" value="ANMELDEN" onclick="changePage()">
+
+</form>
 </body>
 </html>
