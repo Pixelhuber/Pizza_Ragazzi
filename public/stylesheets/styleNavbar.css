@@ -1,7 +1,7 @@
-*{
-    font-family: "Arial Black", sans-serif;
-}
+
 .nav, .menu {
+    font-family: "Arial Black", sans-serif;
+    font-size:1.1vw;
     top: 1%;
     left: 1%;
     display: flex;
