@@ -44,6 +44,7 @@ function validateLoginData() {
 
     if (username.value === "admin" && password.value === "admin") {
         window.location.href = "main";
+        return;
     }
 
     let usernameTyped = username.value.length >= 1;
