@@ -2,8 +2,39 @@ $(function() {
     var visibilityToggle1 = document.getElementById("visibilityButton1");
     var visibilityToggle2 = document.getElementById("visibilityButton2");
 
+    var username = document.getElementById("username");
+    var email = document.getElementById("email");
     var password = document.getElementById("password");
     var password2 = document.getElementById("password2");
+
+    var username_error = document.getElementById("username_error");
+    var email_error = document.getElementById("email_error")
+    var password_error = document.getElementById("password_error");
+    var password_error2 = document.getElementById("password_error2");
+
+    username.addEventListener('input', function () {
+        if (username.value.length >= 1) {
+            username_error.style.display = "none";
+        }
+    });
+
+    email.addEventListener('input', function () {
+        if (email.value.length >= 1) {
+            email_error.style.display = "none";
+        }
+    });
+
+    password.addEventListener('input', function() {
+        if (password.value.length >= 1) {
+            password_error.style.display = "none";
+        }
+    });
+
+    password2.addEventListener('input', function() {
+        if (password2.value.length >= 1) {
+            password_error2.style.display = "none";
+        }
+    });
 
     visibilityToggle1.addEventListener('click', function () {
         if (password.type === "password") {
@@ -15,6 +46,7 @@ $(function() {
             visibilityToggle1.innerHTML = 'visibility_off';
         }
     });
+
     visibilityToggle2.addEventListener('click', function () {
         if (password2.type === "password") {
             password2.type = "text";
@@ -28,15 +60,42 @@ $(function() {
 });
 
 function validateCreateAccountData() {
-    var username = document.forms['loginForm']['username'];
-    var email = document.forms['loginForm']['email'];
-    var password = document.forms['loginForm']['password'];
-    var password2 = document.forms['loginForm']['password2'];
+    var username = document.forms['createAccountForm']['username'];
+    var email = document.forms['createAccountForm']['email'];
+    var password = document.forms['createAccountForm']['password'];
+    var password2 = document.forms['createAccountForm']['password2'];
 
-    if (password.value === password2.value) {
-        return true;
-    } else {
-        alert("Passwörter stimmen nicht überein!")
-        return false;
+    var username_error = document.getElementById("username_error");
+    var email_error = document.getElementById("email_error")
+    var password_error = document.getElementById("password_error");
+    var password_error2 = document.getElementById("password_error2");
+
+    var validInputs = true;
+    if (username.value.length < 1) {
+        username_error.style.display = "block";
+        validInputs = false;
     }
+
+    if (email.value.length < 1) {
+        email_error.style.display = "block";
+        validInputs = false;
+    }
+
+    if (password.value.length < 1) {
+        password_error.style.display = "block";
+        validInputs = false;
+    }
+
+    if (password2.value.length < 1) {
+        password_error2.style.display = "block";
+        validInputs = false;
+    }
+
+    if (password.value === password2.value && validInputs) {
+        window.location.href = "main";
+    }
+}
+
+function changePage() {
+    window.location.href = "login";
 }

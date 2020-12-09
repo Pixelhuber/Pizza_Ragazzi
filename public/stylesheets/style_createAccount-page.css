@@ -35,17 +35,26 @@ button{
     border: 0;
 }
 
-#createAccount_button:hover {
+.submitButtons:hover {
     color: white;
     background-color: black;
     cursor: pointer;
 }
 
-#createAccount_button {
+.submitButtons {
     display: block;
     margin: auto;
+}
+
+#createAccount_button {
+    font-size: 115%;
+    text-align: center;
     width: 267px;
     height: 45px;
+}
+
+#login_button {
+    width: 210px;
 }
 
 .divPasswordInputs {
@@ -62,4 +71,11 @@ span {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.error {
+    width: 345px;
+    color: #c8290d;
+    display: none;
+    margin-bottom: -20px;
 }

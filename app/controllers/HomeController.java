@@ -29,9 +29,7 @@ public class HomeController extends Controller {
      * <code>GET</code> request with a path of <code>/</code>.
      */
     public Result index() {
-        return ok(
-            index.render(
-                "Your new application is ready.",
+        return ok(login.render("Login",
                 assetsFinder
             ));
     }
@@ -42,8 +40,16 @@ public class HomeController extends Controller {
                         assetsFinder
                 ));
     }
-    public Result profile(){
+    public Result profile() {
         return ok(profile.render("Profiles",
+                assetsFinder));
+    }
+    public Result login() {
+        return ok(login.render("Login",
+                assetsFinder));
+    }
+    public Result createAccount() {
+        return ok(createAccount.render("CreateAccount",
                 assetsFinder));
     }
 }

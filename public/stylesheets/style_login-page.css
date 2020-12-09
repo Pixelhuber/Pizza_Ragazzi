@@ -47,12 +47,14 @@ button{
 }
 
 #login_button {
+    font-size: 115%;
+    text-align: center;
     width: 267px;
     height: 45px;
 }
 
 #createAccount_button {
-    width: 200px;
+    width: 210px;
 }
 
 .divPasswordInputs {
@@ -69,4 +71,17 @@ span {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.error {
+    width: 345px;
+    color: #c8290d;
+    display: none;
+    margin-bottom: -20px;
+}
+
+#login_error {
+    text-align: center;
+    margin: auto;
+    font-size: 18px;
 }
