@@ -46,6 +46,9 @@ public class HomeController extends Controller {
         return ok(profile.render("Profiles",
                 assetsFinder));
     }
+
+
+
     public Result main(){
         return ok(
                 pizzarush.render(
