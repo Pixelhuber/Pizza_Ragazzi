@@ -41,8 +41,7 @@ public class HomeController extends Controller {
                 ));
     }
     public Result profile() {
-        return ok(profile.render("Profiles",
-                assetsFinder));
+        return ok(profile.render("Profile",assetsFinder));
     }
     public Result login() {
         return ok(login.render("Login",
