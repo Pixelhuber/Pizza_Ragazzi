@@ -19,3 +19,6 @@ GET     /profile                    controllers.HomeController.profile
 GET     /login                      controllers.HomeController.login
 
 GET     /createAccount              controllers.HomeController.createAccount
+
+
+GET     /main                       controllers.HomeController.main

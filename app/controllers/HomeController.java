@@ -51,4 +51,14 @@ public class HomeController extends Controller {
         return ok(createAccount.render("CreateAccount",
                 assetsFinder));
     }
+
+
+
+    public Result main(){
+        return ok(
+                pizzarush.render(
+                        "Pizza-Rush",
+                        assetsFinder
+                ));
+    }
 }
