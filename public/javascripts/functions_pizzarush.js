@@ -108,10 +108,10 @@ class Order{
 
 // --------------------------------------------------------------------------------------------------------------------
 
-let availableIngredients = [    new Ingredient("Impasto", "tmp_images_in_src/teig.png"),
-                                new Ingredient("Formaggio", "tmp_images_in_src/formaggio.png"),
-                                new Ingredient("Pomodoro", "tmp_images_in_src/pomodoro.png"),
-                                new Ingredient("Salame", "tmp_images_in_src/salame.png")];
+let availableIngredients = [    new Ingredient("Impasto", "/assets/images/teig.png"),
+                                new Ingredient("Formaggio", "/assets/images/formaggio.png"),
+                                new Ingredient("Pomodoro", "/assets/images/pomodoro.png"),
+                                new Ingredient("Salame", "/assets/images/salame.png")];
 
 let orderList = [               new Order("Margarita", 10, 30),
                                 new Order("Salame", 15, 30),
