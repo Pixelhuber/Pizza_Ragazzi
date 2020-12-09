@@ -29,7 +29,9 @@ public class HomeController extends Controller {
      * <code>GET</code> request with a path of <code>/</code>.
      */
     public Result index() {
-        return ok(login.render("Login",
+        return ok(
+            index.render(
+                "Your new application is ready.",
                 assetsFinder
             ));
     }
@@ -40,7 +42,7 @@ public class HomeController extends Controller {
                         assetsFinder
                 ));
     }
-    public Result profile() {
+    public Result profile(){
         return ok(profile.render("Profiles",
                 assetsFinder));
     }
@@ -51,5 +53,15 @@ public class HomeController extends Controller {
     public Result createAccount() {
         return ok(createAccount.render("CreateAccount",
                 assetsFinder));
+    }
+
+
+
+    public Result main(){
+        return ok(
+                pizzarush.render(
+                        "Pizza-Rush",
+                        assetsFinder
+                ));
     }
 }
