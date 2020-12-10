@@ -27,14 +27,13 @@ button{
     font-size: 30px;
 }
 
-#achievements {
+#achievementsHeading {
     margin-left: 60px;
     font-size: 50px;
 }
 
 .achievementBox {
-    margin-left: 60px;
-    margin-bottom: 30px;
+    margin: 15px;
     float: left;
     padding: 30px;
     background: #2f53ff;
