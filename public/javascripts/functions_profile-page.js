@@ -3,8 +3,8 @@ function displayAchievements() {
 
     // Create Achievement-Array
     const allAchievements = [];
-    for (i = 0; i <= 30; i++){
-        allAchievements.push('Achievement '+ i);
+    for (i = 0; i <= 14; i++){
+        allAchievements.push('Achievement '+ (i+1));
     }
 
     // Display Achievements
@@ -33,7 +33,7 @@ $(function () {
             const usernameText = usernameField.text();
 
             // change usernameField into an inputField
-            const usernameInputField = "<input style='font-size: 60px' name=\"new_username\" value=" + usernameText + ">"; //hier nutze ich den style tag nur, weil er aus dem css sheet irgendwie nicht geladen wurde
+            const usernameInputField = "<input style='font-size: 60px' name=\"new_username\" value=\"" + usernameText + "\">"; //hier nutze ich den style tag nur, weil er aus dem css sheet irgendwie nicht geladen wurde
             usernameField.html(usernameInputField);
 
             // display field to change profile-picture
@@ -54,6 +54,7 @@ $(function () {
                 alert("Your Username should not be empty");
             }else {
                 usernameField.html(newUsername);
+                updateUsernameInSession(newUsername);
                 selectFile.html("");
 
                 profileButton.text("Edit Profile");
@@ -74,3 +75,45 @@ $(function () {
         }
     }
 });
+
+function setUsernameOnStartup() {
+    const newUsername = getUsernameFromSession();
+
+    if (newUsername !== undefined)
+        document.getElementById("username").textContent = newUsername;
+}
+
+function updateUsernameInSession(newUsername) {
+
+    fetch("/profile", {
+        method: 'POST',
+        body:   JSON.stringify({
+            username:   newUsername
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    }).then(
+        result => result.json()
+    ).then(
+        result => alert("Username saved: " + result)
+    );
+}
+
+function getUsernameFromSession() {
+
+    let ret = "";
+
+    fetch("/getUsername")
+        .then(
+            result => result.text()
+        ).then(
+            //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
+            result => document.getElementById("username").textContent = result
+        ).catch(
+            err => alert("Couldn't retrieve username")
+        );
+
+    return ret;
+}

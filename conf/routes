@@ -22,3 +22,9 @@ GET     /createAccount              controllers.HomeController.createAccount
 
 
 GET     /main                       controllers.HomeController.main
+
+# ----------------------------------------------------------------------------------
+
+POST    /profile                    controllers.ProfileController.setUsername(request: Request)
+
+GET     /getUsername                controllers.ProfileController.getUsernameFromSession(request: Request)
