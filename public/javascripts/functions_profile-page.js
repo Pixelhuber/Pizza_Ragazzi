@@ -77,46 +77,36 @@ $(function () {
 });
 
 function setUsernameOnStartup() {
-    const newUsername = getUsernameFromSession();
 
-    if (newUsername !== undefined)
-        document.getElementById("username").textContent = newUsername;
+    document.getElementById("username").textContent = getUsernameFromSession();
 }
 
 // Sends a request to update the username in the session
 function updateUsernameInSession(newUsername) {
 
-    fetch("/profile", { // Ruft die Methode ProfileController.setUsername() auf (in 'Routes' definiert)
-        method: 'POST',
-        body:   JSON.stringify({ // Body des requests, der die eigentliche Information enthält
-            username:   newUsername // JSON.stringify() ist auch nicht der einzig mögliche Weg
-        }),
-        headers: {
-            "Content-Type": "application/json",
-            "Data-Type": "json"
-        },
-        credentials: 'include'
+    let loginViewModel = {
+        username: newUsername,
+        password: "Hallo" // Passwort brauch ich hier eigentlich nicht, ich lass es trotzdem mal drin
+    }
 
-    // .then() Methoden definieren, was gemacht werden soll, wenn request erfolgreich war
-    }).then(
-        result => result.json()
-    ).then(
-        result => alert("Username saved: " + result)
-    ).catch(
-        // Was gemacht wird, falls request nicht erfolgreich war
-    );
+    $.post("/profile", loginViewModel,
+        function (data, status){
+            // Das funktioniert noch nicht ganz! Beim ausführen sieht man, dass "data" irgendwie leer bleibt... aber der Wert wird korrekt gespeichert
+            alert("Session updated!\nData: " + data + "\nStatus: " + status)
+        }
+        ).fail(function (){
+            alert("Something went wrong")
+        });
 }
 
 // Reads username from session and updates html
 function getUsernameFromSession() {
 
-    fetch("/getUsername") // Ruft die Methode ProfileController.getUsernameFromSession() auf
-        .then(
-            result => result.text()
-        ).then(
-            //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
-            result => document.getElementById("username").textContent = result
-        ).catch(
-            err => alert("Couldn't retrieve username")
-        );
+    $.get("/getUsername", function(data, status){
+        //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
+        document.getElementById("username").textContent = data
+    }).fail(function (data, status){
+        document.getElementById("username").textContent = "Default Name";
+        //alert("Couldn't retrieve username");
+    });
 }
