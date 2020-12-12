@@ -52,3 +52,47 @@ function createHighscoreTable(tableData) {
 function randomScore() {
     return Math.floor(Math.random() * 1001);
 }
+
+function updateHighscoreTable(points) {
+
+    fetch("/highscore", {
+        method: 'POST',
+        body:   JSON.stringify({
+            points:   points
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    }).then(
+        result => result.json()
+    ).then(
+        result => alert("Username saved: " + result)
+    );
+}
+
+
+function getUsername() {
+    let ret = "";
+
+    fetch("/getUsername")
+        .then(result => result.text())
+        .then(result => document.getElementById("username").textContent = result)
+        .catch(err => alert("Couldn't retrieve username")
+    );
+
+    return ret;
+}
+
+function getPoints() {
+    let ret = "";
+
+    fetch("/getPoints")
+        .then(result => result.text())
+        .then(result => document.getElementById("points").textContent = result)
+        .catch(err => alert("Couldn't retrieve points")
+        );
+
+    return ret;
+}
+
