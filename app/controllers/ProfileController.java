@@ -26,9 +26,9 @@ public class ProfileController extends Controller {
     // Sets the username to the value in the request-body
     public Result setUsername(Http.Request request) {
 
-        String newUsername = request.body().asJson().get("username").asText();
+        String newUsername = request.body().asJson().get("username").asText(); // Liest den Usernamen aus dem body vom request
 
-        return ok().addingToSession(request, "username", newUsername);
+        return ok().addingToSession(request, "username", newUsername); // Gibt ein erfolgreiches 'Result' mit dem gespeicherten Usernamen zurück
     }
 
     // Reads key "username" from session and returns it
@@ -38,6 +38,6 @@ public class ProfileController extends Controller {
                 .session()
                 .get("username")
                 .map(Results::ok)
-                .orElseGet(() -> unauthorized("Default Username"));
+                .orElseGet(() -> unauthorized("Default Username")); // Gibt das zurück, wenn kein Wert in der Session gefunden wurde
     }
 }

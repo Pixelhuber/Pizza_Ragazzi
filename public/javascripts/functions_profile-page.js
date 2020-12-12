@@ -83,29 +83,34 @@ function setUsernameOnStartup() {
         document.getElementById("username").textContent = newUsername;
 }
 
+// Sends a request to update the username in the session
 function updateUsernameInSession(newUsername) {
 
-    fetch("/profile", {
+    fetch("/profile", { // Ruft die Methode ProfileController.setUsername() auf (in 'Routes' definiert)
         method: 'POST',
-        body:   JSON.stringify({
-            username:   newUsername
+        body:   JSON.stringify({ // Body des requests, der die eigentliche Information enthält
+            username:   newUsername // JSON.stringify() ist auch nicht der einzig mögliche Weg
         }),
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Data-Type": "json"
         },
         credentials: 'include'
+
+    // .then() Methoden definieren, was gemacht werden soll, wenn request erfolgreich war
     }).then(
         result => result.json()
     ).then(
         result => alert("Username saved: " + result)
+    ).catch(
+        // Was gemacht wird, falls request nicht erfolgreich war
     );
 }
 
+// Reads username from session and updates html
 function getUsernameFromSession() {
 
-    let ret = "";
-
-    fetch("/getUsername")
+    fetch("/getUsername") // Ruft die Methode ProfileController.getUsernameFromSession() auf
         .then(
             result => result.text()
         ).then(
@@ -114,6 +119,4 @@ function getUsernameFromSession() {
         ).catch(
             err => alert("Couldn't retrieve username")
         );
-
-    return ret;
 }
