@@ -126,6 +126,7 @@ function populateIngredientSection(){
     availableIngredients.forEach(function(item, index, array){
         const ingredient = document.createElement('div');
         const image = document.createElement('img');
+        const name = document.createElement('div')
 
         ingredient.setAttribute('class', 'box ingredient');
         ingredient.setAttribute('onmousedown', 'pullNewIngredient(' + index + ')');
@@ -134,8 +135,10 @@ function populateIngredientSection(){
         image.setAttribute('height', '50px');
         image.setAttribute('width', 'auto');
 
-        ingredient.innerHTML = item.name;
+        name.innerText = item.name;
+
         ingredient.appendChild(image);
+        ingredient.appendChild(name);
 
         document.getElementById('ingredientSection').getElementsByClassName('scroll_container').item(0).appendChild(ingredient);
     })

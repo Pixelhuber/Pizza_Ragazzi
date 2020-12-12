@@ -10,22 +10,21 @@
         <link rel="stylesheet" type="text/css" href=@routes.Assets.versioned("stylesheets/style_profile-page-new.css")>
 
 
-
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript" src=@routes.Assets.versioned("javascripts/functions_profile-page.js")></script>
 
-            <!--Bootstrap-->
+        <!--Bootstrap-->
         <link rel="stylesheet" href=@routes.Assets.versioned("stylesheets/bootstrap.min.css")>
 
         <title>Profile-Page</title>
     </head>
 
-    <body id="body">
-            <!--Navigation bar-->
+    <body id="body" onload="setUsernameOnStartup()">
+        <!--Navigation bar-->
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
-            <!--end of Navigation bar-->
+        <!--end of Navigation bar-->
 
-        <h1 id="heading">Profile</h1>
+        <h1 id="heading">PROFILE</h1>
         <br>
 
         <div class="container-fluid">
@@ -36,7 +35,7 @@
                         <h1 id="username">Username</h1>
                     </form>
                     <div id="p-image">
-            </div>
+                    </div>
                     <button id="profileButton">Edit Profile</button>
                 </div>
 
@@ -48,15 +47,17 @@
             </div>
         </div>
 
-
         <br>
         <br>
         <br>
 
-        <h1 id="achievements">Achievements:</h1>
+        <h1 id="achievementsHeading">Achievements:</h1>
 
-        <script>
-        displayAchievements()
-        </script>
-        </body>
+        <div id="achievements_table">
+        </div>
+
+        <script> displayAchievements() </script>
+
+
+    </body>
 </html>
