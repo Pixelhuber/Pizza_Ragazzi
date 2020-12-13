@@ -2,33 +2,32 @@ package controllers;
 
 import play.data.Form;
 import play.data.FormFactory;
-import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
-import viewmodels.Achievement;
-import viewmodels.User;
+import viewmodels.UserViewModel;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 
 
 public class ProfileController extends Controller {
 
     private final AssetsFinder assetsFinder;
+    private final FormFactory formFactory;
 
     @Inject
     public ProfileController(AssetsFinder assetsFinder, FormFactory formFactory) {
         this.assetsFinder = assetsFinder;
+        this.formFactory = formFactory;
     }
 
     // Sets the username to the value in the request-body
     public Result setUsername(Http.Request request) {
+        Form<UserViewModel> form = formFactory.form(UserViewModel.class); // Ein ViewModel gibt quasi die Form vor, wie aus einem request gelesen werden soll (dafür auch das Package "ViewModels" :))
+        UserViewModel userViewModel = form.bindFromRequest(request).get();
 
-        String newUsername = request.body().asJson().get("username").asText();
-
-        return ok().addingToSession(request, "username", newUsername);
+        return ok().addingToSession(request, "username", userViewModel.getUsername()); // Speichert den Username in der Session unter dem Key "username"
     }
 
     // Reads key "username" from session and returns it
@@ -36,8 +35,8 @@ public class ProfileController extends Controller {
 
         return request
                 .session()
-                .get("username")
+                .get("username") // Sucht nach dem Wert in der Session, der unter dem Key "Username" abgelegt ist
                 .map(Results::ok)
-                .orElseGet(() -> unauthorized("Default Username"));
+                .orElseGet(Results::notFound);
     }
 }
