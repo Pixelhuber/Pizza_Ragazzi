@@ -22,15 +22,3 @@ GET     /createAccount              controllers.HomeController.createAccount
 
 
 GET     /main                       controllers.HomeController.main
-
-GET     /getUsername                controllers.HighscoreController.getUsername(request: Request)
-
-GET     /getPoints                  controllers.HighscoreController.getPoints(request: Request)
-
-POST    /highscore                  controllers.HighscoreController.updateHighscoreTable(request: Request)
-
-# ----------------------------------------------------------------------------------
-
-POST    /profile                    controllers.ProfileController.setUsername(request: Request)
-
-GET     /getUsername                controllers.ProfileController.getUsernameFromSession(request: Request)
