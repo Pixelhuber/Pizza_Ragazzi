@@ -11,7 +11,7 @@
     </head>
 
     <body onload="populateIngredientSection();
-    populateOrderSection()">
+    populateOrderSection();countdown(120)">
 
             <!--NAVIGATION BAR ------------->
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
@@ -28,7 +28,7 @@
 
         <div id="upper_container">
             <div id="left_upper_container">
-                <h1>Time: 7:00</h1>
+                <h1 id="timer"></h1>
             </div>
             <div id="oven_container">
                 <img class="oven" src=@routes.Assets.versioned("images/oven.png") alt="Ofen"/>

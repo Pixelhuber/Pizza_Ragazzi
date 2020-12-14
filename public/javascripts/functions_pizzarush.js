@@ -5,6 +5,18 @@ class Ingredient {
         this.image = image;
     }
 
+    //returns an instance of the ingredient with this name
+    static getInstanceByName(name) {
+        let ret = undefined;
+
+        availableIngredients.forEach(function (item, index, array) {
+            if (name === item.name)
+                ret = new Ingredient(name, item.image);
+        })
+
+        return ret;
+    }
+
     createDraggableInstance() {
         const draggable = this.createImg();
 
@@ -44,31 +56,19 @@ class Ingredient {
 
         return ret;
     }
-
-    //returns an instance of the ingredient with this name
-    static getInstanceByName(name) {
-        let ret = undefined;
-
-        availableIngredients.forEach(function (item, index, array) {
-            if (name === item.name)
-                ret = new Ingredient(name, item.image);
-        })
-
-        return ret;
-    }
 }
 
 //ingredient class above
 // --------------------------------------------------------------------------------------------------------------------
 
 class Pizza {
+    ingredients = [];
+    pizzaDiv;
+
     constructor() {
         this.ingredients.push(Ingredient.getInstanceByName("Impasto"))
         this.pizzaDiv = this.createDiv();
     }
-
-    ingredients = [];
-    pizzaDiv;
 
     static findExistingPizzaByDiv(div) {
         existingPizzas.forEach(function (item, index, array) {
@@ -291,12 +291,42 @@ function createPizzaJSON{
 
 }
 */
-
 function addToShownPoints(number) {
-    if (number === undefined){
+    if (number === undefined) {
         number = 1;
     }
     let currentlyDisplayedText = document.getElementById("currentlyDisplayedPoints").textContent;
     let currentlyDisplayedPoints = parseInt(currentlyDisplayedText.match(/\d+/)) + number;
-    document.getElementById("currentlyDisplayedPoints").textContent = "Points: "+ currentlyDisplayedPoints;
+    document.getElementById("currentlyDisplayedPoints").textContent = "Points: " + currentlyDisplayedPoints;
+}
+
+function countdown(seconds) {
+// Set the date we're counting down to
+    var countDownDate = new Date();
+    countDownDate.setSeconds(countDownDate.getSeconds()+seconds);
+
+// Update the count down every 1 second
+    var x = setInterval(function () {
+        var now = new Date().getTime();
+
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+
+        // Time calculations
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        if (seconds<10){
+             seconds="0"+seconds;
+        }
+
+        // Display the result in the element with id="demo"
+        document.getElementById("timer").innerHTML = "Time: " + minutes + ":" + seconds;
+
+        // If the count down is finished, write some text
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("timer").innerHTML = "END";
+        }
+    }, 1000);
 }
