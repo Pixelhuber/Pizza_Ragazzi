@@ -210,8 +210,8 @@ function makeDraggable(element) {
 
                 if (checkOverlap(element, document.getElementsByClassName("order").item(index))) {
 
-                    //hier fetching to check if pizza is valid
-                    addToShownPoints();
+                    //Server validates Pizza and updates points
+                    validatePizza(element);
 
                     alert(element.name + " into " + orderList[index].name) // "element" in this case is simply an <img>
                     existingPizzas.splice(existingPizzas.indexOf(element), 1);
@@ -286,19 +286,49 @@ function checkOverlap(draggable, destination) {
     return isOverlapX && isOverlapY;
 }
 
-/*
-function createPizzaJSON{
+
+function validatePizza(element) {
+
+    //Pizza JSON creation TODO: enter correct pizza name instead of salame
+    let pizzaJson = '{"pizzaName": "' + 'Salame' + '",\n "ingredients": [';
+    let collection = element.children;
+    Array.from(collection).forEach(function (element) {
+        pizzaJson += '\n"' + element.alt + '",'
+    });
+    pizzaJson = pizzaJson.substring(0, pizzaJson.length - 1) + '\n]\n}'
+
+    fetch("/pizza_rush/validate_pizza", {
+        method: 'POST',
+        body: pizzaJson,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    }).then(updateCurrentPoints)
+        .catch((error) => {
+        console.error('Error:', error);
+    });
+
 
 }
-*/
-function addToShownPoints(number) {
-    if (number === undefined) {
-        number = 1;
-    }
-    let currentlyDisplayedText = document.getElementById("currentlyDisplayedPoints").textContent;
-    let currentlyDisplayedPoints = parseInt(currentlyDisplayedText.match(/\d+/)) + number;
-    document.getElementById("currentlyDisplayedPoints").textContent = "Points: " + currentlyDisplayedPoints;
+
+function updateCurrentPoints() {
+    let returnedPoints = -1;
+    fetch("/pizza_rush/get_current_points")
+        .then(
+            result => result.text()
+        ).then(
+        result => {
+            returnedPoints = parseInt(result);
+            document.getElementById("currentlyDisplayedPoints").textContent = "Points: " + returnedPoints;
+        }
+    ).catch((error) => {
+        console.error('Error:', error);
+    });
+
 }
+
+
 
 function countdown(seconds) {
 // Set the date we're counting down to
