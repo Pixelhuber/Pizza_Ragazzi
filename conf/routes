@@ -22,3 +22,5 @@ GET     /createAccount              controllers.HomeController.createAccount
 
 
 GET     /main                       controllers.HomeController.main
+
+POST    /login                      controllers.LoginController.login

@@ -67,3 +67,20 @@ function changePage() {
     window.location.href = "createAccount";
 }
 
+function authenticateLogin() {
+    let username = document.getElementById("loginUsername").value;
+    let password = document.getElementById("loginPassword").value;
+
+    let loginViewModel = {
+        username: username,
+        password: password
+    }
+    $post("/login", loginViewModel)
+        .done(function (data, status) {
+            if (status === "success")
+                window.location.href = "main"
+        })
+        .fail(function () {
+            alert("Something went wrong.")
+        });
+}
