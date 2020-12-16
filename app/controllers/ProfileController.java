@@ -27,7 +27,7 @@ public class ProfileController extends Controller {
         Form<UserViewModel> form = formFactory.form(UserViewModel.class); // Ein ViewModel gibt quasi die Form vor, wie aus einem request gelesen werden soll (dafür auch das Package "ViewModels" :))
         UserViewModel userViewModel = form.bindFromRequest(request).get();
 
-        return ok().addingToSession(request, "username", userViewModel.getUsername()); // Speichert den Username in der Session unter dem Key "username"
+        return ok(userViewModel.getUsername()).addingToSession(request, "username", userViewModel.getUsername()); // Speichert den Username in der Session unter dem Key "username"
     }
 
     // Reads key "username" from session and returns it
