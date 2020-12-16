@@ -23,4 +23,7 @@ GET     /createAccount              controllers.HomeController.createAccount
 
 GET     /main                       controllers.HomeController.main
 
-POST    /login                      controllers.LoginController.login
+POST    /authenticate               controllers.LoginController.authenticate(request: Request)
+
+GET     /getUsername                controllers.LoginController.getUsernameFromSession(request: Request)
+

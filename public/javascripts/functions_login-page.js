@@ -42,10 +42,7 @@ function validateLoginData() {
     var password_error = document.getElementById("password_error");
     var login_error = document.getElementById("login_error");
 
-    if (username.value === "admin" && password.value === "admin") {
-        window.location.href = "main";
-        return;
-    }
+
 
     let usernameTyped = username.value.length >= 1;
     if (!usernameTyped) {
@@ -71,16 +68,26 @@ function authenticateLogin() {
     let username = document.getElementById("loginUsername").value;
     let password = document.getElementById("loginPassword").value;
 
-    let loginViewModel = {
-        username: username,
-        password: password
-    }
-    $post("/login", loginViewModel)
-        .done(function (data, status) {
-            if (status === "success")
-                window.location.href = "main"
+    fetch("/login", {
+        method: 'POST',
+        body:   JSON.stringify({
+            username:   username.value
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    })
+        .then(result => result.json())
+        .then(data => {
+            if (username.value === "admin" && password.value === "admin") {
+                alert(data)
+                window.location.href = "main";
+            } else{
+                alert("Anmeldedaten fehlerhaft")
+            }
         })
-        .fail(function () {
-            alert("Something went wrong.")
-        });
+
+
+
 }

@@ -5,6 +5,9 @@ import play.data.FormFactory;
 import play.mvc.*;
 import viewmodels.LoginViewModel;
 import views.html.login;
+import play.libs.Json;
+import scala.util.parsing.json.JSON;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import javax.naming.AuthenticationException;
 
@@ -18,16 +21,20 @@ public class LoginController extends Controller {
         this.formFactory = formFactory;
     }
 
-    public Result login() {
-        return ok(
-                login.render("This is your Login Page", assetsFinder)
-        );
-    }
 
     public Result authenticate(Http.Request request) {
-        Form<LoginViewModel> form = formFactory.form(LoginViewModel.class);
-        LoginViewModel loginViewModel = form.bindFromRequest(request).get();
-        return ok().addingToSession(request, "username", loginViewModel.username);
+        JsonNode json = request.body().asJson();
+        if (json == null) {
+            return badRequest("Expecting Json data");
+        } else {
+            String name = json.findPath("username").textValue();
+            if (name == null) {
+                return badRequest("Fehler");
+            } else {
+                return ok().addingToSession(request, "username", name);
+
+            }
+        }
     }
 
     public Result logout(Http.Request request) {
@@ -35,4 +42,14 @@ public class LoginController extends Controller {
         return ok(login.render("This is your Profile Page", assetsFinder));
     }
 
+
+    public Result getUsernameFromSession(Http.Request request) {
+
+        return request
+                .session()
+                .get("username")
+                .map(Results::ok)
+                .orElseGet(() -> unauthorized("Default Username"));
+    }
 }
+
