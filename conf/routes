@@ -25,8 +25,23 @@ GET     /main                       controllers.HomeController.main
 
 
 
-#Pizza Rush
+#PIZZA RUSH
 
 GET     /pizza_rush/get_current_points  controllers.PizzaRushController.getCurrentPointsFromSession(requst: Request)
 
 POST   /pizza_rush/validate_pizza      controllers.PizzaRushController.validatePizza(request: Request)
+
+# HIGHSCORE ------------------------------------------------------------------------
+GET     /getTableData               controllers.HighscoreController.getTableData
+
+# PROFILE --------------------------------------------------------------------------
+POST    /profile                    controllers.ProfileController.setUsername(request: Request)
+
+GET     /getUsername                controllers.ProfileController.getUsernameFromSession(request: Request)
+
+
+# LOGGIN ----------------------------------------------------------------------------
+POST    /authenticate               controllers.LoginController.authenticate(request: Request)
+
+GET     /getUsername                controllers.LoginController.getUsernameFromSession(request: Request)
+

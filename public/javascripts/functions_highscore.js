@@ -20,11 +20,13 @@ function createHighscoreTable(tableData) {
     /*Sortiert die Tabelle nach Punktewerten*/
     tableData.sort(sortFunction);
     function sortFunction(a, b) {
-        if (a[1] === b[1]) {
+        let aInt = parseInt(a[1], 10);
+        let bInt = parseInt(b[1], 10);
+        if (aInt === bInt) {
             return 0;
         }
         else {
-            return (a[1]> b[1]) ? -1 : 1;
+            return (aInt > bInt) ? -1 : 1;
         }
     }
 
@@ -49,6 +51,9 @@ function createHighscoreTable(tableData) {
     document.body.appendChild(table);
 }
 
-function randomScore() {
-    return Math.floor(Math.random() * 1001);
+function getTableData() {
+    fetch("/getTableData")
+        .then(result => result.json())
+        .then(result => createHighscoreTable(result));
 }
+

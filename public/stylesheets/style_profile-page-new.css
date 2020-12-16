@@ -1,5 +1,6 @@
 * {
     font-family: "Arial Black", sans-serif;
+    color: black;
 }
 
 #heading {
@@ -27,23 +28,27 @@ button{
     font-size: 30px;
 }
 
-#achievements {
+#achievementsHeading {
     margin-left: 60px;
     font-size: 50px;
 }
 
 .achievementBox {
-    margin-left: 60px;
-    margin-bottom: 30px;
+    margin: 15px;
+    padding: 15px;
+
     float: left;
-    padding: 30px;
-    background: #2f53ff;
-    box-sizing: border-box;
+
+    background-color: black;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border-radius: 12px;
+    color: white;
+
+    font-size: 1.2em;
 }
 
-
+.achievementBox:hover{
+    background-color: #363736;
+}
 
 #level {
     font-size: 30px;
