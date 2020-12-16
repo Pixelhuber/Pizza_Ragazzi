@@ -20,7 +20,13 @@ GET     /login                      controllers.HomeController.login
 
 GET     /createAccount              controllers.HomeController.createAccount
 
-
 GET     /main                       controllers.HomeController.main
 
+# HIGHSCORE ------------------------------------------------------------------------
 GET     /getTableData               controllers.HighscoreController.getTableData
+
+# PROFILE --------------------------------------------------------------------------
+POST    /profile                    controllers.ProfileController.setUsername(request: Request)
+
+GET     /getUsername                controllers.ProfileController.getUsernameFromSession(request: Request)
+
