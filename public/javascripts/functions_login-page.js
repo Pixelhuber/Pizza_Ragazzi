@@ -68,7 +68,7 @@ function authenticateLogin() {
     let username = document.getElementById("loginUsername").value;
     let password = document.getElementById("loginPassword").value;
 
-    fetch("/login", {
+    fetch("/authenticate", {
         method: 'POST',
         body:   JSON.stringify({
             username:   username.value

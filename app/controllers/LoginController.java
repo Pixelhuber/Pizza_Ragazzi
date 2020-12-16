@@ -1,5 +1,6 @@
 package controllers;
 
+
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.*;
@@ -9,6 +10,7 @@ import play.libs.Json;
 import scala.util.parsing.json.JSON;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import javax.inject.Inject;
 import javax.naming.AuthenticationException;
 
 public class LoginController extends Controller {
@@ -16,6 +18,7 @@ public class LoginController extends Controller {
     private final AssetsFinder assetsFinder;
     private final FormFactory formFactory;
 
+    @Inject
     public LoginController(AssetsFinder assetsFinder, FormFactory formFactory) {
         this.assetsFinder = assetsFinder;
         this.formFactory = formFactory;
