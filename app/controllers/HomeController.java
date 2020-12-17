@@ -1,8 +1,11 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import play.libs.Json;
 import play.mvc.*;
 import play.db.*;
 
+import scala.util.parsing.json.JSON;
 import views.html.*;
 
 import javax.inject.Inject;
@@ -31,8 +34,9 @@ public class HomeController extends Controller {
     public Result index() {
         return ok(login.render("Login",
                 assetsFinder
-            ));
+        ));
     }
+
     public Result highscore() {
         return ok(
                 highscore.render(
@@ -42,25 +46,33 @@ public class HomeController extends Controller {
     }
 
     public Result profile() {
-        return ok(profile.render("Profile",assetsFinder));
+        return ok(
+                profile.render(
+                        "Profile",
+                        assetsFinder));
     }
 
     public Result login() {
-        return ok(login.render("Login",
-                assetsFinder));
+        return ok(
+                login.render(
+                        "Login",
+                        assetsFinder));
     }
 
     public Result createAccount() {
-        return ok(createAccount.render("CreateAccount",
-                assetsFinder));
+        return ok(
+                createAccount.render(
+                        "CreateAccount",
+                        assetsFinder));
     }
 
 
-    public Result main(){
+    public Result main() {
         return ok(
                 pizzarush.render(
                         "Pizza-Rush",
                         assetsFinder
                 ));
     }
+
 }

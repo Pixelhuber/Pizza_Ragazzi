@@ -20,8 +20,8 @@ GET     /login                      controllers.HomeController.login
 
 GET     /createAccount              controllers.HomeController.createAccount
 
-
 GET     /main                       controllers.HomeController.main
+
 
 # HIGHSCORE ------------------------------------------------------------------------
 GET     /highscore/getTableData     controllers.HighscoreController.getTableData
@@ -35,9 +35,7 @@ GET     /getUsername                controllers.ProfileController.getUsernameFro
 # LOGIN ----------------------------------------------------------------------------
 POST    /authenticate               controllers.LoginController.authenticate(request: Request)
 
-
-
-#Pizza Rush
+# PIZZA-RUSH -----------------------------------------------------------------------
 
 GET     /pizza_rush/get_current_points  controllers.PizzaRushController.getCurrentPointsFromSession(requst: Request)
 
