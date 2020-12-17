@@ -5,45 +5,11 @@ class Ingredient {
         this.image = image;
     }
 
-    //returns an instance of the ingredient with this name
-    static getInstanceByName(name) {
-        let ret = undefined;
-
-        availableIngredients.forEach(function (item, index, array) {
-            if (name === item.name)
-                ret = new Ingredient(name, item.image);
-        })
-
-        return ret;
-    }
-
     createDraggableInstance() {
-        const draggable = this.createImg();
-
-        draggable.setAttribute('class', 'draggable');
-
-        switch (this.name) {
-            case "Impasto":
-                let newPizza = new Pizza();
-                existingPizzas.push(newPizza);
-                const newPizzaDiv = newPizza.createDiv();
-
-                document.getElementById("pizza_layer").appendChild(newPizzaDiv);
-                return newPizzaDiv;
-            case "Pomodoro":
-                document.getElementById("tomato_layer").appendChild(draggable);
-                break;
-            case "Formaggio":
-                document.getElementById("cheese_layer").appendChild(draggable);
-                break;
-            case "Salame":
-                document.getElementById("salami_layer").appendChild(draggable);
-                break;
-        }
-
-        makeDraggable(draggable);
-
-        return draggable;
+        if (this.name === "Impasto")
+            return new DraggablePizzaInstance();
+        else
+            return new DraggableIngredientInstance(this);
     }
 
     createImg() {
@@ -56,54 +22,171 @@ class Ingredient {
 
         return ret;
     }
-}
 
-//ingredient class above
-// --------------------------------------------------------------------------------------------------------------------
-
-class Pizza {
-    ingredients = [];
-    pizzaDiv;
-
-    constructor() {
-        this.ingredients.push(Ingredient.getInstanceByName("Impasto"))
-        this.pizzaDiv = this.createDiv();
+    getName() {
+        return this.name;
     }
 
+    //returns an instance of the ingredient with this name
+    static getInstanceByName(name) {
+        let ret = undefined;
+
+        availableIngredients.forEach(function(item, index, array) {
+            if (name === item.name)
+                ret = new Ingredient(name, item.image);
+        })
+
+        return ret;
+    }
+}
+
+class DraggableIngredientInstance extends Ingredient {
+
+    constructor(ingredient) {
+        super(ingredient.name, ingredient.image);
+        this.createDraggable();
+    }
+
+    draggable;
+
+    createDraggable() {
+        const draggable = this.createImg();
+
+        draggable.setAttribute('class', 'draggable');
+
+        switch (this.name) {
+            case "Pomodoro":    document.getElementById("tomato_layer").appendChild(draggable);
+                break;
+            case "Formaggio":   document.getElementById("cheese_layer").appendChild(draggable);
+                break;
+            case "Salame":      document.getElementById("salami_layer").appendChild(draggable);
+                break;
+        }
+
+        this.draggable = draggable;
+
+        makeDraggable(this);
+    }
+
+    whenDraggedInOrder(order) {
+
+        alert("Delivered: " + this.getName() + "\nOrdered: " + order.name)
+        this.draggable.remove();
+        return;
+    }
+
+    whenDraggedInPizza(pizza) {
+
+        //Put ingredient on pizza
+        pizza.ingredients.push(Ingredient.getInstanceByName(this.getName()));
+
+        //Div declarations
+        const pizzaDivOld = pizza.draggable;
+        const pizzaDivUpdated = pizza.updateDiv();
+
+        //Set position of pizzaDivUpdated
+        pizzaDivUpdated.style.left = pizzaDivOld.style.left;
+        pizzaDivUpdated.style.top = pizzaDivOld.style.top;
+
+        //Swap pizzaDivs
+        document.getElementById("pizza_layer").replaceChild(pizzaDivUpdated, pizzaDivOld)
+
+        //Remove single draggable ingredient
+        pizzaDivOld.remove();
+        this.draggable.remove();
+        return;
+    }
+}
+
+// ingredient & draggableIngredientInstance class above
+// --------------------------------------------------------------------------------------------------------------------
+
+// A "Pizza" is basically a dough with ingredients on it. It doesn't have to be a correct Pizza
+class Pizza {
+
+    // When created, a new pizza is simply a piece of dough. More ingredients get added while playing.
+    constructor() {
+        this.ingredients.push(Ingredient.getInstanceByName("Impasto"))
+    }
+
+    ingredients = [];
+
+}
+
+class DraggablePizzaInstance extends Pizza {
+
+    constructor() {
+        super();
+
+        this.updateDiv();
+        existingPizzas.push(this);
+
+        document.getElementById("pizza_layer").appendChild(this.draggable);
+    }
+
+    draggable;
+
     static findExistingPizzaByDiv(div) {
-        existingPizzas.forEach(function (item, index, array) {
-            if (item.pizzaDiv === div)
+        existingPizzas.forEach(function(item, index, array){
+            if (item.draggable === div)
                 return item;
         })
 
         return undefined;
     }
 
-    createDiv() {
+    getName() {
+        return "unknown Pizza" // temporary return value
+    }
+
+    // a.k.a. createDraggable()
+    updateDiv() {
         const pizzaDiv = document.createElement("div");
 
         pizzaDiv.setAttribute('class', 'draggable');
 
-        makeDraggable(pizzaDiv);
 
-        this.ingredients.forEach(function (item, index, array) {
+
+        this.ingredients.forEach(function(item, index, array){
+
+            // TODO: Ingredients get stacked in correct order
             const ingr = item.createImg();
             ingr.setAttribute('style', 'position: absolute');
 
             pizzaDiv.appendChild(ingr);
 
-            return pizzaDiv;
+            //return pizzaDiv;
         })
 
+        this.draggable = pizzaDiv;
 
-        return pizzaDiv;
+        makeDraggable(this);
+
+        return this.draggable
+    }
+
+    // should check if pizza matches the order
+    whenDraggedInOrder(order) {
+
+        // Server validates pizza and updates points
+        validatePizza(this.draggable);
+
+        alert("Delivered: " + this.getName() + "\nOrdered: " + order.name)
+        existingPizzas.splice(existingPizzas.indexOf(this), 1);
+        this.draggable.remove();
+        return;
+    }
+
+    whenDraggedInOven(oven) {
+
+
     }
 }
 
-//pizza class above
+// pizza & draggablePizzaInstance class above
 // --------------------------------------------------------------------------------------------------------------------
 
-class SinglePizzaOrder {
+class Order{
 
     constructor(name, points, time) {
         this.name = name;
@@ -112,24 +195,25 @@ class SinglePizzaOrder {
     }
 }
 
+// order class above
 // --------------------------------------------------------------------------------------------------------------------
 
-let availableIngredients = [new Ingredient("Impasto", "/assets/images/teig.png"),
-    new Ingredient("Formaggio", "/assets/images/formaggio.png"),
-    new Ingredient("Pomodoro", "/assets/images/pomodoro.png"),
-    new Ingredient("Salame", "/assets/images/salame.png")];
+let availableIngredients = [    new Ingredient("Impasto", "/assets/images/teig.png"),
+                                new Ingredient("Formaggio", "/assets/images/formaggio.png"),
+                                new Ingredient("Pomodoro", "/assets/images/pomodoro.png"),
+                                new Ingredient("Salame", "/assets/images/salame.png")];
 
-let orderList = [new SinglePizzaOrder("Margarita", 10, 30),
-    new SinglePizzaOrder("Salame", 15, 30),
-    new SinglePizzaOrder("Salame", 15, 30)];
+let orderList = [               new Order("Margarita", 10, 30),
+                                new Order("Salame", 15, 30),
+                                new Order("Salame", 15, 30)];
 
-let existingPizzas = [];
+let existingPizzas = [          ];
 
 // --------------------------------------------------------------------------------------------------------------------
 
 // called at startup
-function populateIngredientSection() {
-    availableIngredients.forEach(function (item, index, array) {
+function populateIngredientSection(){
+    availableIngredients.forEach(function(item, index, array){
         const ingredient = document.createElement('div');
         const image = document.createElement('img');
         const name = document.createElement('div')
@@ -151,8 +235,8 @@ function populateIngredientSection() {
 }
 
 // called at startup
-function populateOrderSection() {
-    orderList.forEach(function (item, index, array) {
+function populateOrderSection(){
+    orderList.forEach(function(item, index, array){
         const order = document.createElement('div');
 
         order.setAttribute('class', 'box order');
@@ -163,10 +247,13 @@ function populateOrderSection() {
 }
 
 function makeDraggable(element) {
-    var diff_x = 0, diff_y = 0, x = 0, y = 0;
+    let diff_x = 0, diff_y = 0, x = 0, y = 0;
+
+    if (!(element instanceof DraggableIngredientInstance || element instanceof DraggablePizzaInstance))
+        alert("problem in functions_pizzarush.makeDraggable()")
 
     // if element is pressed down -> start dragging
-    element.onmousedown = initiateDrag;
+    element.draggable.onmousedown = initiateDrag;
 
     function initiateDrag(event) {
         event = event || window.event;
@@ -192,8 +279,8 @@ function makeDraggable(element) {
         y = event.clientY;
 
         // set the element's new position:
-        element.style.top = (element.offsetTop - diff_y) + "px";
-        element.style.left = (element.offsetLeft - diff_x) + "px";
+        element.draggable.style.top = (element.draggable.offsetTop - diff_y) + "px";
+        element.draggable.style.left = (element.draggable.offsetLeft - diff_x) + "px";
     }
 
 
@@ -207,65 +294,59 @@ function makeDraggable(element) {
         document.onmouseup = null;
         document.onmousemove = null;
 
-        // when pizza is dragged into an order element
-        if (element.tagName === "DIV") {
-            orderList.forEach(function (item, index, array) {
+        checkForOverlapWithOrder();
 
-                if (checkOverlap(element, document.getElementsByClassName("order").item(index))) {
+        if (element instanceof DraggableIngredientInstance)
+            checkForOverlapWithPizza();
 
-                    //Server validates Pizza and updates points
-                    validatePizza(element);
+        checkForOverlapWithOven();
+    }
 
-                    alert(element.name + " into " + orderList[index].name) // "element" in this case is simply an <img>
-                    existingPizzas.splice(existingPizzas.indexOf(element), 1);
-                    element.remove();
-                    return;
-                }
-            });
-        }
-        // when ingredient is dragged into a pizza
-        if (element.tagName !== "DIV") {
+    function checkForOverlapWithOrder() {
+        orderList.forEach(function(item, index, array){
 
-            for (let i = 0; i < document.getElementById("pizza_layer").childElementCount; i++) {
+            if (checkOverlap(element.draggable, document.getElementsByClassName("order").item(index))){
 
-                //checks overlap with every existing pizza
-                if (checkOverlap(element, document.getElementById("pizza_layer").children.item(i))) {
+                element.whenDraggedInOrder(orderList[index]);
+            }
+        });
+    }
 
-                    //Put ingredient on pizza
-                    existingPizzas[i].ingredients.push(Ingredient.getInstanceByName(element.alt));
+    function checkForOverlapWithPizza() {
+        for (let i = 0; i < document.getElementById("pizza_layer").childElementCount; i++) {
 
-                    //Div declarations
-                    const pizzaDivOld = document.getElementById("pizza_layer").children.item(i);
-                    const pizzaDivUpdated = existingPizzas[i].createDiv();
+            if (checkOverlap(element.draggable, document.getElementById("pizza_layer").children.item(i))) {
 
-                    //Set position of pizzaDivUpdated
-                    pizzaDivUpdated.style.left = pizzaDivOld.style.left;
-                    pizzaDivUpdated.style.top = pizzaDivOld.style.top;
-
-                    //Swap pizzaDivs
-                    document.getElementById("pizza_layer").replaceChild(pizzaDivUpdated, pizzaDivOld)
-
-                    //Remove single draggable ingredient
-                    element.remove();
-                    return;
-                }
+                element.whenDraggedInPizza(existingPizzas[i])
             }
         }
-
     }
+
+    //TODO: Weiter machen: checkOverlap() überarbeiten; Öfen aus Array lesen?
+    function checkForOverlapWithOven() {
+        for (let i = 0; i < document.getElementsByClassName("oven").length; i++) {
+
+            if (checkOverlap(element.draggable, document.getElementsByClassName("oven").item(i))) {
+
+                element.whenDraggedInOven(document.getElementsByClassName("oven").item(i))
+            }
+        }
+    }
+
+
 }
 
-function pullNewIngredient(ingredientIndex) {
-    const draggable = availableIngredients[ingredientIndex].createDraggableInstance();
+function pullNewIngredient(ingredientIndex){
+    const draggable = availableIngredients[ingredientIndex].createDraggableInstance().draggable;
     const event = window.event;
     event.preventDefault();
 
     // set element position to cursor. Teig wird direkt als angefangene Pizza erstellt, deshalb anders behandelt
-    draggable.style.left = draggable.tagName === "IMG" ? event.clientX + scrollX - draggable.width / 2 + "px" : event.clientX + scrollX - draggable.firstChild.width / 2 + "px";
-    draggable.style.top = draggable.tagName === "IMG" ? event.clientY + scrollY - draggable.height / 2 + "px" : event.clientY + scrollY - draggable.firstChild.height / 2 + "px";
+    draggable.style.left = draggable.tagName === "IMG" ? event.clientX + scrollX - draggable.width/2 + "px" : event.clientX + scrollX - draggable.firstChild.width/2 + "px";
+    draggable.style.top = draggable.tagName === "IMG" ? event.clientY + scrollY - draggable.height/2 + "px" : event.clientY + scrollY - draggable.firstChild.height/2 + "px";
 }
 
-function checkOverlap(draggable, destination) {
+function checkOverlap(draggable, destination){
     let draggable_box = undefined;
     let destination_box = undefined;
 
@@ -279,8 +360,8 @@ function checkOverlap(draggable, destination) {
 
 
     //center-coordinates of the draggable element
-    const draggable_centerX = draggable_box.left + (draggable_box.right - draggable_box.left) / 2;
-    const draggable_centerY = draggable_box.top + (draggable_box.bottom - draggable_box.top) / 2;
+    const draggable_centerX = draggable_box.left + (draggable_box.right - draggable_box.left)/2;
+    const draggable_centerY = draggable_box.top + (draggable_box.bottom - draggable_box.top)/2;
 
     //are they overlapping in X or Y ?
     const isOverlapX = (draggable_centerX > destination_box.left && draggable_centerX < destination_box.right);
@@ -311,8 +392,6 @@ function validatePizza(element) {
         .catch((error) => {
         console.error('Error:', error);
     });
-
-
 }
 
 function updateCurrentPoints() {
