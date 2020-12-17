@@ -11,8 +11,7 @@
 </head>
 
   <body onload="  populateIngredientSection();
-                  populateOrderSection();
-                  countdown(120)">
+                  populateOrderSection()">
 
   <!--NAVIGATION BAR ------------->
   <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
@@ -29,6 +28,7 @@
 
     <div id="upper_container">
             <div id="left_upper_container">
+                <button id="startStop_button" onclick="manageCountdown(120)">Start!</button>
                 <h1 id="timer"></h1>
             </div>
             <div id="oven_container">

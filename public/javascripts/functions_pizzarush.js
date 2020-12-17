@@ -331,7 +331,14 @@ function updateCurrentPoints() {
 
 }
 
+var timerActive = false;
 
+function manageCountdown(seconds){
+    if (!timerActive){
+        countdown(seconds)
+        timerActive = true;
+    }
+}
 
 function countdown(seconds) {
 // Set the date we're counting down to
