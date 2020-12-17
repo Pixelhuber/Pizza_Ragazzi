@@ -99,7 +99,6 @@ section{
 #workSurface{
     flex: 3;
     background: rgba(150, 150, 150, 0.2);
-    border-radius: 15px;
 }
 
 .box{
@@ -107,10 +106,13 @@ section{
     align-items: center;
 
     margin: 5px 0 5px 0;
+    background-color: white;
+    font-size: 1.2em;
+    border: 4px solid black;
+}
+
+.box:hover{
     background-color: rgba(150, 150, 150, 0.2);
-    font-size: 1.5em;
-    border-radius: 8px;
-    border: 3px solid black;
 }
 
 .ingredient{
@@ -124,4 +126,5 @@ section{
 
 .order{
     height: 2.5em;
+    padding-left: 5px;
 }

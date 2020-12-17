@@ -42,10 +42,7 @@ function validateLoginData() {
     var password_error = document.getElementById("password_error");
     var login_error = document.getElementById("login_error");
 
-    if (username.value === "admin" && password.value === "admin") {
-        window.location.href = "main";
-        return;
-    }
+
 
     let usernameTyped = username.value.length >= 1;
     if (!usernameTyped) {
@@ -58,12 +55,35 @@ function validateLoginData() {
         login_error.style.display = "none";
     }
 
-    else if (usernameTyped) {
-        login_error.style.display = "block";
-    }
+    authenticateLogin();
 }
 
 function changePage() {
     window.location.href = "createAccount";
+}
+
+function authenticateLogin() {
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+    let login_error = document.getElementById("login_error");
+
+    fetch("/authenticate", {
+        method: 'POST',
+        body:   JSON.stringify({
+            username:   username
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    })
+        .then(result => result.text())
+        .then(data => {
+            if (username === "admin" && password === "admin") {
+                window.location.href = "main";
+            } else {
+                login_error.style.display = "block";
+            }
+        })
 }
 

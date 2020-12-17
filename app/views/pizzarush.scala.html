@@ -1,32 +1,33 @@
 @(title: String)(implicit assetsFinder: AssetsFinder)
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
+<head>
+  <meta charset="UTF-8">
 
-        <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_pizzarush.css")">
-        <script type="text/javascript" src="@routes.Assets.versioned("javascripts/functions_pizzarush.js")"></script>
+  <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_pizzarush.css")">
+  <script type="text/javascript" src="@routes.Assets.versioned("javascripts/functions_pizzarush.js")"></script>
 
-        <title>Pizza-Rush</title>
-    </head>
+  <title>Pizza-Rush</title>
+</head>
 
-    <body onload="populateIngredientSection();
-    populateOrderSection();countdown(120)">
+  <body onload="  populateIngredientSection();
+                  populateOrderSection();
+                  countdown(120)">
 
-            <!--NAVIGATION BAR ------------->
-        <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
-            <!------------------------------>
+  <!--NAVIGATION BAR ------------->
+  <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
+  <!------------------------------>
 
-        <div id="pizza_layer"> </div>
+  <div id="pizza_layer"> </div>
 
-            <!--diese Ebenen sorgen dafür, dass z.B Tomaten immer über Teig gerendert werden usw. -->
-        <div id="dough_layer"> </div>
-        <div id="tomato_layer"> </div>
-        <div id="cheese_layer"> </div>
-        <div id="salami_layer"> </div>
+  <!--diese Ebenen sorgen dafür, dass z.B Tomaten immer über Teig gerendert werden usw. -->
+  <div id="dough_layer"> </div>
+  <div id="tomato_layer"> </div>
+  <div id="cheese_layer"> </div>
+  <div id="salami_layer"> </div>
 
 
-        <div id="upper_container">
+    <div id="upper_container">
             <div id="left_upper_container">
                 <h1 id="timer"></h1>
             </div>
@@ -41,33 +42,33 @@
             </div>
         </div>
 
-        <section>
+  <section>
 
-            <div id="ingredientSection">
-                <h1>INGREDIENTI</h1>
+    <div id="ingredientSection">
+      <h1>INGREDIENTI</h1>
 
-                <div class="scroll_container">
+      <div class="scroll_container">
 
-                        <!--INGREDIENT LIST POPULATED DYNAMICALLY -->
+        <!--INGREDIENT LIST POPULATED DYNAMICALLY -->
 
-                </div>
+      </div>
 
-            </div>
+    </div>
 
-            <div id="workSurface"></div>
+    <div id="workSurface"></div>
 
-            <div id="orderSection">
-                <h1>ORDINI</h1>
+    <div id="orderSection">
+      <h1>ORDINI</h1>
 
-                <div class="scroll_container">
+      <div class="scroll_container">
 
-                        <!--ORDER LIST POPULATED DYNAMICALLY -->
+        <!--ORDER LIST POPULATED DYNAMICALLY -->
 
-                </div>
+      </div>
 
-            </div>
+    </div>
 
-        </section>
+  </section>
 
-    </body>
+</body>
 </html>

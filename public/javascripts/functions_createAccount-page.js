@@ -99,3 +99,45 @@ function validateCreateAccountData() {
 function changePage() {
     window.location.href = "login";
 }
+
+function createAccount() {
+    let username = document.getElementById("loginUsername").value;
+    let password = document.getElementById("loginPassword").value;
+
+    fetch("/login", {
+        method: 'POST',
+        body: JSON.stringify({
+            username: username.value
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    })
+        .then(data => {
+            if (password.value === password2.value && validInputs) {
+                window.location.href = "main";
+
+            } else {
+                alert("Registrieren fehlergeschlagen")
+            }
+        })
+
+    function getUsernameFromSession() {
+
+        let ret = "";
+
+        fetch("/getUsername")
+            .then(
+                result => result.text()
+            ).then(
+            result => document.getElementById("username").textContent = result
+        ).catch(
+            username = username.value()
+        );
+
+        return ret;
+    }
+
+
+}
