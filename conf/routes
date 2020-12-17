@@ -12,6 +12,7 @@ GET     /message                    controllers.AsyncController.message
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(file)
 
+# HTML-PAGES -----------------------------------------------------------------------
 GET     /highscore                  controllers.HomeController.highscore
 
 GET     /profile                    controllers.HomeController.profile
@@ -20,20 +21,16 @@ GET     /login                      controllers.HomeController.login
 
 GET     /createAccount              controllers.HomeController.createAccount
 
-
 GET     /main                       controllers.HomeController.main
 
 # HIGHSCORE ------------------------------------------------------------------------
-GET     /getTableData               controllers.HighscoreController.getTableData
+GET     /highscore/getTableData     controllers.HighscoreController.getTableData
 
 # PROFILE --------------------------------------------------------------------------
-POST    /profile                    controllers.ProfileController.setUsername(request: Request)
+POST    /profile/updateUsername     controllers.ProfileController.setUsername(request: Request)
 
+# Use this route for every getUsername call
 GET     /getUsername                controllers.ProfileController.getUsernameFromSession(request: Request)
-
 
 # LOGIN ----------------------------------------------------------------------------
 POST    /authenticate               controllers.LoginController.authenticate(request: Request)
-
-GET     /getUsername                controllers.LoginController.getUsernameFromSession(request: Request)
-

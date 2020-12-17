@@ -86,15 +86,4 @@ function authenticateLogin() {
             }
         })
 }
-// Reads username from session and updates html
-function getUsernameFromSession() {
-
-    $.get("/getUsername", function(data, status){
-        //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
-        document.getElementById("username").textContent = data
-    }).fail(function (data, status){
-        document.getElementById("username").textContent = "Default Name";
-        //alert("Couldn't retrieve username");
-    });
-}
 
