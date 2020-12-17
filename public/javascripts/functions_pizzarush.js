@@ -107,9 +107,11 @@ class Pizza {
     // When created, a new pizza is simply a piece of dough. More ingredients get added while playing.
     constructor() {
         this.ingredients.push(Ingredient.getInstanceByName("Impasto"))
+        this.isBaked = false;
     }
 
     ingredients = [];
+    isBaked;
 
 }
 
@@ -136,7 +138,11 @@ class DraggablePizzaInstance extends Pizza {
     }
 
     getName() {
-        return "unknown Pizza" // temporary return value
+        // temporary return values
+        if (this.isBaked)
+            return "unknown baked Pizza"
+        else
+            return "unknown Pizza"
     }
 
     // a.k.a. createDraggable()
@@ -144,8 +150,6 @@ class DraggablePizzaInstance extends Pizza {
         const pizzaDiv = document.createElement("div");
 
         pizzaDiv.setAttribute('class', 'draggable');
-
-
 
         this.ingredients.forEach(function(item, index, array){
 
@@ -157,6 +161,11 @@ class DraggablePizzaInstance extends Pizza {
 
             //return pizzaDiv;
         })
+
+        // Sets the size of the <div> to the size of the <img> in it
+        // without this, checkOverlap() couldn't calculate the middle point of the <div>
+        pizzaDiv.style.width = pizzaDiv.firstElementChild.getAttribute("width");
+        pizzaDiv.style.height = pizzaDiv.firstElementChild.getAttribute("height");
 
         this.draggable = pizzaDiv;
 
@@ -179,6 +188,8 @@ class DraggablePizzaInstance extends Pizza {
 
     whenDraggedInOven(oven) {
 
+        alignDraggableToDestination(this.draggable, oven);
+        this.isBaked = true;
 
     }
 }
@@ -294,15 +305,15 @@ function makeDraggable(element) {
         document.onmouseup = null;
         document.onmousemove = null;
 
-        checkForOverlapWithOrder();
+        checkIfDraggedInOrder();
 
         if (element instanceof DraggableIngredientInstance)
-            checkForOverlapWithPizza();
+            checkIfDraggedInPizza();
 
-        checkForOverlapWithOven();
+        checkIfDraggedInOven();
     }
 
-    function checkForOverlapWithOrder() {
+    function checkIfDraggedInOrder() {
         orderList.forEach(function(item, index, array){
 
             if (checkOverlap(element.draggable, document.getElementsByClassName("order").item(index))){
@@ -312,7 +323,7 @@ function makeDraggable(element) {
         });
     }
 
-    function checkForOverlapWithPizza() {
+    function checkIfDraggedInPizza() {
         for (let i = 0; i < document.getElementById("pizza_layer").childElementCount; i++) {
 
             if (checkOverlap(element.draggable, document.getElementById("pizza_layer").children.item(i))) {
@@ -323,7 +334,7 @@ function makeDraggable(element) {
     }
 
     //TODO: Weiter machen: checkOverlap() überarbeiten; Öfen aus Array lesen?
-    function checkForOverlapWithOven() {
+    function checkIfDraggedInOven() {
         for (let i = 0; i < document.getElementsByClassName("oven").length; i++) {
 
             if (checkOverlap(element.draggable, document.getElementsByClassName("oven").item(i))) {
@@ -346,18 +357,9 @@ function pullNewIngredient(ingredientIndex){
     draggable.style.top = draggable.tagName === "IMG" ? event.clientY + scrollY - draggable.height/2 + "px" : event.clientY + scrollY - draggable.firstChild.height/2 + "px";
 }
 
-function checkOverlap(draggable, destination){
-    let draggable_box = undefined;
-    let destination_box = undefined;
-
-    //Man braucht ein <img> um den Mittelpunkt zu berechnen. Da Pizzen aber <div> sind, nimmt man das .firstChild
-    if (destination.firstChild.tagName !== "IMG")
-        destination_box = destination.getBoundingClientRect();
-    else
-        destination_box = destination.tagName === "IMG" ? destination.getBoundingClientRect() : destination.firstChild.getBoundingClientRect();
-
-    draggable_box = draggable.tagName === "IMG" ? draggable.getBoundingClientRect() : draggable.firstChild.getBoundingClientRect();
-
+function checkOverlap(draggable, destination) {
+    const draggable_box = draggable.getBoundingClientRect();
+    const destination_box = destination.getBoundingClientRect();
 
     //center-coordinates of the draggable element
     const draggable_centerX = draggable_box.left + (draggable_box.right - draggable_box.left)/2;
@@ -368,6 +370,19 @@ function checkOverlap(draggable, destination){
     const isOverlapY = (draggable_centerY > destination_box.top && draggable_centerY < destination_box.bottom);
 
     return isOverlapX && isOverlapY;
+}
+
+function alignDraggableToDestination(draggable, destination) {
+
+    const draggable_box = draggable.getBoundingClientRect();
+    const destination_box = destination.getBoundingClientRect();
+
+    const x = destination_box.left + (destination_box.width - draggable_box.width) / 2
+    const y = destination_box.top + (destination_box.height - draggable_box.height) / 2
+
+    //Align pizza and oven position
+    draggable.style.left = x + "px";
+    draggable.style.top = y + "px";
 }
 
 
