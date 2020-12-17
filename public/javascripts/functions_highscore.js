@@ -52,7 +52,7 @@ function createHighscoreTable(tableData) {
 }
 
 function getTableData() {
-    fetch("/getTableData")
+    fetch("/highscore/getTableData")
         .then(result => result.json())
         .then(result => createHighscoreTable(result));
 }

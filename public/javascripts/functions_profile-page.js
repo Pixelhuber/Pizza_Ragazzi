@@ -89,7 +89,7 @@ function updateUsernameInSession(newUsername) {
         password: "Hallo" // Passwort brauch ich hier eigentlich nicht, ich lass es trotzdem mal drin
     }
 
-    $.post("/profile", loginViewModel,
+    $.post("/profile/updateUsername", loginViewModel,
         function (data, status){
             // Das funktioniert noch nicht ganz! Beim ausführen sieht man, dass "data" irgendwie leer bleibt... aber der Wert wird korrekt gespeichert
             alert("Session updated!\nData: " + data + "\nStatus: " + status)
@@ -107,6 +107,6 @@ function getUsernameFromSession() {
         document.getElementById("username").textContent = data
     }).fail(function (data, status){
         document.getElementById("username").textContent = "Default Name";
-        //alert("Couldn't retrieve username");
+        alert("Couldn't retrieve username from session");
     });
 }
