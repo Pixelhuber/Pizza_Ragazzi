@@ -331,16 +331,17 @@ function updateCurrentPoints() {
 
 }
 
-var timerActive = false;
+let timerActive = false;
 
-function manageCountdown(seconds){
+function manageCountdown(seconds,timerContainerId){
     if (!timerActive){
-        countdown(seconds)
         timerActive = true;
+        countdown(seconds,timerContainerId)
     }
+    document.getElementById("startStop_button").style.display='none';
 }
 
-function countdown(seconds) {
+function countdown(seconds, timerContainerId) {
 // Set the date we're counting down to
     var countDownDate = new Date();
     countDownDate.setSeconds(countDownDate.getSeconds()+seconds);
@@ -361,12 +362,12 @@ function countdown(seconds) {
         }
 
         // Display the result in the element with id="demo"
-        document.getElementById("timer").innerHTML = "Time: " + minutes + ":" + seconds;
+        document.getElementById(timerContainerId).innerHTML = "Time: " + minutes + ":" + seconds;
 
         // If the count down is finished, write some text
         if (distance < 0) {
             clearInterval(x);
-            document.getElementById("timer").innerHTML = "END";
+            document.getElementById(timerContainerId).innerHTML = "END";
         }
     }, 1000);
 }

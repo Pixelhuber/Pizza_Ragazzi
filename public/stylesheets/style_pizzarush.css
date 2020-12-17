@@ -12,6 +12,10 @@ body {
     cursor: move;
 }
 
+#startStop_button{
+    display: flex;
+}
+
 #upper_container{
     display: flex;
 
