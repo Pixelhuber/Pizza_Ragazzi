@@ -536,7 +536,7 @@ function manageRushCountdown(seconds, timerContainerId){
             // @Override
             onCountdownStart() {
                 timerActive = true;
-                document.getElementById("startStop_button").style.display='none';
+                document.getElementById("startStop_overlay").style.display='none';
             }
 
             // @Override
