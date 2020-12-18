@@ -1,3 +1,4 @@
+// An "Ingredient" is only a definition of an ingredient without any behavior.
 class Ingredient {
 
     constructor(name, image) {
@@ -40,14 +41,17 @@ class Ingredient {
     }
 }
 
+// A "DraggableIngredientInstance" is an actual Ingredient you can interact with and drag around
 class DraggableIngredientInstance extends Ingredient {
 
     constructor(ingredient) {
         super(ingredient.name, ingredient.image);
         this.createDraggable();
+        this.isDragEnabled = true;
     }
 
-    draggable;
+    draggable; // Actual draggable html-element
+    isDragEnabled; // Dragging gets disabled for example when in oven
 
     createDraggable() {
         const draggable = this.createImg();
@@ -68,11 +72,14 @@ class DraggableIngredientInstance extends Ingredient {
         makeDraggable(this);
     }
 
+    setIsDragEnabled(boolean) {
+        this.isDragEnabled = boolean;
+    }
+
     whenDraggedInOrder(order) {
 
         alert("Delivered: " + this.getName() + "\nOrdered: " + order.name)
         this.draggable.remove();
-        return;
     }
 
     whenDraggedInPizza(pizza) {
@@ -94,27 +101,28 @@ class DraggableIngredientInstance extends Ingredient {
         //Remove single draggable ingredient
         pizzaDivOld.remove();
         this.draggable.remove();
-        return;
     }
 }
 
 // ingredient & draggableIngredientInstance class above
 // --------------------------------------------------------------------------------------------------------------------
 
-// A "Pizza" is basically a dough with ingredients on it. It doesn't have to be a correct Pizza
+// A "Pizza" is only a definition of ingredients without any behavior.
+// Example: An Order-Element requests a "Pizza" and not a "DraggablePizzaInstance"
 class Pizza {
 
     // When created, a new pizza is simply a piece of dough. More ingredients get added while playing.
     constructor() {
         this.ingredients.push(Ingredient.getInstanceByName("Impasto"))
-        this.isBaked = false;
+        this.bakingTimeInSeconds = 5;
     }
 
     ingredients = [];
-    isBaked;
+    bakingTimeInSeconds;
 
 }
 
+// A "DraggablePizzaInstance" is the actual Pizza you can interact with and drag around
 class DraggablePizzaInstance extends Pizza {
 
     constructor() {
@@ -122,11 +130,15 @@ class DraggablePizzaInstance extends Pizza {
 
         this.updateDiv();
         existingPizzas.push(this);
-
         document.getElementById("pizza_layer").appendChild(this.draggable);
+
+        this.isBaked = false;
+        this.isDragEnabled = true;
     }
 
-    draggable;
+    draggable; // Actual draggable html-element
+    isDragEnabled;
+    isBaked;
 
     static findExistingPizzaByDiv(div) {
         existingPizzas.forEach(function(item, index, array){
@@ -137,12 +149,36 @@ class DraggablePizzaInstance extends Pizza {
         return undefined;
     }
 
+    bake() {
+        class BakingTimer extends CountdownInterface {
+
+            onCountdownStart() {
+                this.affectedObject.setIsDragEnabled(false);
+            }
+
+            onCountdownInterval() {
+                // irgendein Zeit-Indikator
+            }
+
+            onCountdownEnd() {
+                this.affectedObject.setIsDragEnabled(true);
+                this.affectedObject.isBaked = true
+            }
+        }
+
+        new BakingTimer(this.bakingTimeInSeconds, this).startCountdown();
+    }
+
+    setIsDragEnabled(boolean) {
+        this.isDragEnabled = boolean;
+    }
+
     getName() {
         // temporary return values
         if (this.isBaked)
             return "unknown baked Pizza"
         else
-            return "unknown Pizza"
+            return "unknown unbaked Pizza"
     }
 
     // a.k.a. createDraggable()
@@ -189,8 +225,7 @@ class DraggablePizzaInstance extends Pizza {
     whenDraggedInOven(oven) {
 
         alignDraggableToDestination(this.draggable, oven);
-        this.isBaked = true;
-
+        this.bake();
     }
 }
 
@@ -199,10 +234,12 @@ class DraggablePizzaInstance extends Pizza {
 
 class Order{
 
-    constructor(name, points, time) {
+    constructor(name, points, timeInSeconds, requestedPizza) {
         this.name = name;
         this.points = points;
-        this.time = time;
+        this.time = timeInSeconds;
+        if (requestedPizza instanceof Pizza)
+            this.pizza = requestedPizza;
     }
 }
 
@@ -267,6 +304,9 @@ function makeDraggable(element) {
     element.draggable.onmousedown = initiateDrag;
 
     function initiateDrag(event) {
+        if (!element.isDragEnabled)
+            return;
+
         event = event || window.event;
         event.preventDefault();
 
@@ -296,7 +336,6 @@ function makeDraggable(element) {
 
 
     // defines what to do when element is released
-    // TODO: Split up in specific methods for draggable ingredients and pizzas
     function endDrag(event) {
         event = event || window.event;
         event.preventDefault();
@@ -305,12 +344,13 @@ function makeDraggable(element) {
         document.onmouseup = null;
         document.onmousemove = null;
 
-        checkIfDraggedInOrder();
+        checkIfDraggedInOrder(); // check overlap with every order element
 
         if (element instanceof DraggableIngredientInstance)
-            checkIfDraggedInPizza();
+            checkIfDraggedInPizza(); // check overlap with every existing pizza
 
-        checkIfDraggedInOven();
+        if (element instanceof DraggablePizzaInstance)
+            checkIfDraggedInOven(); // check overlap with every oven
     }
 
     function checkIfDraggedInOrder() {
@@ -318,7 +358,7 @@ function makeDraggable(element) {
 
             if (checkOverlap(element.draggable, document.getElementsByClassName("order").item(index))){
 
-                element.whenDraggedInOrder(orderList[index]);
+                element.whenDraggedInOrder(orderList[index]); // notify the object
             }
         });
     }
@@ -333,7 +373,6 @@ function makeDraggable(element) {
         }
     }
 
-    //TODO: Weiter machen: checkOverlap() überarbeiten; Öfen aus Array lesen?
     function checkIfDraggedInOven() {
         for (let i = 0; i < document.getElementsByClassName("oven").length; i++) {
 
@@ -386,6 +425,8 @@ function alignDraggableToDestination(draggable, destination) {
 }
 
 
+// PIZZA-VALIDATION & POINTS ------------------------------------------------------------------------------------------
+
 function validatePizza(element) {
 
     //Pizza JSON creation TODO: enter correct pizza name instead of salame
@@ -425,43 +466,101 @@ function updateCurrentPoints() {
 
 }
 
-let timerActive = false;
 
-function manageCountdown(seconds,timerContainerId){
-    if (!timerActive){
-        timerActive = true;
-        countdown(seconds,timerContainerId)
+// COUNTDOWN-STUFF ----------------------------------------------------------------------------------------------------
+
+// diese Klasse soll ein Java-Interface simulieren
+// spezifische Countdown-Anwendungen erben von dieser Klasse und müssen nurnoch die drei methoden "onCountdownX()" überschreiben
+class CountdownInterface {
+
+    constructor(seconds, affectedObject) {
+        this.seconds = seconds;
+        this.affectedObject = affectedObject;
+
+        // Set the date we're counting down to
+        this.countDownDate = new Date();
+        this.countDownDate.setSeconds(this.countDownDate.getSeconds() + seconds);
     }
-    document.getElementById("startStop_button").style.display='none';
+
+    seconds;
+    affectedObject;
+
+    countDownDate;
+    distance;
+
+    // do not override this method
+    startCountdown(){
+        this.onCountdownStart(); // behavior to be specified in concrete class
+
+        // Update the countdown every 1 second
+        let x = setInterval(() => {
+            let now = new Date().getTime();
+
+            // Find the distance between now and the countdown date
+            this.distance = this.countDownDate - now;
+
+            if (this.distance < 1) {
+                clearInterval(x);
+                this.onCountdownEnd(); // behavior to be specified in concrete class
+            } else {
+                this.onCountdownInterval() // behavior to be specified in concrete class
+            }
+        }, 1000);
+    }
+
+    // Override this method in concrete class
+    onCountdownStart() {
+        alert("onCountdownStart() hasn't been overridden for this countdown type")
+    }
+
+    // Override this method in concrete class
+    onCountdownInterval() {
+        alert("onCountdownInterval() hasn't been overridden for this countdown type")
+    }
+
+    // Override this method in concrete class
+    onCountdownEnd() {
+        alert("onCountdownEnd() hasn't been overridden for this countdown type")
+    }
 }
 
-function countdown(seconds, timerContainerId) {
-// Set the date we're counting down to
-    var countDownDate = new Date();
-    countDownDate.setSeconds(countDownDate.getSeconds()+seconds);
 
-// Update the count down every 1 second
-    var x = setInterval(function () {
-        var now = new Date().getTime();
 
-        // Find the distance between now and the count down date
-        var distance = countDownDate - now;
+let timerActive = false;
 
-        // Time calculations
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+function manageRushCountdown(seconds, timerContainerId){
+    if (!timerActive){
 
-        if (seconds<10){
-             seconds="0"+seconds;
+        class RushCountdown extends CountdownInterface { // Hier wird die spezifische RushCountdown Klasse definiert
+
+            // @Override
+            onCountdownStart() {
+                timerActive = true;
+                document.getElementById("startStop_button").style.display='none';
+            }
+
+            // @Override
+            onCountdownInterval() {
+                // Time calculations
+                let minutes = Math.floor((this.distance % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((this.distance % (1000 * 60)) / 1000);
+
+                if (seconds < 10){
+                    seconds = "0" + seconds;
+                }
+
+                // Display the result in the affectedObject
+                this.affectedObject.innerHTML = "Time: " + minutes + ":" + seconds;
+            }
+
+            // @Override
+            // Hier könnte später die PizzaRush Runde beendet werden
+            onCountdownEnd() {
+                timerActive = false;
+                this.affectedObject.innerHTML = "END";
+            }
         }
 
-        // Display the result in the element with id="demo"
-        document.getElementById(timerContainerId).innerHTML = "Time: " + minutes + ":" + seconds;
-
-        // If the count down is finished, write some text
-        if (distance < 0) {
-            clearInterval(x);
-            document.getElementById(timerContainerId).innerHTML = "END";
-        }
-    }, 1000);
+        new RushCountdown(seconds, document.getElementById(timerContainerId)).startCountdown(); // Countdown wird gestartet
+    }
 }
