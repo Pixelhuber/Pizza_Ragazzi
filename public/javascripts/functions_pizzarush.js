@@ -557,6 +557,8 @@ function manageRushCountdown(seconds, timerContainerId){
             // Hier könnte später die PizzaRush Runde beendet werden
             onCountdownEnd() {
                 timerActive = false;
+                document.getElementById("startStop_overlay").style.display='block';
+                document.getElementById("startStop_overlay_text").innerHTML="Round over !<br />Click to play again";
                 this.affectedObject.innerHTML = "END";
             }
         }
