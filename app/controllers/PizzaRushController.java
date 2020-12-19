@@ -44,5 +44,9 @@ public class PizzaRushController extends Controller {
         return 0;
     }
 
+    public Result resetPoints(Http.Request request){
+        return ok().addingToSession(request, "currentPizzaRushPoints","0");
+    }
+
 
 }

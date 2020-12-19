@@ -466,6 +466,14 @@ function updateCurrentPoints() {
 
 }
 
+function resetPoints() {
+    fetch("/pizza_rush/reset_points",{
+        method: 'POST',
+        credentials: "include"
+    }).then(updateCurrentPoints)
+        .catch((error) =>{console.log('Error', error)})
+}
+
 
 // COUNTDOWN-STUFF ----------------------------------------------------------------------------------------------------
 
@@ -563,6 +571,7 @@ function manageRushCountdown(seconds, timerContainerId){
             }
         }
 
+        resetPoints();
         new RushCountdown(seconds, document.getElementById(timerContainerId)).startCountdown(); // Countdown wird gestartet
     }
 }
