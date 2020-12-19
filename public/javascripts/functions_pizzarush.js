@@ -125,6 +125,10 @@ class Pizza {
 // A "DraggablePizzaInstance" is the actual Pizza you can interact with and drag around
 class DraggablePizzaInstance extends Pizza {
 
+    draggable; // Actual draggable html-element
+    isDragEnabled;
+    isBaked;
+
     constructor() {
         super();
 
@@ -135,10 +139,6 @@ class DraggablePizzaInstance extends Pizza {
         this.isBaked = false;
         this.isDragEnabled = true;
     }
-
-    draggable; // Actual draggable html-element
-    isDragEnabled;
-    isBaked;
 
     static findExistingPizzaByDiv(div) {
         existingPizzas.forEach(function(item, index, array){
@@ -163,6 +163,7 @@ class DraggablePizzaInstance extends Pizza {
             onCountdownEnd() {
                 this.affectedObject.setIsDragEnabled(true);
                 this.affectedObject.isBaked = true
+                console.log("pizza is baked")
             }
         }
 
@@ -176,9 +177,9 @@ class DraggablePizzaInstance extends Pizza {
     getName() {
         // temporary return values
         if (this.isBaked)
-            return "unknown baked Pizza"
+            return "unknown baked Pizza";
         else
-            return "unknown unbaked Pizza"
+            return "unknown unbaked Pizza";
     }
 
     // a.k.a. createDraggable()
@@ -214,7 +215,7 @@ class DraggablePizzaInstance extends Pizza {
     whenDraggedInOrder(order) {
 
         // Server validates pizza and updates points
-        validatePizza(this.draggable);
+        validatePizza(order, this.draggable, this.isBaked);
 
         alert("Delivered: " + this.getName() + "\nOrdered: " + order.name)
         existingPizzas.splice(existingPizzas.indexOf(this), 1);
@@ -240,6 +241,10 @@ class Order{
         this.time = timeInSeconds;
         if (requestedPizza instanceof Pizza)
             this.pizza = requestedPizza;
+    }
+
+    getName(){
+        return this.name;
     }
 }
 
@@ -427,10 +432,17 @@ function alignDraggableToDestination(draggable, destination) {
 
 // PIZZA-VALIDATION & POINTS ------------------------------------------------------------------------------------------
 
-function validatePizza(element) {
+function validatePizza(order, element, isBaked) {
 
-    //Pizza JSON creation TODO: enter correct pizza name instead of salame
-    let pizzaJson = '{"pizzaName": "' + 'Salame' + '",\n "ingredients": [';
+    //ich frage is baked im moment nur hier ab und lasse es nicht vom server validieren
+    //dies mache ich nur, da ich im moment keine zeit hab, mich mit imaginären nullpointerexeptions auseinander zu setzten
+    if (!isBaked)
+        return
+
+    //Pizza JSON creation
+    let pizzaJson = '{"pizzaName": "' + order.getName() + '",\n' +
+       // '"bakingState:": "' + isBaked + '",\n' +
+        '"ingredients": [';
     let collection = element.children;
     Array.from(collection).forEach(function (element) {
         pizzaJson += '\n"' + element.alt + '",'
