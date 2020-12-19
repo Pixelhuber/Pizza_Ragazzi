@@ -29,8 +29,10 @@ GET     /highscore/getTableData     controllers.HighscoreController.getTableData
 # PROFILE --------------------------------------------------------------------------
 POST    /profile/updateUsername     controllers.ProfileController.setUsername(request: Request)
 
-# Use this route for every getUsername call
+# Use this route for every get call
 GET     /getUsername                controllers.ProfileController.getUsernameFromSession(request: Request)
+
+GET     /getPassword                controllers.ProfileController.getPasswordFromSession(request: Request)
 
 # LOGIN ----------------------------------------------------------------------------
 POST    /authenticate               controllers.LoginController.authenticate(request: Request)

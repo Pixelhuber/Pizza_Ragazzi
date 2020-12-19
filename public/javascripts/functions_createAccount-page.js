@@ -118,6 +118,7 @@ function createAccount() {
         .then(result => result.text())
         .then(data => {
            window.location.href = "main";
+
         })
 
     function getUsernameFromSession() {

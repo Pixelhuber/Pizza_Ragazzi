@@ -39,4 +39,13 @@ public class ProfileController extends Controller {
                 .map(Results::ok)
                 .orElseGet(Results::notFound);
     }
+
+    public Result getPasswordFromSession(Http.Request request) {
+
+        return request
+                .session()
+                .get("password") // Sucht nach dem Wert in der Session, der unter dem Key "password" abgelegt ist
+                .map(Results::ok)
+                .orElseGet(Results::notFound);
+    }
 }

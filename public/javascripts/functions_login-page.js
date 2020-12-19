@@ -80,7 +80,7 @@ function authenticateLogin() {
     })
         .then(result => result.text())
         .then(data => {
-            if (username === "admin" && password === "admin" || username === getUsernameFromSession()) {       //password === getPasswordFromSession() brauch ich noch
+            if (username === "admin" && password === "admin" || username === getUsernameFromSession() && password === getPasswordFromSession()) {
                 window.location.href = "main";
             } else {
                 login_error.style.display = "block";
@@ -97,9 +97,26 @@ function getUsernameFromSession() {
         ).then(
         result => document.getElementById("username").textContent = result
     ).catch(
-        username = this.username
+        username = username.value
     );
 
     return ret;
 }
+
+function getPasswordFromSession() {
+
+    let ret = "";
+
+    fetch("/getPassword")
+        .then(
+            result => result.text()
+        ).then(
+        result => document.getElementById("password").textContent = result
+    ).catch(
+        password = password.value
+    );
+
+    return ret;
+}
+
 
