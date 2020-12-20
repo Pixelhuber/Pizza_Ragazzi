@@ -76,12 +76,6 @@ class DraggableIngredientInstance extends Ingredient {
         this.isDragEnabled = boolean;
     }
 
-    whenDraggedInOrder(order) {
-
-        alert("Delivered: " + this.getName() + "\nOrdered: " + order.name)
-        this.draggable.remove();
-    }
-
     whenDraggedInPizza(pizza) {
 
         //Put ingredient on pizza
@@ -133,7 +127,7 @@ class DraggablePizzaInstance extends Pizza {
         super();
 
         this.updateDiv();
-        existingPizzas.push(this);
+        existingDraggablePizzaInstances.push(this);
         document.getElementById("pizza_layer").appendChild(this.draggable);
 
         this.isBaked = false;
@@ -141,7 +135,7 @@ class DraggablePizzaInstance extends Pizza {
     }
 
     static findExistingPizzaByDiv(div) {
-        existingPizzas.forEach(function(item, index, array){
+        existingDraggablePizzaInstances.forEach(function(item, index, array){
             if (item.draggable === div)
                 return item;
         })
@@ -214,13 +208,8 @@ class DraggablePizzaInstance extends Pizza {
     // should check if pizza matches the order
     whenDraggedInOrder(order) {
 
-        // Server validates pizza and updates points
-        validatePizza(order, this.draggable, this.isBaked);
-
-        alert("Delivered: " + this.getName() + "\nOrdered: " + order.name)
-        existingPizzas.splice(existingPizzas.indexOf(this), 1);
+        existingDraggablePizzaInstances.splice(existingDraggablePizzaInstances.indexOf(this), 1);
         this.draggable.remove();
-        return;
     }
 
     whenDraggedInOven(oven) {
@@ -233,14 +222,94 @@ class DraggablePizzaInstance extends Pizza {
 // pizza & draggablePizzaInstance class above
 // --------------------------------------------------------------------------------------------------------------------
 
-class Order{
+class Order {
 
     constructor(name, points, timeInSeconds, requestedPizza) {
         this.name = name;
         this.points = points;
-        this.time = timeInSeconds;
+        this.timeInSeconds = timeInSeconds;
         if (requestedPizza instanceof Pizza)
-            this.pizza = requestedPizza;
+            this.requestedPizza = requestedPizza;
+    }
+
+    name;
+    points;
+    timeInSeconds;
+    requestedPizza;
+
+    gameElement;
+
+    deliver(pizza) {
+        pizza.whenDraggedInOrder(this);
+
+        // Server validates pizza and updates points
+        validatePizza(this, pizza.draggable, pizza.isBaked);
+
+        this.gameElement.remove();
+        orderList.splice(orderList.indexOf(this), 1);
+        console.log("Delivered: " + pizza.getName() + "\nOrdered: " + this.name);
+    }
+
+    createGameElement() {
+        const order = document.createElement('div');
+        const timeIndicator = document.createElement('div');
+        const text = document.createElement('p');
+
+        order.setAttribute('class', 'box order');
+        text.setAttribute('style', 'position: absolute; z-index: 2');
+
+        text.innerHTML = this.name;
+        order.appendChild(timeIndicator);
+        order.appendChild(text);
+
+        this.gameElement = order;
+
+        document.getElementById('orderSection').getElementsByClassName('scroll_container').item(0).appendChild(this.gameElement);
+    }
+
+    // starts countdown
+    activate() {
+
+        class OrderTimer extends CountdownInterface {
+
+            timeLeftInDecimal = 1.0;
+
+            onCountdownStart() {
+                this.lock = 0;
+                this.affectedObject.updateTimeIndicator(this.affectedObject.gameElement.firstElementChild, this.timeLeftInDecimal);
+            }
+
+            onCountdownInterval() {
+                this.timeLeftInDecimal = 1 - this.secondsPassed/this.durationInSeconds;
+
+                this.affectedObject.updateTimeIndicator(this.affectedObject.gameElement.firstElementChild, this.timeLeftInDecimal);
+            }
+
+            onCountdownEnd() {
+                if (this.affectedObject.gameElement.isConnected){ // SEHR wichtige Abfrage, hat mich viel Zeit gekostet
+                    this.affectedObject.gameElement.remove();
+                    orderList.splice(orderList.indexOf(this.affectedObject), 1);
+                }
+            }
+        }
+
+        new OrderTimer(this.timeInSeconds, this).startCountdown();
+    }
+
+    updateTimeIndicator(timeIndicator, timeLeftInDecimal) {
+        const gameElement_box = this.gameElement.getBoundingClientRect();
+        const timeIndicator_box = timeIndicator.getBoundingClientRect();
+
+        timeIndicator.style.height = (gameElement_box.height - 8) + "px";
+        timeIndicator.style.width = gameElement_box.width * (timeLeftInDecimal) + "px";
+
+
+        if (timeLeftInDecimal > 0.5)
+            timeIndicator.style.backgroundColor = "green";
+        else if (timeLeftInDecimal > 0.2)
+            timeIndicator.style.backgroundColor = "yellow";
+        else
+            timeIndicator.style.backgroundColor = "red";
     }
 
     getName(){
@@ -256,11 +325,9 @@ let availableIngredients = [    new Ingredient("Impasto", "/assets/images/teig.p
                                 new Ingredient("Pomodoro", "/assets/images/pomodoro.png"),
                                 new Ingredient("Salame", "/assets/images/salame.png")];
 
-let orderList = [               new Order("Margarita", 10, 30),
-                                new Order("Salame", 15, 30),
-                                new Order("Salame", 15, 30)];
+let orderList = [               ];
 
-let existingPizzas = [          ];
+let existingDraggablePizzaInstances = [];
 
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -289,13 +356,15 @@ function populateIngredientSection(){
 
 // called at startup
 function populateOrderSection(){
+
+    orderList.push( new Order("Margarita", 10, 15),
+                    new Order("Salame", 15, 25),
+                    new Order("Funghi", 10, 40),
+                    new Order("Speciale", 15, 50),
+                    new Order("Salame", 15, 25));
+
     orderList.forEach(function(item, index, array){
-        const order = document.createElement('div');
-
-        order.setAttribute('class', 'box order');
-
-        order.innerHTML = item.name;
-        document.getElementById('orderSection').getElementsByClassName('scroll_container').item(0).appendChild(order);
+        item.createGameElement();
     })
 }
 
@@ -349,21 +418,23 @@ function makeDraggable(element) {
         document.onmouseup = null;
         document.onmousemove = null;
 
-        checkIfDraggedInOrder(); // check overlap with every order element
 
         if (element instanceof DraggableIngredientInstance)
             checkIfDraggedInPizza(); // check overlap with every existing pizza
 
-        if (element instanceof DraggablePizzaInstance)
+        else if (element instanceof DraggablePizzaInstance) {
             checkIfDraggedInOven(); // check overlap with every oven
+            checkIfDraggedInOrder(); // check overlap with every order element
+        }
     }
+    // -------------------------------
 
     function checkIfDraggedInOrder() {
         orderList.forEach(function(item, index, array){
 
-            if (checkOverlap(element.draggable, document.getElementsByClassName("order").item(index))){
+            if (checkOverlap(element.draggable, item.gameElement)){
 
-                element.whenDraggedInOrder(orderList[index]); // notify the object
+                item.deliver(element)
             }
         });
     }
@@ -373,7 +444,7 @@ function makeDraggable(element) {
 
             if (checkOverlap(element.draggable, document.getElementById("pizza_layer").children.item(i))) {
 
-                element.whenDraggedInPizza(existingPizzas[i])
+                element.whenDraggedInPizza(existingDraggablePizzaInstances[i])
             }
         }
     }
@@ -387,8 +458,6 @@ function makeDraggable(element) {
             }
         }
     }
-
-
 }
 
 function pullNewIngredient(ingredientIndex){
@@ -484,6 +553,13 @@ function resetPoints() {
         credentials: "include"
     }).then(updateCurrentPoints)
         .catch((error) =>{console.log('Error', error)})
+
+    orderList.forEach(function (item, index, array){
+
+        item.gameElement.remove();
+        item.createGameElement();
+        item.activate();
+    })
 }
 
 
@@ -493,20 +569,19 @@ function resetPoints() {
 // spezifische Countdown-Anwendungen erben von dieser Klasse und müssen nurnoch die drei methoden "onCountdownX()" überschreiben
 class CountdownInterface {
 
-    constructor(seconds, affectedObject) {
-        this.seconds = seconds;
+    constructor(durationInSeconds, affectedObject) {
+        this.durationInSeconds = durationInSeconds;
+        this.secondsPassed = 0;
+
         this.affectedObject = affectedObject;
 
-        // Set the date we're counting down to
-        this.countDownDate = new Date();
-        this.countDownDate.setSeconds(this.countDownDate.getSeconds() + seconds);
     }
 
-    seconds;
+    durationInSeconds;
+    secondsPassed;
+
     affectedObject;
 
-    countDownDate;
-    distance;
 
     // do not override this method
     startCountdown(){
@@ -514,18 +589,16 @@ class CountdownInterface {
 
         // Update the countdown every 1 second
         let x = setInterval(() => {
-            let now = new Date().getTime();
+            this.secondsPassed += 1;
 
-            // Find the distance between now and the countdown date
-            this.distance = this.countDownDate - now;
+            if (this.secondsPassed >= this.durationInSeconds) {
+                    this.onCountdownEnd(); // behavior to be specified in concrete class
+                    clearInterval(x);
 
-            if (this.distance < 1) {
-                clearInterval(x);
-                this.onCountdownEnd(); // behavior to be specified in concrete class
             } else {
                 this.onCountdownInterval() // behavior to be specified in concrete class
             }
-        }, 1000);
+        }, 1000); // 1000 millisecond (= 1 second) interval
     }
 
     // Override this method in concrete class
@@ -551,23 +624,28 @@ let timerActive = false;
 function manageRushCountdown(seconds, timerContainerId){
     if (!timerActive){
 
+        resetPoints();
+
         class RushCountdown extends CountdownInterface { // Hier wird die spezifische RushCountdown Klasse definiert
 
             // @Override
             onCountdownStart() {
                 timerActive = true;
                 document.getElementById("startStop_overlay").style.display='none';
+
+                orderList.forEach(function(item, index, array){
+                    item.activate();
+                })
             }
 
             // @Override
             onCountdownInterval() {
                 // Time calculations
-                let minutes = Math.floor((this.distance % (1000 * 60 * 60)) / (1000 * 60));
-                let seconds = Math.floor((this.distance % (1000 * 60)) / 1000);
-
-                if (seconds < 10){
+                let secondsLeft = this.durationInSeconds - this.secondsPassed;
+                let minutes = "" + Math.floor(secondsLeft/60);
+                let seconds = "" + secondsLeft - minutes*60;
+                if (seconds.toString().length < 2)
                     seconds = "0" + seconds;
-                }
 
                 // Display the result in the affectedObject
                 this.affectedObject.innerHTML = "Time: " + minutes + ":" + seconds;
@@ -578,12 +656,11 @@ function manageRushCountdown(seconds, timerContainerId){
             onCountdownEnd() {
                 timerActive = false;
                 document.getElementById("startStop_overlay").style.display='block';
-                document.getElementById("startStop_overlay_text").innerHTML="Round over !<br />Click to play again";
+                document.getElementById("startStop_overlay_text").innerHTML="Round over!<br />Click to play again";
                 this.affectedObject.innerHTML = "END";
             }
         }
 
-        resetPoints();
         new RushCountdown(seconds, document.getElementById(timerContainerId)).startCountdown(); // Countdown wird gestartet
     }
 }

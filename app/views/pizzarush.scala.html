@@ -11,7 +11,7 @@
     </head>
 
     <body onload="  populateIngredientSection();
-                  populateOrderSection()">
+                    populateOrderSection()">
 
             <!--NAVIGATION BAR ------------->
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
@@ -19,7 +19,8 @@
 
         <div id="pizza_layer"> </div>
 
-            <!--diese Ebenen sorgen dafür, dass z.B Tomaten immer über Teig gerendert werden usw. -->
+        <!--diese Ebenen sorgen dafür, dass z.B Tomaten immer über Teig gerendert werden usw. -->
+        <!--TODO: Man kann die render reihenfolge auch mit dem CSS-Attribut "z-index" machen, das ist dann doch eleganter-->
         <div id="dough_layer"> </div>
         <div id="tomato_layer"> </div>
         <div id="cheese_layer"> </div>
@@ -29,7 +30,7 @@
         <div id="upper_container">
             <div id="left_upper_container">
 
-                <div id="startStop_overlay" onclick="manageRushCountdown(30, 'timerRushmode')">
+                <div id="startStop_overlay" onclick="manageRushCountdown(120, 'timerRushmode')">
                     <div id="startStop_overlay_text">Click anywhere to start!</div>
                 </div>
                 <h1 id="timerRushmode"></h1>
