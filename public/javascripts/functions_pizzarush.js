@@ -65,6 +65,8 @@ class DraggableIngredientInstance extends Ingredient {
                 break;
             case "Salame":      document.getElementById("salami_layer").appendChild(draggable);
                 break;
+            case "Funghi":      document.getElementById("mushroom_layer").appendChild(draggable);
+                break;
         }
 
         this.draggable = draggable;
@@ -323,7 +325,8 @@ class Order {
 let availableIngredients = [    new Ingredient("Impasto", "/assets/images/teig.png"),
                                 new Ingredient("Formaggio", "/assets/images/formaggio.png"),
                                 new Ingredient("Pomodoro", "/assets/images/pomodoro.png"),
-                                new Ingredient("Salame", "/assets/images/salame.png")];
+                                new Ingredient("Salame", "/assets/images/salame.png"),
+                                new Ingredient("Funghi", "/assets/images/funghi.png")];
 
 let orderList = [               ];
 
