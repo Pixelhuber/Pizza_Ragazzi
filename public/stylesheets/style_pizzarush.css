@@ -165,14 +165,8 @@ section{
 }
 
 .order > div{
-    position: relative;
-
     border-top: 4px solid black;
     border-bottom: 4px solid black;
-
-    transition-property: width;
-    transition-duration: 1s;
-    transition-timing-function: linear;
 }
 
 #pizza_layer #dough_layer #tomato_layer #cheese_layer #salami_layer {

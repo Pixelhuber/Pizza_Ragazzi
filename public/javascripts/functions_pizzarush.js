@@ -239,6 +239,7 @@ class Order {
     timeInSeconds;
     requestedPizza;
 
+    //in game representation of the order
     gameElement;
 
     deliver(pizza) {
@@ -253,65 +254,61 @@ class Order {
     }
 
     createGameElement() {
-        const order = document.createElement('div');
-        const timeIndicator = document.createElement('div');
-        const text = document.createElement('p');
+        this.gameElement = document.createElement('div');
+        this.gameElement.timeIndicator = document.createElement('div');
+        this.gameElement.text = document.createElement('p');
 
-        order.setAttribute('class', 'box order');
-        text.setAttribute('style', 'position: absolute; z-index: 2');
+        this.gameElement.setAttribute('class', 'box order');
+        this.gameElement.text.setAttribute('style', 'position: absolute; z-index: 2');
 
-        text.innerHTML = this.name;
-        order.appendChild(timeIndicator);
-        order.appendChild(text);
-
-        this.gameElement = order;
+        this.gameElement.text.innerHTML = this.name;
+        this.gameElement.appendChild(this.gameElement.timeIndicator);
+        this.gameElement.appendChild(this.gameElement.text);
 
         document.getElementById('orderSection').getElementsByClassName('scroll_container').item(0).appendChild(this.gameElement);
     }
 
-    // starts countdown
-    activate() {
+    // starts the animation of the order timeIndicator
+    startAnimation() {
+        const order = this;
+        let start;
 
-        class OrderTimer extends CountdownInterface {
 
-            timeLeftInDecimal = 1.0;
 
-            onCountdownStart() {
-                this.lock = 0;
-                this.affectedObject.updateTimeIndicator(this.affectedObject.gameElement.firstElementChild, this.timeLeftInDecimal);
-            }
+        // this is one animation step
+        function updateTimeIndicator(timestamp) {
+            if (start === undefined)
+                start = timestamp;
+            const elapsed = timestamp - start; // elapsed = time passed since animation start [milliseconds]
 
-            onCountdownInterval() {
-                this.timeLeftInDecimal = 1 - this.secondsPassed/this.durationInSeconds;
+            const gameElement_box = order.gameElement.getBoundingClientRect();
+            const timeIndicator_box = order.gameElement.timeIndicator.getBoundingClientRect();
 
-                this.affectedObject.updateTimeIndicator(this.affectedObject.gameElement.firstElementChild, this.timeLeftInDecimal);
-            }
+            // update time indicator
+            let timeLeftInDecimal = Math.max(((order.timeInSeconds*1000 - elapsed) / (order.timeInSeconds*1000)), 0) // percentage of time left [min = 0]
+            order.gameElement.timeIndicator.style.height = (gameElement_box.height - 8) + "px"; // always the same
+            order.gameElement.timeIndicator.style.width = gameElement_box.width * (timeLeftInDecimal) + "px";
 
-            onCountdownEnd() {
-                if (this.affectedObject.gameElement.isConnected){ // SEHR wichtige Abfrage, hat mich viel Zeit gekostet
-                    this.affectedObject.gameElement.remove();
-                    orderList.splice(orderList.indexOf(this.affectedObject), 1);
+            // set indicator color according to percentage of time left
+            if (timeLeftInDecimal > 0.5)
+                order.gameElement.timeIndicator.style.backgroundColor = "green";
+            else if (timeLeftInDecimal > 0.2)
+                order.gameElement.timeIndicator.style.backgroundColor = "yellow";
+            else
+                order.gameElement.timeIndicator.style.backgroundColor = "red";
+
+
+            if (elapsed < order.timeInSeconds*1000) { // Stop the animation when time is over
+                window.requestAnimationFrame(updateTimeIndicator);
+            } else {
+                if (order.gameElement.isConnected){ // SEHR wichtige Abfrage, hat mich viel Zeit gekostet
+                    order.gameElement.remove();
+                    orderList.splice(orderList.indexOf(order), 1);
                 }
             }
         }
 
-        new OrderTimer(this.timeInSeconds, this).startCountdown();
-    }
-
-    updateTimeIndicator(timeIndicator, timeLeftInDecimal) {
-        const gameElement_box = this.gameElement.getBoundingClientRect();
-        const timeIndicator_box = timeIndicator.getBoundingClientRect();
-
-        timeIndicator.style.height = (gameElement_box.height - 8) + "px";
-        timeIndicator.style.width = gameElement_box.width * (timeLeftInDecimal) + "px";
-
-
-        if (timeLeftInDecimal > 0.5)
-            timeIndicator.style.backgroundColor = "green";
-        else if (timeLeftInDecimal > 0.2)
-            timeIndicator.style.backgroundColor = "yellow";
-        else
-            timeIndicator.style.backgroundColor = "red";
+        window.requestAnimationFrame(updateTimeIndicator);
     }
 
     getName(){
@@ -361,10 +358,10 @@ function populateIngredientSection(){
 function populateOrderSection(){
 
     orderList.push( new Order("Margarita", 10, 15),
-                    new Order("Salame", 15, 25),
-                    new Order("Funghi", 10, 40),
-                    new Order("Speciale", 15, 50),
-                    new Order("Salame", 15, 25));
+                    new Order("Salame", 15, 35),
+                    new Order("Funghi", 10, 80),
+                    new Order("Speciale", 15, 100),
+                    new Order("Salame", 15, 35));
 
     orderList.forEach(function(item, index, array){
         item.createGameElement();
@@ -561,7 +558,7 @@ function resetPoints() {
 
         item.gameElement.remove();
         item.createGameElement();
-        item.activate();
+        item.startAnimation();
     })
 }
 
@@ -637,7 +634,7 @@ function manageRushCountdown(seconds, timerContainerId){
                 document.getElementById("startStop_overlay").style.display='none';
 
                 orderList.forEach(function(item, index, array){
-                    item.activate();
+                    item.startAnimation();
                 })
             }
 
