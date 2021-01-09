@@ -10,8 +10,7 @@
         <title>Pizza-Rush</title>
     </head>
 
-    <body onload="  populateIngredientSection();
-                    populateOrderSection()">
+    <body onload="  loadGameElements()">
 
             <!--NAVIGATION BAR ------------->
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
@@ -36,12 +35,9 @@
                 </div>
                 <h1 id="timerRushmode"></h1>
             </div>
-            <div id="oven_container">
-                <img class="oven" src=@routes.Assets.versioned("images/oven.png") alt="Ofen"/>
-                <img class="oven" src=@routes.Assets.versioned("images/oven.png") alt="Ofen"/>
-                <img class="oven" src=@routes.Assets.versioned("images/oven.png") alt="Ofen"/>
-                <img class="oven" src=@routes.Assets.versioned("images/oven.png") alt="Ofen"/>
-            </div>
+
+            <div id="oven_container"></div>
+
             <div id="right_upper_container">
                 <h1 id="currentlyDisplayedPoints">Points: 0</h1>
             </div>

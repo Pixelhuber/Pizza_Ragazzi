@@ -6,6 +6,9 @@ class Ingredient {
         this.image = image;
     }
 
+    name;
+    image;
+
     createDraggableInstance() {
         if (this.name === "Impasto")
             return new DraggablePizzaInstance();
@@ -123,7 +126,11 @@ class DraggablePizzaInstance extends Pizza {
 
     draggable; // Actual draggable html-element
     isDragEnabled;
-    isBaked;
+    bakeStatus = {
+        UNBAKED: 0,
+        WELL: 1,
+        BURNT: 2
+    };
 
     constructor() {
         super();
@@ -132,7 +139,7 @@ class DraggablePizzaInstance extends Pizza {
         existingDraggablePizzaInstances.push(this);
         document.getElementById("pizza_layer").appendChild(this.draggable);
 
-        this.isBaked = false;
+        this.bakeStatus = this.bakeStatus.UNBAKED;
         this.isDragEnabled = true;
     }
 
@@ -145,37 +152,17 @@ class DraggablePizzaInstance extends Pizza {
         return undefined;
     }
 
-    bake() {
-        class BakingTimer extends CountdownInterface {
-
-            onCountdownStart() {
-                this.affectedObject.setIsDragEnabled(false);
-            }
-
-            onCountdownInterval() {
-                // irgendein Zeit-Indikator
-            }
-
-            onCountdownEnd() {
-                this.affectedObject.setIsDragEnabled(true);
-                this.affectedObject.isBaked = true
-                console.log("pizza is baked")
-            }
-        }
-
-        new BakingTimer(this.bakingTimeInSeconds, this).startCountdown();
-    }
-
     setIsDragEnabled(boolean) {
         this.isDragEnabled = boolean;
     }
 
     getName() {
         // temporary return values
-        if (this.isBaked)
-            return "unknown baked Pizza";
-        else
-            return "unknown unbaked Pizza";
+        switch (this.bakeStatus){
+            case 0: return "unknown unbaked pizza";
+            case 1: return "unknown baked pizza";
+            case 2: return "unknown burnt pizza"
+        }
     }
 
     // a.k.a. createDraggable()
@@ -216,8 +203,68 @@ class DraggablePizzaInstance extends Pizza {
 
     whenDraggedInOven(oven) {
 
-        alignDraggableToDestination(this.draggable, oven);
-        this.bake();
+        oven.bake(this)
+        alignDraggableToDestination(this.draggable, oven.gameElement.image);
+    }
+}
+
+// pizza & draggablePizzaInstance class above
+// --------------------------------------------------------------------------------------------------------------------
+
+class Oven {
+
+    constructor() {
+        this.gameElement = document.createElement('div');
+        this.gameElement.image = document.createElement('img');
+
+        this.gameElement.setAttribute('class', "oven");
+        this.gameElement.image.setAttribute('src', "/assets/images/oven.png");
+        this.gameElement.image.setAttribute('alt', "Oven");
+
+        this.gameElement.appendChild(this.gameElement.image);
+
+        // Creating an oven instance automatically displays it
+        document.getElementById("oven_container").appendChild(this.gameElement);
+    }
+
+    gameElement
+
+    bake(pizza) {
+        const oven = this;
+        let start;
+
+        // creating the timer element <p>
+        const timer = document.createElement('p');
+        timer.setAttribute('style', "position: absolute; z-index: 20; font-size: 2.5em");
+        timer.innerText = pizza.bakingTimeInSeconds;
+
+        this.gameElement.appendChild(timer);
+
+        // disable dragging for the pizza
+        pizza.setIsDragEnabled(false);
+
+        // this is one animation step
+        function updateTimer(timestamp) {
+            if (start === undefined)
+                start = timestamp;
+            const elapsed = timestamp - start; // elapsed = time passed since animation start [milliseconds]
+
+            // update timer
+            timer.innerText = (Math.floor(pizza.bakingTimeInSeconds - elapsed/1000 + 1)).toString();
+
+            // Stop the animation when time is over
+            if (elapsed < pizza.bakingTimeInSeconds*1000) {
+                window.requestAnimationFrame(updateTimer);
+            }
+            else {
+                pizza.setIsDragEnabled(true);
+                pizza.bakeStatus = Math.min(++pizza.bakeStatus, 2);
+                console.log("pizza is baked: " + pizza.bakeStatus);
+                timer.remove();
+            }
+        }
+
+        window.requestAnimationFrame(updateTimer);
     }
 }
 
@@ -259,9 +306,10 @@ class Order {
         this.gameElement.text = document.createElement('p');
 
         this.gameElement.setAttribute('class', 'box order');
-        this.gameElement.text.setAttribute('style', 'position: absolute; z-index: 2');
 
+        this.gameElement.text.setAttribute('style', 'position: absolute; z-index: 2');
         this.gameElement.text.innerHTML = this.name;
+
         this.gameElement.appendChild(this.gameElement.timeIndicator);
         this.gameElement.appendChild(this.gameElement.text);
 
@@ -320,20 +368,28 @@ class Order {
 // order class above
 // --------------------------------------------------------------------------------------------------------------------
 
-let availableIngredients = [    new Ingredient("Impasto", "/assets/images/teig.png"),
-                                new Ingredient("Formaggio", "/assets/images/formaggio.png"),
-                                new Ingredient("Pomodoro", "/assets/images/pomodoro.png"),
-                                new Ingredient("Salame", "/assets/images/salame.png"),
-                                new Ingredient("Funghi", "/assets/images/funghi.png")];
+const availableIngredients = [      new Ingredient("Impasto", "/assets/images/teig.png"),
+                                    new Ingredient("Formaggio", "/assets/images/formaggio.png"),
+                                    new Ingredient("Pomodoro", "/assets/images/pomodoro.png"),
+                                    new Ingredient("Salame", "/assets/images/salame.png"),
+                                    new Ingredient("Funghi", "/assets/images/funghi.png")];
 
-let orderList = [               ];
+const orderList = [                 ];
 
-let existingDraggablePizzaInstances = [];
+const ovenList = [                  ];
 
-// --------------------------------------------------------------------------------------------------------------------
+const existingDraggablePizzaInstances = [];
+
+// AT STARTUP ---------------------------------------------------------------------------------------------------------
 
 // called at startup
-function populateIngredientSection(){
+function loadGameElements() {
+    loadIngredientSection();
+    loadOrderSection();
+    loadOvens();
+}
+
+function loadIngredientSection(){
     availableIngredients.forEach(function(item, index, array){
         const ingredient = document.createElement('div');
         const image = document.createElement('img');
@@ -355,8 +411,7 @@ function populateIngredientSection(){
     })
 }
 
-// called at startup
-function populateOrderSection(){
+function loadOrderSection(){
 
     orderList.push( new Order("Margarita", 10, 15),
                     new Order("Salame", 15, 35),
@@ -368,6 +423,18 @@ function populateOrderSection(){
         item.createGameElement();
     })
 }
+
+function loadOvens() {
+
+    // this could later be dynamic:
+    // for example load as many ovens as the player has bought
+    ovenList.push(  new Oven(),
+                    new Oven(),
+                    new Oven(),
+                    new Oven());
+}
+
+// --------------------------------------------------------------------------------------------------------------------
 
 function makeDraggable(element) {
     let diff_x = 0, diff_y = 0, x = 0, y = 0;
@@ -451,13 +518,13 @@ function makeDraggable(element) {
     }
 
     function checkIfDraggedInOven() {
-        for (let i = 0; i < document.getElementsByClassName("oven").length; i++) {
+        ovenList.forEach(function(item, index, array){
 
-            if (checkOverlap(element.draggable, document.getElementsByClassName("oven").item(i))) {
+            if (checkOverlap(element.draggable, item.gameElement.image)) {
 
-                element.whenDraggedInOven(document.getElementsByClassName("oven").item(i))
+                element.whenDraggedInOven(item);
             }
-        }
+        });
     }
 }
 

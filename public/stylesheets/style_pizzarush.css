@@ -74,16 +74,25 @@ body {
 
 }
 
-.oven {
-    width: auto;
+.oven{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: fit-content;
     height: 80%;
+}
+
+.oven > img{
+    height: 100%;
+    width: auto;
     padding: 10px;
 }
 
 section{
     display: flex;
 
-    height: 650px; /* HIER SOLLTE KEINE ABSOLUTE GRÖSSE STEHEN -------------------------------------------- */
+    height: 650px; /* HIER SOLLTE KEINE ABSOLUTE GRÖSSE STEHEN! -------------------------------------------- */
 }
 
 ::-webkit-scrollbar {
