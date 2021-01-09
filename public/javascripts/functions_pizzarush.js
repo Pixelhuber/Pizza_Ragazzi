@@ -273,7 +273,8 @@ class Order {
         const order = this;
         let start;
 
-
+        let gameElement_box;
+        let timeIndicator_box;
 
         // this is one animation step
         function updateTimeIndicator(timestamp) {
@@ -281,8 +282,8 @@ class Order {
                 start = timestamp;
             const elapsed = timestamp - start; // elapsed = time passed since animation start [milliseconds]
 
-            const gameElement_box = order.gameElement.getBoundingClientRect();
-            const timeIndicator_box = order.gameElement.timeIndicator.getBoundingClientRect();
+            gameElement_box = order.gameElement.getBoundingClientRect();
+            timeIndicator_box = order.gameElement.timeIndicator.getBoundingClientRect();
 
             // update time indicator
             let timeLeftInDecimal = Math.max(((order.timeInSeconds*1000 - elapsed) / (order.timeInSeconds*1000)), 0) // percentage of time left [min = 0]
