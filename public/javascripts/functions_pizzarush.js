@@ -62,16 +62,17 @@ class DraggableIngredientInstance extends Ingredient {
         draggable.setAttribute('class', 'draggable');
 
         switch (this.name) {
-            case "Pomodoro":    document.getElementById("tomato_layer").appendChild(draggable);
-                break;
-            case "Formaggio":   document.getElementById("cheese_layer").appendChild(draggable);
-                break;
-            case "Salame":      document.getElementById("salami_layer").appendChild(draggable);
-                break;
-            case "Funghi":      document.getElementById("mushroom_layer").appendChild(draggable);
-                break;
+            case "Pomodoro":    draggable.style.zIndex = "11";
+                                break;
+            case "Formaggio":   draggable.style.zIndex = "12";
+                                break;
+            case "Salame":      draggable.style.zIndex = "13";
+                                break;
+            case "Funghi":      draggable.style.zIndex = "14";
+                                break;
         }
 
+        document.getElementById("ingredient_layer").appendChild(draggable);
         this.draggable = draggable;
 
         makeDraggable(this);
@@ -126,6 +127,8 @@ class DraggablePizzaInstance extends Pizza {
 
     draggable; // Actual draggable html-element
     isDragEnabled;
+    isInOven;
+    timeInOvenInMilliseconds = 0;
     bakeStatus = {
         UNBAKED: 0,
         WELL: 1,
@@ -165,7 +168,7 @@ class DraggablePizzaInstance extends Pizza {
         }
     }
 
-    // a.k.a. createDraggable()
+    // returns an updated <div> with all the ingredients in it
     updateDiv() {
         const pizzaDiv = document.createElement("div");
 
@@ -194,7 +197,7 @@ class DraggablePizzaInstance extends Pizza {
         return this.draggable
     }
 
-    // should check if pizza matches the order
+    // should check if pizza matches the order [behavior not implemented]
     whenDraggedInOrder(order) {
 
         existingDraggablePizzaInstances.splice(existingDraggablePizzaInstances.indexOf(this), 1);
@@ -203,8 +206,27 @@ class DraggablePizzaInstance extends Pizza {
 
     whenDraggedInOven(oven) {
 
-        oven.bake(this)
+        this.ovenIn();
+        oven.bake(this);
         alignDraggableToDestination(this.draggable, oven.gameElement.image);
+    }
+
+    ovenIn() {
+        this.isInOven = true;
+    }
+
+    ovenOut() {
+        this.isInOven = false;
+
+        const difference = this.bakingTimeInSeconds - this.timeInOvenInMilliseconds/1000;
+        if (difference > 0)
+            this.bakeStatus = 0;
+        else if (difference < -7)
+            this.bakeStatus = 2;
+        else
+            this.bakeStatus = 1;
+
+        console.log("pizza baked: " + this.bakeStatus);
     }
 }
 
@@ -233,38 +255,56 @@ class Oven {
         const oven = this;
         let start;
 
-        // creating the timer element <p>
+        // creating the timer element <p> --------------------------------------
         const timer = document.createElement('p');
-        timer.setAttribute('style', "position: absolute; z-index: 20; font-size: 2.5em");
+        timer.setAttribute('style',
+            "position: absolute; " +
+            "z-index: 20; " +
+            "font-size: 2em");
+        timer.setAttribute('class', "unclickable");
         timer.innerText = pizza.bakingTimeInSeconds;
 
         this.gameElement.appendChild(timer);
 
-        // disable dragging for the pizza
-        pizza.setIsDragEnabled(false);
+        // BAKING TIMER ANIMATION ----------------------------------------------
+        let lastTimestamp;
 
-        // this is one animation step
-        function updateTimer(timestamp) {
-            if (start === undefined)
+        // method describes one animation step
+        function bakingAnimation(timestamp) {
+            if (start === undefined){
                 start = timestamp;
+                lastTimestamp = timestamp;
+            }
             const elapsed = timestamp - start; // elapsed = time passed since animation start [milliseconds]
 
-            // update timer
-            timer.innerText = (Math.floor(pizza.bakingTimeInSeconds - elapsed/1000 + 1)).toString();
+            // increment timeInOvenInMilliseconds
+            const differenceSinceLastAnimationFrame = timestamp - lastTimestamp;
+            pizza.timeInOvenInMilliseconds += differenceSinceLastAnimationFrame;
 
-            // Stop the animation when time is over
-            if (elapsed < pizza.bakingTimeInSeconds*1000) {
-                window.requestAnimationFrame(updateTimer);
+            // update the timer
+            const timerCount = (Math.floor(pizza.bakingTimeInSeconds - pizza.timeInOvenInMilliseconds/1000 + 1));
+            if (timerCount > 0)
+                timer.innerText = timerCount.toString();
+            else if (timerCount > -4)
+                timer.innerText = "DONE";
+            else if (timerCount > -7)
+                timer.innerText = "!!!"
+            else
+                timer.innerText = "BURNT"
+
+            // Decide whether to stop animation or not
+            if (!pizza.isInOven) { // ovenOut method sets isInOven to false when pizza is dragged out of oven
+                // stop animation
+                timer.remove();
             }
             else {
-                pizza.setIsDragEnabled(true);
-                pizza.bakeStatus = Math.min(++pizza.bakeStatus, 2);
-                console.log("pizza is baked: " + pizza.bakeStatus);
-                timer.remove();
+                // continue animation
+                lastTimestamp = timestamp;
+                window.requestAnimationFrame(bakingAnimation);
             }
         }
 
-        window.requestAnimationFrame(updateTimer);
+        window.requestAnimationFrame(bakingAnimation);
     }
 }
 
@@ -440,7 +480,7 @@ function makeDraggable(element) {
     let diff_x = 0, diff_y = 0, x = 0, y = 0;
 
     if (!(element instanceof DraggableIngredientInstance || element instanceof DraggablePizzaInstance))
-        alert("problem in functions_pizzarush.makeDraggable()")
+        alert("this element is not a DraggableIngredientInstance or a DraggablePizzaInstance");
 
     // if element is pressed down -> start dragging
     element.draggable.onmousedown = initiateDrag;
@@ -448,6 +488,9 @@ function makeDraggable(element) {
     function initiateDrag(event) {
         if (!element.isDragEnabled)
             return;
+
+        if (element.isInOven)
+            element.ovenOut();
 
         event = event || window.event;
         event.preventDefault();
@@ -508,13 +551,12 @@ function makeDraggable(element) {
     }
 
     function checkIfDraggedInPizza() {
-        for (let i = 0; i < document.getElementById("pizza_layer").childElementCount; i++) {
+        existingDraggablePizzaInstances.forEach(function(currentPizza, index, array){
 
-            if (checkOverlap(element.draggable, document.getElementById("pizza_layer").children.item(i))) {
-
-                element.whenDraggedInPizza(existingDraggablePizzaInstances[i])
-            }
-        }
+            if (currentPizza.timeInOvenInMilliseconds < 1.5*1000) // you can only assemble (nearly) raw pizzas -> prevents cheating
+                if (checkOverlap(element.draggable, currentPizza.draggable))
+                    element.whenDraggedInPizza(currentPizza);
+        });
     }
 
     function checkIfDraggedInOven() {
