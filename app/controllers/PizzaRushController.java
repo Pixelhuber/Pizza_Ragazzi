@@ -14,7 +14,9 @@ public class PizzaRushController extends Controller {
 
     public Result validatePizza(Http.Request request) {
 
-        //json daten auslesen
+        request.body().asJson().get("ingredients").asText();
+
+        // read json data
         String pizzaType = request.body().asJson().get("pizzaName").asText();
         //is baked is bugged
         List<String> ingredients = request.body().asJson().findValuesAsText("ingredients");

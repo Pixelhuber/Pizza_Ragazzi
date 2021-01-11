@@ -1,13 +1,16 @@
 // An "Ingredient" is only a definition of an ingredient without any behavior.
 class Ingredient {
 
+    // ATTRIBUTES --------------------
+
+    name;
+    image;
+
     constructor(name, image) {
         this.name = name; // attributes
         this.image = image;
     }
 
-    name;
-    image;
 
     createDraggableInstance() {
         if (this.name === "Impasto")
@@ -47,14 +50,17 @@ class Ingredient {
 // A "DraggableIngredientInstance" is an actual Ingredient you can interact with and drag around
 class DraggableIngredientInstance extends Ingredient {
 
+    // ATTRIBUTES --------------------
+
+    draggable; // Actual draggable html-element
+    isDragEnabled;
+
     constructor(ingredient) {
         super(ingredient.name, ingredient.image);
         this.createDraggable();
         this.isDragEnabled = true;
     }
 
-    draggable; // Actual draggable html-element
-    isDragEnabled; // Dragging gets disabled for example when in oven
 
     createDraggable() {
         const draggable = this.createImg();
@@ -78,6 +84,7 @@ class DraggableIngredientInstance extends Ingredient {
         makeDraggable(this);
     }
 
+    // utility to disable dragging temporarily
     setIsDragEnabled(boolean) {
         this.isDragEnabled = boolean;
     }
@@ -108,27 +115,33 @@ class DraggableIngredientInstance extends Ingredient {
 // --------------------------------------------------------------------------------------------------------------------
 
 // A "Pizza" is only a definition of ingredients without any behavior.
-// Example: An Order-Element requests a "Pizza" and not a "DraggablePizzaInstance"
+// Example: A "Pizza" is something on the menu in the restaurant
+//          A "DraggablePizzaInstance" is on a plate and can be manipulated (and eaten)
 class Pizza {
+
+    // ATTRIBUTES --------------------
+
+    ingredients = [];
 
     // When created, a new pizza is simply a piece of dough. More ingredients get added while playing.
     constructor() {
         this.ingredients.push(Ingredient.getInstanceByName("Impasto"))
-        this.bakingTimeInSeconds = 5;
     }
-
-    ingredients = [];
-    bakingTimeInSeconds;
-
 }
 
 // A "DraggablePizzaInstance" is the actual Pizza you can interact with and drag around
 class DraggablePizzaInstance extends Pizza {
 
+    // ATTRIBUTES --------------------
+
     draggable; // Actual draggable html-element
-    isDragEnabled;
+
+    bakingTimeInSeconds; // required baking time
+    timeInOvenInMilliseconds = 0; // actual time spent in oven
+
     isInOven;
-    timeInOvenInMilliseconds = 0;
+    isDragEnabled;
+
     bakeStatus = {
         UNBAKED: 0,
         WELL: 1,
@@ -144,7 +157,9 @@ class DraggablePizzaInstance extends Pizza {
 
         this.bakeStatus = this.bakeStatus.UNBAKED;
         this.isDragEnabled = true;
+        this.bakingTimeInSeconds = 5;
     }
+
 
     static findExistingPizzaByDiv(div) {
         existingDraggablePizzaInstances.forEach(function(item, index, array){
@@ -155,6 +170,7 @@ class DraggablePizzaInstance extends Pizza {
         return undefined;
     }
 
+    // utility to disable dragging temporarily
     setIsDragEnabled(boolean) {
         this.isDragEnabled = boolean;
     }
@@ -197,7 +213,6 @@ class DraggablePizzaInstance extends Pizza {
         return this.draggable
     }
 
-    // should check if pizza matches the order [behavior not implemented]
     whenDraggedInOrder(order) {
 
         existingDraggablePizzaInstances.splice(existingDraggablePizzaInstances.indexOf(this), 1);
@@ -218,6 +233,7 @@ class DraggablePizzaInstance extends Pizza {
     ovenOut() {
         this.isInOven = false;
 
+        // determine bakeStatus of the pizza
         const difference = this.bakingTimeInSeconds - this.timeInOvenInMilliseconds/1000;
         if (difference > 0)
             this.bakeStatus = 0;
@@ -235,6 +251,10 @@ class DraggablePizzaInstance extends Pizza {
 
 class Oven {
 
+    // ATTRIBUTES --------------------
+
+    gameElement //in game representation of the oven
+
     constructor() {
         this.gameElement = document.createElement('div');
         this.gameElement.image = document.createElement('img');
@@ -249,8 +269,8 @@ class Oven {
         document.getElementById("oven_container").appendChild(this.gameElement);
     }
 
-    gameElement
 
+    // baking animation, manipulating the oven timer AND the pizza inside the oven
     bake(pizza) {
         const oven = this;
         let start;
@@ -269,7 +289,7 @@ class Oven {
         // BAKING TIMER ANIMATION ----------------------------------------------
         let lastTimestamp;
 
-        // method describes one animation step
+        // this method describes one animation step
         function bakingAnimation(timestamp) {
             if (start === undefined){
                 start = timestamp;
@@ -277,11 +297,11 @@ class Oven {
             }
             const elapsed = timestamp - start; // elapsed = time passed since animation start [milliseconds]
 
-            // increment timeInOvenInMilliseconds
+            // manipulate pizza: increment timeInOvenInMilliseconds
             const differenceSinceLastAnimationFrame = timestamp - lastTimestamp;
             pizza.timeInOvenInMilliseconds += differenceSinceLastAnimationFrame;
 
-            // update the timer
+            // manipulate timer: update the timer
             const timerCount = (Math.floor(pizza.bakingTimeInSeconds - pizza.timeInOvenInMilliseconds/1000 + 1));
             if (timerCount > 0)
                 timer.innerText = timerCount.toString();
@@ -293,12 +313,12 @@ class Oven {
                 timer.innerText = "BURNT"
 
             // Decide whether to stop animation or not
-            if (!pizza.isInOven) { // ovenOut method sets isInOven to false when pizza is dragged out of oven
+            if (!pizza.isInOven) { // pizza.ovenOut() method sets isInOven to false when pizza is dragged out of oven
                 // stop animation
                 timer.remove();
             }
             else {
-                // continue animation
+                // continue animation (a.k.a. continue baking)
                 lastTimestamp = timestamp;
                 window.requestAnimationFrame(bakingAnimation);
             }
@@ -308,10 +328,20 @@ class Oven {
     }
 }
 
-// pizza & draggablePizzaInstance class above
+// oven class above
 // --------------------------------------------------------------------------------------------------------------------
 
 class Order {
+
+    // ATTRIBUTES --------------------
+
+    name; // name to display in game
+    requestedPizza; // pizza used for validation [Pizza.class]
+
+    points;
+    timeInSeconds; // time before order expires
+
+    gameElement; //in game representation of the order
 
     constructor(name, points, timeInSeconds, requestedPizza) {
         this.name = name;
@@ -321,19 +351,12 @@ class Order {
             this.requestedPizza = requestedPizza;
     }
 
-    name;
-    points;
-    timeInSeconds;
-    requestedPizza;
-
-    //in game representation of the order
-    gameElement;
 
     deliver(pizza) {
         pizza.whenDraggedInOrder(this);
 
         // Server validates pizza and updates points
-        validatePizza(this, pizza.draggable, pizza.isBaked);
+        validatePizza(this, pizza);
 
         this.gameElement.remove();
         orderList.splice(orderList.indexOf(this), 1);
@@ -406,8 +429,9 @@ class Order {
 }
 
 // order class above
-// --------------------------------------------------------------------------------------------------------------------
+// OBJECT COLLECTIONS -------------------------------------------------------------------------------------------------
 
+// wird später wsl vom Server geladen werden
 const availableIngredients = [      new Ingredient("Impasto", "/assets/images/teig.png"),
                                     new Ingredient("Formaggio", "/assets/images/formaggio.png"),
                                     new Ingredient("Pomodoro", "/assets/images/pomodoro.png"),
@@ -430,7 +454,10 @@ function loadGameElements() {
 }
 
 function loadIngredientSection(){
+
     availableIngredients.forEach(function(item, index, array){
+        // simply create the <div> element
+
         const ingredient = document.createElement('div');
         const image = document.createElement('img');
         const name = document.createElement('div')
@@ -453,11 +480,12 @@ function loadIngredientSection(){
 
 function loadOrderSection(){
 
-    orderList.push( new Order("Margarita", 10, 15),
-                    new Order("Salame", 15, 35),
-                    new Order("Funghi", 10, 80),
-                    new Order("Speciale", 15, 100),
-                    new Order("Salame", 15, 35));
+    // diese ganzen orders werden später wsl auf dem Server erstellt
+    orderList.push( new Order("Margarita", 10, 30),
+                    new Order("Salame", 15, 60),
+                    new Order("Funghi", 10, 150),
+                    new Order("Speciale", 15, 200),
+                    new Order("Salame", 15, 60));
 
     orderList.forEach(function(item, index, array){
         item.createGameElement();
@@ -474,7 +502,8 @@ function loadOvens() {
                     new Oven());
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+
+// FUNCTIONALITY & BEHAVIOR -------------------------------------------------------------------------------------------
 
 function makeDraggable(element) {
     let diff_x = 0, diff_y = 0, x = 0, y = 0;
@@ -611,26 +640,19 @@ function alignDraggableToDestination(draggable, destination) {
 
 // PIZZA-VALIDATION & POINTS ------------------------------------------------------------------------------------------
 
-function validatePizza(order, element, isBaked) {
+function validatePizza(order, pizza) {
 
-    //ich frage is baked im moment nur hier ab und lasse es nicht vom server validieren
-    //dies mache ich nur, da ich im moment keine zeit hab, mich mit imaginären nullpointerexeptions auseinander zu setzten
-    if (!isBaked)
-        return
-
-    //Pizza JSON creation
-    let pizzaJson = '{"pizzaName": "' + order.getName() + '",\n' +
-       // '"bakingState:": "' + isBaked + '",\n' +
-        '"ingredients": [';
-    let collection = element.children;
-    Array.from(collection).forEach(function (element) {
-        pizzaJson += '\n"' + element.alt + '",'
-    });
-    pizzaJson = pizzaJson.substring(0, pizzaJson.length - 1) + '\n]\n}'
+    console.assert(pizza instanceof DraggablePizzaInstance);
+    console.assert(order instanceof Order);
+    const pizzaJson = JSON.stringify(pizza);
+    const orderJson = JSON.stringify(order);
 
     fetch("/pizza_rush/validate_pizza", {
         method: 'POST',
-        body: pizzaJson,
+        body: JSON.stringify({
+            pizza: pizzaJson,
+            order: orderJson
+        }),
         headers: {
             "Content-Type": "application/json"
         },
