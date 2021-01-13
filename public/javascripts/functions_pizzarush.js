@@ -1,3 +1,33 @@
+class AudioPlayer {
+
+    constructor() {
+    }
+
+    static audioPlayer = document.createElement("AUDIO");
+
+    static mash() {
+        this.audioPlayer.setAttribute('src', "/assets/sounds/mash_kürzer.wav");
+        this.audioPlayer.setAttribute('type', "audio/wav");
+
+        this.audioPlayer.play();
+    }
+
+    static fire() {
+        this.audioPlayer.setAttribute('src', "/assets/sounds/epic_fire.wav");
+        this.audioPlayer.setAttribute('type', "audio/wav");
+
+        this.audioPlayer.play();
+    }
+
+    static short_ring() {
+        this.audioPlayer.setAttribute('src', "/assets/sounds/short_ring.wav");
+        this.audioPlayer.setAttribute('type', "audio/wav");
+
+        this.audioPlayer.play();
+    }
+}
+
+
 // An "Ingredient" is only a definition of an ingredient without any behavior.
 class Ingredient {
 
@@ -90,6 +120,9 @@ class DraggableIngredientInstance extends Ingredient {
     }
 
     whenDraggedInPizza(pizza) {
+
+        //Play sound
+        AudioPlayer.mash();
 
         //Put ingredient on pizza
         pizza.ingredients.push(Ingredient.getInstanceByName(this.getName()));
@@ -224,6 +257,8 @@ class DraggablePizzaInstance extends Pizza {
         this.ovenIn();
         oven.bake(this);
         alignDraggableToDestination(this.draggable, oven.gameElement.image);
+
+
     }
 
     ovenIn() {
@@ -259,7 +294,7 @@ class Oven {
         this.gameElement = document.createElement('div');
         this.gameElement.image = document.createElement('img');
 
-        this.gameElement.setAttribute('class', "oven");
+        this.gameElement.setAttribute('class', "oven unclickable");
         this.gameElement.image.setAttribute('src', "/assets/images/oven.png");
         this.gameElement.image.setAttribute('alt', "Oven");
 
@@ -272,6 +307,10 @@ class Oven {
 
     // baking animation, manipulating the oven timer AND the pizza inside the oven
     bake(pizza) {
+
+        // Play sound
+        AudioPlayer.fire();
+
         const oven = this;
         let start;
 
@@ -353,6 +392,10 @@ class Order {
 
 
     deliver(pizza) {
+
+        // Play sound
+        AudioPlayer.short_ring();
+
         pizza.whenDraggedInOrder(this);
 
         // Server validates pizza and updates points
