@@ -34,11 +34,13 @@ class Ingredient {
     // ATTRIBUTES --------------------
 
     name;
-    image;
+    image_path;
+    flight_behavior;
 
-    constructor(name, image) {
+    constructor(name, image_path, flight_behavior) {
         this.name = name; // attributes
-        this.image = image;
+        this.image_path = image_path;
+        this.flight_behavior = flight_behavior;
     }
 
 
@@ -52,7 +54,7 @@ class Ingredient {
     createImg() {
         const ret = document.createElement('img');
 
-        ret.setAttribute('src', this.image);
+        ret.setAttribute('src', this.image_path);
         ret.setAttribute('alt', this.name);
         ret.setAttribute('width', '100px');
         ret.setAttribute('height', '100px');
@@ -66,11 +68,11 @@ class Ingredient {
 
     //returns an instance of the ingredient with this name
     static getInstanceByName(name) {
-        let ret = undefined;
+        let ret = undefined
 
         availableIngredients.forEach(function(item, index, array) {
             if (name === item.name)
-                ret = new Ingredient(name, item.image);
+                ret = item;
         })
 
         return ret;
@@ -86,7 +88,7 @@ class DraggableIngredientInstance extends Ingredient {
     isDragEnabled;
 
     constructor(ingredient) {
-        super(ingredient.name, ingredient.image);
+        super(ingredient.name, ingredient.image_path);
         this.createDraggable();
         this.isDragEnabled = true;
     }
@@ -363,7 +365,7 @@ class Oven {
             }
         }
 
-        window.requestAnimationFrame(bakingAnimation);
+        window.requestAnimationFrame(bakingAnimation); // this command initially starts the animation
     }
 }
 
@@ -476,10 +478,25 @@ class Order {
 
 // wird später wsl vom Server geladen werden
 const availableIngredients = [      new Ingredient("Impasto", "/assets/images/teig.png"),
-                                    new Ingredient("Formaggio", "/assets/images/formaggio.png"),
+                                    new Ingredient("Formaggio", "/assets/images/formaggio.png", {
+                                        vertex_x_inPercent: 20,
+                                        vertex_y_inPercent: 80,
+                                        speed: 8,
+                                        rotation: 7
+                                    }),
                                     new Ingredient("Pomodoro", "/assets/images/pomodoro.png"),
-                                    new Ingredient("Salame", "/assets/images/salame.png"),
-                                    new Ingredient("Funghi", "/assets/images/funghi.png")];
+                                    new Ingredient("Salame", "/assets/images/salame.png", {
+                                        vertex_x_inPercent: 60,
+                                        vertex_y_inPercent: 70,
+                                        speed: 12,
+                                        rotation: 7
+                                    }),
+                                    new Ingredient("Funghi", "/assets/images/funghi.png", {
+                                        vertex_x_inPercent: 50,
+                                        vertex_y_inPercent: 60,
+                                        speed: 9,
+                                        rotation: 8
+                                    })];
 
 const orderList = [                 ];
 
@@ -508,7 +525,7 @@ function loadIngredientSection(){
         ingredient.setAttribute('class', 'box ingredient');
         ingredient.setAttribute('onmousedown', 'pullNewIngredient(' + index + ')');
 
-        image.setAttribute('src', item.image);
+        image.setAttribute('src', item.image_path);
         image.setAttribute('height', '50px');
         image.setAttribute('width', 'auto');
 
@@ -792,8 +809,6 @@ class CountdownInterface {
     }
 }
 
-
-
 let timerActive = false;
 
 function manageRushCountdown(seconds, timerContainerId){
@@ -838,4 +853,124 @@ function manageRushCountdown(seconds, timerContainerId){
 
         new RushCountdown(seconds, document.getElementById(timerContainerId)).startCountdown(); // Countdown wird gestartet
     }
+}
+
+// FRUIT NINJA --------------------------------------------------------------------------------------------------------
+
+function startMiniGame(ingredientList) {
+
+    document.getElementById("miniGame_layer").style.visibility = "visible";
+
+    const game_window = document.createElement('div');
+    game_window.setAttribute('class', "miniGame_window");
+
+    const playArea = document.createElement('div');
+    playArea.setAttribute('class', "miniGame_playArea");
+
+    const sideBar = document.createElement('div');
+    sideBar.setAttribute('class', "miniGame_sideBar");
+
+    game_window.appendChild(playArea);
+    game_window.appendChild(sideBar);
+
+    document.getElementById("miniGame_layer").replaceChild(game_window, document.getElementById("miniGame_layer").firstChild);
+
+    fruit_ninja();
+
+
+    function fruit_ninja() {
+
+        class FlightAnimation {
+
+            static allAnimations = [];
+
+            ingredient_image;
+
+            x = -100;
+            y = 0;
+            curvature = 0.004;
+            rotation = 0;
+
+            vertex_x_inPercent;
+            vertex_y_inPercent;
+            speed;
+            rotation_increment;
+
+            context;
+
+            constructor(element, context) {
+                this.ingredient_image = document.createElement('img');
+                this.ingredient_image.setAttribute('src', element.image_path);
+
+                this.vertex_x_inPercent = element.flight_behavior.vertex_x_inPercent;
+                this.vertex_y_inPercent = element.flight_behavior.vertex_y_inPercent;
+                this.speed = element.flight_behavior.speed;
+                this.rotation_increment = element.flight_behavior.rotation;
+
+                this.context = context;
+            }
+
+            static addAnimation(flightAnimation) {
+                this.allAnimations.push(flightAnimation);
+            }
+
+            step() {
+
+                // calculating y with parable function
+                this.y = this.curvature * Math.pow(this.x - canvas.width * (this.vertex_x_inPercent/100), 2) + canvas.height * (1 - (this.vertex_y_inPercent/100));
+
+                this.context.save();
+                this.context.translate(this.x, this.y);
+                // rotate the canvas to the specified degrees
+                this.context.rotate(this.rotation*Math.PI/180);
+                this.rotation = (this.rotation + this.rotation_increment) % 360;
+                // draw the image
+                // since the context is rotated, the image will be rotated also
+                this.context.drawImage(this.ingredient_image,-this.ingredient_image.width/2,-this.ingredient_image.width/2);
+                this.context.restore();
+
+                this.x += this.speed;
+
+                if (this.x > canvas.width + 200)
+                    FlightAnimation.allAnimations.splice(FlightAnimation.allAnimations.indexOf(this), 1); // stop this animation
+            }
+        }
+
+
+        // canvas creation ----
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext("2d");
+
+        const playArea_box = playArea.getBoundingClientRect();
+        canvas.setAttribute('height', playArea_box.height + "px");
+        canvas.setAttribute('width', playArea_box.width + "px");
+
+        playArea.appendChild(canvas);
+
+        // --------------------
+
+        FlightAnimation.addAnimation(new FlightAnimation(Ingredient.getInstanceByName("Formaggio"), context));
+        FlightAnimation.addAnimation(new FlightAnimation(Ingredient.getInstanceByName("Funghi"), context));
+        FlightAnimation.addAnimation(new FlightAnimation(Ingredient.getInstanceByName("Salame"), context));
+
+        // --------------------
+        let start;
+        function animationStep(timestamp) {
+            if (start === undefined)
+                start = timestamp;
+
+            context.clearRect(0,0, canvas.width, canvas.height); // clear all
+
+            // calculating next frame for every current animation
+            FlightAnimation.allAnimations.forEach(function (item, index, array) {
+               item.step();
+            });
+
+            if (FlightAnimation.allAnimations.length > 0)
+                window.requestAnimationFrame(animationStep);
+        }
+
+        window.requestAnimationFrame(animationStep);
+    }
+
 }

@@ -182,6 +182,40 @@ section{
     border-bottom: 4px solid black;
 }
 
-#pizza_layer #dough_layer #tomato_layer #cheese_layer #salami_layer {
+#miniGame_layer{
+    visibility: hidden;
 
+    position: absolute;
+    z-index: 50;
+
+    height: 99vh;
+    width: 99vw;
+}
+
+.miniGame_window{
+    display: flex;
+
+    width: 40vw;
+    height: 75vh;
+    min-height: 500px;
+    min-width: 600px;
+
+    padding: 30px;
+    margin-left: auto;
+    margin-right: auto;
+
+    background-color: white;
+    border: 4px solid black;
+}
+
+.miniGame_playArea{
+    flex: 4;
+
+    border: 2px solid black;
+}
+
+.miniGame_sideBar{
+    flex: 1;
+
+    display: block;
 }

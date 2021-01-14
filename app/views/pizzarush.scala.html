@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <link rel="shortcut icon" type="image/png" href="@assetsFinder.path("images/favicon.png")">
+        <link rel="shortcut icon" type="image_path/png" href="@assetsFinder.path("images/favicon.png")">
         <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_pizzarush.css")">
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/functions_pizzarush.js")"></script>
 
@@ -16,6 +16,14 @@
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
             <!------------------------------>
 
+        <div id="startStop_overlay" onclick="manageRushCountdown(120, 'timerRushmode')">
+            <div id="startStop_overlay_text">Click anywhere to start!</div>
+        </div>
+
+        <button onclick="startMiniGame()">Start Fruit-Ninja</button>
+
+        <div id="miniGame_layer"> </div>
+
         <div id="pizza_layer"> </div>
 
         <div id="ingredient_layer"> </div>
@@ -24,9 +32,7 @@
         <div id="upper_container">
             <div id="left_upper_container">
 
-                <div id="startStop_overlay" onclick="manageRushCountdown(120, 'timerRushmode')">
-                    <div id="startStop_overlay_text">Click anywhere to start!</div>
-                </div>
+
                 <h1 id="timerRushmode"></h1>
             </div>
 
