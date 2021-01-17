@@ -1,18 +1,3 @@
-# z-Indexes in current implementation
-
-- navbar: 100
-- startStop_Overlay: 90
-- miniGame_layer: 50
-- Baking Timer: 20
-- Ingredient.draggable
-  - Funghi: 14
-  - Salame: 13
-  - Formaggio: 12
-  - Pomodoro: 11
-- .draggable (css-class): 10
-- Order.gameElement.text: 2
-
-
 # play-java-starter-example
 
 This is a starter application that shows how Play works.  Please see the documentation at https://www.playframework.com/documentation/latest/Home for more details.
