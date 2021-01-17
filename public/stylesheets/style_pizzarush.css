@@ -13,6 +13,20 @@ body {
     cursor: move;
 }
 
+img.draggable{ /* all draggableIngredients */
+    height: 100px;
+    width: auto;
+}
+
+div.draggable{ /* all draggable pizzas */
+    display: inline-block;
+}
+
+div.draggable > img{ /* ingredients on pizzas */
+    height: 100px;
+    width: auto;
+}
+
 .unclickable{
     pointer-events: none;
 }
@@ -27,7 +41,7 @@ body {
     right: 0;
     bottom: 0;
     background-color: rgba(0,0,0,0.5); /* Black background with 50% opacity */
-    z-index: 100; /* Specify a stack order in case you're using a different order for other elements */
+    z-index: 90; /* Specify a stack order in case you're using a different order for other elements */
     cursor: pointer; /* Add a pointer on hover */
 }
 
@@ -157,12 +171,14 @@ section{
     background-color: rgba(150, 150, 150, 0.2);
 }
 
-.ingredient{
+.ingredientSectionItem{
 
 }
 
-.ingredient > img{
+.ingredientSectionItem > img{
     height: 30px;
+    width: auto;
+
     margin: 7px;
 }
 

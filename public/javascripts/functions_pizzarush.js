@@ -56,8 +56,8 @@ class Ingredient {
 
         ret.setAttribute('src', this.image_path);
         ret.setAttribute('alt', this.name);
-        ret.setAttribute('width', '100px');
         ret.setAttribute('height', '100px');
+        ret.setAttribute('width', '100px');
 
         return ret;
     }
@@ -73,7 +73,7 @@ class Ingredient {
         availableIngredients.forEach(function(item, index, array) {
             if (name === item.name)
                 ret = item;
-        })
+        });
 
         return ret;
     }
@@ -482,20 +482,26 @@ const availableIngredients = [      new Ingredient("Impasto", "/assets/images/te
                                         vertex_x_inPercent: 20,
                                         vertex_y_inPercent: 80,
                                         speed: 8,
-                                        rotation: 7
+                                        rotation: 7,
+
+                                        hits_required: 3
                                     }),
                                     new Ingredient("Pomodoro", "/assets/images/pomodoro.png"),
                                     new Ingredient("Salame", "/assets/images/salame.png", {
                                         vertex_x_inPercent: 60,
                                         vertex_y_inPercent: 70,
                                         speed: 12,
-                                        rotation: 7
+                                        rotation: 7,
+
+                                        hits_required: 3
                                     }),
                                     new Ingredient("Funghi", "/assets/images/funghi.png", {
                                         vertex_x_inPercent: 50,
                                         vertex_y_inPercent: 60,
                                         speed: 9,
-                                        rotation: 8
+                                        rotation: 8,
+
+                                        hits_required: 3
                                     })];
 
 const orderList = [                 ];
@@ -522,12 +528,10 @@ function loadIngredientSection(){
         const image = document.createElement('img');
         const name = document.createElement('div')
 
-        ingredient.setAttribute('class', 'box ingredient');
+        ingredient.setAttribute('class', 'box ingredientSectionItem');
         ingredient.setAttribute('onmousedown', 'pullNewIngredient(' + index + ')');
 
         image.setAttribute('src', item.image_path);
-        image.setAttribute('height', '50px');
-        image.setAttribute('width', 'auto');
 
         name.innerText = item.name;
 
@@ -880,59 +884,189 @@ function startMiniGame(ingredientList) {
 
     function fruit_ninja() {
 
-        class FlightAnimation {
+        // this class handles the throw of ONE ingredient
+        class IngredientThrower {
 
-            static allAnimations = [];
+            // ATTRIBUTES -----------------
 
+            // stays the same for every throw
+            element;
             ingredient_image;
-
-            x = -100;
-            y = 0;
-            curvature = 0.004;
-            rotation = 0;
-
-            vertex_x_inPercent;
-            vertex_y_inPercent;
-            speed;
-            rotation_increment;
-
             context;
 
+            curvature; // defines how wide or narrow the parable trajectory is
+            speed; // self explanatory [no specific value]
+            rotation_increment; // speed of rotation [in degrees]
+
+            // changes depending on player input
+            hits_left; // how many hits until it is chopped
+
+            // changes for every throw
+            vertex_x_inPercent; // x-coordinate of highpoint of the throw-trajectory [in percent of canvas.width]
+            vertex_y_inPercent; // y-coordinate of highpoint of the throw-trajectory [in percent of canvas.height]
+
+            // changes constantly DURING throw
+            x = -100;
+            y = 0;
+            rotation = 0;
+
+
+            // INGREDIENT JUGGLER ---------
+            ingredientJuggler;
+
+
             constructor(element, context) {
+                this.element = element;
                 this.ingredient_image = document.createElement('img');
                 this.ingredient_image.setAttribute('src', element.image_path);
+                this.context = context;
 
-                this.vertex_x_inPercent = element.flight_behavior.vertex_x_inPercent;
-                this.vertex_y_inPercent = element.flight_behavior.vertex_y_inPercent;
+                this.curvature = 0.004;
                 this.speed = element.flight_behavior.speed;
                 this.rotation_increment = element.flight_behavior.rotation;
 
-                this.context = context;
+                this.hits_left = element.flight_behavior.hits_required;
             }
 
-            static addAnimation(flightAnimation) {
-                this.allAnimations.push(flightAnimation);
+            setupWithIngredientJuggler(juggler) {
+                this.ingredientJuggler = juggler;
+                //juggler.addIngredient(this);
             }
 
+            startThrow() {
+                // tell juggler, you are currently in air
+                const index = this.ingredientJuggler.ingredientsWaitingToBeThrown.indexOf(this);
+                this.ingredientJuggler.ingredientsWaitingToBeThrown.splice(index, 1);
+                this.ingredientJuggler.ingredientsCurrentlyInAir.push(this);
+
+                // prepare values for next throw --------------------
+
+                // new coordinates of highpoint
+                this.vertex_x_inPercent = this.randomize(this.element.flight_behavior.vertex_x_inPercent, 30);
+                this.vertex_y_inPercent = this.randomize(this.element.flight_behavior.vertex_y_inPercent, 30);
+                this.rotation = 0;
+
+                // set the initial x to the value where y is 100px under the canvas
+                // this is to prevent the trajectory from starting extremely far off screen
+                this.x = this.parableYGiven(
+                    canvas.height + 100,
+                    this.curvature,
+                    canvas.width * (this.vertex_x_inPercent/100),
+                    canvas.height * (1 - (this.vertex_y_inPercent/100))
+                )
+
+                if (Math.random() > 0.5){ // 50:50
+                    this.speed = -1 * this.element.flight_behavior.speed; // element will fly reversed
+                    this.x = canvas.width * (this.vertex_x_inPercent/100) + (canvas.width * (this.vertex_x_inPercent/100) - this.x);
+                } else {
+                    this.speed = this.element.flight_behavior.speed;
+                    // leave this.x as it is
+                }
+
+                if (Math.random() > 0.5) // 50:50
+                    this.rotation_increment = - this.element.flight_behavior.rotation;
+                else
+                    this.rotation_increment = this.element.flight_behavior.rotation;
+
+
+                // when throw is finished, tell juggler that you're ready to be thrown again
+                //this.ingredientJuggler.ingredientsWaitingToBeThrown.push(this);
+            }
+
+            endThrow() {
+
+                // tell juggler, you are ready to be thrown again
+                const index = this.ingredientJuggler.ingredientsCurrentlyInAir.indexOf(this);
+                this.ingredientJuggler.ingredientsCurrentlyInAir.splice(index, 1);
+                this.ingredientJuggler.ingredientsWaitingToBeThrown.push(this);
+            }
+
+            // calculate next position and draw on canvas
             step() {
 
                 // calculating y with parable function
-                this.y = this.curvature * Math.pow(this.x - canvas.width * (this.vertex_x_inPercent/100), 2) + canvas.height * (1 - (this.vertex_y_inPercent/100));
+                this.y = this.parableXGiven(
+                    this.x,
+                    this.curvature,
+                    canvas.width * (this.vertex_x_inPercent/100),
+                    canvas.height * (1 - (this.vertex_y_inPercent/100))
+                );
 
                 this.context.save();
+
+                // set rotation center of canvas-context to coordinates of the ingredient
                 this.context.translate(this.x, this.y);
+
                 // rotate the canvas to the specified degrees
                 this.context.rotate(this.rotation*Math.PI/180);
                 this.rotation = (this.rotation + this.rotation_increment) % 360;
+
                 // draw the image
-                // since the context is rotated, the image will be rotated also
+                // since the context is rotated, the image will be rotated as well
                 this.context.drawImage(this.ingredient_image,-this.ingredient_image.width/2,-this.ingredient_image.width/2);
+
                 this.context.restore();
 
                 this.x += this.speed;
 
-                if (this.x > canvas.width + 200)
-                    FlightAnimation.allAnimations.splice(FlightAnimation.allAnimations.indexOf(this), 1); // stop this animation
+                if (this.y > canvas.height + 150)
+                    this.endThrow();
+            }
+
+            // form:  cur * (x - ver_x)^2 + ver_y
+            parableXGiven(x, cur, ver_x, ver_y) {
+                return cur * Math.pow(x - ver_x, 2) + ver_y;
+            }
+
+            // form:  -((x - ver_y)/cur)^0.5 + ver_x
+            parableYGiven(y, cur, ver_x, ver_y) {
+                return - Math.pow((y - ver_y) / cur, 0.5) + ver_x;
+            }
+
+            randomize(value, range) {
+
+                const value_min = Math.max(value - range/2, 15);
+                const value_max = Math.min(value + range/2, 85);
+
+                const tmp = value_max - value_min; // Maximum value you can add to value_min
+
+                return value_min + Math.random() * tmp; // 0 <= Math.random() < 1
+            }
+        }
+
+        // this class is responsible for WHAT is thrown, and WHEN
+        class IngredientJuggler {
+
+            allIngredientsToJuggle = [];
+            ingredientsWaitingToBeThrown = []
+            ingredientsCurrentlyInAir = [];
+
+            constructor(ingredientList) {
+
+                for (let i = 0; i < ingredientList.length; i++) {
+                    this.addIngredient(new IngredientThrower(ingredientList[i], context));
+                }
+
+                for (let i = 0; i < this.allIngredientsToJuggle.length; i++) {
+                    this.allIngredientsToJuggle[i].setupWithIngredientJuggler(this);
+                    this.ingredientsWaitingToBeThrown[i] = this.allIngredientsToJuggle[i];
+                }
+            }
+
+            addIngredient(ingredientThrower) {
+                this.allIngredientsToJuggle.push(ingredientThrower);
+            }
+
+            nextFrame(timestamp) {
+
+                if (this.ingredientsWaitingToBeThrown.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * this.ingredientsWaitingToBeThrown.length);
+                    this.ingredientsWaitingToBeThrown[randomIndex].startThrow();
+                }
+
+                this.ingredientsCurrentlyInAir.forEach(function (item, index, array) {
+                    item.step();
+                });
             }
         }
 
@@ -949,28 +1083,31 @@ function startMiniGame(ingredientList) {
 
         // --------------------
 
-        FlightAnimation.addAnimation(new FlightAnimation(Ingredient.getInstanceByName("Formaggio"), context));
-        FlightAnimation.addAnimation(new FlightAnimation(Ingredient.getInstanceByName("Funghi"), context));
-        FlightAnimation.addAnimation(new FlightAnimation(Ingredient.getInstanceByName("Salame"), context));
+        const testArray = [ Ingredient.getInstanceByName("Formaggio"),
+                            Ingredient.getInstanceByName("Funghi"),
+                            Ingredient.getInstanceByName("Salame")];
 
         // --------------------
+
+        const ingredientJuggler = new IngredientJuggler(testArray);
+
         let start;
+
         function animationStep(timestamp) {
             if (start === undefined)
                 start = timestamp;
 
-            context.clearRect(0,0, canvas.width, canvas.height); // clear all
+            // clear the canvas before drawing the next frame
+            context.clearRect(0,0, canvas.width, canvas.height);
 
-            // calculating next frame for every current animation
-            FlightAnimation.allAnimations.forEach(function (item, index, array) {
-               item.step();
-            });
+            // calculating & drawing next frame for every current throw
+            ingredientJuggler.nextFrame(timestamp);
 
-            if (FlightAnimation.allAnimations.length > 0)
-                window.requestAnimationFrame(animationStep);
+
+            window.requestAnimationFrame(animationStep);
         }
 
-        window.requestAnimationFrame(animationStep);
+        window.requestAnimationFrame(animationStep); // initially start the game-animation
     }
 
 }
