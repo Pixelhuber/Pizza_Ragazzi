@@ -1,65 +1,69 @@
 @(title: String)(implicit assetsFinder: AssetsFinder)
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <link rel="shortcut icon" type="image/png" href="@assetsFinder.path("images/favicon.png")">
-  <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_pizzarush.css")">
-  <script type="text/javascript" src="@routes.Assets.versioned("javascripts/functions_pizzarush.js")"></script>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="shortcut icon" type="image/png" href="@assetsFinder.path("images/favicon.png")">
+        <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_pizzarush.css")">
+        <script type="text/javascript" src="@routes.Assets.versioned("javascripts/functions_pizzarush.js")"></script>
 
-  <title>Pizza-Rush</title>
-</head>
+        <title>Pizza-Rush</title>
+    </head>
 
-<body onload="populateIngredientSection(); populateOrderSection()">
+    <body onload="  loadGameElements()">
 
-  <!--NAVIGATION BAR ------------->
-  <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
-  <!------------------------------>
+            <!--NAVIGATION BAR ------------->
+        <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
+            <!------------------------------>
 
-  <div id="pizza_layer"> </div>
+        <div id="pizza_layer"> </div>
 
-  <!--diese Ebenen sorgen dafür, dass z.B Tomaten immer über Teig gerendert werden usw. -->
-  <div id="dough_layer"> </div>
-  <div id="tomato_layer"> </div>
-  <div id="cheese_layer"> </div>
-  <div id="salami_layer"> </div>
+        <div id="ingredient_layer"> </div>
 
 
+        <div id="upper_container">
+            <div id="left_upper_container">
 
-  <div id="oven_container">
-    <img class="oven" src=@routes.Assets.versioned("images/oven.png") alt="Ofen"/>
-    <img class="oven" src=@routes.Assets.versioned("images/oven.png") alt="Ofen"/>
-    <img class="oven" src=@routes.Assets.versioned("images/oven.png") alt="Ofen"/>
-    <img class="oven" src=@routes.Assets.versioned("images/oven.png") alt="Ofen"/>
-  </div>
+                <div id="startStop_overlay" onclick="manageRushCountdown(120, 'timerRushmode')">
+                    <div id="startStop_overlay_text">Click anywhere to start!</div>
+                </div>
+                <h1 id="timerRushmode"></h1>
+            </div>
 
-  <section>
+            <div id="oven_container"></div>
 
-    <div id="ingredientSection">
-      <h1>INGREDIENTI</h1>
+            <div id="right_upper_container">
+                <h1 id="currentlyDisplayedPoints">Points: 0</h1>
+            </div>
+        </div>
 
-      <div class="scroll_container">
+        <section>
 
-        <!--INGREDIENT LIST POPULATED DYNAMICALLY -->
+            <div id="ingredientSection">
+                <h1>INGREDIENTI</h1>
 
-      </div>
+                <div class="scroll_container">
 
-    </div>
+                        <!--INGREDIENT LIST POPULATED DYNAMICALLY -->
 
-    <div id="workSurface"></div>
+                </div>
 
-    <div id="orderSection">
-      <h1>ORDINI</h1>
+            </div>
 
-      <div class="scroll_container">
+            <div id="workSurface"></div>
 
-        <!--ORDER LIST POPULATED DYNAMICALLY -->
+            <div id="orderSection">
+                <h1>ORDINI</h1>
 
-      </div>
+                <div class="scroll_container">
 
-    </div>
+                        <!--ORDER LIST POPULATED DYNAMICALLY -->
 
-  </section>
+                </div>
 
-</body>
+            </div>
+
+        </section>
+
+    </body>
 </html>

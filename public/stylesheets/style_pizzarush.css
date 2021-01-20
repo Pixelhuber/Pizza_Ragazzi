@@ -9,7 +9,62 @@ body {
 
 .draggable{
     position: absolute;
+    z-index: 10;
     cursor: move;
+}
+
+.unclickable{
+    pointer-events: none;
+}
+
+#startStop_overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: block; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with 50% opacity */
+    z-index: 100; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}
+
+#startStop_overlay_text{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 50px;
+    color: white;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+}
+#timerRushmode{
+    position: relative;
+    top: 20%;
+}
+
+#upper_container{
+    display: flex;
+
+    width: 100%;
+    height: 15vh;
+    margin: 20px auto 20px auto;
+}
+
+#left_upper_container{
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#right_upper_container{
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #oven_container{
@@ -17,22 +72,31 @@ body {
     justify-content: center;
     align-items: center;
 
-    width: 60%;
-    height: 150px;
-    margin: 20px auto 20px auto;
+    width: 50%;
+    /*height: 150px;
+    margin: 20px auto 20px auto;*/
 
 }
 
-.oven {
+.oven{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: fit-content;
+    height: 100%;
+}
+
+.oven > img{
+    height: 100%;
     width: auto;
-    height: 80%;
     padding: 10px;
 }
 
 section{
     display: flex;
 
-    height: 650px; /* HIER SOLLTE KEINE ABSOLUTE GRÖSSE STEHEN -------------------------------------------- */
+    height: 80vh;
 }
 
 ::-webkit-scrollbar {
@@ -103,6 +167,21 @@ section{
 }
 
 .order{
+
     height: 2.5em;
+    /*padding-left: 5px;*/
+}
+
+.order > p{
+    box-sizing: border-box;
     padding-left: 5px;
+}
+
+.order > div{
+    border-top: 4px solid black;
+    border-bottom: 4px solid black;
+}
+
+#pizza_layer #dough_layer #tomato_layer #cheese_layer #salami_layer {
+
 }
