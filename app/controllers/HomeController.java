@@ -34,8 +34,9 @@ public class HomeController extends Controller {
     public Result index() {
         return ok(login.render("Login",
                 assetsFinder
-            ));
+        ));
     }
+
     public Result highscore() {
         return ok(
                 highscore.render(
@@ -43,27 +44,35 @@ public class HomeController extends Controller {
                         assetsFinder
                 ));
     }
+
     public Result profile() {
-        return ok(profile.render("Profile",assetsFinder));
+        return ok(
+                profile.render(
+                        "Profile",
+                        assetsFinder));
     }
+
     public Result login() {
-        return ok(login.render("Login",
-                assetsFinder));
+        return ok(
+                login.render(
+                        "Login",
+                        assetsFinder));
     }
+
     public Result createAccount() {
-        return ok(createAccount.render("CreateAccount",
-                assetsFinder));
+        return ok(
+                createAccount.render(
+                        "CreateAccount",
+                        assetsFinder));
     }
 
 
-
-    public Result main(){
+    public Result main() {
         return ok(
                 pizzarush.render(
                         "Pizza-Rush",
                         assetsFinder
                 ));
     }
-
 
 }
