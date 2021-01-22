@@ -198,6 +198,22 @@ public class UserFactory {
             this.save();
         }
 
+        public int getHighscore() {
+            return highscore;
+        }
+
+        public void setHighscore(int highscore) {
+            this.highscore = highscore;
+        }
+
+        public int getIdTier() {
+            return idTier;
+        }
+
+        public void setIdTier(int idTier) {
+            this.idTier = idTier;
+        }
+
         public String getMail() {
             return mail;
         }

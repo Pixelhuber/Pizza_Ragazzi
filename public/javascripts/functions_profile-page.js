@@ -79,6 +79,8 @@ $(function () {
 function setup() {
     getUsernameFromSession();
     getMailFromDatabase();
+    getGesamtpunkteFromDatabase();
+    getHighscoreFromDatabase();
 }
 
 // Sends a request to update the username in the session
@@ -114,9 +116,29 @@ function getUsernameFromSession() {
 function getMailFromDatabase() {
     $.get("/profile/getMail", function(data, status){
         //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
-        document.getElementById("mail").textContent = data
+        document.getElementById("mail").textContent = "Email: " + data
     }).fail(function (data, status){
         document.getElementById("mail").textContent = "Default Mail";
         alert("Couldn't retrieve mail from database");
+    });
+}
+
+function getGesamtpunkteFromDatabase() {
+    $.get("/profile/getGesamtpunkte", function(data, status){
+        //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
+        document.getElementById("gesamtpunkte").textContent = "Gesamtpunkte: " + data
+    }).fail(function (data, status){
+        document.getElementById("gesamtpunkte").textContent = "Default Gesamtpunkte";
+        alert("Couldn't retrieve gesamtpunkte from database");
+    });
+}
+
+function getHighscoreFromDatabase() {
+    $.get("/profile/getHighscore", function(data, status){
+        //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
+        document.getElementById("highscore").textContent = "Highscore: " + data
+    }).fail(function (data, status){
+        document.getElementById("highscore").textContent = "Default Highscore";
+        alert("Couldn't retrieve highscore from database");
     });
 }

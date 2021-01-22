@@ -34,6 +34,10 @@ GET     /getUsername                controllers.ProfileController.getUsernameFro
 
 GET     /profile/getMail            controllers.ProfileController.getMailFromDatabase
 
+GET     /profile/getGesamtpunkte    controllers.ProfileController.getGesamtpunkteFromDatabase
+
+GET     /profile/getHighscore       controllers.ProfileController.getHighscoreFromDatabase
+
 # LOGIN ----------------------------------------------------------------------------
 POST    /authenticate               controllers.LoginController.authenticate(request: Request)
 

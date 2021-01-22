@@ -44,7 +44,17 @@ public class ProfileController extends Controller {
     }
 
     public Result getMailFromDatabase() {
-        UserFactory.User user = userFactory.getUserById(26);
+        UserFactory.User user = userFactory.getUserById(26);  //TODO muss angepasst werden auf den eingeloggten Nutzer; gilt auch für alle Methoden drunter
         return ok(user.getMail());
+    }
+
+    public Result getGesamtpunkteFromDatabase() {
+        UserFactory.User user = userFactory.getUserById(26);
+        return ok(Integer.toString(user.getGesamtpunkte()));
+    }
+
+    public Result getHighscoreFromDatabase() {
+        UserFactory.User user = userFactory.getUserById(26);
+        return ok(Integer.toString(user.getHighscore()));
     }
 }
