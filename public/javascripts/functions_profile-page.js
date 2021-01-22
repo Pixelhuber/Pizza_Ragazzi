@@ -78,9 +78,9 @@ $(function () {
 
 function setup() {
     getUsernameFromSession();
-    getMailFromDatabase();
     getGesamtpunkteFromDatabase();
     getHighscoreFromDatabase();
+    getMailFromDatabase();
 }
 
 // Sends a request to update the username in the session

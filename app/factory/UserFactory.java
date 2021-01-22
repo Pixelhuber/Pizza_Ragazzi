@@ -78,7 +78,6 @@ public class UserFactory {
                 user = new User(rs);
             }
             stmt.close();
-            System.out.println(user.toString());
             return user;
         });
     }
