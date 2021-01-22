@@ -234,5 +234,19 @@ public class UserFactory {
             this.save();
         }
     }
+        public String[][] getTableData() {
+
+            List<UserFactory.User> users = getAllUsers();
+            String[][] data = new String[users.size()][2];
+            User user;
+
+            for (int i = 0; i < users.size(); i++) {
+                user = getUserById(i+1);
+                data[i][0] = user.getUsername();
+                data[i][1] = String.valueOf(user.getHighscore());
+            }
+            return data;
+
+        }
 
 }

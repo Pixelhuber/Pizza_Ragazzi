@@ -348,8 +348,12 @@ class Oven {
                 timer.innerText = "DONE";
             else if (timerCount > -7)
                 timer.innerText = "!!!"
-            else
+            else if (timerCount > -9)
                 timer.innerText = "BURNT"
+
+            else
+                timer.remove(),pizza.draggable.remove();
+
 
             // Decide whether to stop animation or not
             if (!pizza.isInOven) { // pizza.ovenOut() method sets isInOven to false when pizza is dragged out of oven
