@@ -77,8 +77,7 @@ $(function () {
 });
 
 function setUsernameOnStartup() {
-
-    document.getElementById("username").textContent = getUsernameFromSession();
+    getUsernameFromSession();
 }
 
 // Sends a request to update the username in the session

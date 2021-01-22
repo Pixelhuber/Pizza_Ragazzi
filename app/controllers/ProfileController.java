@@ -1,5 +1,6 @@
 package controllers;
 
+import factory.UserFactory;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
@@ -15,11 +16,13 @@ public class ProfileController extends Controller {
 
     private final AssetsFinder assetsFinder;
     private final FormFactory formFactory;
+    private final UserFactory userFactory;
 
     @Inject
-    public ProfileController(AssetsFinder assetsFinder, FormFactory formFactory) {
+    public ProfileController(AssetsFinder assetsFinder, FormFactory formFactory, UserFactory userFactory) {
         this.assetsFinder = assetsFinder;
         this.formFactory = formFactory;
+        this.userFactory = userFactory;
     }
 
     // Sets the username to the value in the request-body
