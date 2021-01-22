@@ -42,4 +42,9 @@ public class ProfileController extends Controller {
                 .map(Results::ok)
                 .orElseGet(Results::notFound);
     }
+
+    public Result getMailFromDatabase() {
+        UserFactory.User user = userFactory.getUserById(26);
+        return ok(user.getMail());
+    }
 }

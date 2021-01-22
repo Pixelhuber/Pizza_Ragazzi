@@ -76,8 +76,9 @@ $(function () {
     }
 });
 
-function setUsernameOnStartup() {
+function setup() {
     getUsernameFromSession();
+    getMailFromDatabase();
 }
 
 // Sends a request to update the username in the session
@@ -107,5 +108,15 @@ function getUsernameFromSession() {
     }).fail(function (data, status){
         document.getElementById("username").textContent = "Default Name";
         alert("Couldn't retrieve username from session");
+    });
+}
+
+function getMailFromDatabase() {
+    $.get("/profile/getMail", function(data, status){
+        //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
+        document.getElementById("mail").textContent = data
+    }).fail(function (data, status){
+        document.getElementById("mail").textContent = "Default Mail";
+        alert("Couldn't retrieve mail from database");
     });
 }

@@ -32,6 +32,8 @@ POST    /profile/updateUsername     controllers.ProfileController.setUsername(re
 # Use this route for every getUsername call
 GET     /getUsername                controllers.ProfileController.getUsernameFromSession(request: Request)
 
+GET     /profile/getMail            controllers.ProfileController.getMailFromDatabase
+
 # LOGIN ----------------------------------------------------------------------------
 POST    /authenticate               controllers.LoginController.authenticate(request: Request)
 

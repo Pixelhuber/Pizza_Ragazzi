@@ -40,20 +40,22 @@ public class UserFactory {
         });
     }
 
-    public User create(String email, String name, String password) {
+    public User create(String name, String email, String password, int gesamtpunkte, int highscore, int idTier) {
         return db.withConnection(conn -> {
             User user = null;
-            String sql = "INSERT INTO User (username, Points, Email, Password) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO `User` (username, email, password, gesamtpunkte, highscore, Tier_idTier) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, name);
-            stmt.setInt(2, 0);
             stmt.setString(3, email);
             stmt.setString(4, password);
+            stmt.setInt(5, gesamtpunkte);
+            stmt.setInt(6, highscore);
+            stmt.setInt(7, idTier);
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 int id = rs.getInt(1);
-                user = new User(id, name, email, 0);
+                user = new User(id, name, email, gesamtpunkte, highscore, idTier);
             }
             stmt.close();
             return user;
@@ -69,13 +71,14 @@ public class UserFactory {
     public User getUserById(int id) {
         return db.withConnection(conn -> {
             User user = null;
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM User WHERE UserId = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `User` WHERE idUser = ?");
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 user = new User(rs);
             }
             stmt.close();
+            System.out.println(user.toString());
             return user;
         });
     }
@@ -108,20 +111,28 @@ public class UserFactory {
         private int id;
         private String username;
         private String mail;
-        private int points;
+        private int gesamtpunkte;
+        private int highscore;
+        //private ???? profilepicture;
+        private int idTier;
 
-        private User(int id, String username, String mail, int points) {
+        private User(int id, String username, String mail, int gesamtpunkte, int highscore, int idTier) {
             this.id = id;
             this.username = username;
             this.mail = mail;
-            this.points = points;
+            this.gesamtpunkte = gesamtpunkte;
+            this.highscore = highscore;
+            this.idTier = idTier;
         }
 
         private User(ResultSet rs) throws SQLException {
-            this.id = rs.getInt("UserId");
-            this.username = rs.getString("Username");
-            this.mail = rs.getString("Email");
-            this.points = rs.getInt("Points");
+            this.id = rs.getInt("idUser");
+            this.username = rs.getString("username");
+            this.mail = rs.getString("email");
+            this.gesamtpunkte = rs.getInt("gesamtpunkte");
+            this.highscore = rs.getInt("gesamtpunkte");
+            this.highscore = rs.getInt("highscore");
+            this.idTier = rs.getInt("Tier_idTier");
         }
 
         /**
@@ -130,10 +141,10 @@ public class UserFactory {
          */
         public void save() {
             db.withConnection(conn -> {
-                String sql = "UPDATE User SET Username = ?, Points = ?, Email = ? WHERE UserId = ?";
+                String sql = "UPDATE User SET Username = ?, gesamtpunkte = ?, Email = ? WHERE UserId = ?";
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt.setString(1, this.username);
-                stmt.setInt(2, this.points);
+                stmt.setInt(2, this.gesamtpunkte);
                 stmt.setString(3, this.mail);
                 stmt.setInt(4, this.id);
                 stmt.executeUpdate();
@@ -195,16 +206,16 @@ public class UserFactory {
             this.mail = mail;
         }
 
-        public int getPoints() {
-            return points;
+        public int getGesamtpunkte() {
+            return gesamtpunkte;
         }
 
-        public void setPoints(int points) {
-            this.points = points;
+        public void setGesamtpunkte(int gesamtpunkte) {
+            this.gesamtpunkte = gesamtpunkte;
         }
 
-        public void addPoints(int points) {
-            this.points += points;
+        public void addGesamtpunkte(int gesamtpunkte) {
+            this.gesamtpunkte += gesamtpunkte;
             this.save();
         }
     }
