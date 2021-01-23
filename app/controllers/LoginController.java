@@ -46,7 +46,7 @@ public class LoginController extends Controller {
     }
 
     public Result logout(Http.Request request) {
-        request.session().removing("username");
+        
         return ok(login.render("This is your Profile Page", assetsFinder));
     }
 
