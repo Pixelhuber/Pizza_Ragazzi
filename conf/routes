@@ -17,7 +17,7 @@ GET     /highscore                  controllers.HomeController.highscore
 
 GET     /profile                    controllers.HomeController.profile
 
-GET     /login                      controllers.HomeController.login
+GET     /logout                      controllers.HomeController.logout
 
 GET     /createAccount              controllers.HomeController.createAccount
 

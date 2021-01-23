@@ -52,7 +52,7 @@ public class HomeController extends Controller {
                         assetsFinder));
     }
 
-    public Result login() {
+    public Result logout() {
         return ok(
                 login.render(
                         "Login",
