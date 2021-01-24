@@ -1,21 +1,21 @@
-$(function() {
+$(function () {
     var visibilityToggle1 = document.getElementById("visibilityButton1");
 
-    var username = document.getElementById("username");
+    var email = document.getElementById("email");
     var password = document.getElementById("password");
 
-    var username_error = document.getElementById("username_error");
+    var email_error = document.getElementById("email_error");
     var password_error = document.getElementById("password_error");
     var login_error = document.getElementById("login_error");
 
-    username.addEventListener('input', function () {
-        if (username.value.length >= 1) {
-            username_error.style.display = "none";
+    email.addEventListener('input', function () {
+        if (email.value.length >= 1) {
+            email_error.style.display = "none";
             login_error.style.display = "none";
         }
     });
 
-    password.addEventListener('input', function() {
+    password.addEventListener('input', function () {
         if (password.value.length >= 1) {
             password_error.style.display = "none";
             login_error.style.display = "none";
@@ -26,8 +26,7 @@ $(function() {
         if (password.type === "password") {
             password.type = "text";
             visibilityToggle1.innerHTML = 'visibility';
-        }
-        else {
+        } else {
             password.type = "password";
             visibilityToggle1.innerHTML = 'visibility_off';
         }
@@ -35,24 +34,24 @@ $(function() {
 });
 
 function validateLoginData() {
-    var username = document.forms['loginForm']['username'];
-    var password = document.forms['loginForm']['password'];
+    let email = document.forms['loginForm']['email'];
+    let password = document.forms['loginForm']['password'];
 
-    var username_error = document.getElementById("username_error");
-    var password_error = document.getElementById("password_error");
-    var login_error = document.getElementById("login_error");
+    let email_error = document.getElementById("email_error");
+    let password_error = document.getElementById("password_error");
+    let login_error = document.getElementById("login_error");
+    let wrong_password_error = document.getElementById("wrong_password_error");
 
-
-
-    let usernameTyped = username.value.length >= 1;
-    if (!usernameTyped) {
-        username_error.style.display = "block";
+    if (email.value.length < 1 || !email.value.match("[a-zA-Z0-9._%+-]+[@]+[a-zA-Z0-9.-]+[.]+[a-zA-Z]{2,6}")) {
+        email_error.style.display = "block";
         login_error.style.display = "none";
+        wrong_password_error.style.display = "none";
     }
 
     if (password.value.length < 1) {
         password_error.style.display = "block";
         login_error.style.display = "none";
+        wrong_password_error.style.display = "none";
     }
 
     authenticateLogin();
@@ -63,60 +62,34 @@ function changePage() {
 }
 
 function authenticateLogin() {
-    let username = document.getElementById("username").value;
+    let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;
+    let wrong_password_error = document.getElementById("wrong_password_error");
     let login_error = document.getElementById("login_error");
 
-    fetch("/authenticate", {
-        method: 'POST',
-        body:   JSON.stringify({
-            username:   username,
-            password:   password
-        }),
-        headers: {
-            "Content-Type": "application/json"
-        },
-        credentials: 'include'
-    })
-        .then(result => result.text())
-        .then(data => {
-            if (username === "admin" && password === "admin" || username === getUsernameFromSession() && password === getPasswordFromSession()) {
-                window.location.href = "main";
-            } else {
+    fetch("/login/authenticate", {
+            method: 'POST',
+            body: JSON.stringify({
+                email: email,
+                password: password
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: 'include'
+        }
+    ).then(
+        result => result.text()
+    ).then(data => {
+            let msg = data.toString();
+            if (msg === "wrong password") {
+                wrong_password_error.style.display = "block";
+            } else if (msg === "no user with this email") {
                 login_error.style.display = "block";
+                wrong_password_error.style.display = "none";
+            } else if (msg !== "email is not valid" && msg !== "password is empty") {
+                window.location.href = "profile";
             }
-        })
-}
-function getUsernameFromSession() {
-
-    let ret = "";
-
-    fetch("/getUsername")
-        .then(
-            result => result.text()
-        ).then(
-        result => document.getElementById("username").textContent = result
-    ).catch(
-        username = username.value
+        }
     );
-
-    return ret;
 }
-
-function getPasswordFromSession() {
-
-    let ret = "";
-
-    fetch("/getPassword")
-        .then(
-            result => result.text()
-        ).then(
-        result => document.getElementById("password").textContent = result
-    ).catch(
-        password = password.value
-    );
-
-    return ret;
-}
-
-

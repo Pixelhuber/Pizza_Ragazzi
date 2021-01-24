@@ -32,7 +32,6 @@ public class ProfileController extends Controller {
 
     // Reads key "username" from session and returns it
     public Result getUsernameFromSession(Http.Request request) {
-
         return request
                 .session()
                 .get("username") // Sucht nach dem Wert in der Session, der unter dem Key "Username" abgelegt ist
@@ -40,6 +39,7 @@ public class ProfileController extends Controller {
                 .orElseGet(Results::notFound);
     }
 
+    //Jacob: Wollen wir das PW überhaupt in der Session speichern?
     public Result getPasswordFromSession(Http.Request request) {
 
         return request

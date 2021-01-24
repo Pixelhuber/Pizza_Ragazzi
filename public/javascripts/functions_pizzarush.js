@@ -8,21 +8,21 @@ class AudioPlayer {
     static mash() {
         this.audioPlayer.setAttribute('src', "/assets/sounds/mash_kürzer.wav");
         this.audioPlayer.setAttribute('type', "audio/wav");
-
+        this.audioPlayer.volume = 0.4;
         this.audioPlayer.play();
     }
 
     static fire() {
         this.audioPlayer.setAttribute('src', "/assets/sounds/epic_fire.wav");
         this.audioPlayer.setAttribute('type', "audio/wav");
-
+        this.audioPlayer.volume = 0.4;
         this.audioPlayer.play();
     }
 
     static short_ring() {
         this.audioPlayer.setAttribute('src', "/assets/sounds/short_ring.wav");
         this.audioPlayer.setAttribute('type', "audio/wav");
-
+        this.audioPlayer.volume = 0.4;
         this.audioPlayer.play();
     }
 }
@@ -288,7 +288,7 @@ class Oven {
 
     // ATTRIBUTES --------------------
 
-    gameElement //in game representation of the oven
+    gameElement; //in game representation of the oven
 
     constructor() {
         this.gameElement = document.createElement('div');
@@ -474,7 +474,7 @@ class Order {
 // order class above
 // OBJECT COLLECTIONS -------------------------------------------------------------------------------------------------
 
-// wird später wsl vom Server geladen werden
+// TODO wird später wsl vom Server geladen werden
 const availableIngredients = [      new Ingredient("Impasto", "/assets/images/teig.png"),
                                     new Ingredient("Formaggio", "/assets/images/formaggio.png"),
                                     new Ingredient("Pomodoro", "/assets/images/pomodoro.png"),
@@ -523,7 +523,7 @@ function loadIngredientSection(){
 
 function loadOrderSection(){
 
-    // diese ganzen orders werden später wsl auf dem Server erstellt
+    //TODO diese ganzen orders werden später wsl auf dem Server erstellt
     orderList.push( new Order("Margarita", 10, 30),
                     new Order("Salame", 15, 60),
                     new Order("Funghi", 10, 150),

@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
     var visibilityToggle1 = document.getElementById("visibilityButton1");
     var visibilityToggle2 = document.getElementById("visibilityButton2");
 
@@ -10,7 +10,7 @@ $(function() {
     var username_error = document.getElementById("username_error");
     var email_error = document.getElementById("email_error")
     var password_error = document.getElementById("password_error");
-    var password_error2 = document.getElementById("password_error2");
+    var password2_error = document.getElementById("password2_error");
 
     username.addEventListener('input', function () {
         if (username.value.length >= 1) {
@@ -24,15 +24,15 @@ $(function() {
         }
     });
 
-    password.addEventListener('input', function() {
+    password.addEventListener('input', function () {
         if (password.value.length >= 1) {
             password_error.style.display = "none";
         }
     });
 
-    password2.addEventListener('input', function() {
+    password2.addEventListener('input', function () {
         if (password2.value.length >= 1) {
-            password_error2.style.display = "none";
+            password2_error.style.display = "none";
         }
     });
 
@@ -40,8 +40,7 @@ $(function() {
         if (password.type === "password") {
             password.type = "text";
             visibilityToggle1.innerHTML = 'visibility';
-        }
-        else {
+        } else {
             password.type = "password";
             visibilityToggle1.innerHTML = 'visibility_off';
         }
@@ -51,8 +50,7 @@ $(function() {
         if (password2.type === "password") {
             password2.type = "text";
             visibilityToggle2.innerHTML = 'visibility';
-        }
-        else {
+        } else {
             password2.type = "password";
             visibilityToggle2.innerHTML = 'visibility_off';
         }
@@ -60,38 +58,52 @@ $(function() {
 });
 
 function validateCreateAccountData() {
-    var username = document.forms['createAccountForm']['username'];
-    var email = document.forms['createAccountForm']['email'];
-    var password = document.forms['createAccountForm']['password'];
-    var password2 = document.forms['createAccountForm']['password2'];
+    let username = document.forms['createAccountForm']['username'];
+    let email = document.forms['createAccountForm']['email'];
+    let password = document.forms['createAccountForm']['password'];
+    let password2 = document.forms['createAccountForm']['password2'];
 
-    var username_error = document.getElementById("username_error");
-    var email_error = document.getElementById("email_error")
-    var password_error = document.getElementById("password_error");
-    var password_error2 = document.getElementById("password_error2");
+    let username_error = document.getElementById("username_error");
+    let email_error = document.getElementById("email_error");
+    let email_exists_error = document.getElementById("email_exists_error");
+    let password_error = document.getElementById("password_error");
+    let password2_error = document.getElementById("password2_error");
+    let password_duplicate_error = document.getElementById("password_duplicate_error");
 
-    var validInputs = true;
+    let validAccountData = true;
     if (username.value.length < 1) {
         username_error.style.display = "block";
-        validInputs = false;
+        validAccountData = false;
     }
 
-    if (email.value.length < 1) {
+    if (email.value.length < 1 || !email.value.match("[a-zA-Z0-9._%+-]+[@]+[a-zA-Z0-9.-]+[.]+[a-zA-Z]{2,6}")) {
         email_error.style.display = "block";
-        validInputs = false;
+        email_exists_error.style.display = "none";
+        validAccountData = false;
+    }
+
+    if (password.value !== password2.value) {
+        password_duplicate_error.style.display = "block";
+        password_error.style.display = "none";
+        password2_error.style.display = "none";
+        validAccountData = false;
+    }else {
+        password_duplicate_error.style.display = "none";
     }
 
     if (password.value.length < 1) {
         password_error.style.display = "block";
-        validInputs = false;
+        password_duplicate_error.style.display = "none";
+        validAccountData = false;
     }
 
     if (password2.value.length < 1) {
-        password_error2.style.display = "block";
-        validInputs = false;
+        password2_error.style.display = "block";
+        password_duplicate_error.style.display = "none";
+        validAccountData = false;
     }
 
-    if (password.value === password2.value && validInputs) {
+    if (validAccountData){
         createAccount();
     }
 }
@@ -102,13 +114,18 @@ function changePage() {
 
 function createAccount() {
     let username = document.getElementById("username").value;
+    let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;
+    let password2 = document.getElementById("password2").value;
     let login_error = document.getElementById("login_error");
 
-    fetch("/authenticate", {
+    fetch("/login/createAccount", {
         method: 'POST',
-        body:   JSON.stringify({
-            username:   username
+        body: JSON.stringify({
+            username: username,
+            email: email,
+            password: password,
+            password2: password2
         }),
         headers: {
             "Content-Type": "application/json"
@@ -117,25 +134,6 @@ function createAccount() {
     })
         .then(result => result.text())
         .then(data => {
-           window.location.href = "main";
-
+            //window.location.href = "main";
         })
-
-    function getUsernameFromSession() {
-
-        let ret = "";
-
-        fetch("/getUsername")
-            .then(
-                result => result.text()
-            ).then(
-            result => document.getElementById("username").textContent = result
-        ).catch(
-            username = username.value()
-        );
-
-        return ret;
-    }
-
-
 }

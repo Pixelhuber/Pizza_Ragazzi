@@ -33,10 +33,12 @@ POST    /profile/updateUsername     controllers.ProfileController.setUsername(re
 # Use this route for every getUsername call
 GET     /getUsername                controllers.ProfileController.getUsernameFromSession(request: Request)
 
+    #TODO: GET ist nicht sicher --- Never use GET when sending passwords or other sensitive information
 GET     /getPassword                controllers.ProfileController.getPasswordFromSession(request: Request)
 
 # LOGIN ----------------------------------------------------------------------------
-POST    /authenticate               controllers.LoginController.authenticate(request: Request)
+POST    /login/authenticate             controllers.LoginController.authenticate(request: Request)
+POST    /login/createAccount            controllers.LoginController.createAccount(request: Request)
 
 # PIZZA-RUSH -----------------------------------------------------------------------
 
