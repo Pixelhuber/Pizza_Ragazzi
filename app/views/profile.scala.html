@@ -8,11 +8,12 @@
 
         <link rel="stylesheet" type="text/css" href=@routes.Assets.versioned("stylesheets/style.css")>
         <link rel="stylesheet" type="text/css" href=@routes.Assets.versioned("stylesheets/style_profile-page.css")>
+        <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_friendlist.css")">
 
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript" src=@routes.Assets.versioned("javascripts/functions_profile-page.js")></script>
-
+        <script type="text/javascript" src=@routes.Assets.versioned("javascripts/functions_friendlist.js")></script>
         <!--Bootstrap-->
         <link rel="stylesheet" href=@routes.Assets.versioned("stylesheets/bootstrap.min.css")>
 
@@ -48,9 +49,11 @@
                 </div>
             </div>
         </div>
-        <div class="container_friends">
+        <div id="container_friends">
             <h1 id="friends_heading">Friends</h1>
-            <div id="friends-placeholder">@friendlist.render(assetsFinder)</div>
+            <div id="friends-placeholder">
+                <script>defaultList()</script>
+            </div>
         </div>
         <br>
         <br>
