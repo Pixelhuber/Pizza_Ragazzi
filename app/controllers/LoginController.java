@@ -35,9 +35,19 @@ public class LoginController extends Controller {
         }
     }
 
+    public Result createAccount(Http.Request request){
+        JsonNode json = request.body().asJson();
+        if (json == null) {
+            return badRequest("Expecting Json data");
+        }
+        Http.Session session = new Http.Session().adding("username", json.get("data").textValue());
+        System.out.println(json.get("data").textValue());
+        return ok().withSession(session);
+    }
+
     public Result logout(Http.Request request) {
-        request.session().removing("username");
+        
         return ok(login.render("This is your Profile Page", assetsFinder));
     }
-}
 
+}

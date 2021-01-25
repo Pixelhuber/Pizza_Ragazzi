@@ -92,7 +92,7 @@ function validateCreateAccountData() {
     }
 
     if (password.value === password2.value && validInputs) {
-        window.location.href = "main";
+        createAccount();
     }
 }
 
@@ -101,26 +101,24 @@ function changePage() {
 }
 
 function createAccount() {
-    let username = document.getElementById("loginUsername").value;
-    let password = document.getElementById("loginPassword").value;
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+    let login_error = document.getElementById("login_error");
 
-    fetch("/login", {
+    fetch("/authenticate", {
         method: 'POST',
-        body: JSON.stringify({
-            username: username.value
+        body:   JSON.stringify({
+            username:   username
         }),
         headers: {
             "Content-Type": "application/json"
         },
         credentials: 'include'
     })
+        .then(result => result.text())
         .then(data => {
-            if (password.value === password2.value && validInputs) {
-                window.location.href = "main";
+           window.location.href = "main";
 
-            } else {
-                alert("Registrieren fehlergeschlagen")
-            }
         })
 
     function getUsernameFromSession() {

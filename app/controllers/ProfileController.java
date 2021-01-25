@@ -57,4 +57,13 @@ public class ProfileController extends Controller {
         UserFactory.User user = userFactory.getUserById(2);
         return ok(Integer.toString(user.getHighscore()));
     }
+
+    public Result getPasswordFromSession(Http.Request request) {
+
+        return request
+                .session()
+                .get("password") // Sucht nach dem Wert in der Session, der unter dem Key "password" abgelegt ist
+                .map(Results::ok)
+                .orElseGet(Results::notFound);
+    }
 }
