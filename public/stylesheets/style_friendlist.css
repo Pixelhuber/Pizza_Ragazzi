@@ -2,7 +2,7 @@
     display: block;
     margin: 0;
     padding: 0;
-    min-width: 150px;
+    min-width: 100px;
     width: auto;
     height: auto;
     overflow: auto;
@@ -12,7 +12,7 @@
 }
 
 .friend {
-    min-width: 150px;
+    min-width: 100px;
     width: auto;
     height: 60px;
     margin-right: 5px;

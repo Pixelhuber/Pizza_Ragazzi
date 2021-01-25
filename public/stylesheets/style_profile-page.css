@@ -3,6 +3,16 @@
     color: black;
 }
 
+.container_friends{
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+#friends_heading{
+    text-align: center;
+}
+
 #heading {
     margin-left: 7vw;
 }
