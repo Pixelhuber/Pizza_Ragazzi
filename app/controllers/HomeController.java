@@ -31,48 +31,46 @@ public class HomeController extends Controller {
      * this method will be called when the application receives a
      * <code>GET</code> request with a path of <code>/</code>.
      */
-    public Result index() {
-        return ok(login.render("Login",
-                assetsFinder
-        ));
+    public Result index(Http.Request request) {
+        if (request.session().get("username").isPresent()) // check if User is logged in
+
+            return ok(pizzarush.render("Login", assetsFinder));
+        else
+            return ok(login.render("Login", assetsFinder));
     }
 
-    public Result highscore() {
-        return ok(
-                highscore.render(
-                        "Highscores",
-                        assetsFinder
-                ));
+    public Result highscore(Http.Request request) {
+        if (request.session().get("username").isPresent()) // check if User is logged in
+
+            return ok(highscore.render("Highscores", assetsFinder));
+        else
+            return ok(login.render("Login", assetsFinder));
     }
 
-    public Result profile() {
-        return ok(
-                profile.render(
-                        "Profile",
-                        assetsFinder));
+    public Result profile(Http.Request request) {
+        if (request.session().get("username").isPresent()) // check if User is logged in
+
+            return ok(profile.render("Profile", assetsFinder));
+        else
+            return ok(login.render("Login", assetsFinder));
     }
 
-    public Result login() {
-        return ok(
-                login.render(
-                        "Login",
-                        assetsFinder));
+    public Result logout(Http.Request request) {
+
+        return ok(login.render("Login", assetsFinder)).withNewSession();
     }
 
     public Result createAccount() {
-        return ok(
-                createAccount.render(
-                        "CreateAccount",
-                        assetsFinder));
+        return ok(createAccount.render("CreateAccount", assetsFinder));
     }
 
 
-    public Result main() {
-        return ok(
-                pizzarush.render(
-                        "Pizza-Rush",
-                        assetsFinder
-                ));
+    public Result main(Http.Request request) {
+        if (request.session().get("username").isPresent()) // check if User is logged in
+
+            return ok(pizzarush.render("Pizza-Rush", assetsFinder));
+        else
+            return ok(login.render("Login", assetsFinder));
     }
 
 }

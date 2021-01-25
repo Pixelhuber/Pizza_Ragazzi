@@ -27,7 +27,7 @@ body {
     right: 0;
     bottom: 0;
     background-color: rgba(0,0,0,0.5); /* Black background with 50% opacity */
-    z-index: 100; /* Specify a stack order in case you're using a different order for other elements */
+    z-index: 90; /* Specify a stack order in case you're using a different order for other elements */
     cursor: pointer; /* Add a pointer on hover */
 }
 
