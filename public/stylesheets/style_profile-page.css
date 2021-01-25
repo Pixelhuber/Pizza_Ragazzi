@@ -3,14 +3,11 @@
     color: black;
 }
 
-.container_friends{
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
-#friends_heading{
+.container_friends{ /*Definiert Position der Freundesliste*/
     text-align: center;
+    position: absolute;
+    right: 25%;
+    top: 0;
 }
 
 #heading {
