@@ -3,6 +3,7 @@ package controllers;
 import factory.UserFactory;
 import play.data.Form;
 import play.data.FormFactory;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -10,6 +11,7 @@ import play.mvc.Results;
 import viewmodels.UserViewModel;
 
 import javax.inject.Inject;
+import java.io.File;
 
 
 public class ProfileController extends Controller {
@@ -65,5 +67,10 @@ public class ProfileController extends Controller {
                 .get("password") // Sucht nach dem Wert in der Session, der unter dem Key "password" abgelegt ist
                 .map(Results::ok)
                 .orElseGet(Results::notFound);
+    }
+
+    public Result getFriendsData() {
+        UserFactory.User user = userFactory.getUserById(2);
+        return ok(Json.toJson(user.getFriendsData()));
     }
 }

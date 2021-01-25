@@ -180,6 +180,19 @@ public class UserFactory {
             });
         }
 
+        public String[] getFriendsData() {
+
+            List<UserFactory.User> users = getFriends();
+
+            String[] data = new String[users.size()];
+
+            for (int i = 0; i < users.size(); i++) {
+                data[i] = users.get(i).username;
+            }
+            return data;
+
+        }
+
         public int getId() {
             return id;
         }

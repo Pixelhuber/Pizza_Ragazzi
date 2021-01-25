@@ -40,7 +40,8 @@ GET     /profile/getGesamtpunkte    controllers.ProfileController.getGesamtpunkt
 GET     /profile/getHighscore       controllers.ProfileController.getHighscoreFromDatabase
 
 GET     /getPassword                controllers.ProfileController.getPasswordFromSession(request: Request)
-
+# Friendlist --------------------------------------------------------------------------
+GET     /getFriendsData             controllers.ProfileController.getFriendsData
 # LOGIN ----------------------------------------------------------------------------
 POST    /authenticate               controllers.LoginController.authenticate(request: Request)
 

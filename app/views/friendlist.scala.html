@@ -1,10 +1,17 @@
 @(implicit assetsFinder: AssetsFinder)
 
 <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_friendlist.css")">
-<script type="text/javascript" src=@routes.Assets.versioned("javascripts/functions.js")></script>
-
+<script type="text/javascript" src=@routes.Assets.versioned("javascripts/functions_friendlist.js")></script>
 <ul class='friend-list'>
-
+    <li class='friend'>
+        <img src='https://i.imgur.com/nkN3Mv0.jpg' />
+        <div class='name'>
+        </div>
+    </li>
+    <script>getFriendsData()</script>
+</ul>
+    <!--
+<ul class='friend-list'>
     <li class='friend'>
         <img src='https://i.imgur.com/nkN3Mv0.jpg' />
         <div class='name'>
@@ -42,3 +49,4 @@
         </div>
     </li>
 </ul>
+    -->
