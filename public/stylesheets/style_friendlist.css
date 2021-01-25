@@ -16,8 +16,8 @@ Position im jeweiligen Seitenstylesheet unter container_friends*/
 .friend {
     min-width: 100px;
     width: auto;
+    padding-right: 10px;
     height: 60px;
-    margin-right: 5px;
     background: #EEE;
     border-bottom: 1px solid #DDD;
     cursor: pointer;
