@@ -1,3 +1,7 @@
+function createFriendlist(){
+
+}
+
 function createHighscoreTable(tableData) {
     /*Variablen für die einzelnen Tabellenbestandteile   */
     var table = document.createElement('table');
