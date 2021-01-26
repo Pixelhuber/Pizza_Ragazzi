@@ -12,6 +12,7 @@ import viewmodels.UserViewModel;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.util.Optional;
 
 
 public class ProfileController extends Controller {
@@ -50,25 +51,28 @@ public class ProfileController extends Controller {
      * @param request
      * @return
      */
-    public Result getUsername(Http.Request request){
-        String email = request.session().get("email").toString();
+    public Result getUsernameFromDatabase(Http.Request request){
+        String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(user.getUsername());
     }
 
     //evtl getEmailFromSession verwenden oder getUsername
-    public Result getMailFromDatabase() {
-        UserFactory.User user = userFactory.getUserById(2);  //TODO muss angepasst werden auf den eingeloggten Nutzer; gilt auch für alle Methoden drunter
+    public Result getEmailFromDatabase(Http.Request request) {
+        String email = request.session().get("email").get();
+        UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(user.getEmail());
     }
 
-    public Result getGesamtpunkteFromDatabase() {
-        UserFactory.User user = userFactory.getUserById(2);
+    public Result getGesamtpunkteFromDatabase(Http.Request request) {
+        String email = request.session().get("email").get();
+        UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(Integer.toString(user.getTotalPoints()));
     }
 
-    public Result getHighscoreFromDatabase() {
-        UserFactory.User user = userFactory.getUserById(2);
+    public Result getHighscoreFromDatabase(Http.Request request) {
+        String email = request.session().get("email").get();
+        UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(Integer.toString(user.getHighScore()));
     }
 

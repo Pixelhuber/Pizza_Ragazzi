@@ -29,14 +29,14 @@ GET     /highscore/getTableData     controllers.HighscoreController.getTableData
 POST    /profile/updateUsername     controllers.ProfileController.setUsername(request: Request)
 
 # Use this route for every getUsername call
-GET     /getUsername                controllers.ProfileController.getUsername(request: Request)
+GET     /getUsername                controllers.ProfileController.getUsernameFromDatabase(request: Request)
 GET     /getEmail                   controllers.ProfileController.getEmailFromSession(request: Request)
 #double getMail??
-GET     /profile/getMail            controllers.ProfileController.getMailFromDatabase
+GET     /profile/getMail            controllers.ProfileController.getEmailFromDatabase(request: Request)
 
-GET     /profile/getTotalPoints    controllers.ProfileController.getGesamtpunkteFromDatabase
+GET     /profile/getTotalPoints    controllers.ProfileController.getGesamtpunkteFromDatabase(request: Request)
 
-GET     /profile/getHighScore       controllers.ProfileController.getHighscoreFromDatabase
+GET     /profile/getHighScore       controllers.ProfileController.getHighscoreFromDatabase(request: Request)
 
 # Friendlist --------------------------------------------------------------------------
 GET     /getFriendsData             controllers.ProfileController.getFriendsData
