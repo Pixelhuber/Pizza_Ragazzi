@@ -36,9 +36,9 @@ GET     /getEmail                   controllers.ProfileController.getEmailFromSe
 #double getMail??
 GET     /profile/getMail            controllers.ProfileController.getMailFromDatabase
 
-GET     /profile/getGesamtpunkte    controllers.ProfileController.getGesamtpunkteFromDatabase
+GET     /profile/getTotalPoints    controllers.ProfileController.getGesamtpunkteFromDatabase
 
-GET     /profile/getHighscore       controllers.ProfileController.getHighscoreFromDatabase
+GET     /profile/getHighScore       controllers.ProfileController.getHighscoreFromDatabase
 
 # Friendlist --------------------------------------------------------------------------
 GET     /getFriendsData             controllers.ProfileController.getFriendsData

@@ -1,5 +1,6 @@
 package controllers;
 
+import factory.UserFactory;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
@@ -43,21 +44,32 @@ public class ProfileController extends Controller {
                 .orElseGet(Results::notFound);
     }
 
-    //TODO: rename this to getUsername
-    // it should return the username by getting the user from the db with it`s email
+    /**
+     * returns the username
+     * by getting the user from the db with it`s email from the session
+     * @param request
+     * @return
+     */
+    public Result getUsername(Http.Request request){
+        String email = request.session().get("email").toString();
+        UserFactory.User user = userFactory.getUserByEmail(email);
+        return ok(user.getUsername());
+    }
+
+    //evtl getEmailFromSession verwenden oder getUsername
     public Result getMailFromDatabase() {
         UserFactory.User user = userFactory.getUserById(2);  //TODO muss angepasst werden auf den eingeloggten Nutzer; gilt auch für alle Methoden drunter
-        return ok(user.getMail());
+        return ok(user.getEmail());
     }
 
     public Result getGesamtpunkteFromDatabase() {
         UserFactory.User user = userFactory.getUserById(2);
-        return ok(Integer.toString(user.getGesamtpunkte()));
+        return ok(Integer.toString(user.getTotalPoints()));
     }
 
     public Result getHighscoreFromDatabase() {
         UserFactory.User user = userFactory.getUserById(2);
-        return ok(Integer.toString(user.getHighscore()));
+        return ok(Integer.toString(user.getHighScore()));
     }
 
     public Result getPasswordFromSession(Http.Request request) {

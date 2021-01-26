@@ -301,7 +301,7 @@ public class UserFactory {
         }
     }
 
-    public String[][] getHighscoreData() {
+    public String[][] getHighScoreData() {
 
         List<UserFactory.User> users = getAllUsers();
 

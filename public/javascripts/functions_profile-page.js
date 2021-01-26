@@ -113,6 +113,7 @@ function getUsernameFromSession() {
     });
 }
 
+//TODO hier evtl "getMail" route nutzen
 function getMailFromDatabase() {
     $.get("/profile/getMail", function(data, status){
         //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
@@ -124,7 +125,7 @@ function getMailFromDatabase() {
 }
 
 function getGesamtpunkteFromDatabase() {
-    $.get("/profile/getGesamtpunkte", function(data, status){
+    $.get("/profile/getTotalPoints", function(data, status){
         //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
         document.getElementById("gesamtpunkte").textContent = "Gesamtpunkte: " + data
     }).fail(function (data, status){
@@ -134,7 +135,7 @@ function getGesamtpunkteFromDatabase() {
 }
 
 function getHighscoreFromDatabase() {
-    $.get("/profile/getHighscore", function(data, status){
+    $.get("/profile/getHighScore", function(data, status){
         //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
         document.getElementById("highscore").textContent = "Highscore: " + data
     }).fail(function (data, status){
