@@ -11,7 +11,7 @@ function createFriendlist(data){
         var friend = document.createElement(`li`);
         friend.className = `friend`;
         var image= document.createElement(`img`)
-        image.src = 'https://i.imgur.com/nkN3Mv0.jpg'
+        image.src = 'https://i.imgur.com/nkN3Mv0.jpg' //TODO Profilbild anstatt default Bild
         var name = document.createElement(`div`);
         name.className = `name`;
         name.innerHTML = item;
@@ -23,7 +23,7 @@ function createFriendlist(data){
 }
 
 function defaultList(){
-    var test = ["Andres Perez","Leah Slaten"];
+    var test = ["Andres Perez","Leah Slaten","Max Mustermann"];
     createFriendlist(test);
 
 }

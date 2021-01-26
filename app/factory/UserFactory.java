@@ -182,7 +182,7 @@ public class UserFactory {
 
         public String[] getFriendsData() {
 
-            List<UserFactory.User> users = getFriends();
+            List<User> users = getFriends();
 
             String[] data = new String[users.size()];
 
