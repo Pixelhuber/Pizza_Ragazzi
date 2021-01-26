@@ -1,6 +1,7 @@
 package factory;
 
 import play.db.Database;
+import scala.Console;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -167,13 +168,19 @@ public class UserFactory {
         public List<User> getFriends() {
             return db.withConnection(conn -> {
                 List<User> result = new ArrayList<>();
-                String sql = "SELECT * FROM Friendship, User WHERE User1Id = ? AND Friendship.User2Id = UserId";
+                String sql = "SELECT * FROM `Friendship` WHERE User_idUser_One = ? OR User_idUser_Two = ?";
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt.setInt(1, this.id);
+                stmt.setInt(2, this.id);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
-                    User user = new User(rs);
-                    result.add(user);
+
+                    int friendId = (int) rs.getObject("User_idUser_one");
+                    if (friendId==this.id){
+                        friendId = (int) rs.getObject("User_idUser_two");
+                    }
+                        User user = getUserById(friendId);
+                        result.add(user);
                 }
                 stmt.close();
                 return result;
