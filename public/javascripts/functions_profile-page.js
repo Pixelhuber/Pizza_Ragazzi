@@ -54,7 +54,7 @@ $(function () {
                 alert("Your Username should not be empty");
             }else {
                 usernameField.html(newUsername);
-                updateUsernameInSession(newUsername);
+                updateUsernameInDatabaseAndSession(newUsername);
                 selectFile.html("");
 
                 profileButton.text("Edit Profile");
@@ -77,14 +77,14 @@ $(function () {
 });
 
 function setup() {
-    getUsername();
+    getUsernameFromDatabase();
     getGesamtpunkteFromDatabase();
     getHighscoreFromDatabase();
     getMailFromDatabase();
 }
 
 // Sends a request to update the username in the session
-function updateUsernameInSession(newUsername) {
+function updateUsernameInDatabaseAndSession(newUsername) {
 
     let loginViewModel = {
         username: newUsername,
@@ -94,15 +94,15 @@ function updateUsernameInSession(newUsername) {
     $.post("/profile/updateUsername", loginViewModel,
         function (data, status){
             // Das funktioniert noch nicht ganz! Beim ausführen sieht man, dass "data" irgendwie leer bleibt... aber der Wert wird korrekt gespeichert
-            alert("Session updated!\nData: " + data + "\nStatus: " + status)
+            alert("Session and Database updated!\nData: " + data + "\nStatus: " + status)
         }
         ).fail(function (){
             alert("Something went wrong")
         });
 }
 
-// Reads username from session and updates html
-function getUsername() {
+// Reads username from Database and updates html
+function getUsernameFromDatabase() {
 
     $.get("/getUsername", function(data, status){
         //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern

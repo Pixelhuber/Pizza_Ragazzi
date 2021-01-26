@@ -195,15 +195,17 @@ public class UserFactory {
          * Updates the user if it already exists and creates it otherwise. Assumes an
          * autoincrement id column.
          */
-        //TODO: add int id, String username, String email, int totalPoints, int highScore, BufferedImage profilePicture, int currentTier here
+        //TODO: add BufferedImage profilePicture
         public void save() {
             db.withConnection(conn -> {
-                String sql = "UPDATE User SET username = ?, totalPoints = ?, email = ? WHERE idUser = ?";
+                String sql = "UPDATE User SET username = ?, email = ?, gesamtpunkte = ?, highscore = ?, Tier_idTier = ? WHERE idUser = ?";
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt.setString(1, this.username);
-                stmt.setInt(2, this.totalPoints);
-                stmt.setString(3, this.email);
-                stmt.setInt(4, this.id);
+                stmt.setString(2, this.email);
+                stmt.setInt(3, this.totalPoints);
+                stmt.setInt(4, this.highScore);
+                stmt.setInt(5, this.currentTier);
+                stmt.setInt(6, this.id);
                 stmt.executeUpdate();
                 stmt.close();
             });
@@ -263,6 +265,7 @@ public class UserFactory {
 
         public void setId(int id) {
             this.id = id;
+            save();
         }
 
         public String getUsername() {
@@ -271,6 +274,7 @@ public class UserFactory {
 
         public void setUsername(String username) {
             this.username = username;
+            save();
         }
 
         public String getEmail() {
@@ -279,6 +283,7 @@ public class UserFactory {
 
         public void setEmail(String email) {
             this.email = email;
+            save();
         }
 
         public int getTotalPoints() {
@@ -287,6 +292,7 @@ public class UserFactory {
 
         public void setTotalPoints(int totalPoints) {
             this.totalPoints = totalPoints;
+            save();
         }
 
         public int getHighScore() {
@@ -295,6 +301,7 @@ public class UserFactory {
 
         public void setHighScore(int highScore) {
             this.highScore = highScore;
+            save();
         }
 
         public BufferedImage getProfilePicture() {
@@ -303,6 +310,7 @@ public class UserFactory {
 
         public void setProfilePicture(BufferedImage profilePicture) {
             this.profilePicture = profilePicture;
+            save();
         }
 
         public int getCurrentTier() {
@@ -311,6 +319,7 @@ public class UserFactory {
 
         public void setCurrentTier(int currentTier) {
             this.currentTier = currentTier;
+            save();
         }
     }
 }
