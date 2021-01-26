@@ -1,6 +1,5 @@
 package controllers;
 
-import factory.UserFactory;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
@@ -35,16 +34,17 @@ public class ProfileController extends Controller {
         return ok(userViewModel.getUsername()).addingToSession(request, "username", userViewModel.getUsername()); // Speichert den Username in der Session unter dem Key "username"
     }
 
-    // Reads key "username" from session and returns it
-    public Result getUsernameFromSession(Http.Request request) {
-
+    // Reads key "email" from session and returns it
+    public Result getEmailFromSession(Http.Request request) {
         return request
                 .session()
-                .get("username") // Sucht nach dem Wert in der Session, der unter dem Key "Username" abgelegt ist
+                .get("email") // Sucht nach dem Wert in der Session, der unter dem Key "Username" abgelegt ist
                 .map(Results::ok)
                 .orElseGet(Results::notFound);
     }
 
+    //TODO: rename this to getUsername
+    // it should return the username by getting the user from the db with it`s email
     public Result getMailFromDatabase() {
         UserFactory.User user = userFactory.getUserById(2);  //TODO muss angepasst werden auf den eingeloggten Nutzer; gilt auch für alle Methoden drunter
         return ok(user.getMail());

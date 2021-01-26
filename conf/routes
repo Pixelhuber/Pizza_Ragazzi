@@ -31,19 +31,20 @@ GET     /highscore/getTableData     controllers.HighscoreController.getTableData
 POST    /profile/updateUsername     controllers.ProfileController.setUsername(request: Request)
 
 # Use this route for every getUsername call
-GET     /getUsername                controllers.ProfileController.getUsernameFromSession(request: Request)
-
+GET     /getUsername                controllers.ProfileController.getUsername(request: Request)
+GET     /getEmail                   controllers.ProfileController.getEmailFromSession(request: Request)
+#double getMail??
 GET     /profile/getMail            controllers.ProfileController.getMailFromDatabase
 
 GET     /profile/getGesamtpunkte    controllers.ProfileController.getGesamtpunkteFromDatabase
 
 GET     /profile/getHighscore       controllers.ProfileController.getHighscoreFromDatabase
 
-GET     /getPassword                controllers.ProfileController.getPasswordFromSession(request: Request)
 # Friendlist --------------------------------------------------------------------------
 GET     /getFriendsData             controllers.ProfileController.getFriendsData
 # LOGIN ----------------------------------------------------------------------------
-POST    /authenticate               controllers.LoginController.authenticate(request: Request)
+POST    /login/authenticate             controllers.LoginController.authenticate(request: Request)
+POST    /login/createAccount            controllers.LoginController.createAccount(request: Request)
 
 # PIZZA-RUSH -----------------------------------------------------------------------
 

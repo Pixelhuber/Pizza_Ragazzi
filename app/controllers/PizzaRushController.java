@@ -6,6 +6,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
+
 import java.util.List;
 
 
@@ -14,31 +15,23 @@ public class PizzaRushController extends Controller {
 
     public Result validatePizza(Http.Request request) {
 
-        request.body().asJson().get("ingredients").asText();
-
         // read json data
         String pizzaType = request.body().asJson().get("pizzaName").asText();
-        //is baked is bugged
+
         List<String> ingredients = request.body().asJson().findValuesAsText("ingredients");
         Pizza pizza = new Pizza(pizzaType, ingredients);
 
         int currentPoints = getCurrentPointsFromSession(request.session());
         String points = String.valueOf(currentPoints + 10);
 
-        //if (isbaked) {
-            if (pizza.validatePizza()) {
-                return ok().addingToSession(request, "currentPizzaRushPoints", points);
-            }else
-                return ok();
-        //}else {
-           //return ok();
-        //}
+        if (pizza.validatePizza()) {
+            return ok().addingToSession(request, "currentPizzaRushPoints", points);
+        } else
+            return ok();
     }
 
     public Result getCurrentPointsFromSession(Http.Request request) {
-
         getCurrentPointsFromSession(request.session());
-
         return request
                 .session()
                 .get("currentPizzaRushPoints")
