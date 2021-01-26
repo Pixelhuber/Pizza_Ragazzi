@@ -27,7 +27,7 @@ public class HighscoreController extends Controller {
 }*/
 
     public Result getTableData() {
-        return ok(Json.toJson(userFactory.getHighscoreData()));
+        return ok(Json.toJson(userFactory.getHighScoreData()));
     }
 
 }

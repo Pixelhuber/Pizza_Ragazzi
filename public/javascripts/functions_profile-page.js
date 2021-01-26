@@ -77,7 +77,7 @@ $(function () {
 });
 
 function setup() {
-    getUsernameFromSession();
+    getUsername();
     getGesamtpunkteFromDatabase();
     getHighscoreFromDatabase();
     getMailFromDatabase();
@@ -102,7 +102,7 @@ function updateUsernameInSession(newUsername) {
 }
 
 // Reads username from session and updates html
-function getUsernameFromSession() {
+function getUsername() {
 
     $.get("/getUsername", function(data, status){
         //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
