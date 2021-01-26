@@ -57,20 +57,29 @@ public class LoginController extends Controller {
             String email = json.findPath("email").textValue();
             String password = json.findPath("password").textValue();
             String password2 = json.findPath("password2").textValue();
-            if (!password.equals(password2)){
+            if(username == null || username.isEmpty()) {
+                return badRequest("username is empty");
+            }else if (email == null || !email.matches("[a-zA-Z0-9._%+-]+[@]+[a-zA-Z0-9.-]+[.]+[a-zA-Z]{2,6}")) {
+                return badRequest("email is not valid");
+            } else if(password == null || password.isEmpty()) {
+                return badRequest("password is empty");
+            }else if (!password.equals(password2)){
                 return badRequest("password does not match password2");
-            }else{
-
+            }else if (!userFactory.isEmailAvailable(email)){
+                return badRequest("email already in use");
+            }else {
+                UserFactory.User authenticatedUser = userFactory.createUser(email,username,password);
+                if (authenticatedUser == null){
+                    return badRequest("user could not be created");
+                }
+                String authenticatedUserEmail = authenticatedUser.getEmail();
+                return ok().addingToSession(request, "email", authenticatedUserEmail);
             }
         }
-        Http.Session session = new Http.Session().adding("username", json.get("data").textValue());
-        System.out.println(json.get("data").textValue());
-        return ok().withSession(session);
     }
 
     public Result logout(Http.Request request) {
-        
-        return ok(login.render("This is your Profile Page", assetsFinder));
+        return ok(login.render("Login", assetsFinder)).withNewSession();
     }
 
 }

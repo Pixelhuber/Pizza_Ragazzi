@@ -1,16 +1,16 @@
 $(function () {
-    var visibilityToggle1 = document.getElementById("visibilityButton1");
-    var visibilityToggle2 = document.getElementById("visibilityButton2");
+    let visibilityToggle1 = document.getElementById("visibilityButton1");
+    let visibilityToggle2 = document.getElementById("visibilityButton2");
 
-    var username = document.getElementById("username");
-    var email = document.getElementById("email");
-    var password = document.getElementById("password");
-    var password2 = document.getElementById("password2");
+    let username = document.getElementById("username");
+    let email = document.getElementById("email");
+    let password = document.getElementById("password");
+    let password2 = document.getElementById("password2");
 
-    var username_error = document.getElementById("username_error");
-    var email_error = document.getElementById("email_error")
-    var password_error = document.getElementById("password_error");
-    var password2_error = document.getElementById("password2_error");
+    let username_error = document.getElementById("username_error");
+    let email_error = document.getElementById("email_error")
+    let password_error = document.getElementById("password_error");
+    let password2_error = document.getElementById("password2_error");
 
     username.addEventListener('input', function () {
         if (username.value.length >= 1) {
@@ -117,7 +117,9 @@ function createAccount() {
     let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;
     let password2 = document.getElementById("password2").value;
-    let login_error = document.getElementById("login_error");
+
+    let email_exists_error = document.getElementById("email_exists_error");
+    let create_account_error = document.getElementById("create_account_error");
 
     fetch("/login/createAccount", {
         method: 'POST',
@@ -134,6 +136,22 @@ function createAccount() {
     })
         .then(result => result.text())
         .then(data => {
-            //window.location.href = "main";
+            let msg = data.toString();
+            if (msg === "username is empty"){
+                //already handled in validateCreateAccountData()
+            } else if (msg === "email is not valid"){
+                //already handled in validateCreateAccountData()
+            } else if (msg === "password is empty"){
+                //already handled in validateCreateAccountData()
+            } else if (msg === "password does not match password2"){
+                //already handled in validateCreateAccountData()
+            } else if (msg === "email already in use"){
+                email_exists_error.style.display = "block";
+            } else if (msg === "user could not be created"){
+                create_account_error.style.display = "block";
+            } else {
+                //TODO change this to game menu
+                window.location.href = "profile";
+            }
         })
 }

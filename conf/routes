@@ -17,8 +17,6 @@ GET     /highscore                  controllers.HomeController.highscore(request
 
 GET     /profile                    controllers.HomeController.profile(request: Request)
 
-GET     /logout                      controllers.HomeController.logout(request: Request)
-
 GET     /createAccount              controllers.HomeController.createAccount
 
 GET     /main                       controllers.HomeController.main(request: Request)
@@ -42,9 +40,12 @@ GET     /profile/getHighScore       controllers.ProfileController.getHighscoreFr
 
 # Friendlist --------------------------------------------------------------------------
 GET     /getFriendsData             controllers.ProfileController.getFriendsData
+
 # LOGIN ----------------------------------------------------------------------------
-POST    /login/authenticate             controllers.LoginController.authenticate(request: Request)
-POST    /login/createAccount            controllers.LoginController.createAccount(request: Request)
+POST    /login/authenticate         controllers.LoginController.authenticate(request: Request)
+POST    /login/createAccount        controllers.LoginController.createAccount(request: Request)
+# LOGOUT
+GET     /logout                     controllers.LoginController.logout(request: Request)
 
 # PIZZA-RUSH -----------------------------------------------------------------------
 

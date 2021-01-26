@@ -32,7 +32,7 @@ public class HomeController extends Controller {
      * <code>GET</code> request with a path of <code>/</code>.
      */
     public Result index(Http.Request request) {
-        if (request.session().get("username").isPresent()) // check if User is logged in
+        if (request.session().get("email").isPresent()) // check if User is logged in
 
             return ok(pizzarush.render("Login", assetsFinder));
         else
@@ -40,7 +40,7 @@ public class HomeController extends Controller {
     }
 
     public Result highscore(Http.Request request) {
-        if (request.session().get("username").isPresent()) // check if User is logged in
+        if (request.session().get("email").isPresent()) // check if User is logged in
 
             return ok(highscore.render("Highscores", assetsFinder));
         else
@@ -48,17 +48,13 @@ public class HomeController extends Controller {
     }
 
     public Result profile(Http.Request request) {
-        if (request.session().get("username").isPresent()) // check if User is logged in
+        if (request.session().get("email").isPresent()) // check if User is logged in
 
             return ok(profile.render("Profile", assetsFinder));
         else
             return ok(login.render("Login", assetsFinder));
     }
 
-    public Result logout(Http.Request request) {
-
-        return ok(login.render("Login", assetsFinder)).withNewSession();
-    }
 
     public Result createAccount() {
         return ok(createAccount.render("CreateAccount", assetsFinder));
@@ -66,7 +62,7 @@ public class HomeController extends Controller {
 
 
     public Result main(Http.Request request) {
-        if (request.session().get("username").isPresent()) // check if User is logged in
+        if (request.session().get("email").isPresent()) // check if User is logged in
 
             return ok(pizzarush.render("Pizza-Rush", assetsFinder));
         else
