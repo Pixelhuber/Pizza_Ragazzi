@@ -47,6 +47,7 @@ public class UserFactory {
         });
     }
 
+    //TODO complete this
     public User createUser(String email, String name, String password) {
         if (!email.matches("[a-zA-Z0-9._%+-]+[@]+[a-zA-Z0-9.-]+[.]+[a-zA-Z]{2,6}"))
             throw new InvalidEmailException("The e-mail " + email + " is not valid");

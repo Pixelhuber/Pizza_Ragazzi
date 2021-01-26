@@ -42,8 +42,8 @@ public class LoginController extends Controller {
                 if (authenticatedUser == null){
                     return badRequest("wrong password");
                 }
-                String authenticatedUserUsername = authenticatedUser.getUsername();
-                return ok().addingToSession(request, "username", authenticatedUserUsername);
+                String authenticatedUserEmail = authenticatedUser.getEmail();
+                return ok().addingToSession(request, "email", authenticatedUserEmail);
             }
         }
     }

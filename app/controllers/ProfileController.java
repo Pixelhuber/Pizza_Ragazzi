@@ -30,16 +30,21 @@ public class ProfileController extends Controller {
         return ok(userViewModel.getUsername()).addingToSession(request, "username", userViewModel.getUsername()); // Speichert den Username in der Session unter dem Key "username"
     }
 
-    // Reads key "username" from session and returns it
-    public Result getUsernameFromSession(Http.Request request) {
+    // Reads key "email" from session and returns it
+    public Result getEmailFromSession(Http.Request request) {
         return request
                 .session()
-                .get("username") // Sucht nach dem Wert in der Session, der unter dem Key "Username" abgelegt ist
+                .get("email") // Sucht nach dem Wert in der Session, der unter dem Key "Username" abgelegt ist
                 .map(Results::ok)
                 .orElseGet(Results::notFound);
     }
 
-    //Jacob: Wollen wir das PW überhaupt in der Session speichern?
+    public Result getUsername(Http.Request request){
+        return null;
+        //TODO: complete this
+    }
+
+    /*//Jacob: Wollen wir das PW überhaupt in der Session speichern?
     public Result getPasswordFromSession(Http.Request request) {
 
         return request
@@ -47,5 +52,5 @@ public class ProfileController extends Controller {
                 .get("password") // Sucht nach dem Wert in der Session, der unter dem Key "password" abgelegt ist
                 .map(Results::ok)
                 .orElseGet(Results::notFound);
-    }
+    }*/
 }

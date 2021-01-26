@@ -31,10 +31,9 @@ GET     /highscore/getTableData     controllers.HighscoreController.getTableData
 POST    /profile/updateUsername     controllers.ProfileController.setUsername(request: Request)
 
 # Use this route for every getUsername call
-GET     /getUsername                controllers.ProfileController.getUsernameFromSession(request: Request)
+GET     /getUsername                controllers.ProfileController.getUsername(request: Request)
+GET     /getEmail                   controllers.ProfileController.getEmailFromSession(request: Request)
 
-    #TODO: GET ist nicht sicher --- Never use GET when sending passwords or other sensitive information
-GET     /getPassword                controllers.ProfileController.getPasswordFromSession(request: Request)
 
 # LOGIN ----------------------------------------------------------------------------
 POST    /login/authenticate             controllers.LoginController.authenticate(request: Request)
