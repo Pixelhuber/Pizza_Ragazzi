@@ -282,72 +282,38 @@ public class UserFactory {
 
         public void setHighScore(int highScore) {
             this.highScore = highScore;
-            public int getHighscore () {
-                return highscore;
-            }
-
-            public void setHighscore ( int highscore){
-                this.highscore = highscore;
-            }
-
-            public int getIdTier () {
-                return idTier;
-            }
-
-            public void setIdTier ( int idTier){
-                this.idTier = idTier;
-            }
-
-            public String getMail () {
-                return mail;
-            }
-
-            public BufferedImage getProfilePicture () {
-                return profilePicture;
-            }
-
-            public void setProfilePicture (BufferedImage profilePicture){
-                this.profilePicture = profilePicture;
-            }
-
-            public int getGesamtpunkte () {
-                return gesamtpunkte;
-            }
-            public void setGesamtpunkte ( int gesamtpunkte){
-                this.gesamtpunkte = gesamtpunkte;
-            }
-
-            public void addGesamtpunkte(int gesamtpunkte) {
-                this.gesamtpunkte += gesamtpunkte;
-                this.save();
-            }
-
-            public int getCurrentTier () {
-                return currentTier;
-            }
-
-            public void setCurrentTier ( int currentTier){
-                this.currentTier = currentTier;
-            }
-
-            public void addPoints ( int points){
-                this.totalPoints += points;
-                this.save();
-            }
         }
-        public String[][] getHighscoreData() {
 
-            List<UserFactory.User> users = getAllUsers();
-
-            String[][] data = new String[users.size()][2];
-
-            for (int i = 0; i < users.size(); i++) {
-                data[i][0] = users.get(i).username;
-                data[i][1] = String.valueOf(users.get(i).highscore);
-            }
-            return data;
-
-
+        public BufferedImage getProfilePicture() {
+            return profilePicture;
         }
+
+        public void setProfilePicture(BufferedImage profilePicture) {
+            this.profilePicture = profilePicture;
+        }
+
+        public int getCurrentTier() {
+            return currentTier;
+        }
+
+        public void setCurrentTier(int currentTier) {
+            this.currentTier = currentTier;
+        }
+    }
+
+    public String[][] getHighscoreData() {
+
+        List<UserFactory.User> users = getAllUsers();
+
+        String[][] data = new String[users.size()][2];
+
+        for (int i = 0; i < users.size(); i++) {
+            data[i][0] = users.get(i).username;
+            data[i][1] = String.valueOf(users.get(i).getHighScore());
+        }
+        return data;
+
 
     }
+
+}
