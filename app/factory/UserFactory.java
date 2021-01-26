@@ -142,6 +142,19 @@ public class UserFactory {
         });
     }
 
+    public String[][] getHighscoreData() {
+
+        List<UserFactory.User> users = getAllUsers();
+
+        String[][] data = new String[users.size()][2];
+
+        for (int i = 0; i < users.size(); i++) {
+            data[i][0] = users.get(i).username;
+            data[i][1] = String.valueOf(users.get(i).getHighScore());
+        }
+        return data;
+    }
+
     public class User {
         private int id;
         private String username;
@@ -300,20 +313,4 @@ public class UserFactory {
             this.currentTier = currentTier;
         }
     }
-
-    public String[][] getHighScoreData() {
-
-        List<UserFactory.User> users = getAllUsers();
-
-        String[][] data = new String[users.size()][2];
-
-        for (int i = 0; i < users.size(); i++) {
-            data[i][0] = users.get(i).username;
-            data[i][1] = String.valueOf(users.get(i).getHighScore());
-        }
-        return data;
-
-
-    }
-
 }
