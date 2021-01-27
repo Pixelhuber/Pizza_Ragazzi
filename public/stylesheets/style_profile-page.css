@@ -1,5 +1,13 @@
 * {
     font-family: "Arial Black", sans-serif;
+    color: black;
+}
+
+#container_friends{ /*Definiert Position der Freundesliste*/
+    text-align: center;
+    position: absolute;
+    right: 25%;
+    top: 0;
 }
 
 #heading {
@@ -23,7 +31,7 @@ button{
     height: 45px;
 }
 
-#rank {
+.col-md-3 {
     font-size: 30px;
 }
 
@@ -33,25 +41,18 @@ button{
 }
 
 .achievementBox {
-    margin-left: 60px;
-    margin-bottom: 30px;
+    margin: 15px;
+    padding: 15px;
+
     float: left;
-    padding: 30px;
-    background: #2f53ff;
-    box-sizing: border-box;
+
+    background-color: black;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border-radius: 12px;
+    color: white;
+
+    font-size: 1.2em;
 }
 
-
-
-#level {
-    font-size: 30px;
-}
-
-/*unused*/
-#xpBalken {
-    border: 7px solid #000000;
-    height:30px;
-    width:200px;
+.achievementBox:hover{
+    background-color: #363736;
 }

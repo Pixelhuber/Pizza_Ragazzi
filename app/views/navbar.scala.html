@@ -1,14 +1,16 @@
 @(implicit assetsFinder: AssetsFinder)
 
-<link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/styleNavbar.css")">
+<link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_navbar.css")">
 <div class="nav">
+
     <input type="checkbox">
     <span></span>
     <span></span>
-    <div class="menu">
+
+    <ul class="menu">
         <li><a href="@routes.HomeController.main()">Home</a></li>
         <li><a href="@routes.HomeController.profile()">Profile</a></li>
         <li><a href="@routes.HomeController.highscore()">Highscores</a></li>
-        <li><a href="@routes.HomeController.login()">Login</a></li>
-    </div>
+        <li><a href="@routes.LoginController.logout()">Logout</a></li>
+    </ul>
 </div>

@@ -3,7 +3,7 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index
+GET     /                           controllers.HomeController.index(request: Request)
 # An example controller showing how to use dependency injection
 GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code
@@ -12,15 +12,14 @@ GET     /message                    controllers.AsyncController.message
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(file)
 
-GET     /highscore                  controllers.HomeController.highscore
+# HTML-PAGES -----------------------------------------------------------------------
+GET     /highscore                  controllers.HomeController.highscore(request: Request)
 
-GET     /profile                    controllers.HomeController.profile
-
-GET     /login                      controllers.HomeController.login
+GET     /profile                    controllers.HomeController.profile(request: Request)
 
 GET     /createAccount              controllers.HomeController.createAccount
 
-GET     /main                       controllers.HomeController.main
+GET     /main                       controllers.HomeController.main(request: Request)
 
 
 # HIGHSCORE ------------------------------------------------------------------------
@@ -30,10 +29,23 @@ GET     /highscore/getTableData     controllers.HighscoreController.getTableData
 POST    /profile/updateUsername     controllers.ProfileController.setUsername(request: Request)
 
 # Use this route for every getUsername call
-GET     /getUsername                controllers.ProfileController.getUsernameFromSession(request: Request)
+GET     /getUsername                controllers.ProfileController.getUsernameFromDatabase(request: Request)
+GET     /getEmail                   controllers.ProfileController.getEmailFromSession(request: Request)
+#double getMail??
+GET     /profile/getMail            controllers.ProfileController.getEmailFromDatabase(request: Request)
+
+GET     /profile/getTotalPoints    controllers.ProfileController.getGesamtpunkteFromDatabase(request: Request)
+
+GET     /profile/getHighScore       controllers.ProfileController.getHighscoreFromDatabase(request: Request)
+
+# Friendlist --------------------------------------------------------------------------
+GET     /getFriendsData             controllers.ProfileController.getFriendsData
 
 # LOGIN ----------------------------------------------------------------------------
-POST    /authenticate               controllers.LoginController.authenticate(request: Request)
+POST    /login/authenticate         controllers.LoginController.authenticate(request: Request)
+POST    /login/createAccount        controllers.LoginController.createAccount(request: Request)
+# LOGOUT
+GET     /logout                     controllers.LoginController.logout(request: Request)
 
 # PIZZA-RUSH -----------------------------------------------------------------------
 

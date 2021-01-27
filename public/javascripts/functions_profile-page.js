@@ -54,7 +54,7 @@ $(function () {
                 alert("Your Username should not be empty");
             }else {
                 usernameField.html(newUsername);
-                updateUsernameInSession(newUsername);
+                updateUsernameInDatabaseAndSession(newUsername);
                 selectFile.html("");
 
                 profileButton.text("Edit Profile");
@@ -76,13 +76,15 @@ $(function () {
     }
 });
 
-function setUsernameOnStartup() {
-
-    document.getElementById("username").textContent = getUsernameFromSession();
+function setup() {
+    getUsernameFromDatabase();
+    getGesamtpunkteFromDatabase();
+    getHighscoreFromDatabase();
+    getMailFromDatabase();
 }
 
 // Sends a request to update the username in the session
-function updateUsernameInSession(newUsername) {
+function updateUsernameInDatabaseAndSession(newUsername) {
 
     let loginViewModel = {
         username: newUsername,
@@ -92,15 +94,15 @@ function updateUsernameInSession(newUsername) {
     $.post("/profile/updateUsername", loginViewModel,
         function (data, status){
             // Das funktioniert noch nicht ganz! Beim ausführen sieht man, dass "data" irgendwie leer bleibt... aber der Wert wird korrekt gespeichert
-            alert("Session updated!\nData: " + data + "\nStatus: " + status)
+            alert("Session and Database updated!\nData: " + data + "\nStatus: " + status)
         }
         ).fail(function (){
             alert("Something went wrong")
         });
 }
 
-// Reads username from session and updates html
-function getUsernameFromSession() {
+// Reads username from Database and updates html
+function getUsernameFromDatabase() {
 
     $.get("/getUsername", function(data, status){
         //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
@@ -108,5 +110,36 @@ function getUsernameFromSession() {
     }).fail(function (data, status){
         document.getElementById("username").textContent = "Default Name";
         alert("Couldn't retrieve username from session");
+    });
+}
+
+//TODO hier evtl "getMail" route nutzen
+function getMailFromDatabase() {
+    $.get("/profile/getMail", function(data, status){
+        //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
+        document.getElementById("mail").textContent = "Email: " + data
+    }).fail(function (data, status){
+        document.getElementById("mail").textContent = "Default Mail";
+        alert("Couldn't retrieve mail from database");
+    });
+}
+
+function getGesamtpunkteFromDatabase() {
+    $.get("/profile/getTotalPoints", function(data, status){
+        //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
+        document.getElementById("gesamtpunkte").textContent = "Gesamtpunkte: " + data
+    }).fail(function (data, status){
+        document.getElementById("gesamtpunkte").textContent = "Default Gesamtpunkte";
+        alert("Couldn't retrieve gesamtpunkte from database");
+    });
+}
+
+function getHighscoreFromDatabase() {
+    $.get("/profile/getHighScore", function(data, status){
+        //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
+        document.getElementById("highscore").textContent = "Highscore: " + data
+    }).fail(function (data, status){
+        document.getElementById("highscore").textContent = "Default Highscore";
+        alert("Couldn't retrieve highscore from database");
     });
 }
