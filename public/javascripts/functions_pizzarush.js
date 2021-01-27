@@ -59,6 +59,17 @@ class Ingredient {
         ret.setAttribute('height', '100px');
         ret.setAttribute('width', '100px');
 
+        switch (this.name) {
+            case "Pomodoro":    ret.style.zIndex = "11";
+                break;
+            case "Formaggio":   ret.style.zIndex = "12";
+                break;
+            case "Salame":      ret.style.zIndex = "13";
+                break;
+            case "Funghi":      ret.style.zIndex = "14";
+                break;
+        }
+
         return ret;
     }
 
@@ -98,17 +109,6 @@ class DraggableIngredientInstance extends Ingredient {
         const draggable = this.createImg();
 
         draggable.setAttribute('class', 'draggable');
-
-        switch (this.name) {
-            case "Pomodoro":    draggable.style.zIndex = "11";
-                                break;
-            case "Formaggio":   draggable.style.zIndex = "12";
-                                break;
-            case "Salame":      draggable.style.zIndex = "13";
-                                break;
-            case "Funghi":      draggable.style.zIndex = "14";
-                                break;
-        }
 
         document.getElementById("ingredient_layer").appendChild(draggable);
         this.draggable = draggable;
@@ -227,9 +227,9 @@ class DraggablePizzaInstance extends Pizza {
 
         this.ingredients.forEach(function(item, index, array){
 
-            // TODO: Ingredients get stacked in correct order
             const ingr = item.createImg();
-            ingr.setAttribute('style', 'position: absolute');
+            ingr.style.position = "absolute";
+            //ingr.setAttribute('style', 'position: absolute');
 
             pizzaDiv.appendChild(ingr);
 
