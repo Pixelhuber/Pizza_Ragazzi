@@ -179,7 +179,7 @@ public class UserFactory {
             this.username = rs.getString("username");
             this.email = rs.getString("email");
             this.totalPoints = rs.getInt("gesamtpunkte");
-            this.totalPoints = rs.getInt("highscore");
+            this.highScore = rs.getInt("highscore");
             BufferedInputStream bis = new BufferedInputStream(rs.getBinaryStream("profilepicture"));
             if (bis != null) {
                 try {
