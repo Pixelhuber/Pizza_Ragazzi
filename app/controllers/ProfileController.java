@@ -89,8 +89,9 @@ public class ProfileController extends Controller {
                 .orElseGet(Results::notFound);
     }
 
-    public Result getFriendsData() {
-        UserFactory.User user = userFactory.getUserById(2);
+    public Result getFriendsData(Http.Request request) {
+        String email = request.session().get("email").get();
+        UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(Json.toJson(user.getFriendsData()));
     }
 }
