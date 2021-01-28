@@ -1,29 +1,27 @@
 class AudioPlayer {
 
-    constructor() {
-    }
-
-    static audioPlayer = document.createElement("AUDIO");
-
     static mash() {
-        this.audioPlayer.setAttribute('src', "/assets/sounds/mash_kürzer.wav");
-        this.audioPlayer.setAttribute('type', "audio/wav");
-        this.audioPlayer.volume = 0.4;
-        this.audioPlayer.play();
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/mash_kürzer.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
     }
 
     static fire() {
-        this.audioPlayer.setAttribute('src', "/assets/sounds/epic_fire.wav");
-        this.audioPlayer.setAttribute('type', "audio/wav");
-        this.audioPlayer.volume = 0.4;
-        this.audioPlayer.play();
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/epic_fire.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
     }
 
     static short_ring() {
-        this.audioPlayer.setAttribute('src', "/assets/sounds/short_ring.wav");
-        this.audioPlayer.setAttribute('type', "audio/wav");
-        this.audioPlayer.volume = 0.4;
-        this.audioPlayer.play();
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/short_ring.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
     }
 }
 
@@ -350,12 +348,8 @@ class Oven {
                 timer.innerText = "DONE";
             else if (timerCount > -7)
                 timer.innerText = "!!!"
-            else if (timerCount > -9)
-                timer.innerText = "BURNT"
-
             else
-                timer.remove(),pizza.draggable.remove();
-
+                timer.innerText = "BURNT"
 
             // Decide whether to stop animation or not
             if (!pizza.isInOven) { // pizza.ovenOut() method sets isInOven to false when pizza is dragged out of oven
@@ -484,9 +478,9 @@ class Order {
 const availableIngredients = [      new Ingredient("Impasto", "/assets/images/teig.png"),
                                     new Ingredient("Formaggio", "/assets/images/formaggio.png", {
                                         vertex_x_inPercent: 20,
-                                        vertex_y_inPercent: 80,
-                                        speed: 8,
-                                        rotation: 7,
+                                        vertex_y_inPercent: 40,
+                                        speed: 4,
+                                        rotation: 6,
 
                                         hits_required: 3
                                     }),
@@ -494,16 +488,16 @@ const availableIngredients = [      new Ingredient("Impasto", "/assets/images/te
                                     new Ingredient("Salame", "/assets/images/salame.png", {
                                         vertex_x_inPercent: 60,
                                         vertex_y_inPercent: 70,
-                                        speed: 12,
-                                        rotation: 7,
+                                        speed: 3,
+                                        rotation: 15,
 
                                         hits_required: 3
                                     }),
                                     new Ingredient("Funghi", "/assets/images/funghi.png", {
                                         vertex_x_inPercent: 50,
-                                        vertex_y_inPercent: 60,
-                                        speed: 9,
-                                        rotation: 8,
+                                        vertex_y_inPercent: 80,
+                                        speed: 3,
+                                        rotation: 10,
 
                                         hits_required: 3
                                     })];
@@ -888,7 +882,7 @@ function startMiniGame(ingredientList) {
 
     function fruit_ninja() {
 
-        // this class handles the throw of ONE ingredient
+        // an instance of this class handles the throw of ONE ingredient
         class IngredientThrower {
 
             // ATTRIBUTES -----------------
@@ -898,7 +892,7 @@ function startMiniGame(ingredientList) {
             ingredient_image;
             context;
 
-            curvature; // defines how wide or narrow the parable trajectory is
+            kurtosis; // defines how wide or narrow the parable trajectory is
             speed; // self explanatory [no specific value]
             rotation_increment; // speed of rotation [in degrees]
 
@@ -925,7 +919,7 @@ function startMiniGame(ingredientList) {
                 this.ingredient_image.setAttribute('src', element.image_path);
                 this.context = context;
 
-                this.curvature = 0.004;
+                this.kurtosis = 0.05;
                 this.speed = element.flight_behavior.speed;
                 this.rotation_increment = element.flight_behavior.rotation;
 
@@ -946,19 +940,21 @@ function startMiniGame(ingredientList) {
                 // prepare values for next throw --------------------
 
                 // new coordinates of highpoint
-                this.vertex_x_inPercent = this.randomize(this.element.flight_behavior.vertex_x_inPercent, 30);
-                this.vertex_y_inPercent = this.randomize(this.element.flight_behavior.vertex_y_inPercent, 30);
+                this.vertex_x_inPercent = this.randomize(this.element.flight_behavior.vertex_x_inPercent, 80);
+                this.vertex_y_inPercent = this.randomize(this.element.flight_behavior.vertex_y_inPercent, 25);
                 this.rotation = 0;
 
                 // set the initial x to the value where y is 100px under the canvas
                 // this is to prevent the trajectory from starting extremely far off screen
                 this.x = this.parableYGiven(
                     canvas.height + 100,
-                    this.curvature,
+                    this.kurtosis,
                     canvas.width * (this.vertex_x_inPercent/100),
                     canvas.height * (1 - (this.vertex_y_inPercent/100))
                 )
 
+
+                // randomly set flight direction (left -> right / right <- left)
                 if (Math.random() > 0.5){ // 50:50
                     this.speed = -1 * this.element.flight_behavior.speed; // element will fly reversed
                     this.x = canvas.width * (this.vertex_x_inPercent/100) + (canvas.width * (this.vertex_x_inPercent/100) - this.x);
@@ -966,7 +962,10 @@ function startMiniGame(ingredientList) {
                     this.speed = this.element.flight_behavior.speed;
                     // leave this.x as it is
                 }
+                this.x = Math.max(this.x, -100);
+                this.x = Math.min(this.x, canvas.width + 100)
 
+                // randomly set rotation direction
                 if (Math.random() > 0.5) // 50:50
                     this.rotation_increment = - this.element.flight_behavior.rotation;
                 else
@@ -991,7 +990,7 @@ function startMiniGame(ingredientList) {
                 // calculating y with parable function
                 this.y = this.parableXGiven(
                     this.x,
-                    this.curvature,
+                    this.kurtosis,
                     canvas.width * (this.vertex_x_inPercent/100),
                     canvas.height * (1 - (this.vertex_y_inPercent/100))
                 );
@@ -1013,7 +1012,7 @@ function startMiniGame(ingredientList) {
 
                 this.x += this.speed;
 
-                if (this.y > canvas.height + 150)
+                if (this.y > canvas.height + 150 || this.x < -150 || this.x > canvas.width + 150)
                     this.endThrow();
             }
 
@@ -1029,8 +1028,8 @@ function startMiniGame(ingredientList) {
 
             randomize(value, range) {
 
-                const value_min = Math.max(value - range/2, 15);
-                const value_max = Math.min(value + range/2, 85);
+                const value_min = Math.max(value - range/2, 10);
+                const value_max = Math.min(value + range/2, 90);
 
                 const tmp = value_max - value_min; // Maximum value you can add to value_min
 
@@ -1045,7 +1044,14 @@ function startMiniGame(ingredientList) {
             ingredientsWaitingToBeThrown = []
             ingredientsCurrentlyInAir = [];
 
-            constructor(ingredientList) {
+            minDistanceBetweenThrows;
+            timestampLastThrow = 0;
+            maxIngredientsInAir;
+
+            constructor(ingredientList, minDistanceBetweenThrows, maxIngredientsInAir) {
+                this.minDistanceBetweenThrows = minDistanceBetweenThrows;
+                this.maxIngredientsInAir = maxIngredientsInAir;
+
 
                 for (let i = 0; i < ingredientList.length; i++) {
                     this.addIngredient(new IngredientThrower(ingredientList[i], context));
@@ -1063,10 +1069,13 @@ function startMiniGame(ingredientList) {
 
             nextFrame(timestamp) {
 
-                if (this.ingredientsWaitingToBeThrown.length > 0) {
-                    const randomIndex = Math.floor(Math.random() * this.ingredientsWaitingToBeThrown.length);
-                    this.ingredientsWaitingToBeThrown[randomIndex].startThrow();
-                }
+                if ((timestamp - this.timestampLastThrow) > this.minDistanceBetweenThrows)
+                    if (    this.ingredientsWaitingToBeThrown.length > 0 &&
+                            this.ingredientsCurrentlyInAir.length < this.maxIngredientsInAir) {
+                        const randomIndex = Math.floor(Math.random() * this.ingredientsWaitingToBeThrown.length);
+                        this.ingredientsWaitingToBeThrown[randomIndex].startThrow();
+                        this.timestampLastThrow = timestamp;
+                    }
 
                 this.ingredientsCurrentlyInAir.forEach(function (item, index, array) {
                     item.step();
@@ -1093,7 +1102,7 @@ function startMiniGame(ingredientList) {
 
         // --------------------
 
-        const ingredientJuggler = new IngredientJuggler(testArray);
+        const ingredientJuggler = new IngredientJuggler(testArray, 500, 3);
 
         let start;
 

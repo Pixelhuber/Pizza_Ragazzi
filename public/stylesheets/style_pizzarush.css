@@ -211,7 +211,7 @@ section{
 .miniGame_window{
     display: flex;
 
-    width: 40vw;
+    width: 75vw;
     height: 75vh;
     min-height: 500px;
     min-width: 600px;
