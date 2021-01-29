@@ -8,6 +8,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
+import scala.Console;
 import viewmodels.UserViewModel;
 
 import javax.inject.Inject;

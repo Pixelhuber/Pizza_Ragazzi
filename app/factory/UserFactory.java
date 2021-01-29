@@ -14,7 +14,9 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Singleton
 public class UserFactory {
@@ -246,14 +248,14 @@ public class UserFactory {
             });
         }
 
-        public String[] getFriendsData() {
+        public Map<String,BufferedImage> getFriendsData() {
 
             List<User> users = getFriends();
 
-            String[] data = new String[users.size()];
+            Map<String,BufferedImage> data = new HashMap<>();
 
-            for (int i = 0; i < users.size(); i++) {
-                data[i] = users.get(i).username;
+            for (User user : users) {
+                data.put(user.username, user.getProfilePicture());
             }
             return data;
 
