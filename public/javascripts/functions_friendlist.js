@@ -12,7 +12,7 @@ function createFriendlist(data){
         friend.className = `friend`;
 
         var image= document.createElement(`img`)
-        image.src = 'https://i.imgur.com/nkN3Mv0.jpg' //TODO Profilbild anstatt default Bild
+        image.src = data[userName]
 
         var name = document.createElement(`div`);
         name.className = `name`;

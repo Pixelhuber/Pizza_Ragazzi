@@ -11,12 +11,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Singleton
 public class UserFactory {
@@ -248,14 +248,22 @@ public class UserFactory {
             });
         }
 
-        public Map<String,BufferedImage> getFriendsData() {
+        public Map<String,String> getFriendsData() throws IOException {
 
             List<User> users = getFriends();
 
-            Map<String,BufferedImage> data = new HashMap<>();
+            Map<String,String> data = new HashMap<>();
 
             for (User user : users) {
-                data.put(user.username, user.getProfilePicture());
+                //Sets default Profile pic if none was Uploaded
+                String path="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+                if (user.profilePicture != null) {
+                    ImageIO.write(user.getProfilePicture(), "jpg", new File("tmpImage.jpg"));
+                    byte[] imageBytes = Files.readAllBytes(Paths.get("tmpImage.jpg"));
+                    Base64.Encoder encoder = Base64.getEncoder();
+                    path = "data:image/png;base64," + encoder.encodeToString(imageBytes);
+                }
+                data.put(user.username, path);
             }
             return data;
 

@@ -13,6 +13,7 @@ import viewmodels.UserViewModel;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 
@@ -90,7 +91,7 @@ public class ProfileController extends Controller {
                 .orElseGet(Results::notFound);
     }
 
-    public Result getFriendsData(Http.Request request) {
+    public Result getFriendsData(Http.Request request) throws IOException {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(Json.toJson(user.getFriendsData()));
