@@ -23,6 +23,30 @@ class AudioPlayer {
         sound.volume = 0.4;
         sound.play();
     }
+
+    static ingredient_hit() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/ingredient_hit.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static ingredient_finalHit() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/ingredient_finalHit.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static ingredient_throw() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/ingredient_throw.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
 }
 
 
@@ -671,6 +695,7 @@ function pullNewIngredient(ingredientIndex){
     draggable.style.top = draggable.tagName === "IMG" ? event.clientY + scrollY - draggable.height/2 + "px" : event.clientY + scrollY - draggable.firstChild.height/2 + "px";
 }
 
+
 function checkOverlap(draggable, destination) {
     const draggable_box = draggable.getBoundingClientRect();
     const destination_box = destination.getBoundingClientRect();
@@ -697,6 +722,52 @@ function alignDraggableToDestination(draggable, destination) {
     //Align pizza and oven position
     draggable.style.left = x + "px";
     draggable.style.top = y + "px";
+}
+
+function rotateCoordinates(shape, pivot, angle) {
+
+    // translate coordinates so that pivot is at 0x0
+    for (let i = 0; i < shape.length; i++){
+        shape[i][0] -= pivot[0];
+        shape[i][1] -= pivot[1];
+    }
+
+    // rotation around 0x0
+    for (let i = 0; i < shape.length; i++){
+        const tmp = [];
+        tmp[0] = shape[i][0] * Math.cos(angle) - shape[i][1] * Math.sin(angle);
+        tmp[1] = shape[i][1] * Math.cos(angle) + shape[i][0] * Math.sin(angle);
+
+        shape[i][0] = tmp[0];
+        shape[i][1] = tmp[1];
+    }
+
+    // translate coordinates so that pivot is back in original position
+    for (let i = 0; i < shape.length; i++){
+        shape[i][0] += pivot[0]
+        shape[i][1] += pivot[1]
+    }
+
+    return shape;
+}
+
+function isInside(point, shape) {
+    // ray-casting algorithm based on
+    // https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html/pnpoly.html
+
+    const x = point[0], y = point[1];
+
+    let inside = false;
+    for (let i = 0, j = shape.length - 1; i < shape.length; j = i++) {
+        const xi = shape[i][0], yi = shape[i][1];
+        const xj = shape[j][0], yj = shape[j][1];
+
+        const intersect = ((yi > y) !== (yj > y))
+            && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+    }
+
+    return inside;
 }
 
 
@@ -898,6 +969,7 @@ function startMiniGame(ingredientList) {
 
             // changes depending on player input
             hits_left; // how many hits until it is chopped
+            wasHitInThisThrow = false;
 
             // changes for every throw
             vertex_x_inPercent; // x-coordinate of highpoint of the throw-trajectory [in percent of canvas.width]
@@ -928,10 +1000,13 @@ function startMiniGame(ingredientList) {
 
             setupWithIngredientJuggler(juggler) {
                 this.ingredientJuggler = juggler;
-                //juggler.addIngredient(this);
             }
 
             startThrow() {
+
+                //AudioPlayer.ingredient_throw();
+                this.wasHitInThisThrow = false;
+
                 // tell juggler, you are currently in air
                 const index = this.ingredientJuggler.ingredientsWaitingToBeThrown.indexOf(this);
                 this.ingredientJuggler.ingredientsWaitingToBeThrown.splice(index, 1);
@@ -1035,6 +1110,41 @@ function startMiniGame(ingredientList) {
 
                 return value_min + Math.random() * tmp; // 0 <= Math.random() < 1
             }
+
+            isHit(cursorX, cursorY) {
+
+                if (!this.wasHitInThisThrow)
+                    return isInside([cursorX, cursorY], this.getShapeCoordinates());
+                else
+                    return false;
+            }
+
+            onHit() {
+                this.wasHitInThisThrow = true;
+                this.hits_left -= 1;
+
+                if (this.hits_left <= 0) {
+                    AudioPlayer.ingredient_finalHit();
+
+                    console.log("Hit: " + this.element.name);
+
+                    this.ingredient_image.remove();
+                    ingredientJuggler.dropIngredient(this);
+                } else {
+                    AudioPlayer.ingredient_hit();
+                }
+            }
+
+            getShapeCoordinates() {
+                let lu = [this.x - this.ingredient_image.width/2, this.y - this.ingredient_image.height/2];
+                let lo = [this.x - this.ingredient_image.width/2, this.y + this.ingredient_image.height/2];
+                let ro = [this.x + this.ingredient_image.width/2, this.y + this.ingredient_image.height/2];
+                let ru = [this.x + this.ingredient_image.width/2, this.y - this.ingredient_image.height/2];
+
+                const shape = [lu, lo, ro, ru];
+
+                return rotateCoordinates(shape, [this.x, this.y], this.rotation)
+            }
         }
 
         // this class is responsible for WHAT is thrown, and WHEN
@@ -1052,19 +1162,21 @@ function startMiniGame(ingredientList) {
                 this.minDistanceBetweenThrows = minDistanceBetweenThrows;
                 this.maxIngredientsInAir = maxIngredientsInAir;
 
-
                 for (let i = 0; i < ingredientList.length; i++) {
                     this.addIngredient(new IngredientThrower(ingredientList[i], context));
-                }
-
-                for (let i = 0; i < this.allIngredientsToJuggle.length; i++) {
                     this.allIngredientsToJuggle[i].setupWithIngredientJuggler(this);
-                    this.ingredientsWaitingToBeThrown[i] = this.allIngredientsToJuggle[i];
                 }
             }
 
             addIngredient(ingredientThrower) {
                 this.allIngredientsToJuggle.push(ingredientThrower);
+                this.ingredientsWaitingToBeThrown.push(ingredientThrower);
+            }
+
+            dropIngredient(ingredientThrower) {
+                this.allIngredientsToJuggle.splice(this.allIngredientsToJuggle.indexOf(ingredientThrower), 1);
+                this.ingredientsCurrentlyInAir.splice(this.ingredientsCurrentlyInAir.indexOf(ingredientThrower), 1);
+                this.ingredientsWaitingToBeThrown.splice(this.ingredientsWaitingToBeThrown.indexOf(ingredientThrower), 1);
             }
 
             nextFrame(timestamp) {
@@ -1080,6 +1192,41 @@ function startMiniGame(ingredientList) {
                 this.ingredientsCurrentlyInAir.forEach(function (item, index, array) {
                     item.step();
                 });
+            }
+        }
+
+        // this class handles all user inputs while playing
+        function addHitListener(ingredientJuggler) {
+
+            let x;
+            let y;
+
+            canvas.onmousedown = startListening;
+
+
+            function startListening(event) {
+                event = event || window.event;
+                event.preventDefault();
+
+                document.onmouseup = stopListening;
+                document.onmousemove = checkForHit;
+            }
+
+            function stopListening(event) {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+
+            function checkForHit(event) {
+
+                const canvas_box = canvas.getBoundingClientRect();
+                x = event.clientX - canvas_box.left;
+                y = event.clientY - canvas_box.top;
+
+                ingredientJuggler.ingredientsCurrentlyInAir.forEach(function (item, index, array) {
+                    if (item.isHit(x, y))
+                        item.onHit();
+                })
             }
         }
 
@@ -1103,6 +1250,7 @@ function startMiniGame(ingredientList) {
         // --------------------
 
         const ingredientJuggler = new IngredientJuggler(testArray, 500, 3);
+        addHitListener(ingredientJuggler);
 
         let start;
 
@@ -1115,7 +1263,6 @@ function startMiniGame(ingredientList) {
 
             // calculating & drawing next frame for every current throw
             ingredientJuggler.nextFrame(timestamp);
-
 
             window.requestAnimationFrame(animationStep);
         }
