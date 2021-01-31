@@ -39,7 +39,7 @@ GET     /profile/getTotalPoints    controllers.ProfileController.getGesamtpunkte
 GET     /profile/getHighScore       controllers.ProfileController.getHighscoreFromDatabase(request: Request)
 
 # Friendlist --------------------------------------------------------------------------
-GET     /getFriendsData             controllers.ProfileController.getFriendsData
+GET     /getFriendsData             controllers.ProfileController.getFriendsData(request: Request)
 
 # LOGIN ----------------------------------------------------------------------------
 POST    /login/authenticate         controllers.LoginController.authenticate(request: Request)

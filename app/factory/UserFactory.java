@@ -11,10 +11,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Singleton
 public class UserFactory {
@@ -179,7 +181,7 @@ public class UserFactory {
             this.username = rs.getString("username");
             this.email = rs.getString("email");
             this.totalPoints = rs.getInt("gesamtpunkte");
-            this.totalPoints = rs.getInt("highscore");
+            this.highScore = rs.getInt("highscore");
             BufferedInputStream bis = new BufferedInputStream(rs.getBinaryStream("profilepicture"));
             if (bis != null) {
                 try {
@@ -246,14 +248,22 @@ public class UserFactory {
             });
         }
 
-        public String[] getFriendsData() {
+        public Map<String,String> getFriendsData() throws IOException {
 
             List<User> users = getFriends();
 
-            String[] data = new String[users.size()];
+            Map<String,String> data = new HashMap<>();
 
-            for (int i = 0; i < users.size(); i++) {
-                data[i] = users.get(i).username;
+            for (User user : users) {
+                //Sets default Profile pic if none was Uploaded
+                String path="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+                if (user.profilePicture != null) {
+                    ImageIO.write(user.getProfilePicture(), "jpg", new File("tmpImage.jpg"));
+                    byte[] imageBytes = Files.readAllBytes(Paths.get("tmpImage.jpg"));
+                    Base64.Encoder encoder = Base64.getEncoder();
+                    path = "data:image/png;base64," + encoder.encodeToString(imageBytes);
+                }
+                data.put(user.username, path);
             }
             return data;
 
