@@ -96,7 +96,7 @@ body {
 section{
     display: flex;
 
-    height: 80vh;
+    height: 70vh;
 }
 
 ::-webkit-scrollbar {
@@ -139,8 +139,32 @@ section{
 }
 
 #workSurface{
+    display: flex;
+    flex-direction: column;
     flex: 3;
+}
+
+#ingredientSurface{
+    height: 80vh;
     background: rgba(150, 150, 150, 0.2);
+}
+
+#lowerSurfaces{
+    display: flex;
+}
+
+#cuttingSurface{
+    height: 30vh;
+    width: 100%;
+    background: rgba(150, 150, 150, 0.2);
+    margin: 10px 5px 0 0;
+}
+
+#smashingSurface{
+    height: 30vh;
+    width: 100%;
+    background: rgba(150, 150, 150, 0.2);
+    margin: 10px 0 0 5px ;
 }
 
 .box{

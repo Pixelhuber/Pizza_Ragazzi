@@ -528,6 +528,7 @@ function loadOrderSection(){
                     new Order("Salame", 15, 60),
                     new Order("Funghi", 10, 150),
                     new Order("Speciale", 15, 200),
+                    new Order("Salame", 15, 60),
                     new Order("Salame", 15, 60));
 
     orderList.forEach(function(item, index, array){
