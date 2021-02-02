@@ -832,7 +832,7 @@ function resetPoints() {
 
 // diese Klasse soll ein Java-Interface simulieren
 // spezifische Countdown-Anwendungen erben von dieser Klasse und müssen nurnoch die drei methoden "onCountdownX()" überschreiben
-class CountdownInterface {
+class AbstractCountdown {
 
     constructor(durationInSeconds, affectedObject) {
         this.durationInSeconds = durationInSeconds;
@@ -889,7 +889,7 @@ function manageRushCountdown(seconds, timerContainerId){
 
         resetPoints();
 
-        class RushCountdown extends CountdownInterface { // Hier wird die spezifische RushCountdown Klasse definiert
+        class RushCountdown extends AbstractCountdown { // Hier wird die spezifische RushCountdown Klasse definiert
 
             // @Override
             onCountdownStart() {
@@ -954,7 +954,7 @@ function startMiniGame(ingredientList) {
     function fruit_ninja() {
 
         // an instance of this class handles the throw of ONE ingredient
-        class IngredientThrower {
+        class AbstractThrower {
 
             // ATTRIBUTES -----------------
 
@@ -967,9 +967,7 @@ function startMiniGame(ingredientList) {
             speed; // self explanatory [no specific value]
             rotation_increment; // speed of rotation [in degrees]
 
-            // changes depending on player input
-            hits_left; // how many hits until it is chopped
-            wasHitInThisThrow = false;
+
 
             // changes for every throw
             vertex_x_inPercent; // x-coordinate of highpoint of the throw-trajectory [in percent of canvas.width]
@@ -980,37 +978,28 @@ function startMiniGame(ingredientList) {
             y = 0;
             rotation = 0;
 
-
-            // INGREDIENT JUGGLER ---------
-            ingredientJuggler;
+            // -----
+            ingredientJuggler
 
 
             constructor(element, context) {
                 this.element = element;
-                this.ingredient_image = document.createElement('img');
-                this.ingredient_image.setAttribute('src', element.image_path);
                 this.context = context;
 
                 this.kurtosis = 0.05;
                 this.speed = element.flight_behavior.speed;
                 this.rotation_increment = element.flight_behavior.rotation;
-
-                this.hits_left = element.flight_behavior.hits_required;
             }
 
-            setupWithIngredientJuggler(juggler) {
-                this.ingredientJuggler = juggler;
+
+            newThrow() {
+
+                this.defineNewTrajectory();
+                this.startThrow();
             }
 
-            startThrow() {
-
-                //AudioPlayer.ingredient_throw();
-                this.wasHitInThisThrow = false;
-
-                // tell juggler, you are currently in air
-                const index = this.ingredientJuggler.ingredientsWaitingToBeThrown.indexOf(this);
-                this.ingredientJuggler.ingredientsWaitingToBeThrown.splice(index, 1);
-                this.ingredientJuggler.ingredientsCurrentlyInAir.push(this);
+            // this method sets up all variables for the next throw
+            defineNewTrajectory() {
 
                 // prepare values for next throw --------------------
 
@@ -1045,19 +1034,11 @@ function startMiniGame(ingredientList) {
                     this.rotation_increment = - this.element.flight_behavior.rotation;
                 else
                     this.rotation_increment = this.element.flight_behavior.rotation;
-
-
-                // when throw is finished, tell juggler that you're ready to be thrown again
-                //this.ingredientJuggler.ingredientsWaitingToBeThrown.push(this);
             }
 
-            endThrow() {
+            startThrow() {}
 
-                // tell juggler, you are ready to be thrown again
-                const index = this.ingredientJuggler.ingredientsCurrentlyInAir.indexOf(this);
-                this.ingredientJuggler.ingredientsCurrentlyInAir.splice(index, 1);
-                this.ingredientJuggler.ingredientsWaitingToBeThrown.push(this);
-            }
+            endThrow() {}
 
             // calculate next position and draw on canvas
             step() {
@@ -1119,21 +1100,7 @@ function startMiniGame(ingredientList) {
                     return false;
             }
 
-            onHit() {
-                this.wasHitInThisThrow = true;
-                this.hits_left -= 1;
-
-                if (this.hits_left <= 0) {
-                    AudioPlayer.ingredient_finalHit();
-
-                    console.log("Hit: " + this.element.name);
-
-                    this.ingredient_image.remove();
-                    ingredientJuggler.dropIngredient(this);
-                } else {
-                    AudioPlayer.ingredient_hit();
-                }
-            }
+            onHit() {}
 
             getShapeCoordinates() {
                 let lu = [this.x - this.ingredient_image.width/2, this.y - this.ingredient_image.height/2];
@@ -1144,6 +1111,106 @@ function startMiniGame(ingredientList) {
                 const shape = [lu, lo, ro, ru];
 
                 return rotateCoordinates(shape, [this.x, this.y], this.rotation)
+            }
+        }
+
+        class IngredientThrower extends AbstractThrower {
+
+            // changes during play
+            wasHitInThisThrow = false;
+            hits_left; // how many hits until it is chopped
+
+
+            constructor(element, context) {
+                super(element, context);
+
+                this.ingredient_image = document.createElement('img');
+                this.ingredient_image.setAttribute('src', element.image_path);
+
+                this.hits_left = element.flight_behavior.hits_required;
+            }
+
+            setupWithIngredientJuggler(juggler) {
+                this.ingredientJuggler = juggler;
+            }
+
+            startThrow() {
+
+                this.wasHitInThisThrow = false;
+
+                // tell juggler, you can't be thrown again
+                const index = this.ingredientJuggler.ingredientsWaitingToBeThrown.indexOf(this);
+                this.ingredientJuggler.ingredientsWaitingToBeThrown.splice(index, 1);
+
+                // tell juggler to either throw yourself OR a distraction
+                if (Math.random() < 0.1)
+                    this.ingredientJuggler.ingredientsCurrentlyInAir.push(this.createDistraction());
+                else
+                    this.ingredientJuggler.ingredientsCurrentlyInAir.push(this);
+
+            }
+
+            endThrow() {
+
+                // tell juggler, you are ready to be thrown again
+                const index = this.ingredientJuggler.ingredientsCurrentlyInAir.indexOf(this);
+                this.ingredientJuggler.ingredientsCurrentlyInAir.splice(index, 1);
+                this.ingredientJuggler.ingredientsWaitingToBeThrown.push(this);
+            }
+
+            onHit() {
+                this.wasHitInThisThrow = true;
+                this.hits_left -= 1;
+
+                if (this.hits_left <= 0) {
+                    AudioPlayer.ingredient_finalHit();
+                    console.log("Final Hit: " + this.element.name);
+
+                    this.ingredient_image.remove();
+                    ingredientJuggler.dropIngredient(this);
+                } else {
+                    AudioPlayer.ingredient_hit();
+                    console.log("Hit: " + this.element.name);
+                }
+            }
+
+            createDistraction() {
+
+                return new DistractionThrower(this);
+            }
+        }
+
+        class DistractionThrower extends AbstractThrower {
+
+            realIngredientThrower;
+
+            constructor(ingredientThrower) {
+                super(ingredientThrower.element, ingredientThrower.context);
+
+                this.ingredient_image = document.createElement('img');
+                this.ingredient_image.setAttribute('src', "assets/images/pomodoro.png");
+
+                this.realIngredientThrower = ingredientThrower;
+                this.ingredientJuggler = ingredientThrower.ingredientJuggler;
+
+                this.defineNewTrajectory();
+            }
+
+            endThrow() {
+
+                // tell juggler, the NON-distracting ingredient can be thrown again
+                const index = this.ingredientJuggler.ingredientsCurrentlyInAir.indexOf(this);
+                this.ingredientJuggler.ingredientsCurrentlyInAir.splice(index, 1);
+                this.ingredientJuggler.ingredientsWaitingToBeThrown.push(this.realIngredientThrower);
+            }
+
+            onHit() {
+
+                AudioPlayer.distraction_hit();
+                console.log("Distraction Hit: " + this.element.name);
+
+                this.ingredient_image.remove();
+                this.endThrow();
             }
         }
 
@@ -1185,7 +1252,7 @@ function startMiniGame(ingredientList) {
                     if (    this.ingredientsWaitingToBeThrown.length > 0 &&
                             this.ingredientsCurrentlyInAir.length < this.maxIngredientsInAir) {
                         const randomIndex = Math.floor(Math.random() * this.ingredientsWaitingToBeThrown.length);
-                        this.ingredientsWaitingToBeThrown[randomIndex].startThrow();
+                        this.ingredientsWaitingToBeThrown[randomIndex].newThrow();
                         this.timestampLastThrow = timestamp;
                     }
 
