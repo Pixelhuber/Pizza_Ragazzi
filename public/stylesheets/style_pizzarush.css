@@ -167,6 +167,28 @@ section{
     margin: 10px 0 0 5px ;
 }
 
+.buttonContainer {
+    float: right;
+    position: relative;
+    width: 20%;
+    height: 100%
+}
+
+.miniGameButton{
+    width: auto;
+    height: 20vh;
+    position: relative;
+    top: 15%;
+    left: 50%;
+}
+
+.miniGameButton:hover {
+    -webkit-filter: drop-shadow(2px 2px 0 black)
+    drop-shadow(-2px -2px 0 black);
+    filter: drop-shadow(2px 2px 0 black)
+    drop-shadow(-2px -2px 0 black);
+}
+
 .box{
     display: flex;
     align-items: center;
