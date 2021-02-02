@@ -942,8 +942,8 @@ function startMiniGame(ingredientList) {
 
     document.getElementById("miniGame_layer").style.visibility = "visible";
 
-    const game_window = document.createElement('div');
-    game_window.setAttribute('class', "miniGame_window");
+    const miniGame_window = document.createElement('div');
+    miniGame_window.setAttribute('class', "miniGame_window");
 
     const playArea = document.createElement('div');
     playArea.setAttribute('class', "miniGame_playArea");
@@ -951,10 +951,11 @@ function startMiniGame(ingredientList) {
     const sideBar = document.createElement('div');
     sideBar.setAttribute('class', "miniGame_sideBar");
 
-    game_window.appendChild(playArea);
-    game_window.appendChild(sideBar);
+    miniGame_window.appendChild(playArea);
+    miniGame_window.appendChild(sideBar);
 
-    document.getElementById("miniGame_layer").replaceChild(game_window, document.getElementById("miniGame_layer").firstChild);
+    document.getElementById("miniGame_layer").replaceChild(miniGame_window, document.getElementById("miniGame_layer").firstChild);
+
 
     fruit_ninja();
 
@@ -1184,20 +1185,22 @@ function startMiniGame(ingredientList) {
 
             createDistraction() {
 
-                return new DistractionThrower(this);
+                return new DistractionThrower(this, 3000);
             }
         }
 
         class DistractionThrower extends AbstractThrower {
 
             realIngredientThrower;
+            disablingTime;
 
-            constructor(ingredientThrower) {
+            constructor(ingredientThrower, disablingTime) {
                 super(ingredientThrower.element, ingredientThrower.context);
 
                 this.ingredient_image = document.createElement('img');
                 this.ingredient_image.setAttribute('src', "assets/images/pomodoro.png");
 
+                this.disablingTime = disablingTime;
                 this.realIngredientThrower = ingredientThrower;
                 this.ingredientJuggler = ingredientThrower.ingredientJuggler;
 
@@ -1215,7 +1218,9 @@ function startMiniGame(ingredientList) {
             onHit() {
 
                 AudioPlayer.distraction_hit();
+
                 console.log("Distraction Hit: " + this.element.name);
+                this.ingredientJuggler.disableFor(this.disablingTime);
 
                 this.ingredient_image.remove();
                 this.endThrow();
@@ -1232,6 +1237,9 @@ function startMiniGame(ingredientList) {
             minDistanceBetweenThrows;
             timestampLastThrow = 0;
             maxIngredientsInAir;
+
+            disableTime = 0;
+            lastTimestamp;
 
             constructor(ingredientList, minDistanceBetweenThrows, maxIngredientsInAir) {
                 this.minDistanceBetweenThrows = minDistanceBetweenThrows;
@@ -1257,6 +1265,11 @@ function startMiniGame(ingredientList) {
 
             nextFrame(timestamp) {
 
+                if (this.disableTime > 0)
+                    this.disableTime -= timestamp - this.lastTimestamp
+
+                this.lastTimestamp = timestamp;
+
                 if ((timestamp - this.timestampLastThrow) > this.minDistanceBetweenThrows)
                     if (    this.ingredientsWaitingToBeThrown.length > 0 &&
                             this.ingredientsCurrentlyInAir.length < this.maxIngredientsInAir) {
@@ -1268,6 +1281,15 @@ function startMiniGame(ingredientList) {
                 this.ingredientsCurrentlyInAir.forEach(function (item, index, array) {
                     item.step();
                 });
+            }
+
+            isDisabled() {
+                return this.disableTime > 0;
+            }
+
+            disableFor(milliseconds) {
+
+                this.disableTime = milliseconds;
             }
         }
 
@@ -1294,6 +1316,8 @@ function startMiniGame(ingredientList) {
             }
 
             function checkForHit(event) {
+                if (ingredientJuggler.isDisabled())
+                    return;
 
                 const canvas_box = canvas.getBoundingClientRect();
                 x = event.clientX - canvas_box.left;
@@ -1306,16 +1330,23 @@ function startMiniGame(ingredientList) {
             }
         }
 
+        // ------------------------------------------------------------------------------------------------------------
 
         // canvas creation ----
         const canvas = document.createElement('canvas');
         const context = canvas.getContext("2d");
 
-        const playArea_box = playArea.getBoundingClientRect();
-        canvas.setAttribute('height', playArea_box.height + "px");
-        canvas.setAttribute('width', playArea_box.width + "px");
+        //window.addEventListener('resize', setCanvasSize, false);
+        function setCanvasSize() {
+            const playArea_box = playArea.getBoundingClientRect();
+            canvas.setAttribute('height', playArea_box.height + "px");
+            canvas.setAttribute('width', playArea_box.width + "px");
+        }
+        setCanvasSize();
 
         playArea.appendChild(canvas);
+
+        // counter creation -----
 
         // --------------------
 
