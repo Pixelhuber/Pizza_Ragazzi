@@ -40,7 +40,15 @@ class AudioPlayer {
         sound.play();
     }
 
-    static ingredient_throw() {
+    static distraction_hit() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/distraction_hit.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static throw() {
         const sound = document.createElement("AUDIO");
         sound.setAttribute('src', "/assets/sounds/ingredient_throw.wav");
         sound.setAttribute('type', "audio/wav");
@@ -1243,7 +1251,8 @@ function startMiniGame(ingredientList) {
             dropIngredient(ingredientThrower) {
                 this.allIngredientsToJuggle.splice(this.allIngredientsToJuggle.indexOf(ingredientThrower), 1);
                 this.ingredientsCurrentlyInAir.splice(this.ingredientsCurrentlyInAir.indexOf(ingredientThrower), 1);
-                this.ingredientsWaitingToBeThrown.splice(this.ingredientsWaitingToBeThrown.indexOf(ingredientThrower), 1);
+                if (this.ingredientsWaitingToBeThrown.includes(ingredientThrower))
+                    this.ingredientsWaitingToBeThrown.splice(this.ingredientsWaitingToBeThrown.indexOf(ingredientThrower), 1);
             }
 
             nextFrame(timestamp) {
