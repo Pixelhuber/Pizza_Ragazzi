@@ -57,7 +57,7 @@ public class HomeController extends Controller {
 
     public Result menu(Http.Request request){
         if (request.session().get("email").isPresent()) // check if User is logged in
-            return ok();
+            return ok(menu.render("Menu",assetsFinder));
         else
             return ok(login.render("Login", assetsFinder));
     }
