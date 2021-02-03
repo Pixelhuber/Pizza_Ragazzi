@@ -18,13 +18,13 @@ public class PizzaRushController extends Controller {
         // read json data
         String pizzaType = request.body().asJson().get("pizza").asText();
 
-        List<String> ingredients = request.body().asJson().findValuesAsText("ingredients");
+        List<String> ingredients = request.body().asJson().findValuesAsText("ingredients");//TODO Das hier findet bis jetzt noch garkeine zutaten
         Pizza pizza = new Pizza(pizzaType, ingredients);
 
         int currentPoints = getCurrentPointsFromSession(request.session());
-        String points = String.valueOf(currentPoints + 10);
 
         if (pizza.validatePizza()) {
+            String points = String.valueOf(currentPoints + 10);
             return ok().addingToSession(request, "currentPizzaRushPoints", points);
         } else
             return ok();
