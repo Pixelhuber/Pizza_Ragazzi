@@ -64,7 +64,7 @@ public class UserFactory {
             stmt.setString(3, password);
             stmt.setInt(4, 0);
             stmt.setInt(5, 0);
-            stmt.setInt(6, 0);
+            stmt.setInt(6, 1);
             stmt.executeUpdate();
             stmt.close();
             return getUserByEmail(email);

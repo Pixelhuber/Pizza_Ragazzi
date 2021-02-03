@@ -42,6 +42,10 @@ public class ProfileController extends Controller {
         return ok(userViewModel.getUsername()).addingToSession(request, "username", userViewModel.getUsername()); // Speichert den Username in der Session unter dem Key "username"
     }
 
+    public Result setProfilePicture(Http.Request request){
+        return badRequest();
+    }
+
     // Reads key "email" from session and returns it
     public Result getEmailFromSession(Http.Request request) {
         return request
