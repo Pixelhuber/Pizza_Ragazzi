@@ -258,8 +258,8 @@ public class UserFactory {
                 //Sets default Profile pic if none was Uploaded
                 String path="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
                 if (user.profilePicture != null) {
-                    ImageIO.write(user.getProfilePicture(), "jpg", new File("tmpImage.jpg"));
-                    byte[] imageBytes = Files.readAllBytes(Paths.get("tmpImage.jpg"));
+                    ImageIO.write(user.getProfilePicture(), "png", new File("tmpImage.png"));
+                    byte[] imageBytes = Files.readAllBytes(Paths.get("tmpImage.png"));
                     Base64.Encoder encoder = Base64.getEncoder();
                     path = "data:image/png;base64," + encoder.encodeToString(imageBytes);
                 }
