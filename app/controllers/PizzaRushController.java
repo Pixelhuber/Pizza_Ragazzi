@@ -16,7 +16,7 @@ public class PizzaRushController extends Controller {
     public Result validatePizza(Http.Request request) {
 
         // read json data
-        String pizzaType = request.body().asJson().get("pizzaName").asText();
+        String pizzaType = request.body().asJson().get("pizza").asText();
 
         List<String> ingredients = request.body().asJson().findValuesAsText("ingredients");
         Pizza pizza = new Pizza(pizzaType, ingredients);
