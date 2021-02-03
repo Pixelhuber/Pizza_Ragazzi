@@ -20,8 +20,6 @@
             <div id="startStop_overlay_text">Click anywhere to start!</div>
         </div>
 
-        <button onclick="startMiniGame()">Start Fruit-Ninja</button>
-
         <div id="miniGame_layer"> </div>
 
         <div id="pizza_layer"> </div>
@@ -56,7 +54,24 @@
 
             </div>
 
-            <div id="workSurface"></div>
+            <div id="workSurface">
+                <div id="ingredientSurface"></div>
+
+                <div id="lowerSurfaces">
+                    <div id="cuttingSurface">
+                        <div class="buttonContainer">
+                            <input onclick="startMiniGame()" class="miniGameButton" id="startFruitNinja" type="image" src="/assets/images/knife.png"/>
+                        </div>
+                    </div>
+
+                    <div id="smashingSurface">
+                        <div class="buttonContainer">
+                            <input class="miniGameButton" id="startWhackAMole" type="image" src="/assets/images/rollingpin.png"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <div id="orderSection">
                 <h1>ORDINI</h1>
@@ -70,6 +85,12 @@
             </div>
 
         </section>
+
+        <div id="lower_container">
+
+
+
+        </div>
 
     </body>
 </html>
