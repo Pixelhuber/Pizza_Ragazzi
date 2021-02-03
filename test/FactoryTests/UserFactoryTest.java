@@ -5,12 +5,9 @@ import factory.FactoryExceptions.EmailAlreadyInUseException;
 import factory.UserFactory;
 
 import org.junit.*;
-//import org.junit.After;
-//import org.junit.Before;
-//import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.After;
+import org.junit.Before;
+
 
 import play.db.Database;
 import play.db.Databases;
@@ -20,7 +17,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserFactoryTest {
 
     private Database database;
@@ -44,7 +40,6 @@ public class UserFactoryTest {
     }
 
     @Test
-    @Order(1)
     public void createUserTest() {
         UserFactory.User actualUser = userFactory.createUser("test@mail.lel", "testUser1", "test");
         assertEquals(actualUser.getUsername(),"testUser1");
@@ -55,7 +50,6 @@ public class UserFactoryTest {
     }
 
     @Test
-    @Order(2)
     public void createUserTest2(){
         Exception exception = assertThrows(EmailAlreadyInUseException.class, () -> {
             UserFactory.User actualUser = userFactory.createUser("test@mail.lel", "testUser2", "test");
@@ -73,7 +67,6 @@ public class UserFactoryTest {
     }
 
     @Test
-    @Order(3)
     public void isEmailAvailableTest2(){
         boolean expected = false;
         boolean actual = userFactory.isEmailAvailable("test@mail.lel");
@@ -81,7 +74,6 @@ public class UserFactoryTest {
     }
 
     @Test
-    @Order(4)
     public void authenticateUserTest(){
         UserFactory.User actualUser = userFactory.authenticateUser("test@test.lel","test");
         assertEquals(actualUser.getUsername(),"testUser3");
@@ -92,7 +84,6 @@ public class UserFactoryTest {
     }
 
     @Test
-    @Order(5)
     public void authenticateUserTest2(){
         UserFactory.User actualUser = userFactory.authenticateUser("test@mail.lel","wrong");
         UserFactory.User expectedUser = null;
@@ -100,7 +91,6 @@ public class UserFactoryTest {
     }
 
     @Test
-    @Order(6)
     public void deleteUserByEmailTest(){
         userFactory.getUserByEmail("test@mail.lel").delete();
         boolean expected = true;

@@ -21,3 +21,4 @@ generated.truststore
 
 *.DS_Store
 /.bsp/
+/.bsp/

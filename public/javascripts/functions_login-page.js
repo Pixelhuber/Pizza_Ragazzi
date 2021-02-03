@@ -89,7 +89,7 @@ function authenticateLogin() {
                 wrong_password_error.style.display = "none";
             } else if (msg !== "email is not valid" && msg !== "password is empty") {
                 //TODO change this to game menu
-                window.location.href = "profile";
+                window.location.href = "menu";
             }
         }
     );

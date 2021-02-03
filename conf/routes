@@ -21,12 +21,15 @@ GET     /createAccount              controllers.HomeController.createAccount
 
 GET     /main                       controllers.HomeController.main(request: Request)
 
+GET     /menu                       controllers.HomeController.menu(request: Request)
+
 
 # HIGHSCORE ------------------------------------------------------------------------
 GET     /highscore/getTableData     controllers.HighscoreController.getTableData
 
 # PROFILE --------------------------------------------------------------------------
-POST    /profile/updateUsername     controllers.ProfileController.setUsername(request: Request)
+POST    /profile/updateUsername         controllers.ProfileController.setUsername(request: Request)
+POST    /profile/uploadProfilePicture   controllers.ProfileController.setProfilePicture(request: Request)
 
 # Use this route for every getUsername call
 GET     /getUsername                controllers.ProfileController.getUsernameFromDatabase(request: Request)
