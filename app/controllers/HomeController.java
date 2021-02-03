@@ -66,7 +66,7 @@ public class HomeController extends Controller {
         return ok(createAccount.render("CreateAccount", assetsFinder));
     }
 
-    public Result main(Http.Request request) {
+    public Result pizzaRush(Http.Request request) {
         if (request.session().get("email").isPresent()) // check if User is logged in
 
             return ok(pizzarush.render("Pizza-Rush", assetsFinder));

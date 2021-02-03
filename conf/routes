@@ -19,7 +19,7 @@ GET     /profile                    controllers.HomeController.profile(request: 
 
 GET     /createAccount              controllers.HomeController.createAccount
 
-GET     /main                       controllers.HomeController.main(request: Request)
+GET     /pizzaRush                  controllers.HomeController.pizzaRush(request: Request)
 
 GET     /menu                       controllers.HomeController.menu(request: Request)
 
