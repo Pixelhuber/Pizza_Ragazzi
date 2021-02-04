@@ -103,7 +103,7 @@ div.draggable > img{ /* ingredients on pizzas */
 
 .oven > img{
     height: 100%;
-    width: auto;
+    width: 100%;
     padding: 10px;
 }
 
