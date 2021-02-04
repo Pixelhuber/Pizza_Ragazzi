@@ -28,6 +28,16 @@ public class PizzaRushFactory {
         return null;//TODO noch machen sowie andere wichtige Funktionen
     }
 
+    public List<Ingredient> getAvailableIngredients(String email){
+        //TODO jacob gibt euch eine lustige sql abfrage die zuerst das UserTier und damit alle lustigen Zutaten abfragt
+        return null;
+    }
+
+    public List<Order> getAvailablePizzas(String email){
+        //TODO jacob gibt euch eine lustige SQL abfrage die alle veerfügbaren pizza zurückgibt
+        return null;
+    }
+
 
 //-----------KLASSEN-------------------------------------------------------------------------------------------
     public class Ingredient{
