@@ -60,15 +60,15 @@ public class PizzaRushFactory {
             //TODO ingredients noch hinzufügen
         }
 
-        public List<Integer> getOrderIngredientsId(){
+        public List<Ingredient> getOrderIngredients(){
             return db.withConnection(conn -> {
-                List<Integer> result = new ArrayList<>();
+                List<Ingredient> result = new ArrayList<>();
                 //TODO sql statement nochmal überprüfen
                 PreparedStatement stmt = conn.prepareStatement("SELECT Ingredient_idIngredient FROM `Pizza_has_Ingredient` WHERE Pizza_idPizza =? ");
                 stmt.setInt(1,getId());
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
-                    result.add((Integer) rs.getObject("Ingredient_idIngredient"));
+                    result.add(getIngredientById(rs.getInt("Ingredien_idIngredient")));
                 }
                 stmt.close();
                 return result;
