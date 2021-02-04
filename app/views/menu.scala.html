@@ -4,6 +4,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <link rel="stylesheet" media="screen" href="@assetsFinder.path("stylesheets/menu.css")">
         <title>Menu</title>
     </head>
     <body>
@@ -11,9 +12,19 @@
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
             <!--end of Navigation bar-->
 
-        <form action="/pizzaRush">
-            <input type="submit" value="Pizza Rush" />
-        </form>
+        <div class="container">
+            <button class="button" onclick="location.href = ''" type="button">
+                Memory
+            </button>
+            <br>
+            <button class="button" onclick="location.href = '/pizzaRush'" type="button">
+                Pizza Rush
+            </button>
+            <br>
+            <button class="button" onclick="location.href = ''" type="button">
+                Tutorial
+            </button>
+        </div>
 
     </body>
 </html>

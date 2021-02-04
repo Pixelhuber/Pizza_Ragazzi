@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+*{
+    font-family: "Arial Black", sans-serif;
+}
+
+button{
+    height: 100px;
+    width: 500px;
+    margin: 25px;
+    border: 4px black solid;
+    background-color: white;
+}
+.button:hover{
+    color: white;
+    background-color: black;
+    cursor: pointer;
+}
+
+.container{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
