@@ -1,15 +1,29 @@
 package controllers;
 
+import factory.UserFactory;
+import models.pizza_rush.IngredientFactory;
+import models.pizza_rush.OrderFactory;
 import models.pizza_rush.PizzaCreation;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
 
+import javax.inject.Inject;
 import java.util.List;
 
 
 public class PizzaRushController extends Controller {
+    private final AssetsFinder assetsFinder;
+    private final OrderFactory orderFactory;
+    private final IngredientFactory ingredientFactory;
+
+    @Inject
+    public PizzaRushController(AssetsFinder assetsFinder, OrderFactory orderFactory, IngredientFactory ingredientFactory) {
+        this.assetsFinder = assetsFinder;
+        this.orderFactory = orderFactory;
+        this.ingredientFactory = ingredientFactory;
+    }
 
 
     public Result validatePizza(Http.Request request) {

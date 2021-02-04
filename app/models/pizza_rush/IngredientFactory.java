@@ -22,6 +22,9 @@ public class IngredientFactory {@Singleton
         return null;//TODO noch machen sowie andere wichtige Funktionen
     }
 
+    public static Ingredient getIngredientById(int id){
+        return null;//TODO noch machen sowie andere wichtige Funktionen
+    }
 
     public class Ingredient{
         int id;

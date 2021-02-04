@@ -1,5 +1,6 @@
 package models.pizza_rush;
 
+import controllers.PizzaRushController;
 import factory.UserFactory;
 
 import org.springframework.core.annotation.Order;
@@ -22,18 +23,6 @@ public class OrderFactory {
         this.db=db;
     }
 
-    public List<IngredientFactory.Ingredient> getOrderIngredients(){
-        return db.withConnection(conn -> {
-            List<IngredientFactory.Ingredient> ingredients = new ArrayList<>();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Ingredient");//TODO SQL statement falsch
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                //TODO noch machen
-            }
-            stmt.close();
-            return ingredients;
-        });
-    }
 
     public class Order{
         int id;
@@ -48,8 +37,27 @@ public class OrderFactory {
             //TODO ingredients noch hinzufügen
         }
 
+        public List<Integer> getOrderIngredientsId(){
+            return db.withConnection(conn -> {
+                List<Integer> result = new ArrayList<>();
+                //TODO sql statement nochmal überprüfen
+                PreparedStatement stmt = conn.prepareStatement("SELECT Ingredient_idIngredient FROM `Pizza_has_Ingredient` WHERE Pizza_idPizza =? ");
+                stmt.setInt(1,getId());
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    result.add((Integer) rs.getObject("Ingredient_idIngredient"));
+                }
+                stmt.close();
+                return result;
+            });
+        }
+
         public List<IngredientFactory.Ingredient> getIngredients() {
             return ingredients;
+        }
+
+        public int getId() {
+            return id;
         }
     }
 }
