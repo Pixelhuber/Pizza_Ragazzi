@@ -1,6 +1,8 @@
 package models.pizza_rush;
 
-import org.h2.engine.Database;
+
+
+import play.db.Database;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -10,7 +12,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 @Singleton
-public class IngredientFactory {@Singleton
+public class IngredientFactory {
     Database db;
 
     @Inject
