@@ -20,11 +20,11 @@ public class PizzaRushFactory {
         this.db=db;
     }
 
-    public List<IngredientFactory.Ingredient> getAllIngredients(){
+    public List<Ingredient> getAllIngredients(){
         return null;//TODO noch machen sowie andere wichtige Funktionen
     }
 
-    public static IngredientFactory.Ingredient getIngredientById(int id){
+    public static Ingredient getIngredientById(int id){
         return null;//TODO noch machen sowie andere wichtige Funktionen
     }
 
@@ -51,7 +51,7 @@ public class PizzaRushFactory {
         int id;
         String name;
         int points;
-        List<IngredientFactory.Ingredient> ingredients;
+        List<Ingredient> ingredients;
 
         public Order (ResultSet rs) throws SQLException {
             this.id=rs.getInt("idPizza");
@@ -75,8 +75,8 @@ public class PizzaRushFactory {
             });
         }
 
-        public List<IngredientFactory.Ingredient> getIngredients() {
-            return ingredients;
+        public List<Ingredient> getIngredients() {
+            return null;
         }
 
         public int getId() {

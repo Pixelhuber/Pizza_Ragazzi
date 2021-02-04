@@ -1,9 +1,7 @@
 package controllers;
 
-import factory.UserFactory;
-import models.pizza_rush.IngredientFactory;
-import models.pizza_rush.OrderFactory;
 import models.pizza_rush.PizzaCreation;
+import models.pizza_rush.PizzaRushFactory;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -15,14 +13,12 @@ import java.util.List;
 
 public class PizzaRushController extends Controller {
     private final AssetsFinder assetsFinder;
-    private final OrderFactory orderFactory;
-    private final IngredientFactory ingredientFactory;
+    private final PizzaRushFactory pizzaRushFactory;
 
     @Inject
-    public PizzaRushController(AssetsFinder assetsFinder, OrderFactory orderFactory, IngredientFactory ingredientFactory) {
+    public PizzaRushController(AssetsFinder assetsFinder, PizzaRushFactory pizzaRushFactory) {
         this.assetsFinder = assetsFinder;
-        this.orderFactory = orderFactory;
-        this.ingredientFactory = ingredientFactory;
+        this.pizzaRushFactory = pizzaRushFactory;
     }
 
 
