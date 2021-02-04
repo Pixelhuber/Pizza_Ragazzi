@@ -786,14 +786,12 @@ function validatePizza(order, pizza) {
 
     console.assert(pizza instanceof DraggablePizzaInstance);
     console.assert(order instanceof Order);
-    const pizzaJson = JSON.stringify(pizza);
-    const orderJson = JSON.stringify(order);
 
     fetch("/pizza_rush/validate_pizza", {
         method: 'POST',
         body: JSON.stringify({
-            pizza: pizzaJson,
-            order: orderJson
+            pizza: pizza,
+            order: order
         }),
         headers: {
             "Content-Type": "application/json"
