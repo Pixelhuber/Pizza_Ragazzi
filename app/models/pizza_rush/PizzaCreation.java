@@ -2,13 +2,12 @@ package models.pizza_rush;
 
 import java.util.List;
 
-public class Pizza {
+public class PizzaCreation {
 
-    private String name;
+
     private List<String> ingredients;
 
-    public Pizza(String name, List<String> ingredients) {
-        this.name = name;
+    public PizzaCreation(List<String> ingredients) {
         this.ingredients = ingredients;
     }
 

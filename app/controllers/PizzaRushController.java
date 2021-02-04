@@ -1,7 +1,6 @@
 package controllers;
 
-import models.pizza_rush.Pizza;
-import play.libs.Json;
+import models.pizza_rush.PizzaCreation;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -16,14 +15,14 @@ public class PizzaRushController extends Controller {
     public Result validatePizza(Http.Request request) {
 
         // read json data
-        String pizzaType = request.body().asJson().get("pizza").asText();
-        List<String> ingredients = request.body().asJson().findValuesAsText("ingredients");//TODO Das hier findet bis jetzt noch garkeine zutaten
-        Pizza pizza = new Pizza(pizzaType, ingredients);
+        List<String> ingredients = request.body().asJson().get("pizza").findValuesAsText("ingredients");
+        //TODO korrekte zutaten der gemachten Pizza auslesen und als liste formatieren, bisher noch falsch
+        PizzaCreation pizzaCreation = new PizzaCreation(ingredients);
 
         int currentPoints = getCurrentPointsFromSession(request.session());
 
-        if (pizza.validatePizza()) {
-            String points = String.valueOf(currentPoints + 10);
+        if (pizzaCreation.validatePizza()) {
+            String points = String.valueOf(currentPoints + 10);//temporär
             return ok().addingToSession(request, "currentPizzaRushPoints", points);
         } else
             return ok();
