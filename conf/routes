@@ -23,6 +23,8 @@ GET     /pizzaRush                  controllers.HomeController.pizzaRush(request
 
 GET     /menu                       controllers.HomeController.menu(request: Request)
 
+GET     /memory                     controllers.HomeController.memory(request: Request)
+
 
 # HIGHSCORE ------------------------------------------------------------------------
 GET     /highscore/getTableData     controllers.HighscoreController.getTableData

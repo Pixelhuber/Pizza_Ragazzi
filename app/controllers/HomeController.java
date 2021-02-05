@@ -74,4 +74,11 @@ public class HomeController extends Controller {
             return ok(login.render("Login", assetsFinder));
     }
 
+    public Result memory(Http.Request request){
+        if (request.session().get("email").isPresent()) // check if User is logged in
+            return ok(memory.render("Memory",assetsFinder));
+        else
+            return ok(login.render("Login", assetsFinder));
+    }
+
 }

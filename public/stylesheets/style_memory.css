@@ -1,0 +1,23 @@
+.memoryCard{
+    height: 2.5em;
+    /*padding-left: 5px;*/
+}
+
+.memoryCard > p{
+    box-sizing: border-box;
+    padding-left: 5px;
+}
+
+.memoryCard > div{
+    border-top: 4px solid black;
+    border-bottom: 4px solid black;
+    background-color: #2d6201;
+}
+
+#memoryBox{
+    flex: 1;
+    margin: 0 20px 0 20px;
+    min-width: 200px;
+    height: 200px
+
+}
