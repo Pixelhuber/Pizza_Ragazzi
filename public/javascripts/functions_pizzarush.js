@@ -59,18 +59,16 @@ class AudioPlayer {
 
 
 // An "Ingredient" is only a definition of an ingredient without any behavior.
-class Ingredient {
+class AbstractIngredient {
 
     // ATTRIBUTES --------------------
 
     name;
     image_path;
-    flight_behavior;
 
     constructor(name, image_path, flight_behavior) {
         this.name = name; // attributes
         this.image_path = image_path;
-        this.flight_behavior = flight_behavior;
     }
 
 
@@ -120,23 +118,58 @@ class Ingredient {
     }
 }
 
+class ChoppingIngredient extends AbstractIngredient {
+
+    flight_behavior;
+
+    constructor(name, image_path, flight_behavior) {
+        super(name, image_path);
+        this.flight_behavior = flight_behavior;
+    }
+}
+
+class StampingIngredient extends AbstractIngredient {
+
+    stamp_behavior;
+
+    constructor(name, image_path, stamp_behavior) {
+        super(name, image_path);
+        this.stamp_behavior = stamp_behavior;
+    }
+}
+
 // A "DraggableIngredientInstance" is an actual Ingredient you can interact with and drag around
-class DraggableIngredientInstance extends Ingredient {
+class DraggableIngredientInstance extends AbstractIngredient {
 
     // ATTRIBUTES --------------------
 
     draggable; // Actual draggable html-element
+
+    parentIngredient;
+
+    static Status = {
+        RAW: 1,
+        PROCESSED: 2,
+        BAKED: 3,
+        BURNT: 4
+    };
+
+    status;
     isDragEnabled;
 
     constructor(ingredient) {
         super(ingredient.name, ingredient.image_path);
+        this.parentIngredient = ingredient;
+        existingDraggableIngredientInstances.push(this);
+
         this.createDraggable();
         this.isDragEnabled = true;
+        this.status = DraggableIngredientInstance.Status.RAW;
     }
 
 
     createDraggable() {
-        const draggable = this.createImg();
+        const draggable = this.parentIngredient.createImg();
 
         draggable.setAttribute('class', 'draggable');
 
@@ -144,6 +177,30 @@ class DraggableIngredientInstance extends Ingredient {
         this.draggable = draggable;
 
         makeDraggable(this);
+    }
+
+    instanceOf(compareClass) {
+        return this.parentIngredient instanceof compareClass;
+    }
+
+    setStatus(status) {
+        this.status = status;
+
+        // TODO: Change image of the ingredient accordingly
+        switch (this.status){
+            case DraggableIngredientInstance.Status.RAW:
+                //...
+                break;
+            case DraggableIngredientInstance.Status.PROCESSED:
+                //...
+                break;
+            case DraggableIngredientInstance.Status.BAKED:
+                //...
+                break;
+            case DraggableIngredientInstance.Status.BURNT:
+                //...
+                break;
+        }
     }
 
     // utility to disable dragging temporarily
@@ -157,7 +214,7 @@ class DraggableIngredientInstance extends Ingredient {
         AudioPlayer.mash();
 
         //Put ingredient on pizza
-        pizza.ingredients.push(Ingredient.getInstanceByName(this.getName()));
+        pizza.ingredients.push(AbstractIngredient.getInstanceByName(this.getName()));
 
         //Div declarations
         const pizzaDivOld = pizza.draggable;
@@ -176,6 +233,8 @@ class DraggableIngredientInstance extends Ingredient {
     }
 }
 
+
+
 // ingredient & draggableIngredientInstance class above
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -190,7 +249,7 @@ class Pizza {
 
     // When created, a new pizza is simply a piece of dough. More ingredients get added while playing.
     constructor() {
-        this.ingredients.push(Ingredient.getInstanceByName("Impasto"))
+        this.ingredients.push(AbstractIngredient.getInstanceByName("Impasto"))
     }
 }
 
@@ -215,9 +274,9 @@ class DraggablePizzaInstance extends Pizza {
 
     constructor() {
         super();
+        existingDraggablePizzaInstances.push(this);
 
         this.updateDiv();
-        existingDraggablePizzaInstances.push(this);
         document.getElementById("pizza_layer").appendChild(this.draggable);
 
         this.bakeStatus = this.bakeStatus.UNBAKED;
@@ -507,8 +566,8 @@ class Order {
 // OBJECT COLLECTIONS -------------------------------------------------------------------------------------------------
 
 // TODO wird später wsl vom Server geladen werden
-const availableIngredients = [      new Ingredient("Impasto", "/assets/images/teig.png"),
-                                    new Ingredient("Formaggio", "/assets/images/formaggio.png", {
+const availableIngredients = [      new StampingIngredient("Impasto", "/assets/images/teig.png"),
+                                    new ChoppingIngredient("Formaggio", "/assets/images/formaggio.png", {
                                         vertex_x_inPercent: 20,
                                         vertex_y_inPercent: 40,
                                         speed: 4,
@@ -516,8 +575,8 @@ const availableIngredients = [      new Ingredient("Impasto", "/assets/images/te
 
                                         hits_required: 3
                                     }),
-                                    new Ingredient("Pomodoro", "/assets/images/pomodoro.png"),
-                                    new Ingredient("Salame", "/assets/images/salame.png", {
+                                    new StampingIngredient("Pomodoro", "/assets/images/pomodoro.png"),
+                                    new ChoppingIngredient("Salame", "/assets/images/salame.png", {
                                         vertex_x_inPercent: 60,
                                         vertex_y_inPercent: 70,
                                         speed: 3,
@@ -525,7 +584,7 @@ const availableIngredients = [      new Ingredient("Impasto", "/assets/images/te
 
                                         hits_required: 3
                                     }),
-                                    new Ingredient("Funghi", "/assets/images/funghi.png", {
+                                    new ChoppingIngredient("Funghi", "/assets/images/funghi.png", {
                                         vertex_x_inPercent: 50,
                                         vertex_y_inPercent: 80,
                                         speed: 3,
@@ -539,6 +598,8 @@ const orderList = [                 ];
 const ovenList = [                  ];
 
 const existingDraggablePizzaInstances = [];
+
+const existingDraggableIngredientInstances = [];
 
 // AT STARTUP ---------------------------------------------------------------------------------------------------------
 
@@ -839,7 +900,6 @@ function resetPoints() {
 
 // COUNTDOWN-STUFF ----------------------------------------------------------------------------------------------------
 
-// diese Klasse soll ein Java-Interface simulieren
 // spezifische Countdown-Anwendungen erben von dieser Klasse und müssen nurnoch die drei methoden "onCountdownX()" überschreiben
 class AbstractCountdown {
 
@@ -937,31 +997,104 @@ function manageRushCountdown(seconds, timerContainerId){
     }
 }
 
-// FRUIT NINJA --------------------------------------------------------------------------------------------------------
+
+// MINI GAMES ---------------------------------------------------------------------------------------------------------
+
+function startFromChoppingTable() {
+
+    const ingredientsToPlayWith = [];
+    const cuttingSurface = document.getElementById("cuttingSurface");
+
+    cuttingSurface.setAttribute("style", "outline: ");
+
+    for (let i = 0; i < existingDraggableIngredientInstances.length; i++) {
+        const current = existingDraggableIngredientInstances[i];
+
+        if (checkOverlap(current.draggable, document.getElementById("cuttingSurface"))){
+
+            if (!current.instanceOf(ChoppingIngredient)){
+
+                cuttingSurface.setAttribute("style", "outline: 4px solid red");
+                return;
+            }
+        }
+
+        if (current.instanceOf(ChoppingIngredient) &&
+            current.status === DraggableIngredientInstance.Status.RAW) {
+
+            ingredientsToPlayWith.push(current);
+        }
+    }
+
+    if (ingredientsToPlayWith.length > 0)
+        startMiniGame(ingredientsToPlayWith);
+}
+
+
+let fruitNinjaRunning = false;
+let whackAMoleRunning = false;
+
+function stopMiniGame() {
+    fruitNinjaRunning = false;
+    whackAMoleRunning = false;
+
+    document.getElementById("miniGame_layer").style.visibility = "hidden";
+}
 
 function startMiniGame(ingredientList) {
 
-    document.getElementById("miniGame_layer").style.visibility = "visible";
+    const processedIngredients = [];
 
-    const miniGame_window = document.createElement('div');
-    miniGame_window.setAttribute('class', "miniGame_window");
 
-    const playArea = document.createElement('div');
-    playArea.setAttribute('class', "miniGame_playArea");
+    // CREATE THE GAME WINDOW -----------------------------------------------------------------------------------------
 
-    const sideBar = document.createElement('div');
-    sideBar.setAttribute('class', "miniGame_sideBar");
+    const miniGame_window = document.getElementById("miniGame_window");
+
+    const playArea = document.getElementById("miniGame_playArea");
+
+    const sideBar = document.getElementById("miniGame_sideBar");
+
+    const counter = document.getElementById("miniGame_sideBar_counter");
+    updateCounter();
+    sideBar.appendChild(counter);
+
+    const closeButton = document.getElementById("miniGame_sideBar_closeButton");
+    sideBar.appendChild(closeButton);
+
+    const canvas = document.getElementById("miniGame_canvas")
+    const context = canvas.getContext("2d");
+    playArea.appendChild(canvas);
 
     miniGame_window.appendChild(playArea);
     miniGame_window.appendChild(sideBar);
+    document.getElementById("miniGame_layer").appendChild(miniGame_window);
 
-    document.getElementById("miniGame_layer").replaceChild(miniGame_window, document.getElementById("miniGame_layer").firstChild);
+
+
+    // UTILITY FUNCTIONS ----------------------------------------------------------------------------------------------
+
+    function setCanvasSize() {
+        const playArea_box = playArea.getBoundingClientRect();
+        canvas.setAttribute('height', playArea_box.height + "px");
+        canvas.setAttribute('width', playArea_box.width + "px");
+    }
+
+    function updateCounter() {
+
+        counter.innerHTML = "" + processedIngredients.length + "/" + ingredientList.length;
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------
+
+    // display the game window
+    document.getElementById("miniGame_layer").style.visibility = "visible";
 
 
     fruit_ninja();
 
 
     function fruit_ninja() {
+        fruitNinjaRunning = true;
 
         // an instance of this class handles the throw of ONE ingredient
         class AbstractThrower {
@@ -997,8 +1130,8 @@ function startMiniGame(ingredientList) {
                 this.context = context;
 
                 this.kurtosis = 0.05;
-                this.speed = element.flight_behavior.speed;
-                this.rotation_increment = element.flight_behavior.rotation;
+                this.speed = element.parentIngredient.flight_behavior.speed;
+                this.rotation_increment = element.parentIngredient.flight_behavior.rotation;
             }
 
 
@@ -1014,8 +1147,8 @@ function startMiniGame(ingredientList) {
                 // prepare values for next throw --------------------
 
                 // new coordinates of highpoint
-                this.vertex_x_inPercent = this.randomize(this.element.flight_behavior.vertex_x_inPercent, 80);
-                this.vertex_y_inPercent = this.randomize(this.element.flight_behavior.vertex_y_inPercent, 25);
+                this.vertex_x_inPercent = this.randomize(this.element.parentIngredient.flight_behavior.vertex_x_inPercent, 80);
+                this.vertex_y_inPercent = this.randomize(this.element.parentIngredient.flight_behavior.vertex_y_inPercent, 25);
                 this.rotation = 0;
 
                 // set the initial x to the value where y is 100px under the canvas
@@ -1030,10 +1163,10 @@ function startMiniGame(ingredientList) {
 
                 // randomly set flight direction (left -> right / right <- left)
                 if (Math.random() > 0.5){ // 50:50
-                    this.speed = -1 * this.element.flight_behavior.speed; // element will fly reversed
+                    this.speed = -1 * this.element.parentIngredient.flight_behavior.speed; // element will fly reversed
                     this.x = canvas.width * (this.vertex_x_inPercent/100) + (canvas.width * (this.vertex_x_inPercent/100) - this.x);
                 } else {
-                    this.speed = this.element.flight_behavior.speed;
+                    this.speed = this.element.parentIngredient.flight_behavior.speed;
                     // leave this.x as it is
                 }
                 this.x = Math.max(this.x, -100);
@@ -1041,9 +1174,9 @@ function startMiniGame(ingredientList) {
 
                 // randomly set rotation direction
                 if (Math.random() > 0.5) // 50:50
-                    this.rotation_increment = - this.element.flight_behavior.rotation;
+                    this.rotation_increment = - this.element.parentIngredient.flight_behavior.rotation;
                 else
-                    this.rotation_increment = this.element.flight_behavior.rotation;
+                    this.rotation_increment = this.element.parentIngredient.flight_behavior.rotation;
             }
 
             startThrow() {}
@@ -1137,7 +1270,7 @@ function startMiniGame(ingredientList) {
                 this.ingredient_image = document.createElement('img');
                 this.ingredient_image.setAttribute('src', element.image_path);
 
-                this.hits_left = element.flight_behavior.hits_required;
+                this.hits_left = element.parentIngredient.flight_behavior.hits_required;
             }
 
             setupWithIngredientJuggler(juggler) {
@@ -1169,16 +1302,23 @@ function startMiniGame(ingredientList) {
             }
 
             onHit() {
+
                 this.wasHitInThisThrow = true;
                 this.hits_left -= 1;
 
                 if (this.hits_left <= 0) {
+
                     AudioPlayer.ingredient_finalHit();
                     console.log("Final Hit: " + this.element.name);
 
                     this.ingredient_image.remove();
+                    this.element.setStatus(DraggableIngredientInstance.Status.PROCESSED);
+
                     ingredientJuggler.dropIngredient(this);
+                    processedIngredients.push(this.element);
+                    updateCounter();
                 } else {
+
                     AudioPlayer.ingredient_hit();
                     console.log("Hit: " + this.element.name);
                 }
@@ -1219,6 +1359,11 @@ function startMiniGame(ingredientList) {
             onHit() {
 
                 AudioPlayer.distraction_hit();
+
+                window.requestAnimationFrame(function (){
+                    context.fillStyle = '#ab0000'
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+                });
 
                 console.log("Distraction Hit: " + this.element.name);
                 this.ingredientJuggler.disableFor(this.disablingTime);
@@ -1333,31 +1478,10 @@ function startMiniGame(ingredientList) {
 
         // ------------------------------------------------------------------------------------------------------------
 
-        // canvas creation ----
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext("2d");
-
-        //window.addEventListener('resize', setCanvasSize, false);
-        function setCanvasSize() {
-            const playArea_box = playArea.getBoundingClientRect();
-            canvas.setAttribute('height', playArea_box.height + "px");
-            canvas.setAttribute('width', playArea_box.width + "px");
-        }
         setCanvasSize();
 
-        playArea.appendChild(canvas);
 
-        // counter creation -----
-
-        // --------------------
-
-        const testArray = [ Ingredient.getInstanceByName("Formaggio"),
-                            Ingredient.getInstanceByName("Funghi"),
-                            Ingredient.getInstanceByName("Salame")];
-
-        // --------------------
-
-        const ingredientJuggler = new IngredientJuggler(testArray, 500, 3);
+        const ingredientJuggler = new IngredientJuggler(ingredientList, 400, 6);
         addHitListener(ingredientJuggler);
 
         let start;
@@ -1372,7 +1496,10 @@ function startMiniGame(ingredientList) {
             // calculating & drawing next frame for every current throw
             ingredientJuggler.nextFrame(timestamp);
 
-            window.requestAnimationFrame(animationStep);
+            if (ingredientJuggler.allIngredientsToJuggle.length <= 0)
+                stopMiniGame();
+            if (fruitNinjaRunning)
+                window.requestAnimationFrame(animationStep);
         }
 
         window.requestAnimationFrame(animationStep); // initially start the game-animation

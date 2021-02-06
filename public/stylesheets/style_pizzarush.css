@@ -254,7 +254,7 @@ section{
     width: 99vw;
 }
 
-.miniGame_window{
+#miniGame_window{
     display: flex;
 
     width: 75vw;
@@ -270,17 +270,44 @@ section{
     border: 4px solid black;
 }
 
-.miniGame_playArea{
+#miniGame_playArea{
     flex: 4;
 
     outline: 2px solid black;
 }
 
-.miniGame_sideBar{
+#miniGame_sideBar{
     flex: 1;
 
     max-width: 180px;
     margin-left: 20px;
 
     display: block;
+}
+
+#miniGame_sideBar_counter{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 4px solid black;
+    font-size: 1.5em;
+
+    margin-bottom: 30px;
+}
+
+#miniGame_sideBar_closeButton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 4px solid black;
+    font-size: 1.2em;
+    text-transform: uppercase;
+}
+
+#miniGame_sideBar_closeButton:hover{
+    background: black;
+
+    color: white;
 }

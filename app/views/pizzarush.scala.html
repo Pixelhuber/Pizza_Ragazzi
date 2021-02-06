@@ -20,8 +20,19 @@
             <div id="startStop_overlay_text">Click anywhere to start!</div>
         </div>
 
-        <div id="miniGame_layer"> </div>
-
+        <div id="miniGame_layer">
+            <div id="miniGame_window">
+                <div id="miniGame_playArea">
+                    <canvas id="miniGame_canvas"></canvas>
+                </div>
+                <div id="miniGame_sideBar">
+                    <div id="miniGame_sideBar_counter"></div>
+                    <button id="miniGame_sideBar_closeButton" onclick="stopMiniGame()">
+                        End Game
+                    </button>
+                </div>
+            </div>
+        </div>
         <div id="pizza_layer"> </div>
 
         <div id="ingredient_layer"> </div>
@@ -60,7 +71,7 @@
                 <div id="lowerSurfaces">
                     <div id="cuttingSurface">
                         <div class="buttonContainer">
-                            <input onclick="startMiniGame()" class="miniGameButton" id="startFruitNinja" type="image" src="/assets/images/knife.png"/>
+                            <input onclick="startFromChoppingTable()" class="miniGameButton" id="startFruitNinja" type="image" src="/assets/images/knife.png"/>
                         </div>
                     </div>
 
