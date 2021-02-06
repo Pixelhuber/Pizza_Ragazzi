@@ -20,3 +20,5 @@ generated.truststore
 .cache-tests
 
 *.DS_Store
+/.bsp/
+/.bsp/

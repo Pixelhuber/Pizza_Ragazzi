@@ -19,14 +19,17 @@ GET     /profile                    controllers.HomeController.profile(request: 
 
 GET     /createAccount              controllers.HomeController.createAccount
 
-GET     /main                       controllers.HomeController.main(request: Request)
+GET     /pizzaRush                  controllers.HomeController.pizzaRush(request: Request)
+
+GET     /menu                       controllers.HomeController.menu(request: Request)
 
 
 # HIGHSCORE ------------------------------------------------------------------------
 GET     /highscore/getTableData     controllers.HighscoreController.getTableData
 
 # PROFILE --------------------------------------------------------------------------
-POST    /profile/updateUsername     controllers.ProfileController.setUsername(request: Request)
+POST    /profile/updateUsername         controllers.ProfileController.setUsername(request: Request)
+POST    /profile/uploadProfilePicture   controllers.ProfileController.setProfilePicture(request: Request)
 
 # Use this route for every getUsername call
 GET     /getUsername                controllers.ProfileController.getUsernameFromDatabase(request: Request)
@@ -39,7 +42,7 @@ GET     /profile/getTotalPoints    controllers.ProfileController.getGesamtpunkte
 GET     /profile/getHighScore       controllers.ProfileController.getHighscoreFromDatabase(request: Request)
 
 # Friendlist --------------------------------------------------------------------------
-GET     /getFriendsData             controllers.ProfileController.getFriendsData
+GET     /getFriendsData             controllers.ProfileController.getFriendsData(request: Request)
 
 # LOGIN ----------------------------------------------------------------------------
 POST    /login/authenticate         controllers.LoginController.authenticate(request: Request)

@@ -8,10 +8,12 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
+import scala.Console;
 import viewmodels.UserViewModel;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 
@@ -38,6 +40,10 @@ public class ProfileController extends Controller {
         user.setUsername(userViewModel.getUsername());
 
         return ok(userViewModel.getUsername()).addingToSession(request, "username", userViewModel.getUsername()); // Speichert den Username in der Session unter dem Key "username"
+    }
+
+    public Result setProfilePicture(Http.Request request){
+        return badRequest();
     }
 
     // Reads key "email" from session and returns it
@@ -89,8 +95,9 @@ public class ProfileController extends Controller {
                 .orElseGet(Results::notFound);
     }
 
-    public Result getFriendsData() {
-        UserFactory.User user = userFactory.getUserById(2);
+    public Result getFriendsData(Http.Request request) throws IOException {
+        String email = request.session().get("email").get();
+        UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(Json.toJson(user.getFriendsData()));
     }
 }

@@ -43,9 +43,7 @@ $(function () {
                 readURL(this);
             });
 
-
             profileButton.text("Save Profile");
-
 
         } else if (profileButton.text() === "Save Profile"){
 
@@ -54,9 +52,9 @@ $(function () {
                 alert("Your Username should not be empty");
             }else {
                 usernameField.html(newUsername);
-                updateUsernameInDatabaseAndSession(newUsername);
+                //updateUsernameInDatabaseAndSession(newUsername);
                 selectFile.html("");
-
+                uploadProfilePictureIntoDB();
                 profileButton.text("Edit Profile");
             }
         }
@@ -65,12 +63,10 @@ $(function () {
     //function to upload pictures
     function readURL(input) {
         if (input.files && input.files[0]) {
-
             const reader = new FileReader();
             reader.onload = function (e) {
                 $('#profile-picture').attr('src', e.target.result);
             }
-
             reader.readAsDataURL(input.files[0]); //Actually change the picture
         }
     }
@@ -81,7 +77,9 @@ function setup() {
     getGesamtpunkteFromDatabase();
     getHighscoreFromDatabase();
     getMailFromDatabase();
+    //TODO getProfilePic from db
 }
+//TODO update username und profilepic zusammenlegen
 
 // Sends a request to update the username in the session
 function updateUsernameInDatabaseAndSession(newUsername) {
@@ -99,6 +97,31 @@ function updateUsernameInDatabaseAndSession(newUsername) {
         ).fail(function (){
             alert("Something went wrong")
         });
+}
+
+function uploadProfilePictureIntoDB(){
+    let im = document.getElementById("profile-picture");
+    console.log(im);
+    let s = document.getElementById("profile-picture").src;
+    console.log(s);
+    //let img = document.getElementById("profile-picture").files[0];
+    //console.log(img)
+    console.log(JSON.stringify({img: s}));
+    fetch('/profile/uploadProfilePicture',
+        {
+            method: 'POST',
+            body: JSON.stringify({img: s}),
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include'
+        }
+    )
+        .then(
+            result => result.text()
+        )
+        .catch(err => {
+            console.log('ERROR: ');
+            console.error();
+        })
 }
 
 // Reads username from Database and updates html

@@ -151,7 +151,7 @@ function createAccount() {
                 create_account_error.style.display = "block";
             } else {
                 //TODO change this to game menu
-                window.location.href = "profile";
+                window.location.href = "menu";
             }
         })
 }
