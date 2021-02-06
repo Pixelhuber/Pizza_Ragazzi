@@ -15,7 +15,7 @@ class memoryCard{
         this.gameElement = document.createElement('div');
         this.gameElement.text = document.createElement('p');
 
-        this.gameElement.setAttribute('class', 'box order');
+        this.gameElement.setAttribute('class', 'memoryCard');
 
         this.gameElement.text.setAttribute('style', 'position: absolute; z-index: 2');
         this.gameElement.text.innerHTML = this.ingredient;
@@ -30,5 +30,21 @@ class memoryCard{
 
 function loadMemoryCards(){
     new memoryCard("tonno", "erfunden 1900").createGameElement()
+    new memoryCard("tonno", "erfunden 1900").createGameElement()
+    new memoryCard("tonno", "erfunden 1900").createGameElement()
+    new memoryCard("tonno", "erfunden 1900").createGameElement()
+    new memoryCard("tonno", "erfunden 1900").createGameElement()
+    new memoryCard("tonno", "erfunden 1900").createGameElement()
+    new memoryCard("tonno", "erfunden 1900").createGameElement()
+    new memoryCard("tonno", "erfunden 1900").createGameElement()
+    new memoryCard("tonno", "erfunden 1900").createGameElement()
+    new memoryCard("tonno", "erfunden 1900").createGameElement()
+    new memoryCard("tonno", "erfunden 1900").createGameElement()
+    new memoryCard("tonno", "erfunden 1900").createGameElement()
+    new memoryCard("tonno", "erfunden 1900").createGameElement()
+    new memoryCard("tonno", "erfunden 1900").createGameElement()
+    new memoryCard("tonno", "erfunden 1900").createGameElement()
+    new memoryCard("tonno", "erfunden 1900").createGameElement()
+
 }
 
