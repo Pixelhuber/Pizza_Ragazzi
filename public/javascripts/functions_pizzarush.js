@@ -566,7 +566,9 @@ class Order {
 // OBJECT COLLECTIONS -------------------------------------------------------------------------------------------------
 
 // TODO wird später wsl vom Server geladen werden
-const availableIngredients = [      new StampingIngredient("Impasto", "/assets/images/teig.png"),
+const availableIngredients = [      new StampingIngredient("Impasto", "/assets/images/teig.png", {
+                                        hits_required: 3
+                                    }),
                                     new ChoppingIngredient("Formaggio", "/assets/images/formaggio.png", {
                                         vertex_x_inPercent: 20,
                                         vertex_y_inPercent: 40,
@@ -575,7 +577,9 @@ const availableIngredients = [      new StampingIngredient("Impasto", "/assets/i
 
                                         hits_required: 3
                                     }),
-                                    new StampingIngredient("Pomodoro", "/assets/images/pomodoro.png"),
+                                    new StampingIngredient("Pomodoro", "/assets/images/pomodoro.png", {
+                                        hits_required: 2
+                                    }),
                                     new ChoppingIngredient("Salame", "/assets/images/salame.png", {
                                         vertex_x_inPercent: 60,
                                         vertex_y_inPercent: 70,
@@ -1090,7 +1094,7 @@ function startMiniGame(ingredientList) {
     document.getElementById("miniGame_layer").style.visibility = "visible";
 
 
-    fruit_ninja();
+    whackAMole();
 
 
     function fruit_ninja() {
@@ -1215,6 +1219,16 @@ function startMiniGame(ingredientList) {
                     this.endThrow();
             }
 
+            isHit(cursorX, cursorY) {
+
+                if (!this.wasHitInThisThrow)
+                    return isInside([cursorX, cursorY], this.getShapeCoordinates());
+                else
+                    return false;
+            }
+
+            onHit() {}
+
             // form:  cur * (x - ver_x)^2 + ver_y
             parableXGiven(x, cur, ver_x, ver_y) {
                 return cur * Math.pow(x - ver_x, 2) + ver_y;
@@ -1234,16 +1248,6 @@ function startMiniGame(ingredientList) {
 
                 return value_min + Math.random() * tmp; // 0 <= Math.random() < 1
             }
-
-            isHit(cursorX, cursorY) {
-
-                if (!this.wasHitInThisThrow)
-                    return isInside([cursorX, cursorY], this.getShapeCoordinates());
-                else
-                    return false;
-            }
-
-            onHit() {}
 
             getShapeCoordinates() {
                 let lu = [this.x - this.ingredient_image.width/2, this.y - this.ingredient_image.height/2];
@@ -1314,7 +1318,7 @@ function startMiniGame(ingredientList) {
                     this.ingredient_image.remove();
                     this.element.setStatus(DraggableIngredientInstance.Status.PROCESSED);
 
-                    ingredientJuggler.dropIngredient(this);
+                    this.ingredientJuggler.dropIngredient(this);
                     processedIngredients.push(this.element);
                     updateCounter();
                 } else {
@@ -1412,7 +1416,7 @@ function startMiniGame(ingredientList) {
             nextFrame(timestamp) {
 
                 if (this.disableTime > 0)
-                    this.disableTime -= timestamp - this.lastTimestamp
+                    this.disableTime -= timestamp - this.lastTimestamp;
 
                 this.lastTimestamp = timestamp;
 
@@ -1499,6 +1503,367 @@ function startMiniGame(ingredientList) {
             if (ingredientJuggler.allIngredientsToJuggle.length <= 0)
                 stopMiniGame();
             if (fruitNinjaRunning)
+                window.requestAnimationFrame(animationStep);
+        }
+
+        window.requestAnimationFrame(animationStep); // initially start the game-animation
+    }
+
+
+
+    function whackAMole() {
+        whackAMoleRunning = true;
+
+        class AbstractShower {
+
+            element;
+            ingredient_image;
+            context;
+
+            show_duration;
+            time_shown = 0;
+            lastTimestamp = 0;
+
+            // changes for every appearance
+            holeNumber;
+
+            moleHandler;
+
+
+            constructor(element, context) {
+                this.element = element;
+                this.context = context;
+            }
+
+            newShow(duration) {
+
+                this.lastTimestamp = window.performance.now();
+                this.time_shown = duration;
+                this.defineNewShow();
+                this.startShow();
+            }
+
+            defineNewShow() {
+
+                // define in which hole to appear
+                const randomIndex = Math.floor(Math.random() * this.moleHandler.freeHoles.length);
+                this.holeNumber = moleHandler.freeHoles[randomIndex];
+            }
+
+            startShow() {}
+
+            endShow() {}
+
+            step(timestamp) {
+
+                this.time_shown -= timestamp - this.lastTimestamp;
+                this.lastTimestamp = timestamp;
+
+                this.moleHandler.moleDrawer.drawInHole(this.holeNumber, this.ingredient_image);
+
+                if (this.time_shown <= 0){
+                    this.endShow();
+                }
+            }
+
+            isHit(cursorX, cursorY) {
+                return isInside([cursorX, cursorY], )
+            }
+
+            onHit() {}
+        }
+
+        class IngredientShower extends AbstractShower {
+
+            hits_left;
+
+
+            constructor(element, context) {
+                super(element, context);
+
+                this.ingredient_image = document.createElement('img');
+                this.ingredient_image.setAttribute('src', element.image_path);
+
+                this.hits_left = element.parentIngredient.stamp_behavior.hits_required;
+            }
+
+            setupWithMoleHandler(handler) {
+                this.moleHandler = handler;
+            }
+
+            startShow() {
+
+                // tell MoleHandler, you can't be shown again
+                let index = this.moleHandler.ingredientsWaitingToBeShown.indexOf(this);
+                this.moleHandler.ingredientsWaitingToBeShown.splice(index, 1);
+
+                // tell MoleHandler, your hole is occupied
+                index = this.moleHandler.freeHoles.indexOf(this.holeNumber);
+                this.moleHandler.freeHoles.splice(index, 1);
+
+                // tell MoleHandler to either show yourself OR a distraction
+                if (Math.random() < 0.1)
+                    this.moleHandler.ingredientsCurrentlyShown.push(this.createDistraction());
+                else
+                    this.moleHandler.ingredientsCurrentlyShown.push(this);
+            }
+
+            endShow() {
+
+                // tell MoleHandler, you are ready to be shown again
+                const index = this.moleHandler.ingredientsCurrentlyShown.indexOf(this);
+                this.moleHandler.ingredientsCurrentlyShown.splice(index, 1);
+                this.moleHandler.ingredientsWaitingToBeShown.push(this);
+
+                // tell MoleHandler, your hole is now free again
+                this.moleHandler.freeHoles.push(this.holeNumber);
+            }
+
+            onHit() {
+
+                this.hits_left -= 1;
+
+                if (this.hits_left <= 0) {
+
+                    AudioPlayer.ingredient_finalHit(); //TODO: Change this
+                    console.log("Final Hit: " + this.element.name);
+
+                    this.ingredient_image.remove();
+                    this.element.setStatus(DraggableIngredientInstance.Status.PROCESSED);
+
+                    this.moleHandler.dropIngredient(this);
+                    processedIngredients.push(this.element);
+                    updateCounter();
+                }
+            }
+
+            createDistraction() {
+
+                return new DistractionShower(this);
+            }
+        }
+
+        class DistractionShower extends AbstractShower {
+
+            disabling_time;
+
+            realIngredientShower;
+
+            constructor(ingredientShower) {
+                super(ingredientShower.element, ingredientShower.context);
+
+                this.ingredient_image = document.createElement('img');
+                this.ingredient_image.setAttribute('src', "assets/images/funghi.png");
+
+                this.disabling_time = ingredientShower.element.parentIngredient.stamp_behavior.disabling_time;
+                this.realIngredientShower = ingredientShower;
+                this.moleHandler = ingredientShower.moleHandler;
+
+                this.newShow(this.realIngredientShower.moleHandler.show_duration);
+            }
+
+            endShow() {
+
+                // tell MoleHandler, the NON-distracting ingredient can be shown again
+                const index = this.moleHandler.ingredientsCurrentlyShown.indexOf(this);
+                this.moleHandler.ingredientsCurrentlyShown.splice(index, 1);
+                this.moleHandler.ingredientsWaitingToBeShown.push(this.realIngredientShower);
+            }
+
+            onHit() {
+
+                AudioPlayer.distraction_hit(); // TODO: Change this
+
+                window.requestAnimationFrame(function (){
+                    context.fillStyle = '#ab0000'
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+                });
+
+                console.log("Distraction Hit: " + this.element.name);
+                this.moleHandler.disableFor(this.disablingTime);
+
+                this.ingredient_image.remove();
+                this.endThrow();
+            }
+        }
+
+        // this class is responsible for WHAT is shown, and WHEN
+        class MoleHandler {
+
+            allIngredientsInPlay = [];
+            ingredientsWaitingToBeShown = [];
+            ingredientsCurrentlyShown = [];
+
+            freeHoles = [];
+
+            numberOfHoles;
+            show_duration;
+            minDistanceBetweenShows;
+            timestampLastShow = 0;
+            maxIngredientsShownAtOnce;
+
+            disableTime = 0;
+            lastTimestamp;
+
+            moleDrawer;
+
+            constructor(ingredientList, numberOfHoles, show_duration,  minDistanceBetweenShows, maxIngredientsShownAtOnce) {
+                this.numberOfHoles = numberOfHoles;
+                this.show_duration = show_duration;
+                this.moleDrawer = new MoleDrawer(numberOfHoles, canvas, context);
+
+                this.minDistanceBetweenShows = minDistanceBetweenShows;
+                this.maxIngredientsShownAtOnce = maxIngredientsShownAtOnce;
+
+                for (let i = 0; i < numberOfHoles; i++) {
+                    this.freeHoles.push(i);
+                }
+
+                for (let i = 0; i < ingredientList.length; i++) {
+                    this.addIngredient(new IngredientShower(ingredientList[i]));
+                    this.allIngredientsInPlay[i].setupWithMoleHandler(this);
+                }
+            }
+
+            addIngredient(ingredientShower) {
+                this.allIngredientsInPlay.push(ingredientShower);
+                this.ingredientsWaitingToBeShown.push(ingredientShower);
+            }
+
+            dropIngredient(ingredientShower) {
+                this.allIngredientsInPlay.splice(this.allIngredientsInPlay.indexOf(ingredientShower), 1);
+                this.ingredientsCurrentlyShown.splice(this.ingredientsCurrentlyShown.indexOf(ingredientShower), 1);
+                if (this.ingredientsWaitingToBeShown.includes(ingredientShower))
+                    this.ingredientsWaitingToBeShown.splice(this.ingredientsWaitingToBeShown.indexOf(ingredientShower), 1);
+            }
+
+            nextFrame(timestamp) {
+
+                if (this.disableTime > 0)
+                    this.disableTime -= timestamp - this.lastTimestamp
+
+                this.lastTimestamp = timestamp;
+
+                if ((timestamp - this.timestampLastShow) > this.minDistanceBetweenShows)
+                    if (    this.ingredientsWaitingToBeShown.length > 0 &&
+                            this.ingredientsCurrentlyShown.length < this.maxIngredientsShownAtOnce) {
+                        const randomIndex = Math.floor(Math.random() * this.ingredientsWaitingToBeShown.length);
+                        this.ingredientsWaitingToBeShown[randomIndex].newShow(this.show_duration);
+                        this.timestampLastShow = timestamp;
+                    }
+
+                this.ingredientsCurrentlyShown.forEach(function (item, index, array) {
+                    item.step(timestamp);
+                });
+            }
+
+            isDisabled() {
+                return this.disableTime > 0;
+            }
+
+            disableFor(milliseconds) {
+
+                this.disableTime = milliseconds;
+            }
+        }
+
+        class MoleDrawer {
+
+            numberOfHoles;
+            holeSize = 200;
+            gapSize = 20;
+
+            canvas;
+            context;
+
+            holeCoordinates = [];
+
+            constructor(numberOfHoles, canvas, context) {
+                this.numberOfHoles = numberOfHoles;
+                this.canvas = canvas;
+                this.context = context;
+
+                this.determineCoordinates();
+            }
+
+            determineCoordinates() {
+
+                const side = this.holeSize * 3 + this.gapSize * 2;
+                const topGap = (canvas.height - side) / 2;
+                const leftGap = (canvas.width - side) / 2;
+
+                let x = leftGap;
+                let y = topGap;
+
+                for (let i = 0; i < 3; i++) {
+                    y += this.holeSize/2
+
+                    for (let j = 0; j < 3; j++) {
+                        x += this.holeSize/2
+
+                        this.holeCoordinates.push([x, y]);
+
+                        x += this.gapSize;
+                        x += this.holeSize/2;
+                    }
+
+                    x = leftGap;
+                    y += this.gapSize;
+                    y += this.holeSize/2;
+                }
+            }
+
+            drawEmpty() {
+
+                for (let i = 0; i < this.holeCoordinates.length; i++) {
+
+                    context.beginPath();
+                    context.arc(this.holeCoordinates[i][0], this.holeCoordinates[i][1], this.holeSize/2, 0, 2 * Math.PI, false);
+                    context.lineWidth = 10;
+                    context.strokeStyle = '#000000';
+                    context.stroke();
+                }
+
+
+            }
+
+            drawInHole(holeNumber, image) {
+
+                context.save();
+                context.translate(this.holeCoordinates[holeNumber][0], this.holeCoordinates[holeNumber][1]);
+                context.drawImage(image,-image.width/2,-image.width/2);
+                context.restore();
+            }
+        }
+
+        // ------------------------------------------------------------------------------------------------------------
+
+        setCanvasSize();
+
+        const testArray = [ new DraggableIngredientInstance(AbstractIngredient.getInstanceByName("Impasto")),
+                            new DraggableIngredientInstance(AbstractIngredient.getInstanceByName("Impasto")),
+                            new DraggableIngredientInstance(AbstractIngredient.getInstanceByName("Pomodoro"))];
+
+
+        const moleHandler = new MoleHandler(testArray, 9, 450,1000, 1);
+
+
+        let start;
+
+        function animationStep(timestamp) {
+            if (start === undefined)
+                start = timestamp;
+
+            // clear the canvas before drawing the next frame
+            context.clearRect(0,0, canvas.width, canvas.height);
+            moleHandler.moleDrawer.drawEmpty();
+
+            //moleHandler.moleDrawer.drawInHole(4, moleHandler.allIngredientsInPlay[0].ingredient_image);
+            moleHandler.nextFrame(timestamp);
+
+            if (moleHandler.allIngredientsInPlay.length <= 0)
+                stopMiniGame();
+            if (whackAMoleRunning)
                 window.requestAnimationFrame(animationStep);
         }
 
