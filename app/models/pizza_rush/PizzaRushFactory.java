@@ -30,11 +30,16 @@ public class PizzaRushFactory {
 
     public List<Ingredient> getAvailableIngredients(String email){
         //TODO jacob gibt euch eine lustige sql abfrage die zuerst das UserTier und damit alle lustigen Zutaten abfragt
+        // select * from Ingredient where Tier_idTier <= (select Tier_idTier from User where email = 'jj@jj.jj')
         return null;
     }
 
     public List<Order> getAvailablePizzas(String email){
         //TODO jacob gibt euch eine lustige SQL abfrage die alle veerfügbaren pizza zurückgibt
+        // select * from Pizza where idPizza not in
+        //                          (select Pizza_idPizza from Ingredient
+        //                              inner join Pizza_has_Ingredient PhI on Ingredient.idIngredient = PhI.Ingredient_idIngredient
+        //                          where Tier_idTier > (select Tier_idTier from User where email = 'jj@jj.jj'))
         return null;
     }
 
