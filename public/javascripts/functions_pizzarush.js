@@ -540,10 +540,17 @@ const ovenList = [                  ];
 
 const existingDraggablePizzaInstances = [];
 
+function getAvailableIngredients() {
+    fetch("pizza_rush/getAvailableIngredients")
+        .then(result => result.json())
+        .then(result => console.log(result));
+}
+
 // AT STARTUP ---------------------------------------------------------------------------------------------------------
 
 // called at startup
 function loadGameElements() {
+    getAvailableIngredients();
     loadIngredientSection();
     loadOrderSection();
     loadOvens();

@@ -2,6 +2,7 @@ package controllers;
 
 import models.pizza_rush.PizzaCreation;
 import models.pizza_rush.PizzaRushFactory;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -60,5 +61,9 @@ public class PizzaRushController extends Controller {
         return ok().addingToSession(request, "currentPizzaRushPoints", "0");
     }
 
-
+    public Result getAvailableIngredients(Http.Request request) {
+        String email = request.session().get("email").get();
+        PizzaRushFactory.Ingredient[] ingredients = pizzaRushFactory.getAvailableIngredients(email);
+        return ok(Json.toJson(ingredients));
+    }
 }
