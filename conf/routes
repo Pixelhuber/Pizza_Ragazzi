@@ -56,3 +56,4 @@ GET     /pizza_rush/get_current_points  controllers.PizzaRushController.getCurre
 POST    /pizza_rush/validate_pizza      controllers.PizzaRushController.validatePizza(request: Request)
 POST    /pizza_rush/reset_points        controllers.PizzaRushController.resetPoints(request: Request)
 GET     /pizza_rush/getAvailableIngredients controllers.PizzaRushController.getAvailableIngredients(request: Request)
+GET     /pizza_rush/getAvailablePizzas controllers.PizzaRushController.getAvailablePizzas(request: Request)

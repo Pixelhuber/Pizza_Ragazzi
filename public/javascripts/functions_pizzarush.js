@@ -546,11 +546,20 @@ function getAvailableIngredients() {
         .then(result => console.log(result));
 }
 
+function getAvailablePizzas() {
+    fetch("pizza_rush/getAvailablePizzas")
+        .then(result => result.json())
+        .then(result => console.log(result));
+}
+
 // AT STARTUP ---------------------------------------------------------------------------------------------------------
 
 // called at startup
 function loadGameElements() {
+    //vorläufig zum Testen
     getAvailableIngredients();
+    getAvailablePizzas();
+
     loadIngredientSection();
     loadOrderSection();
     loadOvens();

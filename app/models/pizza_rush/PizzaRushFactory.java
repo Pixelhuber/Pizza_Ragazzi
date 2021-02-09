@@ -46,7 +46,7 @@ public class PizzaRushFactory {
                 Ingredient ingredient = new Ingredient(rs);
                 result.add(ingredient);
 
-                System.out.println(ingredient.getName());
+                System.out.println("PizzaIngredient_name " + ingredient.getName());
             }
             stmt.close();
             return null; //Liste muss iwie zu JSON konvertiert werden evtl. mit Gson
@@ -59,7 +59,21 @@ public class PizzaRushFactory {
         //                          (select Pizza_idPizza from Ingredient
         //                              inner join Pizza_has_Ingredient PhI on Ingredient.idIngredient = PhI.Ingredient_idIngredient
         //                          where Tier_idTier > (select Tier_idTier from User where email = 'jj@jj.jj'))
-        return null;
+        return db.withConnection(conn -> {
+            List<Order> result = new ArrayList<>();
+            String sql = "SELECT * FROM Pizza WHERE idPizza NOT IN (SELECT Pizza_idPizza FROM Ingredient INNER JOIN Pizza_has_Ingredient PhI ON Ingredient.idIngredient = PhI.Ingredient_idIngredient WHERE Tier_idTier > (SELECT Tier_idTier FROM `User` WHERE email = ?))";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Order order = new Order(rs);
+                result.add(order);
+
+                System.out.println("Order_name " + order.getName());
+            }
+            stmt.close();
+            return null; //Liste muss iwie zu JSON konvertiert werden evtl. mit Gson
+        });
     }
 
 
@@ -177,6 +191,14 @@ public class PizzaRushFactory {
 
         public int getId() {
             return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getPoints() {
+            return points;
         }
     }
 }

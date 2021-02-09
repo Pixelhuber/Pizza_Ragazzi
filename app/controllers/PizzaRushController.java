@@ -65,6 +65,14 @@ public class PizzaRushController extends Controller {
     public Result getAvailableIngredients(Http.Request request) {
         String email = request.session().get("email").get();
         List<PizzaRushFactory.Ingredient> ingredients = pizzaRushFactory.getAvailableIngredients(email);
+        //TODO: evtl. Gson benutzen zum Konvertieren
         return ok(Json.toJson(ingredients));
+    }
+
+    public Result getAvailablePizzas(Http.Request request) {
+        String email = request.session().get("email").get();
+        List<PizzaRushFactory.Order> orders = pizzaRushFactory.getAvailablePizzas(email);
+        //TODO: same here
+        return ok(Json.toJson(orders));
     }
 }
