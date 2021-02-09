@@ -35,26 +35,21 @@ public class PizzaRushFactory {
         return null;//TODO noch machen sowie andere wichtige Funktionen
     }
 
-    public Ingredient[] getAvailableIngredients(String email){
-        //TODO jacob gibt euch eine lustige sql abfrage die zuerst das UserTier und damit alle lustigen Zutaten abfragt
-        // select * from Ingredient where Tier_idTier <= (select Tier_idTier from User where email = 'jj@jj.jj')
+    public List<Ingredient> getAvailableIngredients(String email){
         return db.withConnection(conn -> {
-            List<Ingredient> list = new ArrayList<>();
-            String sql = "SELECT * FROM `Ingredient`";
+            List<Ingredient> result = new ArrayList<>();
+            String sql = "SELECT * FROM Ingredient WHERE Tier_idTier <= (SELECT Tier_idTier FROM `User` WHERE email = ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Ingredient ingredient = new Ingredient(rs);
-                list.add(ingredient);
-            }
-            //convert List to Array
-            Ingredient[] result = new Ingredient[list.size()];
-            for (int i = 0; i < result.length; i++) {
-                result[i] = list.get(i);
-            }
+                result.add(ingredient);
 
+                System.out.println(ingredient.getName());
+            }
             stmt.close();
-            return null;
+            return result;
         });
     }
 

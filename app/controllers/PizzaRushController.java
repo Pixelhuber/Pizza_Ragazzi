@@ -7,6 +7,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
+import scala.util.parsing.json.JSONArray;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -63,7 +64,7 @@ public class PizzaRushController extends Controller {
 
     public Result getAvailableIngredients(Http.Request request) {
         String email = request.session().get("email").get();
-        PizzaRushFactory.Ingredient[] ingredients = pizzaRushFactory.getAvailableIngredients(email);
+        List<PizzaRushFactory.Ingredient> ingredients = pizzaRushFactory.getAvailableIngredients(email);
         return ok(Json.toJson(ingredients));
     }
 }
