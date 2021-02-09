@@ -14,6 +14,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.util.*;
@@ -258,8 +259,8 @@ public class UserFactory {
                 //Sets default Profile pic if none was Uploaded
                 String path="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
                 if (user.profilePicture != null) {
-                    ImageIO.write(user.getProfilePicture(), "png", new File("tmpImage.png"));
-                    byte[] imageBytes = Files.readAllBytes(Paths.get("tmpImage.png"));
+                    ImageIO.write(user.getProfilePicture(), "png", new File("public/images/Profile_tmpImage/tmpImage.png"));
+                    byte[] imageBytes = Files.readAllBytes(Paths.get("public/images/Profile_tmpImage/tmpImage.png"));
                     Base64.Encoder encoder = Base64.getEncoder();
                     path = "data:image/png;base64," + encoder.encodeToString(imageBytes);
                 }
