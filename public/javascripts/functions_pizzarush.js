@@ -73,10 +73,7 @@ class AbstractIngredient {
 
 
     createDraggableInstance() {
-        if (this.name === "Impasto")
-            return new DraggablePizzaInstance();
-        else
-            return new DraggableIngredientInstance(this);
+        return new DraggableIngredientInstance(this);
     }
 
     createImg() {
@@ -1021,12 +1018,42 @@ function startFromChoppingTable() {
                 cuttingSurface.setAttribute("style", "outline: 4px solid red");
                 return;
             }
+
+            if (current.instanceOf(ChoppingIngredient) &&
+                current.status === DraggableIngredientInstance.Status.RAW) {
+
+                ingredientsToPlayWith.push(current);
+            }
         }
+}
 
-        if (current.instanceOf(ChoppingIngredient) &&
-            current.status === DraggableIngredientInstance.Status.RAW) {
+    if (ingredientsToPlayWith.length > 0)
+        startMiniGame(ingredientsToPlayWith);
+}
 
-            ingredientsToPlayWith.push(current);
+function startFromStampingTable() {
+
+    const ingredientsToPlayWith = [];
+    const stampingSurface = document.getElementById("smashingSurface");
+
+    stampingSurface.setAttribute("style", "outline: ");
+
+    for (let i = 0; i < existingDraggableIngredientInstances.length; i++) {
+        const current = existingDraggableIngredientInstances[i];
+
+        if (checkOverlap(current.draggable, document.getElementById("smashingSurface"))){
+
+            if (!current.instanceOf(StampingIngredient)){
+
+                stampingSurface.setAttribute("style", "outline: 4px solid red");
+                return;
+            }
+
+            if (current.instanceOf(StampingIngredient) &&
+                current.status === DraggableIngredientInstance.Status.RAW) {
+
+                ingredientsToPlayWith.push(current);
+            }
         }
     }
 
@@ -1075,6 +1102,12 @@ function startMiniGame(ingredientList) {
 
 
 
+    if (ingredientList[0].parentIngredient instanceof ChoppingIngredient)
+        fruit_ninja();
+    else if (ingredientList[0].parentIngredient instanceof StampingIngredient)
+        whackAMole();
+
+
     // UTILITY FUNCTIONS ----------------------------------------------------------------------------------------------
 
     function setCanvasSize() {
@@ -1092,9 +1125,6 @@ function startMiniGame(ingredientList) {
 
     // display the game window
     document.getElementById("miniGame_layer").style.visibility = "visible";
-
-
-    whackAMole();
 
 
     function fruit_ninja() {
@@ -1550,9 +1580,21 @@ function startMiniGame(ingredientList) {
                 this.holeNumber = moleHandler.freeHoles[randomIndex];
             }
 
-            startShow() {}
+            startShow() {
 
-            endShow() {}
+                // tell MoleHandler, your hole is occupied
+                //this.moleHandler.freeHoles.splice(this.holeNumber, 1);
+                const index = this.moleHandler.freeHoles.indexOf(this.holeNumber);
+                this.moleHandler.freeHoles.splice(index, 1);
+            }
+
+            endShow() {
+
+                // tell MoleHandler, your hole is now free again
+                //this.moleHandler.freeHoles.splice(this.holeNumber, 0, this.holeNumber);
+                this.moleHandler.freeHoles.push(this.holeNumber);
+                this.holeNumber = undefined;
+            }
 
             step(timestamp) {
 
@@ -1592,14 +1634,11 @@ function startMiniGame(ingredientList) {
             }
 
             startShow() {
+                super.startShow();
 
                 // tell MoleHandler, you can't be shown again
                 let index = this.moleHandler.ingredientsWaitingToBeShown.indexOf(this);
                 this.moleHandler.ingredientsWaitingToBeShown.splice(index, 1);
-
-                // tell MoleHandler, your hole is occupied
-                index = this.moleHandler.freeHoles.indexOf(this.holeNumber);
-                this.moleHandler.freeHoles.splice(index, 1);
 
                 // tell MoleHandler to either show yourself OR a distraction
                 if (Math.random() < 0.1)
@@ -1609,14 +1648,12 @@ function startMiniGame(ingredientList) {
             }
 
             endShow() {
+                super.endShow();
 
                 // tell MoleHandler, you are ready to be shown again
                 const index = this.moleHandler.ingredientsCurrentlyShown.indexOf(this);
                 this.moleHandler.ingredientsCurrentlyShown.splice(index, 1);
                 this.moleHandler.ingredientsWaitingToBeShown.push(this);
-
-                // tell MoleHandler, your hole is now free again
-                this.moleHandler.freeHoles.push(this.holeNumber);
             }
 
             onHit() {
@@ -1655,14 +1692,18 @@ function startMiniGame(ingredientList) {
                 this.ingredient_image = document.createElement('img');
                 this.ingredient_image.setAttribute('src', "assets/images/funghi.png");
 
-                this.disabling_time = ingredientShower.element.parentIngredient.stamp_behavior.disabling_time;
-                this.realIngredientShower = ingredientShower;
+                // copy variables of real ingredientShower
+                this.time_shown = ingredientShower.time_shown;
+                this.lastTimestamp = ingredientShower.lastTimestamp
+                this.holeNumber = ingredientShower.holeNumber;
                 this.moleHandler = ingredientShower.moleHandler;
 
-                this.newShow(this.realIngredientShower.moleHandler.show_duration);
+                this.disabling_time = ingredientShower.element.parentIngredient.stamp_behavior.disabling_time;
+                this.realIngredientShower = ingredientShower;
             }
 
             endShow() {
+                super.endShow();
 
                 // tell MoleHandler, the NON-distracting ingredient can be shown again
                 const index = this.moleHandler.ingredientsCurrentlyShown.indexOf(this);
@@ -1840,12 +1881,8 @@ function startMiniGame(ingredientList) {
 
         setCanvasSize();
 
-        const testArray = [ new DraggableIngredientInstance(AbstractIngredient.getInstanceByName("Impasto")),
-                            new DraggableIngredientInstance(AbstractIngredient.getInstanceByName("Impasto")),
-                            new DraggableIngredientInstance(AbstractIngredient.getInstanceByName("Pomodoro"))];
 
-
-        const moleHandler = new MoleHandler(testArray, 9, 450,1000, 1);
+        const moleHandler = new MoleHandler(ingredientList, 9, 450,0, 2);
 
 
         let start;
