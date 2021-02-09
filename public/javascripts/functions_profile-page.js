@@ -172,7 +172,7 @@ function getProfilePicFromDatabase() {
             //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
             document.getElementById("profile-picture").setAttribute("src",data)
         }).fail(function (data, status){
-            document.getElementById("highscore").textContent = "Default Highscore";
-            alert("Couldn't retrieve highscore from database");
+            document.getElementById("profile-picture").setAttribute("src","https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+            alert("Couldn't retrieve Profile Picture from database");
         });
 }
