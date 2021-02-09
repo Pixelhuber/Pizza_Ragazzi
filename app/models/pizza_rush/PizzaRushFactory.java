@@ -3,7 +3,6 @@ package models.pizza_rush;
 import factory.FactoryExceptions.ProfilePictureException;
 import factory.UserFactory;
 import play.db.Database;
-import scala.util.parsing.json.JSONArray;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
@@ -15,7 +14,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Singleton
@@ -28,7 +26,17 @@ public class PizzaRushFactory {
     }
 
     public List<Ingredient> getAllIngredients(){
-        return null;//TODO noch machen sowie andere wichtige Funktionen
+        return db.withConnection(conn -> {
+            List<Ingredient> ingredients = new ArrayList<>();
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `Ingredient`");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Ingredient ingredient = new Ingredient(rs);
+                ingredients.add(ingredient);
+            }
+            stmt.close();
+            return ingredients;
+        });
     }
 
     public Ingredient getIngredientById(int id){
@@ -64,11 +72,6 @@ public class PizzaRushFactory {
     }
 
     public List<Order> getAvailablePizzas(String email){
-        //TODO jacob gibt euch eine lustige SQL abfrage die alle veerfügbaren pizza zurückgibt
-        // select * from Pizza where idPizza not in
-        //                          (select Pizza_idPizza from Ingredient
-        //                              inner join Pizza_has_Ingredient PhI on Ingredient.idIngredient = PhI.Ingredient_idIngredient
-        //                          where Tier_idTier > (select Tier_idTier from User where email = 'jj@jj.jj'))
         return db.withConnection(conn -> {
             List<Order> result = new ArrayList<>();
             String sql = "SELECT * FROM Pizza WHERE idPizza NOT IN (SELECT Pizza_idPizza FROM Ingredient INNER JOIN Pizza_has_Ingredient PhI ON Ingredient.idIngredient = PhI.Ingredient_idIngredient WHERE Tier_idTier > (SELECT Tier_idTier FROM `User` WHERE email = ?))";
@@ -178,13 +181,12 @@ public class PizzaRushFactory {
             this.id=rs.getInt("idPizza");
             this.name=rs.getString("name");
             this.points=rs.getInt("points");
-            this.ingredients = getOrderIngredients();
+            this.ingredients = getOrderIngredientsFromDatabase();
         }
 
-        public List<Ingredient> getOrderIngredients(){
+        public List<Ingredient> getOrderIngredientsFromDatabase(){
             return db.withConnection(conn -> {
                 List<Ingredient> result = new ArrayList<>();
-                //TODO sql statement nochmal überprüfen
                 PreparedStatement stmt = conn.prepareStatement("SELECT Ingredient_idIngredient FROM `Pizza_has_Ingredient` WHERE Pizza_idPizza =? ");
                 stmt.setInt(1,getId());
                 ResultSet rs = stmt.executeQuery();
