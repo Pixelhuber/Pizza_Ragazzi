@@ -1,5 +1,6 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import models.pizza_rush.PizzaCreation;
 import models.pizza_rush.PizzaRushFactory;
 import play.libs.Json;
@@ -10,6 +11,7 @@ import play.mvc.Results;
 import scala.util.parsing.json.JSONArray;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -65,14 +67,27 @@ public class PizzaRushController extends Controller {
     public Result getAvailableIngredients(Http.Request request) {
         String email = request.session().get("email").get();
         List<PizzaRushFactory.Ingredient> ingredients = pizzaRushFactory.getAvailableIngredients(email);
-        //TODO: evtl. Gson benutzen zum Konvertieren
-        return ok(Json.toJson(ingredients));
+        String json = listToJson(ingredients);
+        return ok(json);
     }
 
     public Result getAvailablePizzas(Http.Request request) {
         String email = request.session().get("email").get();
         List<PizzaRushFactory.Order> orders = pizzaRushFactory.getAvailablePizzas(email);
-        //TODO: same here
-        return ok(Json.toJson(orders));
+        String json = listToJson(orders);
+        return ok(json);
+    }
+
+    //macht aus einer beliebigen Liste ein Json
+    public <T> String listToJson (List<T> list) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = "";
+        try {
+            json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
+            System.out.println(json);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return json;
     }
 }

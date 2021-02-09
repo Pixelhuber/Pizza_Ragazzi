@@ -1,7 +1,10 @@
 package models.pizza_rush;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import factory.FactoryExceptions.ProfilePictureException;
 import factory.UserFactory;
+import org.checkerframework.checker.units.qual.A;
 import play.db.Database;
 
 import javax.imageio.ImageIO;
@@ -63,11 +66,9 @@ public class PizzaRushFactory {
             while (rs.next()) {
                 Ingredient ingredient = new Ingredient(rs);
                 result.add(ingredient);
-
-                System.out.println("PizzaIngredient_name " + ingredient.getName()); //zum Testen
             }
             stmt.close();
-            return null; //Liste muss iwie zu JSON konvertiert werden evtl. mit Gson
+            return result; //Liste muss iwie zu JSON konvertiert werden evtl. mit Gson
         });
     }
 
@@ -81,12 +82,9 @@ public class PizzaRushFactory {
             while (rs.next()) {
                 Order order = new Order(rs);
                 result.add(order);
-
-                System.out.println("Order_name " + order.getName());               //zum Testen
-                System.out.println("Order_Ingredients " + order.getIngredients()); //zum Testen
             }
             stmt.close();
-            return null; //Liste muss iwie zu JSON konvertiert werden evtl. mit Gson
+            return result; //Liste muss iwie zu JSON konvertiert werden evtl. mit Gson
         });
     }
 
@@ -95,10 +93,15 @@ public class PizzaRushFactory {
     public class Ingredient{
         int id;
         String name;
+        @JsonIgnore
         BufferedImage picture_raw;
+        @JsonIgnore
         BufferedImage picture_raw_distractor;
+        @JsonIgnore
         BufferedImage picture_processed;
+        @JsonIgnore
         BufferedImage picture_baked;
+        @JsonIgnore
         BufferedImage picture_burnt;
         int tier;
 
@@ -181,7 +184,7 @@ public class PizzaRushFactory {
             this.id=rs.getInt("idPizza");
             this.name=rs.getString("name");
             this.points=rs.getInt("points");
-            this.ingredients = getOrderIngredientsFromDatabase();
+            this.ingredients = new ArrayList<>(getOrderIngredientsFromDatabase());
         }
 
         public List<Ingredient> getOrderIngredientsFromDatabase(){
