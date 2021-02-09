@@ -49,7 +49,7 @@ public class PizzaRushFactory {
                 System.out.println(ingredient.getName());
             }
             stmt.close();
-            return result;
+            return null; //Liste muss iwie zu JSON konvertiert werden evtl. mit Gson
         });
     }
 
@@ -164,7 +164,7 @@ public class PizzaRushFactory {
                 stmt.setInt(1,getId());
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
-                    result.add(getIngredientById(rs.getInt("Ingredien_idIngredient")));
+                    result.add(getIngredientById(rs.getInt("Ingredient_idIngredient")));
                 }
                 stmt.close();
                 return result;
