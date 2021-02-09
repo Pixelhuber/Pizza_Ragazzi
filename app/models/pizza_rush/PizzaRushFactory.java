@@ -31,8 +31,18 @@ public class PizzaRushFactory {
         return null;//TODO noch machen sowie andere wichtige Funktionen
     }
 
-    public static Ingredient getIngredientById(int id){
-        return null;//TODO noch machen sowie andere wichtige Funktionen
+    public Ingredient getIngredientById(int id){
+        return db.withConnection(conn -> {
+            Ingredient ingredient = null;
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `Ingredient` WHERE idIngredient = ?");
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                ingredient = new Ingredient(rs);
+            }
+            stmt.close();
+            return ingredient;
+        });
     }
 
     public List<Ingredient> getAvailableIngredients(String email){
@@ -46,7 +56,7 @@ public class PizzaRushFactory {
                 Ingredient ingredient = new Ingredient(rs);
                 result.add(ingredient);
 
-                System.out.println("PizzaIngredient_name " + ingredient.getName());
+                System.out.println("PizzaIngredient_name " + ingredient.getName()); //zum Testen
             }
             stmt.close();
             return null; //Liste muss iwie zu JSON konvertiert werden evtl. mit Gson
@@ -69,7 +79,8 @@ public class PizzaRushFactory {
                 Order order = new Order(rs);
                 result.add(order);
 
-                System.out.println("Order_name " + order.getName());
+                System.out.println("Order_name " + order.getName());               //zum Testen
+                System.out.println("Order_Ingredients " + order.getIngredients()); //zum Testen
             }
             stmt.close();
             return null; //Liste muss iwie zu JSON konvertiert werden evtl. mit Gson
@@ -167,7 +178,7 @@ public class PizzaRushFactory {
             this.id=rs.getInt("idPizza");
             this.name=rs.getString("name");
             this.points=rs.getInt("points");
-            //TODO ingredients noch hinzufügen
+            this.ingredients = getOrderIngredients();
         }
 
         public List<Ingredient> getOrderIngredients(){
@@ -186,7 +197,7 @@ public class PizzaRushFactory {
         }
 
         public List<Ingredient> getIngredients() {
-            return null;
+            return ingredients;
         }
 
         public int getId() {
