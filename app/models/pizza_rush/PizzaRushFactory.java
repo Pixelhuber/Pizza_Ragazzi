@@ -93,7 +93,7 @@ public class PizzaRushFactory {
     public class Ingredient{
         int id;
         String name;
-        @JsonIgnore
+        @JsonIgnore //https://gist.github.com/vikrum/4758434
         BufferedImage picture_raw;
         @JsonIgnore
         BufferedImage picture_raw_distractor;
