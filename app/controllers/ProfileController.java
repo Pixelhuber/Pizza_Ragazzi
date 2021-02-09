@@ -86,6 +86,12 @@ public class ProfileController extends Controller {
         return ok(Integer.toString(user.getHighScore()));
     }
 
+    public Result getProfilePictureFromDatabase(Http.Request request) throws IOException {
+        String email = request.session().get("email").get();
+        UserFactory.User user = userFactory.getUserByEmail(email);
+        return ok(Json.toJson(user.getProfilePictureSrc()));
+    }
+
     public Result getPasswordFromSession(Http.Request request) {
 
         return request

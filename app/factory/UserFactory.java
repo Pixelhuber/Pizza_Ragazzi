@@ -257,13 +257,7 @@ public class UserFactory {
 
             for (User user : users) {
                 //Sets default Profile pic if none was Uploaded
-                String path="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
-                if (user.profilePicture != null) {
-                    ImageIO.write(user.getProfilePicture(), "png", new File("public/images/Profile_tmpImage/tmpImage.png"));
-                    byte[] imageBytes = Files.readAllBytes(Paths.get("public/images/Profile_tmpImage/tmpImage.png"));
-                    Base64.Encoder encoder = Base64.getEncoder();
-                    path = "data:image/png;base64," + encoder.encodeToString(imageBytes);
-                }
+                String path=user.getProfilePictureSrc();
                 data.put(user.username, path);
             }
             return data;
@@ -317,6 +311,18 @@ public class UserFactory {
 
         public BufferedImage getProfilePicture() {
             return profilePicture;
+        }
+
+        public String getProfilePictureSrc() throws IOException {
+            String path="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
+            if (this.profilePicture != null) {
+                    ImageIO.write(this.getProfilePicture(), "jpg", new File("public/images/Profile_tmpImage/tmpImage.jpg"));
+                    byte[] imageBytes = Files.readAllBytes(Paths.get("public/images/Profile_tmpImage/tmpImage.jpg"));
+                    Base64.Encoder encoder = Base64.getEncoder();
+                    path = "data:image/jpg;base64," + encoder.encodeToString(imageBytes);
+
+            }
+            return path;
         }
 
         public void setProfilePicture(BufferedImage profilePicture) {

@@ -77,7 +77,7 @@ function setup() {
     getGesamtpunkteFromDatabase();
     getHighscoreFromDatabase();
     getMailFromDatabase();
-    //TODO getProfilePic from db
+    getProfilePicFromDatabase();
 }
 //TODO update username und profilepic zusammenlegen
 
@@ -165,4 +165,14 @@ function getHighscoreFromDatabase() {
         document.getElementById("highscore").textContent = "Default Highscore";
         alert("Couldn't retrieve highscore from database");
     });
+}
+
+function getProfilePicFromDatabase() {
+        $.get("/profile/getProfilePic", function(data, status){
+            //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
+            document.getElementById("profile-picture").setAttribute("src",data)
+        }).fail(function (data, status){
+            document.getElementById("highscore").textContent = "Default Highscore";
+            alert("Couldn't retrieve highscore from database");
+        });
 }

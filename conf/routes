@@ -41,6 +41,8 @@ GET     /profile/getTotalPoints    controllers.ProfileController.getGesamtpunkte
 
 GET     /profile/getHighScore       controllers.ProfileController.getHighscoreFromDatabase(request: Request)
 
+GET     /profile/getProfilePic      controllers.ProfileController.getProfilePictureFromDatabase(request: Request)
+
 # Friendlist --------------------------------------------------------------------------
 GET     /getFriendsData             controllers.ProfileController.getFriendsData(request: Request)
 
