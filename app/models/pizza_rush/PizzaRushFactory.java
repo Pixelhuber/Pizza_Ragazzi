@@ -89,19 +89,21 @@ public class PizzaRushFactory {
         });
     }
 
-    private static String encodeFileToBase64(File file){
-        String encoded = null;
+    public String encodeToString(BufferedImage image, String type) {
+        String imageString = null;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
         try {
-            FileInputStream fileInputStreamReader = new FileInputStream(file);
-            byte[] bytes = new byte[(int)file.length()];
-            fileInputStreamReader.read(bytes);
-            encoded = new String(Base64.getEncoder().encode(bytes), "UTF-8");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            ImageIO.write(image, type, bos);
+            byte[] imageBytes = bos.toByteArray();
+
+            imageString = "data:image/"+type+";base64," + Base64.getEncoder().encodeToString(imageBytes);
+
+            bos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return encoded;
+        return imageString;
     }
 
 
