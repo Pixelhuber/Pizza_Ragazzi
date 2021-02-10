@@ -314,13 +314,6 @@ public class UserFactory {
         public String getProfilePictureSrc() throws IOException {
             String path="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
             if (profilePicture != null) {
-                /*
-                    ImageIO.write(this.getProfilePicture(), "jpg", new File("public/images/Profile_tmpImage/tmpImage.jpg"));
-                    byte[] imageBytes = Files.readAllBytes(Paths.get("public/images/Profile_tmpImage/tmpImage.jpg"));
-                    Base64.Encoder encoder = Base64.getEncoder();
-                    path = "data:image/jpg;base64," + encoder.encodeToString(imageBytes);
-
-                 */
                 path=encodeToString(profilePicture,"jpg");
             }
             return path;
