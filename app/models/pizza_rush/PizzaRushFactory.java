@@ -1,11 +1,7 @@
 package models.pizza_rush;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import factory.FactoryExceptions.ProfilePictureException;
-import factory.UserFactory;
-import org.checkerframework.checker.units.qual.A;
 import play.db.Database;
 
 import javax.imageio.ImageIO;
@@ -122,10 +118,14 @@ public class PizzaRushFactory {
         @JsonIgnore
         BufferedImage picture_burnt;
         int tier;
+        int vertex_x_inPercent;
+        int vertex_y_inPercent;
+        int speed;
+        int rotation;
 
         public Ingredient (ResultSet rs) throws SQLException {
-            id = rs.getInt("idIngredient");
-            name = rs.getString("name");
+            this.id = rs.getInt("idIngredient");
+            this.name = rs.getString("name");
             BufferedInputStream bis_raw = new BufferedInputStream(rs.getBinaryStream("picture_raw"));
             try {
                 picture_raw = ImageIO.read(bis_raw);
@@ -156,7 +156,23 @@ public class PizzaRushFactory {
             } catch (IOException invalidProfilePicture) {
                 throw new ProfilePictureException("We had trouble getting the " + picture_burnt);
             }
-            tier = rs.getInt("Tier_idTier");
+            this.tier = rs.getInt("Tier_idTier");
+            setIngredientFlightBehaviorFromDatabase();
+        }
+
+        private void setIngredientFlightBehaviorFromDatabase(){
+            db.withConnection(conn -> {
+                PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `FlightBehavior` WHERE Ingredient_idIngredient = ? ");
+                stmt.setInt(1, this.id);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    this.vertex_x_inPercent = rs.getInt("vertex_x_inPercent");
+                    this.vertex_y_inPercent = rs.getInt("vertex_y_inPercent");
+                    this.speed = rs.getInt("speed");
+                    this.rotation = rs.getInt("rotation");
+                }
+                stmt.close();
+            });
         }
 
     public int getId() {
@@ -190,6 +206,40 @@ public class PizzaRushFactory {
     public int getTier() {
         return tier;
     }
+
+    public int getVertex_x_inPercent() {
+        return vertex_x_inPercent;
+    }
+
+    public int getVertex_y_inPercent() {
+        return vertex_y_inPercent;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public int getRotation() {
+        return rotation;
+    }
+
+    @Override
+    public String toString() {
+        return "Ingredient{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", picture_raw=" + picture_raw +
+                ", picture_raw_distractor=" + picture_raw_distractor +
+                ", picture_processed=" + picture_processed +
+                ", picture_baked=" + picture_baked +
+                ", picture_burnt=" + picture_burnt +
+                ", tier=" + tier +
+                ", vertex_x_inPercent=" + vertex_x_inPercent +
+                ", vertex_y_inPercent=" + vertex_y_inPercent +
+                ", speed=" + speed +
+                ", rotation=" + rotation +
+                '}';
+    }
 }
 
     public class Order{ //Ideale Pizza, also einfach Pizza aus Datenbank
@@ -202,10 +252,10 @@ public class PizzaRushFactory {
             this.id=rs.getInt("idPizza");
             this.name=rs.getString("name");
             this.points=rs.getInt("points");
-            this.ingredients = new ArrayList<>(getOrderIngredientsFromDatabase());
+            this.ingredients = new ArrayList<>(setOrderIngredientsFromDatabase());
         }
 
-        public List<Ingredient> getOrderIngredientsFromDatabase(){
+        private List<Ingredient> setOrderIngredientsFromDatabase(){
             return db.withConnection(conn -> {
                 List<Ingredient> result = new ArrayList<>();
                 PreparedStatement stmt = conn.prepareStatement("SELECT Ingredient_idIngredient FROM `Pizza_has_Ingredient` WHERE Pizza_idPizza =? ");
@@ -234,5 +284,7 @@ public class PizzaRushFactory {
         public int getPoints() {
             return points;
         }
+
+
     }
 }

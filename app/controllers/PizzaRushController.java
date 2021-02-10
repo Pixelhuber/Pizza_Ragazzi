@@ -78,6 +78,15 @@ public class PizzaRushController extends Controller {
         return ok(json);
     }
 
+    public Result getAvailableFlightBehaviors(Http.Request request) {
+        /*List<String> ids = request.body().asJson().get("ingredients").findValuesAsText("id");
+        for (String id : ids) {
+            System.out.println(id);
+        }
+         */
+        return ok();
+    }
+
     //macht aus einer beliebigen Liste ein Json
     public <T> String listToJson (List<T> list) {
         ObjectMapper objectMapper = new ObjectMapper();

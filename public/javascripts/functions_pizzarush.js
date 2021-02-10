@@ -543,36 +543,13 @@ const existingDraggablePizzaInstances = [];
 
 async function setupData() {
     const ingredients = await getAvailableIngredients();
-    const flightBehaviors = await getAvailableFlightBehaviors(ingredients);
+    console.log(ingredients);
     const orders = await getAvailablePizzas();
-    availableIngredients.push(new Ingredient(ingredients[0].name));
 }
 
 async function getAvailableIngredients() {
     let response = await fetch("pizza_rush/getAvailableIngredients");
     return response.json();
-}
-
-async function getAvailableFlightBehaviors(ingredients) {
-
-
-    let ingredientIds = [];
-    for (let i in ingredients) {
-        ingredientIds.push(ingredients[i].id);
-    }
-
-   /* let response = await fetch("pizza_rush/getAvailableFlightBehaviors", {
-        method: 'POST',
-        body: JSON.stringify({
-            ingredients: ingredientIds
-        }),
-        headers: {
-            "Content-Type": "application/json"
-        },
-        credentials: 'include'
-    })
-    return response.json();
-    */
 }
 
 async function getAvailablePizzas() {
