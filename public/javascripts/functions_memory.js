@@ -17,34 +17,18 @@ class memoryCard{
 
         this.gameElement.setAttribute('class', 'memoryCard');
 
-        this.gameElement.text.setAttribute('style', 'position: absolute; z-index: 2');
         this.gameElement.text.innerHTML = this.ingredient;
 
         this.gameElement.appendChild(this.gameElement.text);
 
         document.getElementById('memoryBox').appendChild(this.gameElement);
-
     }
-
 }
 
 function loadMemoryCards(){
-    new memoryCard("tonno", "erfunden 1900").createGameElement()
-    new memoryCard("tonno", "erfunden 1900").createGameElement()
-    new memoryCard("tonno", "erfunden 1900").createGameElement()
-    new memoryCard("tonno", "erfunden 1900").createGameElement()
-    new memoryCard("tonno", "erfunden 1900").createGameElement()
-    new memoryCard("tonno", "erfunden 1900").createGameElement()
-    new memoryCard("tonno", "erfunden 1900").createGameElement()
-    new memoryCard("tonno", "erfunden 1900").createGameElement()
-    new memoryCard("tonno", "erfunden 1900").createGameElement()
-    new memoryCard("tonno", "erfunden 1900").createGameElement()
-    new memoryCard("tonno", "erfunden 1900").createGameElement()
-    new memoryCard("tonno", "erfunden 1900").createGameElement()
-    new memoryCard("tonno", "erfunden 1900").createGameElement()
-    new memoryCard("tonno", "erfunden 1900").createGameElement()
-    new memoryCard("tonno", "erfunden 1900").createGameElement()
-    new memoryCard("tonno", "erfunden 1900").createGameElement()
 
+    for (let i = 0; i < 7; i++) {
+        new memoryCard("tonno", "erfunden 1900").createGameElement()
+    }
 }
 

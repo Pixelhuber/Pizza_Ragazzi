@@ -1,6 +1,14 @@
 *{
     font-family: "Arial Black", sans-serif;
 }
+
+body{
+    display: flex;
+    align-items: center;
+
+    height: 95vh;
+}
+
 .memoryCard{
     height: 100em;
 
@@ -8,13 +16,22 @@
 }
 
 .memoryCard > p{
-    text-align: center;
-    line-height: 100px;
 }
 
 .memoryCard{
-    height: 200px;
-    width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 20%;
+    height: 10%;
+
+    min-height: 180px;
+    max-height: 200px;
+    max-width: 200px;
+
+    margin: 10px;
+
     background-color: #2d6201;
     border: 1px solid grey;
 }
@@ -23,11 +40,16 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
 
-    min-height: 600px;
-    width: 808px;
+    width: 90vw;
+    max-height: 80vh;
 
-    margin: 100px 0 0 400px;
+    overflow: hidden;
+
+    margin-left: auto;
+    margin-right: auto;
+
     font-size: 1.2em;
     border: 4px solid black;
 
