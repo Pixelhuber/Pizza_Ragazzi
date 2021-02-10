@@ -21,5 +21,3 @@ generated.truststore
 
 *.DS_Store
 /.bsp/
-/.bsp/
-/public/images/Profile_tmpImage/tmpImage.jpg
