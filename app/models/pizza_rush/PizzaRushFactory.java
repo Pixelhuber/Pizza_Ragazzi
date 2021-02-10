@@ -106,17 +106,12 @@ public class PizzaRushFactory {
 //-----------KLASSEN-------------------------------------------------------------------------------------------
     public class Ingredient{
         int id;
-        String name;
-        @JsonIgnore //https://gist.github.com/vikrum/4758434
-        BufferedImage picture_raw;
-        @JsonIgnore
-        BufferedImage picture_raw_distractor;
-        @JsonIgnore
-        BufferedImage picture_processed;
-        @JsonIgnore
-        BufferedImage picture_baked;
-        @JsonIgnore
-        BufferedImage picture_burnt;
+        String name;         //https://gist.github.com/vikrum/4758434
+        String picture_raw;
+        String picture_raw_distractor;
+        String picture_processed;
+        String picture_baked;
+        String picture_burnt;
         int tier;
         int vertex_x_inPercent;
         int vertex_y_inPercent;
@@ -128,31 +123,31 @@ public class PizzaRushFactory {
             this.name = rs.getString("name");
             BufferedInputStream bis_raw = new BufferedInputStream(rs.getBinaryStream("picture_raw"));
             try {
-                picture_raw = ImageIO.read(bis_raw);
+                this.picture_raw = encodeImageToString(ImageIO.read(bis_raw), "png");
             } catch (IOException invalidProfilePicture) {
                 throw new ProfilePictureException("We had trouble getting the " + picture_raw);
             }
             BufferedInputStream bis_raw_disctractor = new BufferedInputStream(rs.getBinaryStream("picture_raw"));
             try {
-                picture_raw_distractor = ImageIO.read(bis_raw_disctractor);
+                this.picture_raw_distractor = encodeImageToString(ImageIO.read(bis_raw_disctractor), "png");
             } catch (IOException invalidProfilePicture) {
                 throw new ProfilePictureException("We had trouble getting the " + picture_raw_distractor);
             }
             BufferedInputStream bis_processed = new BufferedInputStream(rs.getBinaryStream("picture_raw"));
             try {
-                picture_processed = ImageIO.read(bis_processed);
+                this.picture_processed = encodeImageToString(ImageIO.read(bis_processed), "png");
             } catch (IOException invalidProfilePicture) {
                 throw new ProfilePictureException("We had trouble getting the " + picture_processed);
             }
             BufferedInputStream bis_baked = new BufferedInputStream(rs.getBinaryStream("picture_raw"));
             try {
-                picture_baked = ImageIO.read(bis_baked);
+                this.picture_baked = encodeImageToString(ImageIO.read(bis_baked), "png");
             } catch (IOException invalidProfilePicture) {
                 throw new ProfilePictureException("We had trouble getting the " + picture_baked);
             }
             BufferedInputStream bis_burnt = new BufferedInputStream(rs.getBinaryStream("picture_raw"));
             try {
-                picture_burnt = ImageIO.read(bis_burnt);
+                this.picture_burnt = encodeImageToString(ImageIO.read(bis_burnt), "png");
             } catch (IOException invalidProfilePicture) {
                 throw new ProfilePictureException("We had trouble getting the " + picture_burnt);
             }
@@ -183,23 +178,23 @@ public class PizzaRushFactory {
         return name;
     }
 
-    public BufferedImage getPicture_raw() {
+    public String getPicture_raw() {
         return picture_raw;
     }
 
-    public BufferedImage getPicture_raw_distractor() {
+    public String getPicture_raw_distractor() {
         return picture_raw_distractor;
     }
 
-    public BufferedImage getPicture_processed() {
+    public String getPicture_processed() {
         return picture_processed;
     }
 
-    public BufferedImage getPicture_baked() {
+    public String getPicture_baked() {
         return picture_baked;
     }
 
-    public BufferedImage getPicture_burnt() {
+    public String getPicture_burnt() {
         return picture_burnt;
     }
 

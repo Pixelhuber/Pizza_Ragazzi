@@ -506,33 +506,7 @@ class Order {
 // order class above
 // OBJECT COLLECTIONS -------------------------------------------------------------------------------------------------
 
-// TODO wird später wsl vom Server geladen werden
-const availableIngredients = [      new Ingredient("Impasto", "/assets/images/teig.png"),
-                                    new Ingredient("Formaggio", "/assets/images/formaggio.png", {
-                                        vertex_x_inPercent: 20,
-                                        vertex_y_inPercent: 40,
-                                        speed: 4,
-                                        rotation: 6,
-
-                                        hits_required: 3
-                                    }),
-                                    new Ingredient("Pomodoro", "/assets/images/pomodoro.png"),
-                                    new Ingredient("Salame", "/assets/images/salame.png", {
-                                        vertex_x_inPercent: 60,
-                                        vertex_y_inPercent: 70,
-                                        speed: 3,
-                                        rotation: 15,
-
-                                        hits_required: 3
-                                    }),
-                                    new Ingredient("Funghi", "/assets/images/funghi.png", {
-                                        vertex_x_inPercent: 50,
-                                        vertex_y_inPercent: 80,
-                                        speed: 3,
-                                        rotation: 10,
-
-                                        hits_required: 3
-                                    })];
+const availableIngredients = [                ];
 
 const orderList = [                 ];
 
@@ -541,10 +515,30 @@ const ovenList = [                  ];
 const existingDraggablePizzaInstances = [];
 
 
-async function setupData() {
-    const ingredients = await getAvailableIngredients();
-    console.log(ingredients);
+async function setupAvailableIngredients() {
+    const ingredients = await getAvailableIngredients(); //ingredients Json-Array fetchen
+
+    ingredients.forEach(function(item) {                                  // Json-Array in availableIngredients-Array
+        availableIngredients.push(new Ingredient(item.name, item.picture_raw, {
+            vertex_x_inPercent: item.vertex_x_inPercent,
+            vertex_y_inPercent: item.vertex_y_inPercent,
+            speed: item.speed,
+            rotation: item.rotation,
+            hits_required: 3                        //TODO: hits_required vielleicht auch in Datenbank speichern
+        }));
+    });
+}
+
+async function  setupAvailablePizzas() {
     const orders = await getAvailablePizzas();
+
+    orders.forEach(function(item) {
+        orderList.push(new Order(item.name, item.points, 80))  //TODO: timeInSeconds vielleicht auch in Datenbank speichern
+    });
+
+    orderList.forEach(function(item){
+        item.createGameElement();
+    })
 }
 
 async function getAvailableIngredients() {
@@ -561,12 +555,11 @@ async function getAvailablePizzas() {
 
 // called at startup
 async function loadGameElements() {
-    //vorläufig zum Testen
-    await setupData();
+    await setupAvailableIngredients();
+    await setupAvailablePizzas();
 
-    await loadIngredientSection();
-    await loadOrderSection();
-    await loadOvens();
+    loadIngredientSection();
+    loadOvens();
 }
 
 function loadIngredientSection(){
@@ -592,20 +585,6 @@ function loadIngredientSection(){
     })
 }
 
-function loadOrderSection(){
-
-    //TODO diese ganzen orders werden später wsl auf dem Server erstellt
-    orderList.push( new Order("Margarita", 10, 30),
-                    new Order("Salame", 15, 60),
-                    new Order("Funghi", 10, 150),
-                    new Order("Speciale", 15, 200),
-                    new Order("Salame", 15, 60),
-                    new Order("Salame", 15, 60));
-
-    orderList.forEach(function(item, index, array){
-        item.createGameElement();
-    })
-}
 
 function loadOvens() {
 
