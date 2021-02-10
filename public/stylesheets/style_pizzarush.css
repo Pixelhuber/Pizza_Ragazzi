@@ -44,9 +44,18 @@ div.draggable > img{ /* ingredients on pizzas */
      text-align: center;
  }
 
-#loading-image {
+#loading_image {
     position: absolute;
     top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: 97;
+}
+
+#loading_text {
+    position: absolute;
+    top: 70%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);

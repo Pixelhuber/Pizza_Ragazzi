@@ -15,7 +15,8 @@
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
             <!------------------------------>
         <div id="loading">
-            <img id="loading-image" alt="Loading..." src=@routes.Assets.versioned("images/LoadingGif_Pizza.gif")>
+            <img id="loading_image" alt="Loading..." src=@routes.Assets.versioned("images/LoadingGif_Pizza.gif")>
+            <div id="loading_text">Loading...</div>
         </div>
 
         <div id="startStop_overlay" onclick="manageRushCountdown(120, 'timerRushmode')">
