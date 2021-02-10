@@ -12,12 +12,12 @@ import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Singleton
@@ -87,6 +87,21 @@ public class PizzaRushFactory {
             stmt.close();
             return result; //Liste muss iwie zu JSON konvertiert werden evtl. mit Gson
         });
+    }
+
+    private static String encodeFileToBase64(File file){
+        String encoded = null;
+        try {
+            FileInputStream fileInputStreamReader = new FileInputStream(file);
+            byte[] bytes = new byte[(int)file.length()];
+            fileInputStreamReader.read(bytes);
+            encoded = new String(Base64.getEncoder().encode(bytes), "UTF-8");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return encoded;
     }
 
 
