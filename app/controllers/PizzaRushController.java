@@ -84,7 +84,6 @@ public class PizzaRushController extends Controller {
         String json = "";
         try {
             json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
-            System.out.println(json);
         } catch(Exception e) {
             e.printStackTrace();
         }

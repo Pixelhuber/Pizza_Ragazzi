@@ -540,29 +540,35 @@ const ovenList = [                  ];
 
 const existingDraggablePizzaInstances = [];
 
-function getAvailableIngredients() {
-    fetch("pizza_rush/getAvailableIngredients")
-        .then(result => result.json())
-        .then(result => console.log(result));
+
+async function setupData() {
+    const ingredients = await getAvailableIngredients();
+    const orders = await getAvailablePizzas();
+    console.log(ingredients);
+    console.log(orders);
+    availableIngredients.push(new Ingredient(ingredients[0].name));
 }
 
-function getAvailablePizzas() {
-    fetch("pizza_rush/getAvailablePizzas")
-        .then(result => result.json())
-        .then(result => console.log(result));
+async function getAvailableIngredients() {
+    let response = await fetch("pizza_rush/getAvailableIngredients");
+    return response.json();
+}
+
+async function getAvailablePizzas() {
+    let response = await fetch("pizza_rush/getAvailablePizzas");
+    return response.json();
 }
 
 // AT STARTUP ---------------------------------------------------------------------------------------------------------
 
 // called at startup
-function loadGameElements() {
+async function loadGameElements() {
     //vorläufig zum Testen
-    getAvailableIngredients();
-    getAvailablePizzas();
+    await setupData();
 
-    loadIngredientSection();
-    loadOrderSection();
-    loadOvens();
+    await loadIngredientSection();
+    await loadOrderSection();
+    await loadOvens();
 }
 
 function loadIngredientSection(){
