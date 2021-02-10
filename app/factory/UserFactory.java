@@ -10,9 +10,7 @@ import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -316,14 +314,35 @@ public class UserFactory {
         public String getProfilePictureSrc() throws IOException {
             String path="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
             if (profilePicture != null) {
+                /*
                     ImageIO.write(this.getProfilePicture(), "jpg", new File("public/images/Profile_tmpImage/tmpImage.jpg"));
                     byte[] imageBytes = Files.readAllBytes(Paths.get("public/images/Profile_tmpImage/tmpImage.jpg"));
                     Base64.Encoder encoder = Base64.getEncoder();
                     path = "data:image/jpg;base64," + encoder.encodeToString(imageBytes);
 
+                 */
+                path=encodeToString(profilePicture,"jpg");
             }
             return path;
         }
+
+        public String encodeToString(BufferedImage image, String type) {
+            String imageString = null;
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+            try {
+                ImageIO.write(image, type, bos);
+                byte[] imageBytes = bos.toByteArray();
+
+                imageString = "data:image/"+type+";base64," + Base64.getEncoder().encodeToString(imageBytes);
+
+                bos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return imageString;
+        }
+
 
         public void setProfilePicture(BufferedImage profilePicture) {
             this.profilePicture = profilePicture;
