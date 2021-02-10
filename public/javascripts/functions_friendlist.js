@@ -12,8 +12,9 @@ function createFriendlist(data){
         friend.className = `friend`;
 
         var image= document.createElement(`img`)
-        image.src = data[userName]
-
+        if (data[userName]!=null) {
+            image.src = data[userName]
+        }else image.src="assets/images/profile-icon.png"
         var name = document.createElement(`div`);
         name.className = `name`;
         name.innerHTML = userName;

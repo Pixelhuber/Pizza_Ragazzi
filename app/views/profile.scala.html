@@ -23,14 +23,12 @@
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
         <!--end of Navigation bar-->
 
-
         <h1 id="heading">PROFILE</h1>
         <br>
-
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-9">
-                    <img id="profile-picture" src=@routes.Assets.versioned("images/profile-icon.png") alt="profile-picture" width="300" height="300"/>
+                    <img id="profile-picture" alt="profile-picture" width="300" height="300" src=@routes.Assets.versioned("images/profile-icon.png")>
                     <form name="userForm">
                         <h1 id="username">Username</h1>
                     </form>
@@ -58,12 +56,9 @@
         <br>
 
         <h1 id="achievementsHeading">Achievements:</h1>
-
         <div id="achievements_table">
+            <script> displayAchievements() </script>
         </div>
-
-        <script> displayAchievements() </script>
-
 
     </body>
 </html>
