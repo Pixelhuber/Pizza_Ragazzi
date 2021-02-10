@@ -5,15 +5,27 @@
     <head>
         <meta charset="UTF-8">
         <title>Menu</title>
+        <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_menu.css")">
     </head>
     <body>
             <!--Navigation bar-->
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
             <!--end of Navigation bar-->
 
-        <form action="/pizzaRush">
-            <input type="submit" value="Pizza Rush" />
-        </form>
+        <div id="menuItem_container">
+            <form action="/pizzaRush">
+                <input type="submit" value="Pizza Rush" />
+            </form>
+
+            <form action="">
+                <input type="submit" value="Tutorial" />
+            </form>
+
+            <form action="">
+                <input type="submit" value="Memory" />
+            </form>
+        </div>
+
 
     </body>
 </html>
