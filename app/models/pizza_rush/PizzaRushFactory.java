@@ -89,7 +89,7 @@ public class PizzaRushFactory {
         });
     }
 
-    public String encodeToString(BufferedImage image, String type) {
+    public String encodeImageToString(BufferedImage image, String type) {
         String imageString = null;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
