@@ -558,6 +558,8 @@ async function loadGameElements() {
     await setupAvailableIngredients();
     await setupAvailablePizzas();
 
+    document.getElementById("loading").style.display='none';
+
     loadIngredientSection();
     loadOvens();
 }

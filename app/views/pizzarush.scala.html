@@ -10,11 +10,13 @@
         <title>Pizza-Rush</title>
     </head>
 
-    <body onload="  loadGameElements()">
-
+    <body onload="loadGameElements()">
             <!--NAVIGATION BAR ------------->
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
             <!------------------------------>
+        <div id="loading">
+            <img id="loading-image" alt="Loading..." src=@routes.Assets.versioned("images/LoadingGif_Pizza.gif")>
+        </div>
 
         <div id="startStop_overlay" onclick="manageRushCountdown(120, 'timerRushmode')">
             <div id="startStop_overlay_text">Click anywhere to start!</div>
@@ -87,7 +89,6 @@
         </section>
 
         <div id="lower_container">
-
 
 
         </div>
