@@ -1941,7 +1941,7 @@ function startMiniGame(ingredientList) {
         setCanvasSize();
 
 
-        const moleHandler = new MoleHandler(ingredientList, 9, 1000,0, 2);
+        const moleHandler = new MoleHandler(ingredientList, 9, 500,0, 2);
         addHitListener(moleHandler);
 
         let start;
