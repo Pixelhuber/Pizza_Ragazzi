@@ -1467,7 +1467,9 @@ function startMiniGame(ingredientList) {
                         this.timestampLastThrow = timestamp;
                     }
 
-                this.ingredientsCurrentlyInAir.forEach(function (item, index, array) {
+                const copy = [...this.ingredientsCurrentlyInAir];
+
+                copy.forEach(function (item, index, array) {
                     item.step();
                 });
             }
@@ -1825,7 +1827,9 @@ function startMiniGame(ingredientList) {
                         this.timestampLastShow = timestamp;
                     }
 
-                this.ingredientsCurrentlyShown.forEach(function (item, index, array) {
+                const copy = [...this.ingredientsCurrentlyShown];
+
+                copy.forEach(function (item, index, array) {
                     item.step(timestamp);
                 });
             }
