@@ -127,25 +127,25 @@ public class PizzaRushFactory {
             } catch (IOException invalidProfilePicture) {
                 throw new ProfilePictureException("We had trouble getting the " + picture_raw);
             }
-            BufferedInputStream bis_raw_disctractor = new BufferedInputStream(rs.getBinaryStream("picture_raw"));
+            BufferedInputStream bis_raw_distractor = new BufferedInputStream(rs.getBinaryStream("picture_raw"));
             try {
-                this.picture_raw_distractor = encodeImageToString(ImageIO.read(bis_raw_disctractor), "png");
+                this.picture_raw_distractor = encodeImageToString(ImageIO.read(bis_raw_distractor), "png");
             } catch (IOException invalidProfilePicture) {
                 throw new ProfilePictureException("We had trouble getting the " + picture_raw_distractor);
             }
-            BufferedInputStream bis_processed = new BufferedInputStream(rs.getBinaryStream("picture_raw"));
+            BufferedInputStream bis_processed = new BufferedInputStream(rs.getBinaryStream("picture_processed"));
             try {
                 this.picture_processed = encodeImageToString(ImageIO.read(bis_processed), "png");
             } catch (IOException invalidProfilePicture) {
                 throw new ProfilePictureException("We had trouble getting the " + picture_processed);
             }
-            BufferedInputStream bis_baked = new BufferedInputStream(rs.getBinaryStream("picture_raw"));
+            BufferedInputStream bis_baked = new BufferedInputStream(rs.getBinaryStream("picture_baked"));
             try {
                 this.picture_baked = encodeImageToString(ImageIO.read(bis_baked), "png");
             } catch (IOException invalidProfilePicture) {
                 throw new ProfilePictureException("We had trouble getting the " + picture_baked);
             }
-            BufferedInputStream bis_burnt = new BufferedInputStream(rs.getBinaryStream("picture_raw"));
+            BufferedInputStream bis_burnt = new BufferedInputStream(rs.getBinaryStream("picture_burnt"));
             try {
                 this.picture_burnt = encodeImageToString(ImageIO.read(bis_burnt), "png");
             } catch (IOException invalidProfilePicture) {
