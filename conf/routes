@@ -37,6 +37,8 @@ GET     /getEmail                   controllers.ProfileController.getEmailFromSe
 #double getMail??
 GET     /profile/getMail            controllers.ProfileController.getEmailFromDatabase(request: Request)
 
+GET     /profile/getTier            controllers.ProfileController.getTierFromDatabase(request: Request)
+
 GET     /profile/getTotalPoints    controllers.ProfileController.getGesamtpunkteFromDatabase(request: Request)
 
 GET     /profile/getHighScore       controllers.ProfileController.getHighscoreFromDatabase(request: Request)

@@ -77,6 +77,7 @@ function setup() {
     getGesamtpunkteFromDatabase();
     getHighscoreFromDatabase();
     getMailFromDatabase();
+    getTierFromDatabase();
     getProfilePicFromDatabase();
 }
 //TODO update username und profilepic zusammenlegen
@@ -128,7 +129,6 @@ function uploadProfilePictureIntoDB(){
 function getUsernameFromDatabase() {
 
     $.get("/getUsername", function(data, status){
-        //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
         document.getElementById("username").textContent = data
     }).fail(function (data, status){
         document.getElementById("username").textContent = "Default Name";
@@ -139,7 +139,6 @@ function getUsernameFromDatabase() {
 //TODO hier evtl "getMail" route nutzen
 function getMailFromDatabase() {
     $.get("/profile/getMail", function(data, status){
-        //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
         document.getElementById("mail").textContent = "Email: " + data
     }).fail(function (data, status){
         document.getElementById("mail").textContent = "Default Mail";
@@ -149,7 +148,6 @@ function getMailFromDatabase() {
 
 function getGesamtpunkteFromDatabase() {
     $.get("/profile/getTotalPoints", function(data, status){
-        //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
         document.getElementById("gesamtpunkte").textContent = "Gesamtpunkte: " + data
     }).fail(function (data, status){
         document.getElementById("gesamtpunkte").textContent = "Default Gesamtpunkte";
@@ -159,7 +157,6 @@ function getGesamtpunkteFromDatabase() {
 
 function getHighscoreFromDatabase() {
     $.get("/profile/getHighScore", function(data, status){
-        //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
         document.getElementById("highscore").textContent = "Highscore: " + data
     }).fail(function (data, status){
         document.getElementById("highscore").textContent = "Default Highscore";
@@ -167,9 +164,17 @@ function getHighscoreFromDatabase() {
     });
 }
 
+function getTierFromDatabase() {
+    $.get("/profile/getTier", function(data, status){
+        document.getElementById("tier").textContent = "Tier: " + data
+    }).fail(function (data, status){
+        document.getElementById("highscore").textContent = "Default Tier";
+        alert("Couldn't retrieve tier from database");
+    });
+}
+
 function getProfilePicFromDatabase() {
         $.get("/profile/getProfilePic", function(data, status){
-            //TODO: Ich will in dieser Methode nur den String zurückgeben und nicht schon das Feld ändern
             document.getElementById("profile-picture").setAttribute("src",data)
         }).fail(function (data, status){
             document.getElementById("profile-picture").setAttribute("src","https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");

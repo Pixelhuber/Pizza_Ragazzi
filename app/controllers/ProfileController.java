@@ -86,6 +86,12 @@ public class ProfileController extends Controller {
         return ok(Integer.toString(user.getHighScore()));
     }
 
+    public Result getTierFromDatabase(Http.Request request) {
+        String email = request.session().get("email").get();
+        UserFactory.User user = userFactory.getUserByEmail(email);
+        return ok(Integer.toString(user.getCurrentTier()));
+    }
+
     public Result getProfilePictureFromDatabase(Http.Request request) throws IOException {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
