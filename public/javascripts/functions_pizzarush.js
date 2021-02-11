@@ -587,7 +587,6 @@ function loadIngredientSection(){
     })
 }
 
-
 function loadOvens() {
 
     // this could later be dynamic:
