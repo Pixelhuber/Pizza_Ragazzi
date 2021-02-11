@@ -127,11 +127,13 @@ public class PizzaRushFactory {
             } catch (IOException invalidProfilePicture) {
                 throw new ProfilePictureException("We had trouble getting the " + picture_raw);
             }
-            BufferedInputStream bis_raw_distractor = new BufferedInputStream(rs.getBinaryStream("picture_raw"));
-            try {
-                this.picture_raw_distractor = encodeImageToString(ImageIO.read(bis_raw_distractor), "png");
-            } catch (IOException invalidProfilePicture) {
-                throw new ProfilePictureException("We had trouble getting the " + picture_raw_distractor);
+            if (!this.name.equals("Impasto")) {                                                                       //Impasto hat kein distractor-Bild
+                BufferedInputStream bis_raw_distractor = new BufferedInputStream(rs.getBinaryStream("picture_raw_distractor"));
+                try {
+                    this.picture_raw_distractor = encodeImageToString(ImageIO.read(bis_raw_distractor), "png");
+                } catch (IOException invalidProfilePicture) {
+                    throw new ProfilePictureException("We had trouble getting the " + picture_raw_distractor);
+                }
             }
             BufferedInputStream bis_processed = new BufferedInputStream(rs.getBinaryStream("picture_processed"));
             try {
