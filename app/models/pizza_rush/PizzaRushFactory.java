@@ -21,11 +21,11 @@ public class PizzaRushFactory {
     Database db;
 
     @Inject
-    public PizzaRushFactory(Database db){
-        this.db=db;
+    public PizzaRushFactory(Database db) {
+        this.db = db;
     }
 
-    public List<Ingredient> getAllIngredients(){
+    public List<Ingredient> getAllIngredients() {
         return db.withConnection(conn -> {
             List<Ingredient> ingredients = new ArrayList<>();
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `Ingredient`");
@@ -39,7 +39,7 @@ public class PizzaRushFactory {
         });
     }
 
-    public Ingredient getIngredientById(int id){
+    public Ingredient getIngredientById(int id) {
         return db.withConnection(conn -> {
             Ingredient ingredient = null;
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `Ingredient` WHERE idIngredient = ?");
@@ -53,7 +53,7 @@ public class PizzaRushFactory {
         });
     }
 
-    public List<Ingredient> getAvailableIngredients(String email){
+    public List<Ingredient> getAvailableIngredients(String email) {
         return db.withConnection(conn -> {
             List<Ingredient> result = new ArrayList<>();
             String sql = "SELECT * FROM Ingredient WHERE Tier_idTier <= (SELECT Tier_idTier FROM `User` WHERE email = ?)";
@@ -69,7 +69,7 @@ public class PizzaRushFactory {
         });
     }
 
-    public List<Order> getAvailablePizzas(String email){
+    public List<Order> getAvailablePizzas(String email) {
         return db.withConnection(conn -> {
             List<Order> result = new ArrayList<>();
             String sql = "SELECT * FROM Pizza WHERE idPizza NOT IN (SELECT Pizza_idPizza FROM Ingredient INNER JOIN Pizza_has_Ingredient PhI ON Ingredient.idIngredient = PhI.Ingredient_idIngredient WHERE Tier_idTier > (SELECT Tier_idTier FROM `User` WHERE email = ?))";
@@ -93,7 +93,7 @@ public class PizzaRushFactory {
             ImageIO.write(image, type, bos);
             byte[] imageBytes = bos.toByteArray();
 
-            imageString = "data:image/"+type+";base64," + Base64.getEncoder().encodeToString(imageBytes);
+            imageString = "data:image/" + type + ";base64," + Base64.getEncoder().encodeToString(imageBytes);
 
             bos.close();
         } catch (IOException e) {
@@ -103,8 +103,8 @@ public class PizzaRushFactory {
     }
 
 
-//-----------KLASSEN-------------------------------------------------------------------------------------------
-    public class Ingredient{
+    //-----------KLASSEN-------------------------------------------------------------------------------------------
+    public class Ingredient {
         int id;
         String name;         //https://gist.github.com/vikrum/4758434
         String picture_raw;
@@ -118,7 +118,7 @@ public class PizzaRushFactory {
         int speed;
         int rotation;
 
-        public Ingredient (ResultSet rs) throws SQLException {
+        public Ingredient(ResultSet rs) throws SQLException {
             this.id = rs.getInt("idIngredient");
             this.name = rs.getString("name");
             BufferedInputStream bis_raw = new BufferedInputStream(rs.getBinaryStream("picture_raw"));
@@ -155,7 +155,7 @@ public class PizzaRushFactory {
             setIngredientFlightBehaviorFromDatabase();
         }
 
-        private void setIngredientFlightBehaviorFromDatabase(){
+        private void setIngredientFlightBehaviorFromDatabase() {
             db.withConnection(conn -> {
                 PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `FlightBehavior` WHERE Ingredient_idIngredient = ? ");
                 stmt.setInt(1, this.id);
@@ -170,91 +170,91 @@ public class PizzaRushFactory {
             });
         }
 
-    public int getId() {
-        return id;
+        public int getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getPicture_raw() {
+            return picture_raw;
+        }
+
+        public String getPicture_raw_distractor() {
+            return picture_raw_distractor;
+        }
+
+        public String getPicture_processed() {
+            return picture_processed;
+        }
+
+        public String getPicture_baked() {
+            return picture_baked;
+        }
+
+        public String getPicture_burnt() {
+            return picture_burnt;
+        }
+
+        public int getTier() {
+            return tier;
+        }
+
+        public int getVertex_x_inPercent() {
+            return vertex_x_inPercent;
+        }
+
+        public int getVertex_y_inPercent() {
+            return vertex_y_inPercent;
+        }
+
+        public int getSpeed() {
+            return speed;
+        }
+
+        public int getRotation() {
+            return rotation;
+        }
+
+        @Override
+        public String toString() {
+            return "Ingredient{" +
+                    "id=" + id +
+                    ", name='" + name + '\'' +
+                    ", picture_raw=" + picture_raw +
+                    ", picture_raw_distractor=" + picture_raw_distractor +
+                    ", picture_processed=" + picture_processed +
+                    ", picture_baked=" + picture_baked +
+                    ", picture_burnt=" + picture_burnt +
+                    ", tier=" + tier +
+                    ", vertex_x_inPercent=" + vertex_x_inPercent +
+                    ", vertex_y_inPercent=" + vertex_y_inPercent +
+                    ", speed=" + speed +
+                    ", rotation=" + rotation +
+                    '}';
+        }
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getPicture_raw() {
-        return picture_raw;
-    }
-
-    public String getPicture_raw_distractor() {
-        return picture_raw_distractor;
-    }
-
-    public String getPicture_processed() {
-        return picture_processed;
-    }
-
-    public String getPicture_baked() {
-        return picture_baked;
-    }
-
-    public String getPicture_burnt() {
-        return picture_burnt;
-    }
-
-    public int getTier() {
-        return tier;
-    }
-
-    public int getVertex_x_inPercent() {
-        return vertex_x_inPercent;
-    }
-
-    public int getVertex_y_inPercent() {
-        return vertex_y_inPercent;
-    }
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    public int getRotation() {
-        return rotation;
-    }
-
-    @Override
-    public String toString() {
-        return "Ingredient{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", picture_raw=" + picture_raw +
-                ", picture_raw_distractor=" + picture_raw_distractor +
-                ", picture_processed=" + picture_processed +
-                ", picture_baked=" + picture_baked +
-                ", picture_burnt=" + picture_burnt +
-                ", tier=" + tier +
-                ", vertex_x_inPercent=" + vertex_x_inPercent +
-                ", vertex_y_inPercent=" + vertex_y_inPercent +
-                ", speed=" + speed +
-                ", rotation=" + rotation +
-                '}';
-    }
-}
-
-    public class Order{ //Ideale Pizza, also einfach Pizza aus Datenbank
+    public class Order { //Ideale Pizza, also einfach Pizza aus Datenbank
         int id;
         String name;
         int points;
         List<Ingredient> ingredients;
 
-        public Order (ResultSet rs) throws SQLException {
-            this.id=rs.getInt("idPizza");
-            this.name=rs.getString("name");
-            this.points=rs.getInt("points");
+        public Order(ResultSet rs) throws SQLException {
+            this.id = rs.getInt("idPizza");
+            this.name = rs.getString("name");
+            this.points = rs.getInt("points");
             this.ingredients = new ArrayList<>(setOrderIngredientsFromDatabase());
         }
 
-        private List<Ingredient> setOrderIngredientsFromDatabase(){
+        private List<Ingredient> setOrderIngredientsFromDatabase() {
             return db.withConnection(conn -> {
                 List<Ingredient> result = new ArrayList<>();
                 PreparedStatement stmt = conn.prepareStatement("SELECT Ingredient_idIngredient FROM `Pizza_has_Ingredient` WHERE Pizza_idPizza =? ");
-                stmt.setInt(1,getId());
+                stmt.setInt(1, getId());
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
                     result.add(getIngredientById(rs.getInt("Ingredient_idIngredient")));

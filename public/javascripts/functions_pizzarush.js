@@ -62,12 +62,13 @@ class AudioPlayer {
 class Ingredient {
 
     // ATTRIBUTES --------------------
-
+    id;
     name;
     image_path;
     flight_behavior;
 
-    constructor(name, image_path, flight_behavior) {
+    constructor(id, name, image_path, flight_behavior) {
+        this.id=id;
         this.name = name; // attributes
         this.image_path = image_path;
         this.flight_behavior = flight_behavior;
@@ -107,6 +108,10 @@ class Ingredient {
         return this.name;
     }
 
+    getId(){
+        return this.id;
+    }
+
     //returns an instance of the ingredient with this name
     static getInstanceByName(name) {
         let ret = undefined
@@ -129,7 +134,7 @@ class DraggableIngredientInstance extends Ingredient {
     isDragEnabled;
 
     constructor(ingredient) {
-        super(ingredient.name, ingredient.image_path);
+        super(ingredient.id, ingredient.name, ingredient.image_path);
         this.createDraggable();
         this.isDragEnabled = true;
     }
@@ -191,6 +196,15 @@ class Pizza {
     // When created, a new pizza is simply a piece of dough. More ingredients get added while playing.
     constructor() {
         this.ingredients.push(Ingredient.getInstanceByName("Impasto"))
+    }
+
+    getIngredientIds(){
+        let ingredientIds = [];
+
+        this.ingredients.forEach(function (value){
+            ingredientIds.push(value.getId())
+        })
+        return ingredientIds
     }
 }
 
@@ -414,12 +428,14 @@ class Order {
 
     gameElement; //in game representation of the order
 
-    constructor(name, points, timeInSeconds, requestedPizza) {
+    constructor(name, points, timeInSeconds, ingredients) {
         this.name = name;
         this.points = points;
         this.timeInSeconds = timeInSeconds;
-        if (requestedPizza instanceof Pizza)
-            this.requestedPizza = requestedPizza;
+        this.requestedPizza=new Pizza()
+        this.requestedPizza.ingredients=[]
+        this.requestedPizza.ingredients.push.apply(this.requestedPizza.ingredients,ingredients)
+        console.log(this.requestedPizza.ingredients)
     }
 
 
@@ -520,7 +536,7 @@ async function setupAvailableIngredients() {
     console.log(ingredients);
 
     ingredients.forEach(function(item) {                                  // Json-Array in availableIngredients-Array
-        availableIngredients.push(new Ingredient(item.name, item.picture_raw, {
+        availableIngredients.push(new Ingredient(item.id, item.name, item.picture_raw, {
             vertex_x_inPercent: item.vertex_x_inPercent,
             vertex_y_inPercent: item.vertex_y_inPercent,
             speed: item.speed,
@@ -534,7 +550,7 @@ async function  setupAvailablePizzas() {
     const orders = await getAvailablePizzas();
 
     orders.forEach(function(item) {
-        orderList.push(new Order(item.name, item.points, 80))  //TODO: timeInSeconds vielleicht auch in Datenbank speichern
+        orderList.push(new Order(item.name, item.points, 80, item.ingredients))  //TODO: timeInSeconds vielleicht auch in Datenbank speichern
     });
 
     orderList.forEach(function(item){
@@ -791,8 +807,9 @@ function validatePizza(order, pizza) {
     fetch("/pizza_rush/validate_pizza", {
         method: 'POST',
         body: JSON.stringify({
-            pizza: pizza,
-            order: order
+            orderPoints:order.points,
+            orderIngredientIds:order.requestedPizza.getIngredientIds(),
+
         }),
         headers: {
             "Content-Type": "application/json"
