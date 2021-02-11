@@ -568,7 +568,7 @@ async function getAvailablePizzas() {
     return response.json();
 }
 
-// AT STARTUP ---------------------------------------------------------------------------------------------------------
+// STARTUP ---------------------------------------------------------------------------------------------------------
 
 // called at startup
 async function loadGameElements() {
@@ -721,7 +721,6 @@ function pullNewIngredient(ingredientIndex){
     draggable.style.top = draggable.tagName === "IMG" ? event.clientY + scrollY - draggable.height/2 + "px" : event.clientY + scrollY - draggable.firstChild.height/2 + "px";
 }
 
-
 function checkOverlap(draggable, destination) {
     const draggable_box = draggable.getBoundingClientRect();
     const destination_box = destination.getBoundingClientRect();
@@ -836,7 +835,6 @@ function updateCurrentPoints() {
     ).catch((error) => {
         console.error('Error:', error);
     });
-
 }
 
 function resetPoints() {
