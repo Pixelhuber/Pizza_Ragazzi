@@ -1,7 +1,10 @@
 package controllers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import models.pizza_rush.PizzaRushFactory;
+import models.pizza_rush.PizzaValidation;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -10,6 +13,7 @@ import play.mvc.Results;
 import scala.util.parsing.json.JSONArray;
 
 import javax.inject.Inject;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,22 +29,32 @@ public class PizzaRushController extends Controller {
     }
 
 
-    public Result validatePizza(Http.Request request) {
-        // read json data
-        return ok();
-        /*
-        List<String> ingredients = request.body().asJson().get("pizza").findValuesAsText("ingredients");
-        //TODO korrekte zutaten der gemachten Pizza auslesen und als liste formatieren, bisher noch falsch
+    public Result validatePizza(Http.Request request) throws IOException {
+        //TODO fertig übersetzen
+
+        int orderPoints = 0;
+        List<Integer> orderIngredientIds = null;
+        List<Integer> createdPizzaIngredientIds = null;
+        int createdPizzaBakeStatus = 0;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            ObjectReader reader = mapper.readerFor(new TypeReference<List<String>>() {
+            });
+
+            orderPoints = request.body().asJson().get("orderPoints").asInt();
+            orderIngredientIds = reader.readValue(request.body().asJson().get("orderIngredientIds"));
+            createdPizzaIngredientIds = reader.readValue(request.body().asJson().get("createdPizzaIngredientIds"));
+            createdPizzaBakeStatus = request.body().asJson().get("createdPizzaBakeStatus").asInt();
+
+        }catch (IOException JsonListTo){
+            System.out.println("Das übergebene Json konnte nicht in eine Liste übersetzt werden");
+        }
+        PizzaValidation validation = new PizzaValidation(orderPoints,orderIngredientIds,createdPizzaIngredientIds,createdPizzaBakeStatus);
 
         int currentPoints = getCurrentPointsFromSession(request.session());
 
-        if (pizzaCreation.validatePizza()) {
-            String points = String.valueOf(currentPoints + 10);//temporär
-            return ok().addingToSession(request, "currentPizzaRushPoints", points);
-        } else
-            return ok();
-
-         */
+        String points = String.valueOf(currentPoints + validation.calculatePoints());//temporär
+        return ok().addingToSession(request, "currentPizzaRushPoints", points);
     }
 
     public Result getCurrentPointsFromSession(Http.Request request) {
