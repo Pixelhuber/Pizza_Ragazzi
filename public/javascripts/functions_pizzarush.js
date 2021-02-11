@@ -517,6 +517,7 @@ const existingDraggablePizzaInstances = [];
 
 async function setupAvailableIngredients() {
     const ingredients = await getAvailableIngredients(); //ingredients Json-Array fetchen
+    console.log(ingredients);
 
     ingredients.forEach(function(item) {                                  // Json-Array in availableIngredients-Array
         availableIngredients.push(new Ingredient(item.name, item.picture_raw, {
