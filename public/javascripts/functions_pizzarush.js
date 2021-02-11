@@ -202,7 +202,7 @@ class Pizza {
         let ingredientIds = [];
 
         this.ingredients.forEach(function (value){
-            ingredientIds.push(value.getId())
+            ingredientIds.push(value.id)
         })
         return ingredientIds
     }
@@ -809,6 +809,8 @@ function validatePizza(order, pizza) {
         body: JSON.stringify({
             orderPoints:order.points,
             orderIngredientIds:order.requestedPizza.getIngredientIds(),
+            createdPizzaIngredientIds: pizza.getIngredientIds(),
+            createdPizzaBakeStatus: pizza.bakeStatus
 
         }),
         headers: {
