@@ -1,7 +1,6 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import models.pizza_rush.PizzaCreation;
 import models.pizza_rush.PizzaRushFactory;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -32,7 +31,6 @@ public class PizzaRushController extends Controller {
         /*
         List<String> ingredients = request.body().asJson().get("pizza").findValuesAsText("ingredients");
         //TODO korrekte zutaten der gemachten Pizza auslesen und als liste formatieren, bisher noch falsch
-        PizzaCreation pizzaCreation = new PizzaCreation(ingredients);
 
         int currentPoints = getCurrentPointsFromSession(request.session());
 
