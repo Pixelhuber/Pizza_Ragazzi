@@ -564,6 +564,8 @@ class Order {
 
 // TODO wird später wsl vom Server geladen werden
 const availableIngredients = [      new StampingIngredient("Impasto", "/assets/images/teig.png", {
+                                        disabling_time: 5000,
+
                                         hits_required: 3
                                     }),
                                     new ChoppingIngredient("Formaggio", "/assets/images/formaggio.png", {
@@ -575,7 +577,9 @@ const availableIngredients = [      new StampingIngredient("Impasto", "/assets/i
                                         hits_required: 3
                                     }),
                                     new StampingIngredient("Pomodoro", "/assets/images/pomodoro.png", {
-                                        hits_required: 2
+                                        disabling_time: 2000,
+
+                                        hits_required: 5
                                     }),
                                     new ChoppingIngredient("Salame", "/assets/images/salame.png", {
                                         vertex_x_inPercent: 60,
@@ -1127,6 +1131,7 @@ function startMiniGame(ingredientList) {
     document.getElementById("miniGame_layer").style.visibility = "visible";
 
 
+
     function fruit_ninja() {
         fruitNinjaRunning = true;
 
@@ -1445,8 +1450,12 @@ function startMiniGame(ingredientList) {
 
             nextFrame(timestamp) {
 
-                if (this.disableTime > 0)
+                if (this.disableTime > 0){
                     this.disableTime -= timestamp - this.lastTimestamp;
+
+                    context.fillStyle = '#e57d7d'
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+                }
 
                 this.lastTimestamp = timestamp;
 
@@ -1503,7 +1512,7 @@ function startMiniGame(ingredientList) {
                 x = event.clientX - canvas_box.left;
                 y = event.clientY - canvas_box.top;
 
-                ingredientJuggler.ingredientsCurrentlyInAir.forEach(function (item, index, array) {
+                ingredientJuggler.ingredientsCurrentlyInAir.forEach(function (item) {
                     if (item.isHit(x, y))
                         item.onHit();
                 })
@@ -1609,10 +1618,21 @@ function startMiniGame(ingredientList) {
             }
 
             isHit(cursorX, cursorY) {
-                return isInside([cursorX, cursorY], )
+                return isInside([cursorX, cursorY], this.getShapeCoordinates());
             }
 
             onHit() {}
+
+            getShapeCoordinates() {
+                const holeCoordinates = this.moleHandler.moleDrawer.holeCoordinates[this.holeNumber];
+
+                let lu = [holeCoordinates[0] - this.ingredient_image.width/2, holeCoordinates[1] - this.ingredient_image.height/2];
+                let lo = [holeCoordinates[0] - this.ingredient_image.width/2, holeCoordinates[1] + this.ingredient_image.height/2];
+                let ro = [holeCoordinates[0] + this.ingredient_image.width/2, holeCoordinates[1] + this.ingredient_image.height/2];
+                let ru = [holeCoordinates[0] + this.ingredient_image.width/2, holeCoordinates[1] - this.ingredient_image.height/2];
+
+                return [lu, lo, ro, ru];
+            }
         }
 
         class IngredientShower extends AbstractShower {
@@ -1641,7 +1661,7 @@ function startMiniGame(ingredientList) {
                 this.moleHandler.ingredientsWaitingToBeShown.splice(index, 1);
 
                 // tell MoleHandler to either show yourself OR a distraction
-                if (Math.random() < 0.1)
+                if (Math.random() < 0.2)
                     this.moleHandler.ingredientsCurrentlyShown.push(this.createDistraction());
                 else
                     this.moleHandler.ingredientsCurrentlyShown.push(this);
@@ -1657,6 +1677,7 @@ function startMiniGame(ingredientList) {
             }
 
             onHit() {
+                this.endShow();
 
                 this.hits_left -= 1;
 
@@ -1671,6 +1692,10 @@ function startMiniGame(ingredientList) {
                     this.moleHandler.dropIngredient(this);
                     processedIngredients.push(this.element);
                     updateCounter();
+                } else {
+
+                    AudioPlayer.ingredient_hit();
+                    console.log("Hit: " + this.element.name)
                 }
             }
 
@@ -1721,10 +1746,10 @@ function startMiniGame(ingredientList) {
                 });
 
                 console.log("Distraction Hit: " + this.element.name);
-                this.moleHandler.disableFor(this.disablingTime);
+                this.moleHandler.disableFor(this.disabling_time);
 
                 this.ingredient_image.remove();
-                this.endThrow();
+                this.endShow();
             }
         }
 
@@ -1773,15 +1798,22 @@ function startMiniGame(ingredientList) {
 
             dropIngredient(ingredientShower) {
                 this.allIngredientsInPlay.splice(this.allIngredientsInPlay.indexOf(ingredientShower), 1);
-                this.ingredientsCurrentlyShown.splice(this.ingredientsCurrentlyShown.indexOf(ingredientShower), 1);
+                if (this.ingredientsCurrentlyShown.includes(ingredientShower))
+                    this.ingredientsCurrentlyShown.splice(this.ingredientsCurrentlyShown.indexOf(ingredientShower), 1);
                 if (this.ingredientsWaitingToBeShown.includes(ingredientShower))
                     this.ingredientsWaitingToBeShown.splice(this.ingredientsWaitingToBeShown.indexOf(ingredientShower), 1);
             }
 
             nextFrame(timestamp) {
 
-                if (this.disableTime > 0)
+                if (this.disableTime > 0){
                     this.disableTime -= timestamp - this.lastTimestamp
+
+                    context.fillStyle = '#e57d7d'
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+                }
+
+                this.moleDrawer.drawEmpty();
 
                 this.lastTimestamp = timestamp;
 
@@ -1877,13 +1909,36 @@ function startMiniGame(ingredientList) {
             }
         }
 
+        function addHitListener(moleHandler) {
+
+            let x;
+            let y;
+
+            canvas.onmousedown = checkForHit;
+
+
+            function checkForHit(event) {
+                if (moleHandler.isDisabled())
+                    return;
+
+                const canvas_box = canvas.getBoundingClientRect();
+                x = event.clientX - canvas_box.left;
+                y = event.clientY - canvas_box.top;
+
+                moleHandler.ingredientsCurrentlyShown.forEach(function (item) {
+                    if (item.isHit(x, y))
+                        item.onHit();
+                })
+            }
+        }
+
         // ------------------------------------------------------------------------------------------------------------
 
         setCanvasSize();
 
 
-        const moleHandler = new MoleHandler(ingredientList, 9, 450,0, 2);
-
+        const moleHandler = new MoleHandler(ingredientList, 9, 1000,0, 2);
+        addHitListener(moleHandler);
 
         let start;
 
@@ -1893,9 +1948,7 @@ function startMiniGame(ingredientList) {
 
             // clear the canvas before drawing the next frame
             context.clearRect(0,0, canvas.width, canvas.height);
-            moleHandler.moleDrawer.drawEmpty();
 
-            //moleHandler.moleDrawer.drawInHole(4, moleHandler.allIngredientsInPlay[0].ingredient_image);
             moleHandler.nextFrame(timestamp);
 
             if (moleHandler.allIngredientsInPlay.length <= 0)
