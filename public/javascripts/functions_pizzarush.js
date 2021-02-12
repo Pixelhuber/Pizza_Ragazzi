@@ -629,7 +629,7 @@ async function setupAvailableIngredients() {
     console.log(ingredients);
 
     ingredients.forEach(function(item) {                                  // Json-Array in availableIngredients-Array
-        availableIngredients.push(new Ingredient(item.id, item.name, item.picture_raw, {
+        availableIngredients.push(new AbstractIngredient(item.id, item.name, item.picture_raw, { //TODO: Fixen
             vertex_x_inPercent: item.vertex_x_inPercent,
             vertex_y_inPercent: item.vertex_y_inPercent,
             speed: item.speed,
