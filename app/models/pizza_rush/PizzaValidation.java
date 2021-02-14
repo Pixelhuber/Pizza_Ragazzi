@@ -5,10 +5,10 @@ import java.util.List;
 
 public class PizzaValidation {
 
-    private int orderPoints;
-    private List<Integer> orderIngredientIds;
-    private List<Integer> createdPizzaIngredientIds;
-    private int createdPizzaBakeStatus;
+    private final int orderPoints;
+    private final List<Integer> orderIngredientIds;
+    private final List<Integer> createdPizzaIngredientIds;
+    private final int createdPizzaBakeStatus;
 
     public PizzaValidation(int orderPoints,List<Integer> orderIngredientIds,List<Integer> createdPizzaIngredientIds,int createdPizzaBakeStatus){
         if(orderPoints==0||orderIngredientIds==null||createdPizzaIngredientIds==null)throw new NullPointerException("Parameter ist null");
