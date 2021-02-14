@@ -66,7 +66,7 @@ class AbstractIngredient {
     name;
     image_path;
 
-    constructor(id, name, image_path, flight_behavior) {
+    constructor(id, name, image_path) {
         this.id=id;
         this.name = name; // attributes
         this.image_path = image_path;
@@ -111,7 +111,7 @@ class AbstractIngredient {
     static getInstanceByName(name) {
         let ret = undefined
 
-        availableIngredients.forEach(function(item, index, array) {
+        availableIngredients.forEach(function(item) {
             if (name === item.name)
                 ret = item;
         });
@@ -297,7 +297,7 @@ class DraggablePizzaInstance extends Pizza {
 
 
     static findExistingPizzaByDiv(div) {
-        existingDraggablePizzaInstances.forEach(function(item, index, array){
+        existingDraggablePizzaInstances.forEach(function(item){
             if (item.draggable === div)
                 return item;
         })
@@ -325,7 +325,7 @@ class DraggablePizzaInstance extends Pizza {
 
         pizzaDiv.setAttribute('class', 'draggable');
 
-        this.ingredients.forEach(function(item, index, array){
+        this.ingredients.forEach(function(item){
 
             const ingr = item.createImg();
             ingr.style.position = "absolute";
@@ -349,7 +349,6 @@ class DraggablePizzaInstance extends Pizza {
     }
 
     whenDraggedInOrder(order) {
-
         existingDraggablePizzaInstances.splice(existingDraggablePizzaInstances.indexOf(this), 1);
         this.draggable.remove();
     }
@@ -359,8 +358,6 @@ class DraggablePizzaInstance extends Pizza {
         this.ovenIn();
         oven.bake(this);
         alignDraggableToDestination(this.draggable, oven.gameElement.image);
-
-
     }
 
     ovenIn() {
@@ -627,9 +624,10 @@ const existingDraggableIngredientInstances = [];
 async function setupAvailableIngredients() {
     const ingredients = await getAvailableIngredients(); //ingredients Json-Array fetchen
     console.log(ingredients);
-
+    /* TODO dieser untere Teil liest die ingredients aus und steckt sie in die available ingredients,
+        die übersetzung von den Datenbank items in die richtigen ingredients geht noch nicht richtig deshalb ausgegraut
     ingredients.forEach(function(item) {                                  // Json-Array in availableIngredients-Array
-        availableIngredients.push(new AbstractIngredient(item.id, item.name, item.picture_raw, { //TODO: Fixen
+        availableIngredients.push(new AbstractIngredient(item.id, item.name, item.picture_raw, {
             vertex_x_inPercent: item.vertex_x_inPercent,
             vertex_y_inPercent: item.vertex_y_inPercent,
             speed: item.speed,
@@ -637,6 +635,7 @@ async function setupAvailableIngredients() {
             hits_required: 3                        //TODO: hits_required vielleicht auch in Datenbank speichern
         }));
     });
+     */
 }
 
 async function  setupAvailablePizzas() {
@@ -676,7 +675,7 @@ async function loadGameElements() {
 
 function loadIngredientSection(){
 
-    availableIngredients.forEach(function(item, index, array){
+    availableIngredients.forEach(function(item, index){
         // simply create the <div> element
 
         const ingredient = document.createElement('div');
