@@ -4,32 +4,43 @@ class MemoryCard{
 
     ingredient; // ingredient the card is about
     fact;       // fact about the ingredient
+    id;
 
-    constructor(ingredient, fact) {
+    constructor(ingredient, fact, id) {
         this.ingredient = ingredient;
         this.fact = fact;
+        this.id = id;
     }
 
     createCards(){                                  //jeder Aufruf dieser Methode erstellt 2 Karten, die für den Namen und die für den Fakt
         this.createNameCard();
         this.createFactCard();
+
     }
 
     createNameCard() {
         const card = new NameCard(this);
 
         card.gameElement = document.createElement('div');
-        card.gameElement.text = document.createElement('p');
+        card.gameElement.text = document.createElement("p");
 
         card.gameElement.setAttribute('class', 'memoryCard');
 
         card.gameElement.text.innerHTML = this.ingredient;
 
+        card.gameElement.text.innerHTML = this.ingredient;
+
+        card.gameElement.setAttribute('id', this.id);
+
+        /*card.gameElement.setAttribute('onmousedown', card.turnAround.bind(this));*/
+
         card.gameElement.appendChild(card.gameElement.text);
 
         document.getElementById('memoryBox').appendChild(card.gameElement);
 
+
     }
+
 
     createFactCard() {
         const card = new FactCard(this);
@@ -41,13 +52,11 @@ class MemoryCard{
 
         card.gameElement.text.innerHTML = this.fact;
 
+        card.gameElement.setAttribute('id', this.id);
+
         card.gameElement.appendChild(card.gameElement.text);
 
         document.getElementById('memoryBox').appendChild(card.gameElement);
-    }
-
-    revealCard(MemoryCard){
-
     }
 
 
@@ -60,6 +69,11 @@ class NameCard extends MemoryCard{
         this.name = name;
     }
 
+    turnAround(){
+        this.gameElement.text.innerHTML = "Hallo";
+
+    }
+
 }
 
 class FactCard extends MemoryCard{
@@ -67,6 +81,11 @@ class FactCard extends MemoryCard{
     constructor(memoryCard, fact) {
         super(memoryCard.ingredient, memoryCard.fact);
         this.fact = fact;
+    }
+
+    turnAround(){
+        this.gameElement.text.innerHTML = "Hallo";
+
     }
 
 }
@@ -77,9 +96,32 @@ function loadMemoryCards(){                                                     
 
     for (let i = 0; i < ingredientList.length; i++) {
         let fact = getIngredientFact(ingredientList[i], getCurrentTier())
-        new MemoryCard(ingredientList[i],fact).createCards()
+        let memoryCard = new MemoryCard(ingredientList[i],fact,i).createCards()
+
     }
+
+    //onClick müsste eigentlich für NameCard und FactCard gehen, da beide die gleiche ID haben
+
+    for (let i = 0; i < ingredientList.length; i++) {
+        let  theBox = document.getElementById(i.toString());
+        theBox.onclick = function(evt) {
+            toggle(theBox);
+        }
+
+    }
+
 }
+
+function toggle(card){
+
+    if (card.text.style.visibility === "visible") {
+        card.text.style.visibility = "hidden"
+    } else {
+        card.text.style.visibility = "visible"
+    }
+
+}
+
 
 // TODO: Get Tier and Ingredientlist from Database --------------------
 
