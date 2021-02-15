@@ -575,7 +575,6 @@ class Order {
 // order class above
 // OBJECT COLLECTIONS -------------------------------------------------------------------------------------------------
 
-// TODO wird später wsl vom Server geladen werden
 const availableIngredients = [      new StampingIngredient("Impasto", "/assets/images/teig.png", {
                                         disabling_time: 5000,
 
