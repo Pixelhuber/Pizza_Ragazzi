@@ -181,3 +181,107 @@ function getProfilePicFromDatabase() {
             alert("Couldn't retrieve Profile Picture from database");
         });
 }
+
+//onclick-function von friend aus friendlist (functions_friendlist.js)
+function getInformationFromFriend(elm) {
+    if (!viewOnly) {
+        var name = elm.childNodes[1].innerHTML;  //childnodes[1] gibt das "name" child von friend
+
+        friendGetUsernameFromDatabase(name);
+        friendGetGesamtpunkteFromDatabase(name);
+        friendGetHighscoreFromDatabase(name);
+        friendGetMailFromDatabase(name);
+        friendGetTierFromDatabase(name);
+        friendGetProfilePicFromDatabase(name);
+
+        deleteOldFriendList();          //Liste wird gelöscht, damit nur neue angezeigt wird
+        document.getElementById("profileButton").style.visibility = "hidden";       //Edit-Knopf hidden
+        viewOnly = true;                //in functions_friendlist.js wird der Freundeslisten hoverEffect und onclick nicht mehr ausgeführt
+
+        friendGetFriendsData(name);
+    }
+}
+
+function deleteOldFriendList() {
+    var friendList = document.getElementsByClassName("friend-list");
+    for (i = 0; i < friendList.length; i++) {
+        friendList.item(i).remove();
+    }
+}
+
+function friendGetUsernameFromDatabase(username) {
+    fetch("/friendGetUsername", {
+        method: 'POST',
+        body: JSON.stringify(username),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    }).then(result => result.text())
+        .then(result => document.getElementById("username").textContent = result)
+}
+
+function friendGetMailFromDatabase(username) {
+    fetch("/profile/friendGetMail", {
+        method: 'POST',
+        body: JSON.stringify(username),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    }).then(result => result.text())
+        .then(result => document.getElementById("mail").textContent = "Email: " + result)
+}
+
+function friendGetGesamtpunkteFromDatabase(username) {
+    fetch("/profile/friendGetTotalPoints", {
+        method: 'POST',
+        body: JSON.stringify(username),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    }).then(result => result.text())
+        .then(result => document.getElementById("gesamtpunkte").textContent = "Gesamtpunkte: " + result)
+}
+
+function friendGetHighscoreFromDatabase(username) {
+    fetch("/profile/friendGetHighScore", {
+        method: 'POST',
+        body: JSON.stringify(username),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    }).then(result => result.text())
+        .then(result => document.getElementById("highscore").textContent = "Highscore: " + result)
+}
+
+function friendGetTierFromDatabase(username) {
+    fetch("/profile/friendGetTier", {
+        method: 'POST',
+        body: JSON.stringify(username),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    }).then(result => result.text())
+        .then(result => document.getElementById("tier").textContent = "Tier: " + result)
+}
+
+function friendGetProfilePicFromDatabase(username) {
+    fetch("/profile/friendGetProfilePic", {
+        method: 'POST',
+        body: JSON.stringify(username),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    }).then(result => result.json())
+        .then(result => document.getElementById("profile-picture").setAttribute("src", result))
+        .catch((error) => {
+        document.getElementById("profile-picture").setAttribute("src","https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+        alert("Couldn't retrieve Profile Picture from database");
+        console.error('Error:', error);
+    });
+}

@@ -45,6 +45,15 @@ GET     /profile/getHighScore       controllers.ProfileController.getHighscoreFr
 
 GET     /profile/getProfilePic      controllers.ProfileController.getProfilePictureFromDatabase(request: Request)
 
+# PROFILE-FROM-FRIEND ROUTES --------------------------------------------------------------------------
+POST    /friendGetUsername                controllers.ProfileController.friendGetUsernameFromDatabase(request: Request)
+POST    /profile/friendGetMail            controllers.ProfileController.friendGetEmailFromDatabase(request: Request)
+POST    /profile/friendGetTier            controllers.ProfileController.friendGetTierFromDatabase(request: Request)
+POST    /profile/friendGetTotalPoints     controllers.ProfileController.friendGetGesamtpunkteFromDatabase(request: Request)
+POST    /profile/friendGetHighScore       controllers.ProfileController.friendGetHighscoreFromDatabase(request: Request)
+POST    /profile/friendGetProfilePic      controllers.ProfileController.friendGetProfilePictureFromDatabase(request: Request)
+POST    /friendGetFriendsData     controllers.ProfileController.friendFriendsData(request: Request)
+
 # Friendlist --------------------------------------------------------------------------
 GET     /getFriendsData             controllers.ProfileController.getFriendsData(request: Request)
 

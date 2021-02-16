@@ -14,6 +14,7 @@ import viewmodels.UserViewModel;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -110,6 +111,56 @@ public class ProfileController extends Controller {
     public Result getFriendsData(Http.Request request) throws IOException {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
+        return ok(Json.toJson(user.getFriendsData()));
+    }
+
+    //AB HIER METHODEN ZUM ANSCHAUEN DES PROFILS EINES FREUNDES
+
+    /**
+     * returns the username
+     * by getting the user from the db with it`s email from the session
+     * @return Result
+     */
+    public Result friendGetUsernameFromDatabase(Http.Request request){
+        String username = request.body().asJson().asText();
+        UserFactory.User user = userFactory.getUserByUsername(username);
+        return ok(user.getUsername());
+    }
+
+    //evtl getEmailFromSession verwenden oder getUsername
+    public Result friendGetEmailFromDatabase(Http.Request request) {
+        String username = request.body().asJson().asText();
+        UserFactory.User user = userFactory.getUserByUsername(username);
+        return ok(user.getEmail());
+    }
+
+    public Result friendGetGesamtpunkteFromDatabase(Http.Request request) {
+        String username = request.body().asJson().asText();
+        UserFactory.User user = userFactory.getUserByUsername(username);
+        return ok(Integer.toString(user.getTotalPoints()));
+    }
+
+    public Result friendGetHighscoreFromDatabase(Http.Request request) {
+        String username = request.body().asJson().asText();
+        UserFactory.User user = userFactory.getUserByUsername(username);
+        return ok(Integer.toString(user.getHighScore()));
+    }
+
+    public Result friendGetTierFromDatabase(Http.Request request) {
+        String username = request.body().asJson().asText();
+        UserFactory.User user = userFactory.getUserByUsername(username);
+        return ok(Integer.toString(user.getCurrentTier()));
+    }
+
+    public Result friendGetProfilePictureFromDatabase(Http.Request request) throws IOException {
+        String username = request.body().asJson().asText();
+        UserFactory.User user = userFactory.getUserByUsername(username);
+        return ok(Json.toJson(user.getProfilePictureSrc()));
+    }
+
+    public Result friendFriendsData(Http.Request request) throws IOException{
+        String username = request.body().asJson().asText();
+        UserFactory.User user = userFactory.getUserByUsername(username);
         return ok(Json.toJson(user.getFriendsData()));
     }
 }

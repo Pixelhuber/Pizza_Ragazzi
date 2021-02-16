@@ -18,7 +18,7 @@ Position im jeweiligen Seitenstylesheet unter container_friends*/
     width: auto;
     padding-right: 10px;
     height: 60px;
-    background: #EEE;
+    background: #eeeeee;
     border-bottom: 1px solid #DDD;
     cursor: pointer;
     display: flex;
@@ -46,8 +46,4 @@ Position im jeweiligen Seitenstylesheet unter container_friends*/
 
 .friend.selected img {
     border-color: white;
-}
-
-.friend:not(.selected):hover {
-    background-color: black;
 }
