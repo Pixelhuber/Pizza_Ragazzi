@@ -165,4 +165,3 @@ function getIngredientFact(ingredient, currentTier){
 }
 
 // TODO: shuffleCards, clickEvent, zugehörige Karten verknüpfen
-

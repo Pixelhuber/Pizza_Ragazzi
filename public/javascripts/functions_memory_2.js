@@ -3,25 +3,27 @@ class MemoryIngredient {
     id;
     name;
     description;
-    picture_src;
+    picture_string;
 
     constructor(id, name, description, picture_src) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.picture_src = picture_src;
+        this.picture_string = picture_src;
     }
 }
 
+// ---------------------------------------------------
+
 class AbstractMemoryCard {
 
-    ingredient
+    memoryIngredient
     gameElement;
     isFlipped; // true -> card content is visible
 
     constructor(memoryIngredient) {
 
-        this.ingredient = memoryIngredient;
+        this.memoryIngredient = memoryIngredient;
         this.isFlipped = false;
     }
 
@@ -69,6 +71,14 @@ class NameCard extends AbstractMemoryCard {
 
         // TODO: Create <div> however you want
     }
+
+    static createNameCard(memoryIngredient) {
+        return new NameCard(memoryIngredient);
+    }
+
+    static createFactCard(memoryIngredient) {
+        return new DescriptionCard(memoryIngredient);
+    }
 }
 
 class DescriptionCard extends AbstractMemoryCard {
@@ -92,17 +102,21 @@ class DescriptionCard extends AbstractMemoryCard {
     }
 }
 
+memoryCards = [];
+
 // --------------------------------------------------------------------------------------------------------------------
 
 async function createMemoryCards() {
-    const ingredients = await loadMemoryCards();
+    const ingredients = await getMemoryIngredients();
 
     ingredients.forEach(function (item) {
-        console.log(item.name);
+        const memoryIngredient = new MemoryIngredient(item.id, item.name, item.description, item.picture_string)
+        memoryCards.push(AbstractMemoryCard.createNameCard(memoryIngredient));
+        memoryCards.push(AbstractMemoryCard.createFactCard(memoryIngredient));
     })
 }
 
-async function loadMemoryCards() {
+async function getMemoryIngredients() {
 
     let response = await fetch("memory/getMemoryIngredients");
     return response.json();
