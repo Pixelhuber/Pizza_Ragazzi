@@ -109,7 +109,7 @@ function validateCreateAccountData() {
 }
 
 function changePage() {
-    window.location.href = "login";
+    window.location.href = "logout";
 }
 
 function createAccount() {
@@ -119,6 +119,7 @@ function createAccount() {
     let password2 = document.getElementById("password2").value;
 
     let email_exists_error = document.getElementById("email_exists_error");
+    let username_exists_error = document.getElementById("username_exists_error");
     let create_account_error = document.getElementById("create_account_error");
 
     fetch("/login/createAccount", {
@@ -147,6 +148,8 @@ function createAccount() {
                 //already handled in validateCreateAccountData()
             } else if (msg === "email already in use"){
                 email_exists_error.style.display = "block";
+            } else if (msg === "username already in use"){
+                username_exists_error.style.display = "block";
             } else if (msg === "user could not be created"){
                 create_account_error.style.display = "block";
             } else {

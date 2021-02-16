@@ -3,6 +3,7 @@ package factory;
 import factory.FactoryExceptions.EmailAlreadyInUseException;
 import factory.FactoryExceptions.InvalidEmailException;
 import factory.FactoryExceptions.ProfilePictureException;
+import factory.FactoryExceptions.UsernameAlreadyInUseException;
 import play.db.Database;
 import scala.Console;
 
@@ -55,6 +56,8 @@ public class UserFactory {
             throw new InvalidEmailException("The e-mail " + email + " is not valid");
         if (!isEmailAvailable(email))
             throw new EmailAlreadyInUseException("The e-mail " + email + " is already in use");
+        if (!isUsernameAvailable(email))
+            throw new UsernameAlreadyInUseException("The username " + name + " is already in use");
         return db.withConnection(conn -> {
             String sql = "INSERT INTO User (username, email, password, gesamtpunkte, highscore, Tier_idTier) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -90,6 +93,33 @@ public class UserFactory {
             User user = null;
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM User WHERE email = ?");
             stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                user = new User(rs);
+            }
+            stmt.close();
+            return user;
+        });
+    }
+
+    /**
+     * checks if a user exists in the db
+     *
+     * @param username the unique identifier of the user, his email address
+     * @return true if there is no user, false if the email is already in use
+     */
+    public boolean isUsernameAvailable(String username) {
+        User user = getUserByUsername(username);
+        if (user == null)
+            return true;
+        return false;
+    }
+
+    public User getUserByUsername(String username) {
+        return db.withConnection(conn -> {
+            User user = null;
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM User WHERE username = ?");
+            stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 user = new User(rs);
