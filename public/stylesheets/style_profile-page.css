@@ -38,6 +38,19 @@
     clear: both;
 }
 
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media (max-width: 800px) {
+    .left_div {
+        width: 100%;
+    }
+    .middle_div {
+        width: 100%;
+    }
+    .right_div {
+        width: 100%;
+    }
+}
+
 .bottom_div {
     padding: 1%;
     margin: 1%;
@@ -46,6 +59,8 @@
 }
 
 #profile-picture {
+    width: 250px;
+    height: 250px;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -63,6 +78,10 @@ button{
 }
 
 #container_friends{ /*Definiert Position der Freundesliste*/
+    text-align: center;
+}
+
+#chat_heading {
     text-align: center;
 }
 
