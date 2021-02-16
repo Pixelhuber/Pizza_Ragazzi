@@ -76,6 +76,10 @@ function endHoverEffect(elm) {
     }
 }
 
+function addFriend() {
+
+}
+
 function defaultList() {
     var test = ["Andres Perez", "Leah Slaten", "Max Mustermann"];
     createFriendlist(test);
