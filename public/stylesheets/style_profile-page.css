@@ -10,6 +10,7 @@
     margin: 1%;
     background-color: #d2d2d2;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 10px;
 
     text-align: center;
 }
@@ -21,6 +22,7 @@
     margin: 1%;
     background-color: #d2d2d2;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 10px;
 }
 
 .right_div {
@@ -30,6 +32,7 @@
     margin: 1%;
     background-color: #d2d2d2;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 10px;
 }
 
 .wrap:after {
@@ -56,6 +59,7 @@
     margin: 1%;
     background-color: #d2d2d2;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 10px;
 }
 
 #profile-picture {
@@ -95,13 +99,12 @@ button{
 
     float: left;
 
-    background-color: black;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    color: white;
 
     font-size: 1.2em;
+    border: 4px black solid;
 }
 
 .achievementBox:hover{
-    background-color: #363736;
+    background-color: #888888;
 }
