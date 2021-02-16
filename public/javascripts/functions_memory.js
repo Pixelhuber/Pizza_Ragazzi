@@ -87,7 +87,7 @@ class FactCard extends MemoryCard{
 
 }
 
-function loadMemoryCards(){                                                     //wird initial aufgerufen
+function loadMemoryCards(){ // wird initial aufgerufen
 
     let ingredientList = getNextTierIngredients(getCurrentTier()+1);
 
@@ -100,9 +100,6 @@ function loadMemoryCards(){                                                     
     //onClick müsste eigentlich für NameCard und FactCard gehen, da beide die gleiche ID haben
 
     clickCard(ingredientList);
-
-
-
 }
 
 function toggle(card){
@@ -112,8 +109,6 @@ function toggle(card){
     } else {
         card.text.style.visibility = "visible"
     }
-
-
 }
 
 function clickCard(ingredientList){
