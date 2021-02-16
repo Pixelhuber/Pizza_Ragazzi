@@ -622,7 +622,7 @@ const existingDraggableIngredientInstances = [];
 
 async function setupAvailableIngredients() {
     const ingredients = await getAvailableIngredients(); //ingredients Json-Array fetchen
-    console.log(ingredients);
+    /*
     //TODO dieser untere Teil liest die ingredients aus und steckt sie in die available ingredients,
     // die übersetzung von den Datenbank items in die richtigen ingredients geht noch nicht richtig deshalb ausgegraut
     ingredients.forEach(function(item) {                                  // Json-Array in availableIngredients-Array
@@ -634,6 +634,7 @@ async function setupAvailableIngredients() {
             hits_required: 3                        //TODO: hits_required vielleicht auch in Datenbank speichern
         }));
     });
+     */
 }
 
 async function  setupAvailablePizzas() {

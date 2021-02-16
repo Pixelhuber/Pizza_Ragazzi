@@ -56,12 +56,10 @@ public class PizzaRushFactory {
     // Gets available ingredients for specific User
     public List<Ingredient> getIngredients(String email) {
         List<Ingredient> result = new ArrayList<>();
-
         result.addAll(getChoppingIngredients(email));
         result.addAll(getStampingIngredients(email));
 
         result.sort(Comparator.comparing(Ingredient::getId));
-
         return result;
     }
 
@@ -85,6 +83,7 @@ public class PizzaRushFactory {
     private List<Ingredient> getChoppingIngredients(String email) {
         return db.withConnection(conn -> {
             List<Ingredient> result = new ArrayList<>();
+            //String sql = "SELECT * FROM `Ingredient` JOIN `FlightBehavior` ON `Ingredient`.idIngredient = `FlightBehavior`.Ingredient_fk JOIN `User` ON `Ingredient`.Tier_idTier <= `User`.Tier_idTier WHERE `User`.email = ?";
             String sql = "SELECT * FROM `Ingredient` JOIN `FlightBehavior` FB on Ingredient.idIngredient = FB.Ingredient_fk WHERE Tier_idTier <= (SELECT Tier_idTier FROM `User` WHERE email = ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, email);
@@ -118,6 +117,7 @@ public class PizzaRushFactory {
     private List<Ingredient> getStampingIngredients(String email) {
         return db.withConnection(conn -> {
             List<Ingredient> result = new ArrayList<>();
+            //String sql = "SELECT * FROM `Ingredient` JOIN `StampBehavior` ON `Ingredient`.idIngredient = `StampBehavior`.Ingredient_fk JOIN `User` ON `Ingredient`.Tier_idTier <= `User`.Tier_idTier WHERE `User`.email = ?";
             String sql = "SELECT * FROM `Ingredient` JOIN `StampBehavior` SB on Ingredient.idIngredient = SB.Ingredient_fk WHERE Tier_idTier <= (SELECT Tier_idTier FROM `User` WHERE email = ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, email);
