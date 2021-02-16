@@ -56,7 +56,7 @@ public class PizzaRushFactory {
     public List<Ingredient> getAvailableIngredients(String email) {
         return db.withConnection(conn -> {
             List<Ingredient> result = new ArrayList<>();
-            String sql = "SELECT * FROM Ingredient WHERE Tier_idTier <= (SELECT Tier_idTier FROM `User` WHERE email = ?)";
+            String sql = "SELECT * FROM `Ingredient` WHERE Tier_idTier <= (SELECT Tier_idTier FROM `User` WHERE email = ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
@@ -128,7 +128,7 @@ public class PizzaRushFactory {
                 throw new ProfilePictureException("We had trouble getting the " + picture_raw);
             }
             if (!this.name.equals("Impasto")) {                                                                       //Impasto hat kein distractor-Bild
-                BufferedInputStream bis_raw_distractor = new BufferedInputStream(rs.getBinaryStream("picture_raw_distractor"));
+                BufferedInputStream bis_raw_distractor = new BufferedInputStream(rs.getBinaryStream("picture_raw_distraction"));
                 try {
                     this.picture_raw_distractor = encodeImageToString(ImageIO.read(bis_raw_distractor), "png");
                 } catch (IOException invalidProfilePicture) {
@@ -159,7 +159,7 @@ public class PizzaRushFactory {
 
         private void setIngredientFlightBehaviorFromDatabase() {
             db.withConnection(conn -> {
-                PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `FlightBehavior` WHERE Ingredient_idIngredient = ? ");
+                PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `FlightBehavior` WHERE Ingredient_fk = ? ");
                 stmt.setInt(1, this.id);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
