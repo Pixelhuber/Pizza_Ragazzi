@@ -106,5 +106,7 @@ button{
 }
 
 .achievementBox:hover{
-    background-color: #888888;
+    color: white;
+    background-color: black;
+    cursor: pointer;
 }
