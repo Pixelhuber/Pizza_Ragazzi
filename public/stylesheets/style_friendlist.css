@@ -49,5 +49,5 @@ Position im jeweiligen Seitenstylesheet unter container_friends*/
 }
 
 .friend:not(.selected):hover {
-    background: #DDD;
+    background-color: black;
 }
