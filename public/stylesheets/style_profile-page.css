@@ -3,41 +3,71 @@
     color: black;
 }
 
-#container_friends{ /*Definiert Position der Freundesliste*/
+.left_div {
+    float: left;
+    width: 30%;
+    padding: 1%;
+    margin: 1%;
+    background-color: #d2d2d2;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
     text-align: center;
-    position: absolute;
-    right: 25%;
-    top: 0;
 }
 
-#heading {
-    margin-left: 7vw;
+.middle_div {
+    float: left;
+    width: 25%;
+    padding: 1%;
+    margin: 1%;
+    background-color: #a5a5a5;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.right_div {
+    float: left;
+    width: 30%;
+    padding: 1%;
+    margin: 1%;
+    background-color: #5b5b5b;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.wrap:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.bottom_div {
+    padding: 1%;
+    margin: 1%;
+    background-color: #696969;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 #profile-picture {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     background-color: #d2d2d2;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    margin-left: 60px;
     border-radius: 12px;
-    float: left;
-    margin-right: 60px;
 }
 
 #username {
-    font-size: 60px;
+
 }
 
 button{
     height: 45px;
 }
 
-.col-md-3 {
-    font-size: 30px;
+#container_friends{ /*Definiert Position der Freundesliste*/
+    text-align: center;
 }
 
 #achievementsHeading {
-    margin-left: 60px;
-    font-size: 50px;
+
 }
 
 .achievementBox {

@@ -12,52 +12,51 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript" src=@routes.Assets.versioned("javascripts/functions_profile-page.js")></script>
         <script type="text/javascript" src=@routes.Assets.versioned("javascripts/functions_friendlist.js")></script>
-        <!--Bootstrap-->
-        <link rel="stylesheet" href=@routes.Assets.versioned("stylesheets/bootstrap.min.css")>
+
 
         <title>Profile-Page</title>
     </head>
 
     <body id="body" onload="setup()">
-        <!--Navigation bar-->
+            <!--Navigation bar-->
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
-        <!--end of Navigation bar-->
+            <!--end of Navigation bar-->
 
-        <h1 id="heading">PROFILE</h1>
-        <br>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-9">
-                    <img id="profile-picture" alt="profile-picture" width="300" height="300" src=@routes.Assets.versioned("images/profile-icon.png")>
-                    <form name="userForm">
-                        <h1 id="username">Username</h1>
-                    </form>
-                    <div id="p-image">
+        <div class="wrap">
+            <div class="left_div">
+                <img id="profile-picture" alt="profile-picture" width="300" height="300" src=@routes.Assets.versioned("images/profile-icon.png")>
+                <form name="userForm">
+                    <h1 id="username">Username</h1>
+                </form>
+                <div id="p-image"></div>
+                <div id="mail"></div>
+                <br>
+                <div id="tier">Tier</div>
+                <div id="gesamtpunkte"></div>
+                <div id="highscore"></div>
+                <br>
+                <button id="profileButton">Edit Profile</button>
+            </div>
+
+            <div class="middle_div">
+                <div id="container_friends">
+                    <h1 id="friends_heading">Friends</h1>
+                    <div id="friends-placeholder">
+                        <script>getFriendsData()</script>
                     </div>
-                    <button id="profileButton">Edit Profile</button>
-                </div>
-
-                <div class="col-md-3">
-                    <div id="tier">Tier</div>
-                    <div id="gesamtpunkte"></div>
-                    <div id="highscore"></div>
-                    <div id="mail"></div>
                 </div>
             </div>
-        </div>
-        <div id="container_friends">
-            <h1 id="friends_heading">Friends</h1>
-            <div id="friends-placeholder">
-                <script>getFriendsData()</script>
+
+            <div class="right_div">
+                Chat
             </div>
         </div>
-        <br>
-        <br>
-        <br>
 
-        <h1 id="achievementsHeading">Achievements:</h1>
-        <div id="achievements_table">
-            <script> displayAchievements() </script>
+        <div class="bottom_div">
+            <h1 id="achievementsHeading">Achievements:</h1>
+            <div id="achievements_table">
+                <script> displayAchievements() </script>
+            </div>
         </div>
 
     </body>

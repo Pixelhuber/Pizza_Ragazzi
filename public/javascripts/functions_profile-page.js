@@ -33,11 +33,11 @@ $(function () {
             const usernameText = usernameField.text();
 
             // change usernameField into an inputField
-            const usernameInputField = "<input style='font-size: 60px' name=\"new_username\" value=\"" + usernameText + "\">"; //hier nutze ich den style tag nur, weil er aus dem css sheet irgendwie nicht geladen wurde
+            const usernameInputField = "<input style='font-size: 30px' name=\"new_username\" value=\"" + usernameText + "\">"; //hier nutze ich den style tag nur, weil er aus dem css sheet irgendwie nicht geladen wurde
             usernameField.html(usernameInputField);
 
             // display field to change profile-picture
-            const selectFileButton = "<input style='font-size: 22px' id=\"file-upload\" type=\"file\" accept=\"image/*\"/>"
+            const selectFileButton = "<input style='font-size: 18px' id=\"file-upload\" type=\"file\" accept=\"image/*\"/>"
             selectFile.html(selectFileButton);
             $("#file-upload").on('change', function(){
                 readURL(this);
