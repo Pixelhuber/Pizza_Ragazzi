@@ -1135,7 +1135,6 @@ function startMiniGame(ingredientList) {
     }
 
     function updateCounter() {
-
         counter.innerHTML = "" + processedIngredients.length + "/" + ingredientList.length;
     }
 
@@ -1706,6 +1705,9 @@ function startMiniGame(ingredientList) {
                     this.element.setStatus(DraggableIngredientInstance.Status.PROCESSED);
 
                     this.moleHandler.dropIngredient(this);
+                    if(this.element.id===1){//TODO das hier wurde neu eingefügt, der alte Teig muss noch despawnen und die neue Pizzainstance mit neuem Bild angezeigt werden
+                        new DraggablePizzaInstance()
+                    }
                     processedIngredients.push(this.element);
                     updateCounter();
                 } else {
