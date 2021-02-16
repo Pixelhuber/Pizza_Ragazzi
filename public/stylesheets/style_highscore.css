@@ -14,7 +14,9 @@ th, td {
 }
 
 tr:hover {
-    background-color: #4CAF50;
+    color: white;
+    background-color: black;
+    cursor: pointer;
 }
 
 h2{
