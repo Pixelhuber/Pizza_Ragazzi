@@ -10,6 +10,7 @@ function createFriendlist(data){
     for (var userName in data){
         var friend = document.createElement(`li`);
         friend.className = `friend`;
+        friend.onclick = function() {getUsernameFromListItem(this)};
 
         var image= document.createElement(`img`)
         if (data[userName]!=null) {
@@ -23,6 +24,11 @@ function createFriendlist(data){
         list.appendChild(friend);
     }
     document.getElementById("container_friends").append(list);
+}
+
+function getUsernameFromListItem(elm) {
+    var name = elm.childNodes[1].innerHTML;
+    console.log(name);
 }
 
 function defaultList(){
