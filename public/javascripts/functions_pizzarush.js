@@ -65,11 +65,21 @@ class AbstractIngredient {
     id;
     name;
     image_path;
+    picture_raw;
+    picture_raw_distraction;
+    picture_processed;
+    picture_baked;
+    picture_burnt;
 
-    constructor(id, name, image_path) {
+    constructor(id, name, image_path, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt) {
         this.id=id;
         this.name = name; // attributes
         this.image_path = image_path;
+        this.picture_raw = picture_raw;
+        this.picture_raw_distraction = picture_raw_distraction;
+        this.picture_processed = picture_processed;
+        this.picture_baked = picture_baked;
+        this.picture_burnt = picture_burnt;
     }
 
 
@@ -124,8 +134,8 @@ class ChoppingIngredient extends AbstractIngredient {
 
     flight_behavior;
 
-    constructor(id, name, image_path, flight_behavior) {
-        super(id, name, image_path);
+    constructor(id, name, image_path, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt, flight_behavior) {
+        super(id, name, image_path, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt);
         this.flight_behavior = flight_behavior;
     }
 }
@@ -134,8 +144,8 @@ class StampingIngredient extends AbstractIngredient {
 
     stamp_behavior;
 
-    constructor(id, name, image_path, stamp_behavior) {
-        super(id, name, image_path);
+    constructor(id, name, image_path, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt, stamp_behavior) {
+        super(id, name, image_path, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt);
         this.stamp_behavior = stamp_behavior;
     }
 }
@@ -160,7 +170,7 @@ class DraggableIngredientInstance extends AbstractIngredient {
     isDragEnabled;
 
     constructor(ingredient) {
-        super(ingredient.id, ingredient.name, ingredient.image_path);
+        super(ingredient.id, ingredient.name, ingredient.image_path, ingredient.picture_raw, ingredient.picture_raw_distraction, ingredient.picture_processed, ingredient.picture_baked,ingredient.picture_burnt);
         this.parentIngredient = ingredient;
         existingDraggableIngredientInstances.push(this);
 
@@ -592,14 +602,14 @@ async function setupAvailableIngredients() {
     console.log(ingredients)
     ingredients.forEach(function(item) {// Json-Array in availableIngredients-Array
         if(item.hasOwnProperty("display_time")){
-            availableIngredients.push(new StampingIngredient(item.id, item.name, item.picture_raw, {
+            availableIngredients.push(new StampingIngredient(item.id, item.name, item.picture_raw,item.picture_raw,item.picture_raw_distraction,item.picture_processed,item.picture_baked,item.picture_burnt,{
                 disabling_time: item.disabling_time,
 
                 hits_required: item.hits_required
             }))
         }
         else{
-            availableIngredients.push(new ChoppingIngredient(item.id, item.name, item.picture_raw, {
+            availableIngredients.push(new ChoppingIngredient(item.id, item.name, item.picture_raw,item.picture_raw,item.picture_raw_distraction,item.picture_processed,item.picture_baked,item.picture_burnt, {
                 vertex_x_inPercent: item.vertex_x_inPercent,
                 vertex_y_inPercent: item.vertex_y_inPercent,
                 speed: item.speed,
