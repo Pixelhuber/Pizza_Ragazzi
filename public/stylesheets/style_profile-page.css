@@ -73,10 +73,6 @@
     border-radius: 12px;
 }
 
-#username {
-
-}
-
 #container_friends{ /*Definiert Position der Freundesliste*/
     text-align: center;
 }
@@ -101,12 +97,27 @@
     cursor: pointer;
 }
 
-#chat_heading {
-    text-align: center;
+#backToMyProfileButton {
+    visibility: hidden;
+    font-size: 120%;
+    background-color: white;
+    color: black;
+    border: 4px black solid;
+    position: absolute;
+    top: 2%;
+    right: 1%;
+    width: 5%;
+    height: 10%;
 }
 
-#achievementsHeading {
+#backToMyProfileButton:hover {
+    color: white;
+    background-color: black;
+    cursor: pointer;
+}
 
+#chat_heading {
+    text-align: center;
 }
 
 .achievementBox {

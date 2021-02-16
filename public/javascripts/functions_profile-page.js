@@ -195,11 +195,19 @@ function getInformationFromFriend(elm) {
         friendGetProfilePicFromDatabase(name);
 
         deleteOldFriendList();          //Liste wird gelöscht, damit nur neue angezeigt wird
-        document.getElementById("profileButton").style.visibility = "hidden";       //Edit-Knopf hidden
-        viewOnly = true;                //in functions_friendlist.js wird der Freundeslisten hoverEffect und onclick nicht mehr ausgeführt
-
         friendGetFriendsData(name);
+
+        document.getElementById("profileButton").style.visibility = "hidden";       //Edit-Profile-Knopf hidden
+        document.getElementById("addFriendInputLabel").style.visibility = "hidden";         //Freund hinzufügen Label hidden
+        document.getElementById("addFriendInput").style.visibility = "hidden";         //Freund hinzufügen Searchbar hidden
+        document.getElementById("addFriendButton").style.visibility = "hidden";         //Freund hinzufügen Button hidden
+        document.getElementById("backToMyProfileButton").style.visibility = "visible";  //Zurück Button visible
+        viewOnly = true;                //in functions_friendlist.js wird der Freundeslisten hoverEffect und onclick nicht mehr ausgeführt
     }
+}
+
+function backToMyProfile() {
+    window.location.href = "profile";
 }
 
 function deleteOldFriendList() {

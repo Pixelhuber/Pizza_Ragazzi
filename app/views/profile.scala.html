@@ -47,8 +47,8 @@
                     </div>
                 </div>
                 <br>
-                <label for="addFriendInput">Freund hinzufügen:</label>
-                <input id ="addFriendInput" type="text" placeholder="Nutzernamen eingeben...">
+                <label for="addFriendInput" id="addFriendInputLabel">Freund hinzufügen:</label>
+                <input id="addFriendInput" type="text" placeholder="Nutzernamen eingeben...">
                 <br>
                 <button id="addFriendButton" onclick="addFriend()">+</button>
             </div>
@@ -57,6 +57,8 @@
                 <h1 id="chat_heading">Chat</h1>
             </div>
         </div>
+
+        <button id="backToMyProfileButton" onclick="backToMyProfile()">Zurück</button>
 
         <div class="bottom_div">
             <h1 id="achievementsHeading">Achievements:</h1>
