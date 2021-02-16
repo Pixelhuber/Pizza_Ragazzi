@@ -124,8 +124,8 @@ class ChoppingIngredient extends AbstractIngredient {
 
     flight_behavior;
 
-    constructor(name, image_path, flight_behavior) {
-        super(name, image_path);
+    constructor(id, name, image_path, flight_behavior) {
+        super(id, name, image_path);
         this.flight_behavior = flight_behavior;
     }
 }
@@ -134,8 +134,8 @@ class StampingIngredient extends AbstractIngredient {
 
     stamp_behavior;
 
-    constructor(name, image_path, stamp_behavior) {
-        super(name, image_path);
+    constructor(id, name, image_path, stamp_behavior) {
+        super(id, name, image_path);
         this.stamp_behavior = stamp_behavior;
     }
 }
@@ -574,44 +574,11 @@ class Order {
 // order class above
 // OBJECT COLLECTIONS -------------------------------------------------------------------------------------------------
 
-const availableIngredients = [      new StampingIngredient("Impasto", "/assets/images/teig.png", {
-                                        disabling_time: 5000,
+const availableIngredients = [];
 
-                                        hits_required: 3
-                                    }),
-                                    new ChoppingIngredient("Formaggio", "/assets/images/formaggio.png", {
-                                        vertex_x_inPercent: 20,
-                                        vertex_y_inPercent: 40,
-                                        speed: 4,
-                                        rotation: 6,
+const orderList = [];
 
-                                        hits_required: 3
-                                    }),
-                                    new StampingIngredient("Pomodoro", "/assets/images/pomodoro.png", {
-                                        disabling_time: 2000,
-
-                                        hits_required: 5
-                                    }),
-                                    new ChoppingIngredient("Salame", "/assets/images/salame.png", {
-                                        vertex_x_inPercent: 60,
-                                        vertex_y_inPercent: 70,
-                                        speed: 3,
-                                        rotation: 15,
-
-                                        hits_required: 3
-                                    }),
-                                    new ChoppingIngredient("Funghi", "/assets/images/funghi.png", {
-                                        vertex_x_inPercent: 50,
-                                        vertex_y_inPercent: 80,
-                                        speed: 3,
-                                        rotation: 10,
-
-                                        hits_required: 3
-                                    })];
-
-const orderList = [                 ];
-
-const ovenList = [                  ];
+const ovenList = [];
 
 const existingDraggablePizzaInstances = [];
 
@@ -623,16 +590,23 @@ async function setupAvailableIngredients() {
     const ingredients = await getAvailableIngredients(); //ingredients Json-Array fetchen
     console.log("Fetched ingredients:")
     console.log(ingredients)
-    //TODO dieser untere Teil liest die ingredients aus und steckt sie in die available ingredients,
-    // die übersetzung von den Datenbank items in die richtigen ingredients geht noch nicht richtig deshalb ausgegraut
-    ingredients.forEach(function(item) {                                  // Json-Array in availableIngredients-Array
-        availableIngredients.push(new AbstractIngredient(item.id, item.name, item.picture_raw, {
-            vertex_x_inPercent: item.vertex_x_inPercent,
-            vertex_y_inPercent: item.vertex_y_inPercent,
-            speed: item.speed,
-            rotation: item.rotation,
-            hits_required: 3                        //TODO: hits_required vielleicht auch in Datenbank speichern
-        }));
+    ingredients.forEach(function(item) {// Json-Array in availableIngredients-Array
+        if(item.hasOwnProperty("display_time")){
+            availableIngredients.push(new StampingIngredient(item.id, item.name, item.picture_raw, {
+                disabling_time: item.disabling_time,
+
+                hits_required: item.hits_required
+            }))
+        }
+        else{
+            availableIngredients.push(new ChoppingIngredient(item.id, item.name, item.picture_raw, {
+                vertex_x_inPercent: item.vertex_x_inPercent,
+                vertex_y_inPercent: item.vertex_y_inPercent,
+                speed: item.speed,
+                rotation: item.rotation,
+                hits_required: item.hits_required
+            }))
+        }
     });
 }
 
