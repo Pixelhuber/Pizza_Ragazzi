@@ -623,8 +623,8 @@ const existingDraggableIngredientInstances = [];
 async function setupAvailableIngredients() {
     const ingredients = await getAvailableIngredients(); //ingredients Json-Array fetchen
     console.log(ingredients);
-    /* TODO dieser untere Teil liest die ingredients aus und steckt sie in die available ingredients,
-        die übersetzung von den Datenbank items in die richtigen ingredients geht noch nicht richtig deshalb ausgegraut
+    //TODO dieser untere Teil liest die ingredients aus und steckt sie in die available ingredients,
+    // die übersetzung von den Datenbank items in die richtigen ingredients geht noch nicht richtig deshalb ausgegraut
     ingredients.forEach(function(item) {                                  // Json-Array in availableIngredients-Array
         availableIngredients.push(new AbstractIngredient(item.id, item.name, item.picture_raw, {
             vertex_x_inPercent: item.vertex_x_inPercent,
@@ -634,7 +634,6 @@ async function setupAvailableIngredients() {
             hits_required: 3                        //TODO: hits_required vielleicht auch in Datenbank speichern
         }));
     });
-     */
 }
 
 async function  setupAvailablePizzas() {

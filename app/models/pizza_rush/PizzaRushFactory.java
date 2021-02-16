@@ -69,7 +69,7 @@ public class PizzaRushFactory {
     private List<Ingredient> getChoppingIngredients() {
         return db.withConnection(conn -> {
             List<Ingredient> result = new ArrayList<>();
-            String sql = "SELECT * FROM Ingredient JOIN FlightBehavior FB on Ingredient.idIngredient = FB.Ingredient_fk";
+            String sql = "SELECT * FROM `Ingredient` JOIN `FlightBehavior` FB on Ingredient.idIngredient = FB.Ingredient_fk";
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -85,7 +85,7 @@ public class PizzaRushFactory {
     private List<Ingredient> getChoppingIngredients(String email) {
         return db.withConnection(conn -> {
             List<Ingredient> result = new ArrayList<>();
-            String sql = "SELECT * FROM Ingredient JOIN FlightBehavior FB on Ingredient.idIngredient = FB.Ingredient_fk WHERE Tier_idTier <= (SELECT Tier_idTier FROM `User` WHERE email = ?)";
+            String sql = "SELECT * FROM `Ingredient` JOIN `FlightBehavior` FB on Ingredient.idIngredient = FB.Ingredient_fk WHERE Tier_idTier <= (SELECT Tier_idTier FROM `User` WHERE email = ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
@@ -102,7 +102,7 @@ public class PizzaRushFactory {
     private List<Ingredient> getStampingIngredients() {
         return db.withConnection(conn -> {
             List<Ingredient> result = new ArrayList<>();
-            String sql = "SELECT * FROM Ingredient JOIN StampBehavior SB on Ingredient.idIngredient = SB.Ingredient_fk";
+            String sql = "SELECT * FROM `Ingredient` JOIN `StampBehavior` SB on Ingredient.idIngredient = SB.Ingredient_fk";
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -118,7 +118,7 @@ public class PizzaRushFactory {
     private List<Ingredient> getStampingIngredients(String email) {
         return db.withConnection(conn -> {
             List<Ingredient> result = new ArrayList<>();
-            String sql = "SELECT * FROM Ingredient JOIN StampBehavior SB on Ingredient.idIngredient = SB.Ingredient_fk WHERE Tier_idTier <= (SELECT Tier_idTier FROM `User` WHERE email = ?)";
+            String sql = "SELECT * FROM `Ingredient` JOIN `StampBehavior` SB on Ingredient.idIngredient = SB.Ingredient_fk WHERE Tier_idTier <= (SELECT Tier_idTier FROM `User` WHERE email = ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
