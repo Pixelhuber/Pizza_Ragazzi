@@ -481,14 +481,13 @@ class Order {
 
     gameElement; //in game representation of the order
 
-    constructor(name, points, timeInSeconds, ingredients) {
+    constructor(name, points, timeInSeconds, ingredients){
         this.name = name;
         this.points = points;
         this.timeInSeconds = timeInSeconds;
         this.requestedPizza=new Pizza()
         this.requestedPizza.ingredients=[]
         this.requestedPizza.ingredients.push.apply(this.requestedPizza.ingredients,ingredients)
-        console.log(this.requestedPizza.ingredients)
     }
 
 
@@ -622,7 +621,8 @@ const existingDraggableIngredientInstances = [];
 
 async function setupAvailableIngredients() {
     const ingredients = await getAvailableIngredients(); //ingredients Json-Array fetchen
-    /*
+    console.log("Fetched ingredients:")
+    console.log(ingredients)
     //TODO dieser untere Teil liest die ingredients aus und steckt sie in die available ingredients,
     // die übersetzung von den Datenbank items in die richtigen ingredients geht noch nicht richtig deshalb ausgegraut
     ingredients.forEach(function(item) {                                  // Json-Array in availableIngredients-Array
@@ -634,7 +634,6 @@ async function setupAvailableIngredients() {
             hits_required: 3                        //TODO: hits_required vielleicht auch in Datenbank speichern
         }));
     });
-     */
 }
 
 async function  setupAvailablePizzas() {
