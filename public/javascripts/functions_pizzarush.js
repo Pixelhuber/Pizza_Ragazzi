@@ -1042,38 +1042,23 @@ async function getCurrentPlayerTotalPoints() {
         });
 }
 
-function setCurrentPlayerHighscore(newHighscore) {
-    /*
-    let returnedPoints = -1;
-    return await fetch("/profile/getHighScore")
-        .then(
-            result => result.text()
-        ).then(
-            result => {
-                returnedPoints = parseInt(result);
-                return returnedPoints;
-            }
-        ).catch((error) => {
-            console.error('Error:', error);
-        });
-     */
-}
+async function setCurrentPlayerPoints(newTotalPoints,newHighscore) {
+    fetch("/pizza_rush/setPlayerPoints", {
+        method: 'POST',
+        body: JSON.stringify({
+            newTotalPoints: newTotalPoints,
+            newHighscore: newHighscore
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    }).then(result => result.text())
+        .then(data => {
+            let msg = data.toString();
+            console.log(msg);
+        })
 
-function setCurrentPlayerTotalPoints(newTotalPoints) {
-    /*
-    let returnedPoints = -1;
-    return await fetch("/profile/getHighScore")
-        .then(
-            result => result.text()
-        ).then(
-            result => {
-                returnedPoints = parseInt(result);
-                return returnedPoints;
-            }
-        ).catch((error) => {
-            console.error('Error:', error);
-        });
-     */
 }
 
 function resetPoints() {
@@ -1197,9 +1182,11 @@ async function endGame() {
     let currentPlayerHighscore = await getCurrentPlayerHighscore();
     let currentPlayerTotalPoints = await getCurrentPlayerTotalPoints();
     if (currentPoints>currentPlayerHighscore){
-        setCurrentPlayerHighscore(currentPoints);
+        currentPlayerHighscore=currentPoints;
     }
-    setCurrentPlayerTotalPoints(currentPlayerTotalPoints+currentPoints)
+    await setCurrentPlayerPoints(currentPlayerTotalPoints + currentPoints,currentPlayerHighscore)
+
+
 
     // window.location.reload(true);
     /*
