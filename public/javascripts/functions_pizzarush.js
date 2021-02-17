@@ -55,6 +55,30 @@ class AudioPlayer {
         sound.volume = 0.4;
         sound.play();
     }
+
+    static ingredient_stamp() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/stamp_small.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static ingredient_finalStamp() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/stamp_big.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static trashcan() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/trashcan.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
 }
 
 
@@ -109,8 +133,8 @@ class AbstractIngredient {
         }
 
         ret.setAttribute('alt', this.name);
-        ret.setAttribute('width', '100px');
-        ret.setAttribute('height', '100px');
+        ret.setAttribute('width', '110px');
+        ret.setAttribute('height', '110px');
 
         // TODO: Früher oder später müssen wir die z-Indexes der Ingredients in der Datenbank speichern
         switch (this.name) {
@@ -824,6 +848,7 @@ function makeDraggable(element) {
 
     function checkIfDraggedInTrash() {
         if (checkOverlap(element.draggable, document.getElementById("trash"))) {
+            AudioPlayer.trashcan();
             element.delete();
         }
     }
@@ -1340,6 +1365,7 @@ function startMiniGame(ingredientList) {
                 // draw the image
                 // since the context is rotated, the image will be rotated as well
                 this.context.drawImage(this.ingredient_image,-this.ingredient_image.width/2,-this.ingredient_image.height/2);
+                //this.context.fillRect(-20, -20, 40, 40);
 
                 this.context.restore();
 
@@ -1780,7 +1806,7 @@ function startMiniGame(ingredientList) {
 
                 if (this.hits_left <= 0) {
 
-                    AudioPlayer.ingredient_finalHit(); //TODO: Find suitable sound
+                    AudioPlayer.ingredient_finalStamp();
                     console.log("Final Hit: " + this.draggableIngredient.name);
 
                     this.ingredient_image.remove();
@@ -1797,7 +1823,7 @@ function startMiniGame(ingredientList) {
                     updateCounter();
                 } else {
 
-                    AudioPlayer.ingredient_hit();
+                    AudioPlayer.ingredient_stamp();
                     console.log("Hit: " + this.draggableIngredient.name)
                 }
             }

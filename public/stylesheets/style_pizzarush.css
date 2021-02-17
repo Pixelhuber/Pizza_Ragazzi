@@ -174,18 +174,31 @@ section{
     cursor: move;
 }
 
-img.draggable{ /* all draggableIngredients */
-    height: 100px;
-    width: auto;
+/* all draggableIngredients */
+img.draggable{
+    height: 110px;
+    width: 110px;
+    object-fit: contain;
+}
+/* all draggable pizzas */
+div.draggable{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-div.draggable{ /* all draggable pizzas */
-    display: inline-block;
+/* Impasto should be a little bigger */
+.draggable > img:nth-child(1){
+    height: 125px;
+    width: 125px;
+    object-fit: contain;
 }
 
-div.draggable > img{ /* ingredients on pizzas */
-    height: 100px;
-    width: auto;
+/* ingredients on pizzas */
+div.draggable > img{
+    height: 110px;
+    width: 110px;
+    object-fit: contain;
 }
 
 .oven{
@@ -358,7 +371,7 @@ div.draggable > img{ /* ingredients on pizzas */
         opacity: 0.08;
         /*         font-size: 10px; */
         /* 				font-weight: 400; */
-        filter: blur(5px);
+        filter: blur(3px);
         letter-spacing: 3px;
     }
     100%{
