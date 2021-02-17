@@ -5,6 +5,8 @@
         <meta charset="UTF-8">
         <link rel="shortcut icon" type="image_path/png" href="@assetsFinder.path("images/favicon.png")">
         <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_pizzarush.css")">
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.js"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/functions_pizzarush.js")"></script>
 
         <title>Pizza-Rush</title>
@@ -15,8 +17,8 @@
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
             <!------------------------------>
         <div id="loading">
-            <img id="loading_image" alt="Loading..." src=@routes.Assets.versioned("images/LoadingGif_Pizza.gif")>
-            <div id="loading_text">Loading...</div>
+            <img id="loading_image" alt="Loading Pictures..." src=@routes.Assets.versioned("images/LoadingGif_Pizza.gif")>
+            <div id="loading_text">Loading Pictures...</div>
         </div>
 
         <div id="startStop_overlay" onclick="manageRushCountdown(1200, 'rushCountdown')">
