@@ -375,6 +375,12 @@ class DraggablePizzaInstance extends Pizza {
         makeDraggable(this);
     }
 
+    delete() {
+        this.draggable.remove();
+        const index = existingDraggablePizzaInstances.indexOf(this);
+        existingDraggablePizzaInstances.splice(index, 1);
+    }
+
     whenDraggedInOrder(order) {
         existingDraggablePizzaInstances.splice(existingDraggablePizzaInstances.indexOf(this), 1);
         this.draggable.remove();
@@ -766,6 +772,7 @@ function makeDraggable(element) {
         document.onmouseup = null;
         document.onmousemove = null;
 
+        checkIfDraggedInTrash();
 
         if (element instanceof DraggableIngredientInstance && element.status === DraggableIngredientInstance.Status.PROCESSED)
             checkIfDraggedInPizza(); // check overlap with every existing pizza
@@ -804,6 +811,12 @@ function makeDraggable(element) {
                 element.whenDraggedInOven(item);
             }
         });
+    }
+
+    function checkIfDraggedInTrash() {
+        if (checkOverlap(element.draggable, document.getElementById("trash"))) {
+            element.delete();
+        }
     }
 }
 

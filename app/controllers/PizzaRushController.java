@@ -87,18 +87,6 @@ public class PizzaRushController extends Controller {
         return ok(json);
     }
 
-    public Result getAvailableStampingIngredients(Http.Request request) {
-        String email;
-        if (request.session().get("email").isPresent())
-            email = request.session().get("email").get();
-        else
-            return badRequest("Can't identify User: No E-Mail in session");
-
-        List<PizzaRushFactory.Ingredient> stampingIngredients = pizzaRushFactory.getIngredients(email);//TODO getStampingingredients ist privat
-        String json = listToJson(stampingIngredients);
-        return ok(json);
-    }
-
     public Result getAvailablePizzas(Http.Request request) {
         String email;
         if (request.session().get("email").isPresent())

@@ -187,7 +187,7 @@ section{
 .scroll_container{
     overflow-y: scroll;
 
-    height: 80%;
+    flex: 1;
 }
 
 #ingredientSection{
@@ -195,13 +195,17 @@ section{
     min-width: 200px;
     margin: 0 20px 0 20px;
 
+    display: flex;
+    flex-flow: column;
 }
 
 #orderSection{
     flex: 1;
-    margin: 0 20px 0 20px;
     min-width: 200px;
+    margin: 0 20px 0 20px;
 
+    display: flex;
+    flex-flow: column;
 }
 
 #workSurface{
@@ -362,4 +366,16 @@ section{
     background: black;
 
     color: white;
+}
+
+#trash{
+    width: 40%;
+    min-width: 100px;
+}
+
+#trash > img{
+    padding: 10px;
+
+    width: 100%;
+    height: auto;
 }
