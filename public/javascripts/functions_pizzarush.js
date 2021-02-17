@@ -1164,17 +1164,22 @@ function manageRushCountdown(seconds, timerContainerId){
 
             // @Override
             // Hier könnte später die PizzaRush Runde beendet werden
-            onCountdownEnd() {
+            async onCountdownEnd() {
                 timerActive = false;
-                document.getElementById("startStop_overlay").style.display='block';
-                document.getElementById("startStop_overlay_text").innerHTML="Round over!<br />Click to play again";
+                document.getElementById("startStop_overlay").style.display = 'block';
+                document.getElementById("startStop_overlay_text").innerHTML = "Round over!<br/>You scored " +await getCurrentPoints() +" Points<br/>Click to play again";
+
                 this.affectedObject.innerHTML = "END";
-                endGame();
+                await endGame();
+                document.getElementById("startStop_overlay").onclick = restartGame;
             }
         }
-
         new RushCountdown(seconds, document.getElementById(timerContainerId)).startCountdown(); // Countdown wird gestartet
     }
+}
+
+function restartGame(){
+    window.location.reload(false);
 }
 
 async function endGame() {
@@ -1185,26 +1190,6 @@ async function endGame() {
         currentPlayerHighscore=currentPoints;
     }
     await setCurrentPlayerPoints(currentPlayerTotalPoints + currentPoints,currentPlayerHighscore)
-
-
-
-    // window.location.reload(true);
-    /*
-    for (let i of existingDraggableIngredientInstances){
-        i.draggable.remove();
-        console.log("Ingredient instance deleted: " + i.name)
-    }
-    for (let i of existingDraggablePizzaInstances){
-        i.draggable.remove();
-        console.log("Removed Pizza instance ingredients: " + i.ingredients)
-    }
-    existingDraggablePizzaInstances.length=0;
-    existingDraggableIngredientInstances.length=0;
-
-    orderList.length = 0;
-    ovenList.length=0;
-    availableIngredients.length=0;
-     */
 }
 
 
