@@ -4,6 +4,7 @@ import factory.FactoryExceptions.EmailAlreadyInUseException;
 import factory.FactoryExceptions.InvalidEmailException;
 import factory.FactoryExceptions.ProfilePictureException;
 import factory.FactoryExceptions.UsernameAlreadyInUseException;
+import models.Achievement;
 import play.db.Database;
 import scala.Console;
 
@@ -327,19 +328,48 @@ public class UserFactory {
 
         }
 
-        public String getNameFromTierId() {
-            StringBuffer stringBuffer = new StringBuffer(); // einfacher String funktioniert nicht, da im withConnection lambda Ausdruck nicht auf Variablen außerhalb zugegriffen werden kann
+        public List<Achievement> getAchievements() {
+            return db.withConnection(conn -> {
+                List<Achievement> result = new ArrayList<>();
+                String sql = "SELECT `Reward_idReward` FROM `User_has_Reward` WHERE User_idUser = ?";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, this.id);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    int achievementId = rs.getInt("Reward_idReward");
+                    result.add(getAchievementByAchievementId(achievementId));
+                }
+                stmt.close();
+                return result;
+            });
+        }
 
-            db.withConnection(conn -> {
+        public Achievement getAchievementByAchievementId(int achievementId) {
+            return db.withConnection(conn -> {
+                    Achievement achievement = null;
+                    PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `Reward` WHERE idReward = ?");
+                    stmt.setInt(1, achievementId);
+                    ResultSet rs = stmt.executeQuery();
+                    if (rs.next()) {
+                        achievement = new Achievement(rs);
+                    }
+                    stmt.close();
+                    return achievement;
+                });
+        }
+
+        public String getNameFromTierId() {
+            return db.withConnection(conn -> {
+                String tierName = null;
                 PreparedStatement stmt = conn.prepareStatement("SELECT name FROM `Tier` WHERE idTier = ?");
                 stmt.setInt(1, this.currentTier);
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()) {
-                    stringBuffer.append(rs.getString("name"));
+                    tierName = rs.getString("name");
                 }
                 stmt.close();
+                return tierName;
             });
-            return stringBuffer.toString();
         }
 
         public int getId() {

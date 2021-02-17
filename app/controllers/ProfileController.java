@@ -1,6 +1,8 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import factory.UserFactory;
+import models.Achievement;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
@@ -114,6 +116,14 @@ public class ProfileController extends Controller {
         return ok(Json.toJson(user.getFriendsData()));
     }
 
+    public Result getAchievementsFromDatabase(Http.Request request) {
+        String email = request.session().get("email").get();
+        UserFactory.User user = userFactory.getUserByEmail(email);
+        List<Achievement> achievements = user.getAchievements();
+        String json = listToJson(achievements);
+        return ok(json);
+    }
+
     public Result addFriend(Http.Request request) {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
@@ -129,6 +139,19 @@ public class ProfileController extends Controller {
         if (successfull) return ok();
         else return badRequest("username not valid");
     }
+
+    //macht aus einer beliebigen Liste ein Json
+    public <T> String listToJson (List<T> list) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = "";
+        try {
+            json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+
 
 
     //AB HIER METHODEN ZUM ANSCHAUEN DES PROFILS EINES FREUNDES
@@ -179,5 +202,13 @@ public class ProfileController extends Controller {
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
         return ok(Json.toJson(user.getFriendsData()));
+    }
+
+    public Result friendGetAchievementsFromDatabase(Http.Request request) {
+        String username = request.body().asJson().asText();
+        UserFactory.User user = userFactory.getUserByUsername(username);
+        List<Achievement> achievements = user.getAchievements();
+        String json = listToJson(achievements);
+        return ok(json);
     }
 }

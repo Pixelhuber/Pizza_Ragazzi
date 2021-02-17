@@ -45,6 +45,8 @@ GET     /profile/getHighScore       controllers.ProfileController.getHighscoreFr
 
 GET     /profile/getProfilePic      controllers.ProfileController.getProfilePictureFromDatabase(request: Request)
 
+GET     /profile/getAchievements    controllers.ProfileController.getAchievementsFromDatabase(request: Request)
+
 POST    /profile/addFriend          controllers.ProfileController.addFriend(request: Request)
 
 # PROFILE-FROM-FRIEND ROUTES --------------------------------------------------------------------------
@@ -54,7 +56,8 @@ POST    /profile/friendGetTierName        controllers.ProfileController.friendGe
 POST    /profile/friendGetTotalPoints     controllers.ProfileController.friendGetGesamtpunkteFromDatabase(request: Request)
 POST    /profile/friendGetHighScore       controllers.ProfileController.friendGetHighscoreFromDatabase(request: Request)
 POST    /profile/friendGetProfilePic      controllers.ProfileController.friendGetProfilePictureFromDatabase(request: Request)
-POST    /friendGetFriendsData     controllers.ProfileController.friendFriendsData(request: Request)
+POST    /profile/friendGetAchievements    controllers.ProfileController.friendGetAchievementsFromDatabase(request: Request)
+POST    /friendGetFriendsData             controllers.ProfileController.friendFriendsData(request: Request)
 
 # Friendlist --------------------------------------------------------------------------
 GET     /getFriendsData             controllers.ProfileController.getFriendsData(request: Request)

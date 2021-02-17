@@ -1,19 +1,14 @@
 
-function displayAchievements() {
-
-    // Create Achievement-Array
-    const allAchievements = [];
-    for (i = 0; i <= 14; i++){
-        allAchievements.push('Achievement '+ (i+1));
+function displayAchievements(allAchievements) {
+    if (allAchievements !== 'undefined' && allAchievements.length > 0) {
+        // Display Achievements
+        allAchievements.forEach(function (item) {
+            const achievementDiv = document.createElement('div');
+            achievementDiv.textContent = item.name;
+            achievementDiv.setAttribute('class', 'achievementBox');
+            document.getElementById("achievements_table").appendChild(achievementDiv);
+        });
     }
-
-    // Display Achievements
-    allAchievements.forEach(function (item, index, array) {
-        const achievementDiv = document.createElement('div');
-        achievementDiv.textContent = item;
-        achievementDiv.setAttribute('class', 'achievementBox');
-        document.getElementById("achievements_table").appendChild(achievementDiv);
-    });
 }
 
 $(function () {
@@ -77,6 +72,8 @@ function setup() {
     getMailFromDatabase();
     getTierFromDatabase();
     getProfilePicFromDatabase();
+    getAchievementsFromDatabase();
+    getFriendsData();
 }
 //TODO update username und profilepic zusammenlegen
 
@@ -123,14 +120,21 @@ function uploadProfilePictureIntoDB(){
         })
 }
 
+function getAchievementsFromDatabase() {
+    $.get("/profile/getAchievements", function(data, status){
+        displayAchievements(JSON.parse(data));
+    }).fail(function (data, status){
+        alert("Couldn't retrieve achievements from database");
+    });
+}
+
 // Reads username from Database and updates html
 function getUsernameFromDatabase() {
-
     $.get("/getUsername", function(data, status){
         document.getElementById("username").textContent = data
     }).fail(function (data, status){
         document.getElementById("username").textContent = "Default Name";
-        alert("Couldn't retrieve username from session");
+        alert("Couldn't retrieve username from database");
     });
 }
 
@@ -184,7 +188,7 @@ function getProfilePicFromDatabase() {
 
 //onclick-function von friend aus friendlist (functions_friendlist.js)
 function setupInformationFromFriend(elm) {
-    if (!viewOnly) {
+    if (!viewOnly) {        //Funktion wird nur ausgeführt, wenn man auf dem eigenen Profil ist
         var name = elm.childNodes[1].innerHTML;  //childnodes[1] gibt das "name" child von friend
 
         friendGetUsernameFromDatabase(name);
@@ -194,6 +198,9 @@ function setupInformationFromFriend(elm) {
         friendGetTierFromDatabase(name);
         friendGetProfilePicFromDatabase(name);
 
+        deleteOldAchievements();
+        friendGetAchievementsFromDatabase(name);
+
         deleteOldFriendList();          //Liste wird gelöscht, damit nur neue angezeigt wird
         friendGetFriendsData(name);
 
@@ -202,15 +209,15 @@ function setupInformationFromFriend(elm) {
         document.getElementById("addFriendInput").style.visibility = "hidden";         //Freund hinzufügen Searchbar hidden
         document.getElementById("addFriendButton").style.visibility = "hidden";         //Freund hinzufügen Button hidden
         document.getElementById("backToMyProfileButton").style.visibility = "visible";  //Zurück Button visible
-        viewOnly = true;                //in functions_friendlist.js wird der Freundeslisten hoverEffect und onclick nicht mehr ausgeführt
+        viewOnly = true;                //in functions_friendlist.js wird der Freundeslisten hoverEffect und onclick nicht mehr ausgeführt (diese Funktion auch nicht)
     }
 }
 
 function backToMyProfile() {
-    setup();
+    deleteOldAchievements();         //Achievements werden gelöscht, damit nur die vom logged in user angezeigt werden
+    deleteOldFriendList();          //FreundesListe wird gelöscht, damit nur die vom logged in user angezeigt werden
 
-    deleteOldFriendList();          //Liste wird gelöscht, damit nur neue angezeigt wird
-    getFriendsData();
+    setup();
 
     document.getElementById("editProfileButton").style.visibility = "visible";       //Edit-Profile-Knopf hidden
     document.getElementById("addFriendInputLabel").style.visibility = "visible";         //Freund hinzufügen Label hidden
@@ -220,11 +227,30 @@ function backToMyProfile() {
     viewOnly = false;
 }
 
+//löscht Freundesliste um nur Freundesliste des Freundes zu sehen
 function deleteOldFriendList() {
     var friendList = document.getElementsByClassName("friend-list");
     for (i = 0; i < friendList.length; i++) {
         friendList.item(i).remove();
     }
+}
+
+//löscht Achievements um nur Achievements des Freundes zu sehen
+function deleteOldAchievements() {
+    var achievements = document.getElementById("achievements_table");
+    achievements.innerHTML = '';
+}
+
+function friendGetAchievementsFromDatabase(username) {
+    fetch("/profile/friendGetAchievements", {
+        method: 'POST',
+        body: JSON.stringify(username),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    }).then(result => result.json())
+        .then(result => displayAchievements(result))
 }
 
 function friendGetUsernameFromDatabase(username) {
