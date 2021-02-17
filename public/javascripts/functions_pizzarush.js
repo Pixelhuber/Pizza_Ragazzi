@@ -993,19 +993,87 @@ function validatePizza(order, pizza) {
     });
 }
 
-function updateCurrentPoints() {
+async function updateCurrentPoints() {
+    document.getElementById("currentlyDisplayedPoints").textContent = "POINTS: " + await getCurrentPoints();
+}
+
+async function getCurrentPoints() {
     let returnedPoints = -1;
-    fetch("/pizza_rush/get_current_points")
+    return await fetch("/pizza_rush/get_current_points")
         .then(
             result => result.text()
         ).then(
-        result => {
-            returnedPoints = parseInt(result);
-            document.getElementById("currentlyDisplayedPoints").textContent = "POINTS: " + returnedPoints;
-        }
-    ).catch((error) => {
-        console.error('Error:', error);
-    });
+            result => {
+                returnedPoints = parseInt(result);
+                return returnedPoints;
+            }
+        ).catch((error) => {
+            console.error('Error:', error);
+        });
+}
+
+async function getCurrentPlayerHighscore() {
+    let returnedPoints = -1;
+    return await fetch("/profile/getHighScore")
+        .then(
+            result => result.text()
+        ).then(
+            result => {
+                returnedPoints = parseInt(result);
+                return returnedPoints;
+            }
+        ).catch((error) => {
+            console.error('Error:', error);
+        });
+}
+
+async function getCurrentPlayerTotalPoints() {
+    let returnedPoints = -1;
+    return await fetch("/profile/getTotalPoints")
+        .then(
+            result => result.text()
+        ).then(
+            result => {
+                returnedPoints = parseInt(result);
+                return returnedPoints;
+            }
+        ).catch((error) => {
+            console.error('Error:', error);
+        });
+}
+
+function setCurrentPlayerHighscore(newHighscore) {
+    /*
+    let returnedPoints = -1;
+    return await fetch("/profile/getHighScore")
+        .then(
+            result => result.text()
+        ).then(
+            result => {
+                returnedPoints = parseInt(result);
+                return returnedPoints;
+            }
+        ).catch((error) => {
+            console.error('Error:', error);
+        });
+     */
+}
+
+function setCurrentPlayerTotalPoints(newTotalPoints) {
+    /*
+    let returnedPoints = -1;
+    return await fetch("/profile/getHighScore")
+        .then(
+            result => result.text()
+        ).then(
+            result => {
+                returnedPoints = parseInt(result);
+                return returnedPoints;
+            }
+        ).catch((error) => {
+            console.error('Error:', error);
+        });
+     */
 }
 
 function resetPoints() {
@@ -1124,8 +1192,16 @@ function manageRushCountdown(seconds, timerContainerId){
     }
 }
 
-function endGame(){
-    window.location.reload(true);
+async function endGame() {
+    let currentPoints = await getCurrentPoints();
+    let currentPlayerHighscore = await getCurrentPlayerHighscore();
+    let currentPlayerTotalPoints = await getCurrentPlayerTotalPoints();
+    if (currentPoints>currentPlayerHighscore){
+        setCurrentPlayerHighscore(currentPoints);
+    }
+    setCurrentPlayerTotalPoints(currentPlayerTotalPoints+currentPoints)
+
+    // window.location.reload(true);
     /*
     for (let i of existingDraggableIngredientInstances){
         i.draggable.remove();
@@ -1143,6 +1219,7 @@ function endGame(){
     availableIngredients.length=0;
      */
 }
+
 
 // MINI GAMES ---------------------------------------------------------------------------------------------------------
 
