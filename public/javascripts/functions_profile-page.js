@@ -21,7 +21,7 @@ function displayAchievements() {
 $(function () {
 
     //edit the profile (username, picture) (email and password could be added in the future)
-    $("#profileButton").on('click', function () {
+    $("#editProfileButton").on('click', function () {
 
         // CONSTANTS -----------------------------------
         const profileButton = $(this);
@@ -183,7 +183,7 @@ function getProfilePicFromDatabase() {
 }
 
 //onclick-function von friend aus friendlist (functions_friendlist.js)
-function getInformationFromFriend(elm) {
+function setupInformationFromFriend(elm) {
     if (!viewOnly) {
         var name = elm.childNodes[1].innerHTML;  //childnodes[1] gibt das "name" child von friend
 
@@ -197,7 +197,7 @@ function getInformationFromFriend(elm) {
         deleteOldFriendList();          //Liste wird gelöscht, damit nur neue angezeigt wird
         friendGetFriendsData(name);
 
-        document.getElementById("profileButton").style.visibility = "hidden";       //Edit-Profile-Knopf hidden
+        document.getElementById("editProfileButton").style.visibility = "hidden";       //Edit-Profile-Knopf hidden
         document.getElementById("addFriendInputLabel").style.visibility = "hidden";         //Freund hinzufügen Label hidden
         document.getElementById("addFriendInput").style.visibility = "hidden";         //Freund hinzufügen Searchbar hidden
         document.getElementById("addFriendButton").style.visibility = "hidden";         //Freund hinzufügen Button hidden
@@ -207,7 +207,17 @@ function getInformationFromFriend(elm) {
 }
 
 function backToMyProfile() {
-    window.location.href = "profile";
+    setup();
+
+    deleteOldFriendList();          //Liste wird gelöscht, damit nur neue angezeigt wird
+    getFriendsData();
+
+    document.getElementById("editProfileButton").style.visibility = "visible";       //Edit-Profile-Knopf hidden
+    document.getElementById("addFriendInputLabel").style.visibility = "visible";         //Freund hinzufügen Label hidden
+    document.getElementById("addFriendInput").style.visibility = "visible";         //Freund hinzufügen Searchbar hidden
+    document.getElementById("addFriendButton").style.visibility = "visible";         //Freund hinzufügen Button hidden
+    document.getElementById("backToMyProfileButton").style.visibility = "hidden";  //Zurück Button visible
+    viewOnly = false;
 }
 
 function deleteOldFriendList() {

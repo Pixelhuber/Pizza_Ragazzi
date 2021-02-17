@@ -25,7 +25,7 @@ function createFriendlist(data) {
         var friend = document.createElement(`li`);
         friend.className = `friend`;
         friend.onclick = function () {
-            getInformationFromFriend(this)
+            setupInformationFromFriend(this)
         };
         friend.onmouseover = function () {
             beginHoverEffect(this)
@@ -77,11 +77,25 @@ function endHoverEffect(elm) {
 }
 
 function addFriend() {
+    var username = document.getElementById("addFriendInput").value;
 
-}
-
-function defaultList() {
-    var test = ["Andres Perez", "Leah Slaten", "Max Mustermann"];
-    createFriendlist(test);
-
+    fetch("/profile/addFriend", {
+        method: 'POST',
+        body: JSON.stringify(username),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    }).then(result => result.text())
+        .then(data => {
+            let msg = data.toString();
+            if (msg === "username not valid") {
+                document.getElementById("addFriendInput").style.borderColor = "red";
+            } else {
+                deleteOldFriendList();
+                getFriendsData();
+                document.getElementById("addFriendInput").value = '';
+                document.getElementById("addFriendInput").style.border = "0";
+            }
+        })
 }

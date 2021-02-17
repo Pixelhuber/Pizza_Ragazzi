@@ -45,6 +45,8 @@ GET     /profile/getHighScore       controllers.ProfileController.getHighscoreFr
 
 GET     /profile/getProfilePic      controllers.ProfileController.getProfilePictureFromDatabase(request: Request)
 
+POST    /profile/addFriend          controllers.ProfileController.addFriend(request: Request)
+
 # PROFILE-FROM-FRIEND ROUTES --------------------------------------------------------------------------
 POST    /friendGetUsername                controllers.ProfileController.friendGetUsernameFromDatabase(request: Request)
 POST    /profile/friendGetMail            controllers.ProfileController.friendGetEmailFromDatabase(request: Request)

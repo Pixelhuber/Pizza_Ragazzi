@@ -255,6 +255,41 @@ public class UserFactory {
             });
         }
 
+        public boolean addFriend(int id2) {
+            if (this.id == id2) return false;
+
+            List<User> allUsers = getAllUsers();
+            List<User> friends = getFriends();
+            boolean id2Exists = false;
+            boolean alreadyFriend = false;
+
+            for (User user : allUsers) {        //checken ob es User mit der id gibt
+                if (user.getId() == id2) {
+                    id2Exists = true;
+                    break;
+                }
+            }
+
+            for (User user : friends) {         //checken ob sie schon befreundet sind
+                if (user.getId() == id2) {
+                    alreadyFriend = true;
+                    break;
+                }
+            }
+
+            if (id2Exists && !alreadyFriend) {
+                db.withConnection(conn -> {
+                    PreparedStatement stmt = conn.prepareStatement("INSERT INTO `Friendship` (User_idUser_one, User_idUser_two) VALUES (?, ?)");
+                    stmt.setInt(1, this.id);
+                    stmt.setInt(2, id2);
+                    stmt.executeUpdate();
+                    stmt.close();
+                });
+                return true;
+            }
+            return false;
+        }
+
         public List<User> getFriends() {
             return db.withConnection(conn -> {
                 List<User> result = new ArrayList<>();

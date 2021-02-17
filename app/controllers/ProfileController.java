@@ -114,6 +114,23 @@ public class ProfileController extends Controller {
         return ok(Json.toJson(user.getFriendsData()));
     }
 
+    public Result addFriend(Http.Request request) {
+        String email = request.session().get("email").get();
+        UserFactory.User user = userFactory.getUserByEmail(email);
+
+        String newFriendUsername = request.body().asJson().asText();
+        UserFactory.User newFriendUser = userFactory.getUserByUsername(newFriendUsername);
+
+        boolean successfull;
+        if (newFriendUser != null) {
+            successfull = user.addFriend(newFriendUser.getId());
+        } else return badRequest("username not valid");
+
+        if (successfull) return ok();
+        else return badRequest("username not valid");
+    }
+
+
     //AB HIER METHODEN ZUM ANSCHAUEN DES PROFILS EINES FREUNDES
 
     /**
