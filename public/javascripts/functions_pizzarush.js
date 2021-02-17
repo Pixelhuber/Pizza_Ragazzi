@@ -109,9 +109,10 @@ class AbstractIngredient {
         }
 
         ret.setAttribute('alt', this.name);
-        ret.setAttribute('height', '100px');
         ret.setAttribute('width', '100px');
+        ret.setAttribute('height', '100px');
 
+        // TODO: Früher oder später müssen wir die z-Indexes der Ingredients in der Datenbank speichern
         switch (this.name) {
             case "Pomodoro":    ret.style.zIndex = "11";
                                 break;
@@ -119,7 +120,13 @@ class AbstractIngredient {
                                 break;
             case "Salame":      ret.style.zIndex = "13";
                                 break;
-            case "Funghi":      ret.style.zIndex = "14";
+            case "Prociutto":      ret.style.zIndex = "14";
+                                break;
+            case "Paprica":   ret.style.zIndex = "15";
+                                break;
+            case "Funghi":      ret.style.zIndex = "16";
+                                break;
+            case "Ananas":      ret.style.zIndex = "17";
                                 break;
         }
 
@@ -359,13 +366,15 @@ class DraggablePizzaInstance extends Pizza {
             pizzaDivUpdated.appendChild(ingredient);
         })
 
+        document.getElementById("pizza_layer").appendChild(pizzaDivUpdated);
+
         // Sets the size of the <div> to the size of the <img> in it
         // without this, checkOverlap() couldn't calculate the middle point of the <div>
-        pizzaDivUpdated.style.width = pizzaDivUpdated.firstElementChild.getAttribute("width");
-        pizzaDivUpdated.style.height = pizzaDivUpdated.firstElementChild.getAttribute("height");
+        const child_box = pizzaDivUpdated.firstElementChild.getBoundingClientRect();
+        pizzaDivUpdated.style.width = child_box.width + "px";
+        pizzaDivUpdated.style.height = child_box.height + "px";
 
         if (pizzaDivOld !== undefined) {
-            document.getElementById("pizza_layer").appendChild(pizzaDivUpdated);
             alignDraggableToDestination(pizzaDivUpdated, pizzaDivOld);
             document.getElementById("pizza_layer").removeChild(pizzaDivOld);
             pizzaDivOld.remove();
@@ -844,6 +853,34 @@ function checkOverlap(draggable, destination) {
 
     return isOverlapX && isOverlapY;
 }
+
+/*
+var checkOverlap = (function () {
+    function getPositions( elem ) {
+        var pos, width, height;
+        pos = $( elem ).position();
+        width = $( elem ).width();
+        height = $( elem ).height();
+        const ret = [ [ pos.left, pos.left + width ], [ pos.top, pos.top + height ] ]
+        return ret;
+    }
+
+    function comparePositions( p1, p2 ) {
+        var r1, r2;
+        r1 = p1[0] < p2[0] ? p1 : p2;
+        r2 = p1[0] < p2[0] ? p2 : p1;
+        const ret = r1[1] > r2[0] || r1[0] === r2[0]
+        return ret;
+    }
+
+    return function ( a, b ) {
+        var pos1 = getPositions( a ),
+            pos2 = getPositions( b );
+        const ret = comparePositions( pos1[0], pos2[0] ) && comparePositions( pos1[1], pos2[1] )
+        return ret;
+    };
+})();
+*/
 
 function alignDraggableToDestination(draggable, destination) {
 
