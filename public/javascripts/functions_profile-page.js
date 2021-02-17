@@ -173,9 +173,11 @@ function getTierFromDatabase() {
 
 function getProfilePicFromDatabase() {
         $.get("/profile/getProfilePic", function(data, status){
-            document.getElementById("profile-picture").setAttribute("src",data)
+            if (data != null) {
+                document.getElementById("profile-picture").setAttribute("src", data)
+            }
+            else document.getElementById("profile-picture").setAttribute("src","https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
         }).fail(function (data, status){
-            document.getElementById("profile-picture").setAttribute("src","https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
             alert("Couldn't retrieve Profile Picture from database");
         });
 }
@@ -294,10 +296,16 @@ function friendGetProfilePicFromDatabase(username) {
         },
         credentials: 'include'
     }).then(result => result.json())
-        .then(result => document.getElementById("profile-picture").setAttribute("src", result))
+        .then(result => setFriendsProfilePic(result))
         .catch((error) => {
-        document.getElementById("profile-picture").setAttribute("src","https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
         alert("Couldn't retrieve Profile Picture from database");
         console.error('Error:', error);
     });
+}
+
+function setFriendsProfilePic(result) {
+    if (result != null) {
+        document.getElementById("profile-picture").setAttribute("src", result)
+    }
+    else document.getElementById("profile-picture").setAttribute("src","https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
 }
