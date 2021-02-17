@@ -82,6 +82,7 @@
     background-color: white;
     color: black;
     padding: 5px;
+    border: 2px black solid;
 }
 
 #editProfileButton:hover {
@@ -112,6 +113,7 @@
     background-color: white;
     color: black;
     margin-left: 5%;
+    border: 2px black solid;
 }
 
 #addFriendButton:hover {
