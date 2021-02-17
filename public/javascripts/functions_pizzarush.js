@@ -1289,7 +1289,7 @@ function startMiniGame(ingredientList) {
 
                 // draw the image
                 // since the context is rotated, the image will be rotated as well
-                this.context.drawImage(this.ingredient_image,-this.ingredient_image.width/2,-this.ingredient_image.width/2);
+                this.context.drawImage(this.ingredient_image,-this.ingredient_image.width/2,-this.ingredient_image.height/2);
 
                 this.context.restore();
 
@@ -1956,10 +1956,9 @@ function startMiniGame(ingredientList) {
             }
 
             drawInHole(holeNumber, image) {
-
                 context.save();
                 context.translate(this.holeCoordinates[holeNumber][0], this.holeCoordinates[holeNumber][1]);
-                context.drawImage(image,-image.width/2,-image.width/2);
+                context.drawImage(image,-image.width/2,-image.height/2);
                 context.restore();
             }
         }
