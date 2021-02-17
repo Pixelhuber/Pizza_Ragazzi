@@ -60,6 +60,7 @@
     background-color: #d2d2d2;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 10px;
+    float: left;    /* aus irgendeinem Grund werden nur mit float die Achievements im div angezeigt https://stackoverflow.com/questions/2062258/floating-elements-within-a-div-floats-outside-of-div-why */
 }
 
 #profile-picture {

@@ -9,12 +9,10 @@ function displayAchievements() {
 
     // Display Achievements
     allAchievements.forEach(function (item, index, array) {
-        console.log(index);
         const achievementDiv = document.createElement('div');
         achievementDiv.textContent = item;
         achievementDiv.setAttribute('class', 'achievementBox');
         document.getElementById("achievements_table").appendChild(achievementDiv);
-        document.getElementById("achievements_table")
     });
 }
 
