@@ -57,7 +57,7 @@
 }
 
 .bottom_div {
-    width: 100%;
+    width: 95%;
     padding: 1%;
     margin: 1%;
     background-color: #d2d2d2;
@@ -145,6 +145,7 @@
 }
 
 .achievementBox {
+    position: relative;
     margin: 15px;
     padding: 15px;
 
@@ -156,10 +157,42 @@
     border: 4px black solid;
 }
 
-.achievementBox:hover{
+.achievementBox:hover {
     color: white;
     background-color: black;
     cursor: pointer;
+}
+/*für description hover: https://www.w3schools.com/css/tryit.asp?filename=trycss_tooltip_arrow_top*/
+
+.achievementBox:hover .achievementDescription {
+    visibility: visible;
+}
+
+.achievementBox .achievementDescription { /*sorgt für description hover tooltip*/
+    visibility: hidden;
+    width: 10vw;
+    background-color: white;
+    color: black;
+    text-align: center;
+    border: 4px black solid;
+    border-radius: 6px;
+    padding: 10px 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -5.5vw;
+}
+
+.achievementBox .achievementDescription::after { /* sorgt für pfeil über description hover*/
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 5vw;
+    margin-left: -5px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
 }
 
 /* Track */

@@ -6,6 +6,12 @@ function displayAchievements(allAchievements) {
             const achievementDiv = document.createElement('div');
             achievementDiv.textContent = item.name;
             achievementDiv.setAttribute('class', 'achievementBox');
+
+            const descriptionSpan = document.createElement('span');
+            descriptionSpan.textContent = item.description;
+            descriptionSpan.setAttribute('class', 'achievementDescription');
+            achievementDiv.appendChild(descriptionSpan);
+
             document.getElementById("achievements_table").appendChild(achievementDiv);
         });
     }
