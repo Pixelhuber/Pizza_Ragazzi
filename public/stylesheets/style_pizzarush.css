@@ -4,7 +4,170 @@
 
 body {
     background-color: white;
-    /*background-color: rgba(230,214,144,0.5);*/
+    min-width: 800px;
+}
+
+section{
+    display: flex;
+
+    height: 77vh;
+}
+
+#upper_container{
+    display: flex;
+
+    width: 100%;
+    height: 15vh;
+    margin: 20px 0 20px 0;
+}
+
+#oven_container{
+    flex: 3;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+#left_upper_container{
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+
+    min-width: 200px;
+    margin: 0 20px 0 20px;
+
+    font-size: 0.8em;
+}
+
+#right_upper_container{
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+
+    min-width: 200px;
+    margin: 0 20px 0 20px;
+
+    font-size: 0.8em;
+}
+
+#workSurface{
+    display: flex;
+    flex-flow: column;
+    flex: 3;
+}
+
+#ingredientSurface{
+    flex: 6;
+
+    background: rgba(150, 150, 150, 0.2);
+}
+
+#lowerSurfaces{
+    display: flex;
+    flex: 4;
+}
+
+#cuttingSurface{
+    height: 100%;
+    width: 100%;
+    background: rgba(150, 150, 150, 0.2);
+    margin: 10px 5px 0 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+#smashingSurface{
+    height: 100%;
+    width: 100%;
+    background: rgba(150, 150, 150, 0.2);
+    margin: 10px 0 0 5px ;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.scroll_container{
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+    flex: 1;
+}
+
+
+/* INGREDIENT SECTION ----------------------------------------------------------------------------------*/
+
+#ingredientSection{
+    flex: 1;
+    min-width: 200px;
+    margin: 0 20px 0 20px;
+
+    display: flex;
+    flex-flow: column;
+}
+
+.ingredientSectionItem{
+
+}
+
+.ingredientSectionItem > img{
+    height: 30px;
+    width: auto;
+
+    margin: 7px;
+}
+
+
+/* ORDER SECTION ----------------------------------------------------------------------------------*/
+
+#orderSection{
+    flex: 1;
+    min-width: 200px;
+    margin: 0 20px 0 20px;
+
+    display: flex;
+    flex-flow: column;
+}
+
+.order{
+
+    height: 2.5em;
+    /*padding-left: 5px;*/
+}
+
+.order > p{
+    box-sizing: border-box;
+    padding-left: 5px;
+}
+
+.order > div{
+    border-top: 4px solid black;
+    border-bottom: 4px solid black;
+}
+
+
+/* SINGLE ELEMENTS ----------------------------------------------------------------------------------*/
+
+.unclickable{
+    pointer-events: none;
+}
+
+.box{
+    display: flex;
+    align-items: center;
+
+    margin: 5px 0 5px 0;
+    background-color: white;
+    font-size: 1.2em;
+    border: 4px solid black;
+}
+
+.box:hover{
+    background-color: rgba(150, 150, 150, 0.2);
 }
 
 .draggable{
@@ -27,62 +190,34 @@ div.draggable > img{ /* ingredients on pizzas */
     width: auto;
 }
 
-.unclickable{
-    pointer-events: none;
+.oven{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 5px;
 }
 
-#loading {
-     width: 100%;
-     height: 100%;
-     top: 0;
-     left: 0;
-     position: fixed;
-     display: block;
-     opacity: 1;
-     background-color: #fff;
-     z-index: 95;
-     text-align: center;
- }
-
-#loading_image {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    z-index: 97;
+.oven > img{
+    height: auto;
+    width: 100%;
+    max-width: 160px;
 }
 
-@keyframes load {
-    0%{
-        opacity: 0.08;
-        /*         font-size: 10px; */
-        /* 				font-weight: 400; */
-        filter: blur(5px);
-        letter-spacing: 3px;
-    }
-    100%{
-        /*         opacity: 1; */
-        /*         font-size: 12px; */
-        /* 				font-weight:600; */
-        /* 				filter: blur(0); */
-    }
+#rushCountdown{
+
 }
 
-#loading_text {
-    position: absolute;
-    top: 70%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    margin: auto;
-    font-family: Helvetica, sans-serif, Arial;
-    font-size: 22pt;
-    font-weight: 900;
-    animation: load 1.2s infinite 0s ease-in-out;
-    animation-direction: alternate;
-    text-shadow: 0 0 1px white;
-    z-index: 97;
+#trash{
+    width: 40%;
+    min-width: 100px;
+}
+
+#trash > img{
+    padding: 10px;
+
+    width: 100%;
+    height: auto;
 }
 
 #startStop_overlay {
@@ -106,199 +241,18 @@ div.draggable > img{ /* ingredients on pizzas */
     transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
 }
-#timerRushmode{
-    position: relative;
-    top: 20%;
-}
-
-#upper_container{
-    display: flex;
-
-    width: 100%;
-    height: 15vh;
-    padding: 20px 0 20px 0;
-}
-
-#left_upper_container{
-    width: 25%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#right_upper_container{
-    width: 25%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#oven_container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    width: 50%;
-    /*height: 150px;
-    margin: 20px auto 20px auto;*/
-
-}
-
-.oven{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    width: fit-content;
-    height: 100%;
-}
-
-.oven > img{
-    height: 100%;
-    width: 100%;
-    padding: 10px;
-}
-
-section{
-    display: flex;
-
-    height: 70vh;
-}
-
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #888;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
-.scroll_container{
-    overflow-y: scroll;
-
-    flex: 1;
-}
-
-#ingredientSection{
-    flex: 1;
-    min-width: 200px;
-    margin: 0 20px 0 20px;
-
-    display: flex;
-    flex-flow: column;
-}
-
-#orderSection{
-    flex: 1;
-    min-width: 200px;
-    margin: 0 20px 0 20px;
-
-    display: flex;
-    flex-flow: column;
-}
-
-#workSurface{
-    display: flex;
-    flex-direction: column;
-    flex: 3;
-}
-
-#ingredientSurface{
-    height: 80vh;
-    background: rgba(150, 150, 150, 0.2);
-}
-
-#lowerSurfaces{
-    display: flex;
-}
-
-#cuttingSurface{
-    height: 30vh;
-    width: 100%;
-    background: rgba(150, 150, 150, 0.2);
-    margin: 10px 5px 0 0;
-}
-
-#smashingSurface{
-    height: 30vh;
-    width: 100%;
-    background: rgba(150, 150, 150, 0.2);
-    margin: 10px 0 0 5px ;
-}
-
-.buttonContainer {
-    float: right;
-    position: relative;
-    width: 20%;
-    height: 100%
-}
 
 .miniGameButton{
-    width: auto;
-    height: 20vh;
     position: relative;
-    top: 15%;
-    left: 50%;
-}
+    right: 30px;
 
-.miniGameButton:hover {
-    -webkit-filter: drop-shadow(2px 2px 0 black)
-    drop-shadow(-2px -2px 0 black);
-    filter: drop-shadow(2px 2px 0 black)
-    drop-shadow(-2px -2px 0 black);
-}
-
-.box{
-    display: flex;
-    align-items: center;
-
-    margin: 5px 0 5px 0;
-    background-color: white;
-    font-size: 1.2em;
-    border: 4px solid black;
-}
-
-.box:hover{
-    background-color: rgba(150, 150, 150, 0.2);
-}
-
-.ingredientSectionItem{
-
-}
-
-.ingredientSectionItem > img{
-    height: 30px;
+    height: 20vh;
     width: auto;
 
-    margin: 7px;
 }
 
-.order{
 
-    height: 2.5em;
-    /*padding-left: 5px;*/
-}
-
-.order > p{
-    box-sizing: border-box;
-    padding-left: 5px;
-}
-
-.order > div{
-    border-top: 4px solid black;
-    border-bottom: 4px solid black;
-}
+/* MINI GAMES ----------------------------------------------------------------------------------*/
 
 #miniGame_layer{
     visibility: hidden;
@@ -368,14 +322,84 @@ section{
     color: white;
 }
 
-#trash{
-    width: 40%;
-    min-width: 100px;
+.miniGameButton:hover {
+    -webkit-filter: drop-shadow(2px 2px 0 black)
+    drop-shadow(-2px -2px 0 black);
+    filter: drop-shadow(2px 2px 0 black)
+    drop-shadow(-2px -2px 0 black);
 }
 
-#trash > img{
-    padding: 10px;
+/* SPECIAL ----------------------------------------------------------------------------------*/
 
-    width: 100%;
-    height: auto;
+#loading {
+     width: 100%;
+     height: 100%;
+     top: 0;
+     left: 0;
+     position: fixed;
+     display: block;
+     opacity: 1;
+     background-color: #fff;
+     z-index: 95;
+     text-align: center;
+ }
+
+#loading_image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: 97;
+}
+
+@keyframes load {
+    0%{
+        opacity: 0.08;
+        /*         font-size: 10px; */
+        /* 				font-weight: 400; */
+        filter: blur(5px);
+        letter-spacing: 3px;
+    }
+    100%{
+        /*         opacity: 1; */
+        /*         font-size: 12px; */
+        /* 				font-weight:600; */
+        /* 				filter: blur(0); */
+    }
+}
+
+#loading_text {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    margin: auto;
+    font-family: Helvetica, sans-serif, Arial;
+    font-size: 22pt;
+    font-weight: 900;
+    animation: load 1.2s infinite 0s ease-in-out;
+    animation-direction: alternate;
+    text-shadow: 0 0 1px white;
+    z-index: 97;
+}
+
+::-webkit-scrollbar {
+     width: 10px;
+ }
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

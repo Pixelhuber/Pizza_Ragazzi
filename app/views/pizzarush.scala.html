@@ -19,7 +19,7 @@
             <div id="loading_text">Loading...</div>
         </div>
 
-        <div id="startStop_overlay" onclick="manageRushCountdown(1200, 'timerRushmode')">
+        <div id="startStop_overlay" onclick="manageRushCountdown(1200, 'rushCountdown')">
             <div id="startStop_overlay_text">Click anywhere to start!</div>
         </div>
 
@@ -45,13 +45,13 @@
             <div id="left_upper_container">
 
 
-                <h1 id="timerRushmode"></h1>
+                <h1 id="rushCountdown"></h1>
             </div>
 
             <div id="oven_container"></div>
 
             <div id="right_upper_container">
-                <h1 id="currentlyDisplayedPoints">Points: 0</h1>
+                <h1 id="currentlyDisplayedPoints"></h1>
             </div>
         </div>
 
@@ -73,15 +73,11 @@
 
                 <div id="lowerSurfaces">
                     <div id="cuttingSurface">
-                        <div class="buttonContainer">
-                            <input class="miniGameButton" id="startFruitNinja" onclick="startFromChoppingTable()" type="image" src="/assets/images/knife.png"/>
-                        </div>
+                        <input class="miniGameButton" id="startFruitNinja" onclick="startFromChoppingTable()" type="image" src="/assets/images/knife.png"/>
                     </div>
 
                     <div id="smashingSurface">
-                        <div class="buttonContainer">
-                            <input class="miniGameButton" id="startWhackAMole" onclick="startFromStampingTable()" type="image" src="/assets/images/rollingpin.png"/>
-                        </div>
+                        <input class="miniGameButton" id="startWhackAMole" onclick="startFromStampingTable()" type="image" src="/assets/images/rollingpin.png"/>
                     </div>
                 </div>
             </div>

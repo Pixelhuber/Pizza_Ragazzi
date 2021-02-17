@@ -453,7 +453,7 @@ class Oven {
 
         // creating the timer element <p> --------------------------------------
         const timer = document.createElement('p');
-        timer.setAttribute('style', "position: absolute; z-index: 20; font-size: 2em");
+        timer.setAttribute('style', "position: absolute; z-index: 45; font-size: 2em");
         timer.setAttribute('class', "unclickable");
         timer.innerText = pizza.bakingTimeInSeconds;
 
@@ -939,7 +939,7 @@ function updateCurrentPoints() {
         ).then(
         result => {
             returnedPoints = parseInt(result);
-            document.getElementById("currentlyDisplayedPoints").textContent = "Points: " + returnedPoints;
+            document.getElementById("currentlyDisplayedPoints").textContent = "POINTS: " + returnedPoints;
         }
     ).catch((error) => {
         console.error('Error:', error);
@@ -1044,7 +1044,7 @@ function manageRushCountdown(seconds, timerContainerId){
                     seconds = "0" + seconds;
 
                 // Display the result in the affectedObject
-                this.affectedObject.innerHTML = "Time: " + minutes + ":" + seconds;
+                this.affectedObject.innerHTML = "TIME: " + minutes + ":" + seconds;
             }
 
             // @Override
