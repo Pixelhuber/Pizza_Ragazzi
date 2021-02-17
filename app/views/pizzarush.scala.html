@@ -19,12 +19,23 @@
             <div id="loading_text">Loading...</div>
         </div>
 
-        <div id="startStop_overlay" onclick="manageRushCountdown(120, 'timerRushmode')">
+        <div id="startStop_overlay" onclick="manageRushCountdown(1200, 'timerRushmode')">
             <div id="startStop_overlay_text">Click anywhere to start!</div>
         </div>
 
-        <div id="miniGame_layer"> </div>
-
+        <div id="miniGame_layer">
+            <div id="miniGame_window">
+                <div id="miniGame_playArea">
+                    <canvas id="miniGame_canvas"></canvas>
+                </div>
+                <div id="miniGame_sideBar">
+                    <div id="miniGame_sideBar_counter"></div>
+                    <button id="miniGame_sideBar_closeButton" onclick="stopMiniGame()">
+                        End Game
+                    </button>
+                </div>
+            </div>
+        </div>
         <div id="pizza_layer"> </div>
 
         <div id="ingredient_layer"> </div>
@@ -63,13 +74,13 @@
                 <div id="lowerSurfaces">
                     <div id="cuttingSurface">
                         <div class="buttonContainer">
-                            <input onclick="startMiniGame()" class="miniGameButton" id="startFruitNinja" type="image" src="/assets/images/knife.png"/>
+                            <input class="miniGameButton" id="startFruitNinja" onclick="startFromChoppingTable()" type="image" src="/assets/images/knife.png"/>
                         </div>
                     </div>
 
                     <div id="smashingSurface">
                         <div class="buttonContainer">
-                            <input class="miniGameButton" id="startWhackAMole" type="image" src="/assets/images/rollingpin.png"/>
+                            <input class="miniGameButton" id="startWhackAMole" onclick="startFromStampingTable()" type="image" src="/assets/images/rollingpin.png"/>
                         </div>
                     </div>
                 </div>
