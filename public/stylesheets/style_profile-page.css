@@ -13,6 +13,8 @@
     border-radius: 10px;
 
     text-align: center;
+    max-height: 70vh;
+    overflow: auto;
 }
 
 .middle_div {
@@ -87,8 +89,14 @@
     cursor: pointer;
 }
 
-#container_friends{ /*Definiert Position der Freundesliste*/
+#friends_heading {
+    margin-top: 2%;
     text-align: center;
+}
+
+#container_friends{
+    overflow-y: auto;
+    max-height: 38vh;
 }
 
 #addFriendInput {
@@ -131,6 +139,7 @@
 }
 
 #chat_heading {
+    margin-top: 2%;
     text-align: center;
 }
 
@@ -150,4 +159,19 @@
     color: white;
     background-color: black;
     cursor: pointer;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
