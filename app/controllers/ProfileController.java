@@ -87,10 +87,10 @@ public class ProfileController extends Controller {
         return ok(Integer.toString(user.getHighScore()));
     }
 
-    public Result getTierFromDatabase(Http.Request request) {
+    public Result getTierNameFromDatabase(Http.Request request) {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
-        return ok(Integer.toString(user.getCurrentTier()));
+        return ok(user.getNameFromTierId());
     }
 
     public Result getProfilePictureFromDatabase(Http.Request request) throws IOException {
@@ -163,10 +163,10 @@ public class ProfileController extends Controller {
         return ok(Integer.toString(user.getHighScore()));
     }
 
-    public Result friendGetTierFromDatabase(Http.Request request) {
+    public Result friendGetTierNameFromDatabase(Http.Request request) {
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
-        return ok(Integer.toString(user.getCurrentTier()));
+        return ok(user.getNameFromTierId());
     }
 
     public Result friendGetProfilePictureFromDatabase(Http.Request request) throws IOException {

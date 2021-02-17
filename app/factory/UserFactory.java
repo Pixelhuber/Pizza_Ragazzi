@@ -327,6 +327,21 @@ public class UserFactory {
 
         }
 
+        public String getNameFromTierId() {
+            StringBuffer stringBuffer = new StringBuffer(); // einfacher String funktioniert nicht, da im withConnection lambda Ausdruck nicht auf Variablen außerhalb zugegriffen werden kann
+
+            db.withConnection(conn -> {
+                PreparedStatement stmt = conn.prepareStatement("SELECT name FROM `Tier` WHERE idTier = ?");
+                stmt.setInt(1, this.currentTier);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    stringBuffer.append(rs.getString("name"));
+                }
+                stmt.close();
+            });
+            return stringBuffer.toString();
+        }
+
         public int getId() {
             return id;
         }

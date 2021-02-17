@@ -37,7 +37,7 @@ GET     /getEmail                   controllers.ProfileController.getEmailFromSe
 #double getMail??
 GET     /profile/getMail            controllers.ProfileController.getEmailFromDatabase(request: Request)
 
-GET     /profile/getTier            controllers.ProfileController.getTierFromDatabase(request: Request)
+GET     /profile/getTierName        controllers.ProfileController.getTierNameFromDatabase(request: Request)
 
 GET     /profile/getTotalPoints    controllers.ProfileController.getGesamtpunkteFromDatabase(request: Request)
 
@@ -50,7 +50,7 @@ POST    /profile/addFriend          controllers.ProfileController.addFriend(requ
 # PROFILE-FROM-FRIEND ROUTES --------------------------------------------------------------------------
 POST    /friendGetUsername                controllers.ProfileController.friendGetUsernameFromDatabase(request: Request)
 POST    /profile/friendGetMail            controllers.ProfileController.friendGetEmailFromDatabase(request: Request)
-POST    /profile/friendGetTier            controllers.ProfileController.friendGetTierFromDatabase(request: Request)
+POST    /profile/friendGetTierName        controllers.ProfileController.friendGetTierNameFromDatabase(request: Request)
 POST    /profile/friendGetTotalPoints     controllers.ProfileController.friendGetGesamtpunkteFromDatabase(request: Request)
 POST    /profile/friendGetHighScore       controllers.ProfileController.friendGetHighscoreFromDatabase(request: Request)
 POST    /profile/friendGetProfilePic      controllers.ProfileController.friendGetProfilePictureFromDatabase(request: Request)

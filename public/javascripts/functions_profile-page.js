@@ -163,8 +163,8 @@ function getHighscoreFromDatabase() {
 }
 
 function getTierFromDatabase() {
-    $.get("/profile/getTier", function(data, status){
-        document.getElementById("tier").textContent = "Tier: " + data
+    $.get("/profile/getTierName", function(data, status){
+        document.getElementById("tier").textContent = "Rang: " + data
     }).fail(function (data, status){
         document.getElementById("highscore").textContent = "Default Tier";
         alert("Couldn't retrieve tier from database");
@@ -276,7 +276,7 @@ function friendGetHighscoreFromDatabase(username) {
 }
 
 function friendGetTierFromDatabase(username) {
-    fetch("/profile/friendGetTier", {
+    fetch("/profile/friendGetTierName", {
         method: 'POST',
         body: JSON.stringify(username),
         headers: {
@@ -284,7 +284,7 @@ function friendGetTierFromDatabase(username) {
         },
         credentials: 'include'
     }).then(result => result.text())
-        .then(result => document.getElementById("tier").textContent = "Tier: " + result)
+        .then(result => document.getElementById("tier").textContent = "Rang: " + result)
 }
 
 function friendGetProfilePicFromDatabase(username) {
