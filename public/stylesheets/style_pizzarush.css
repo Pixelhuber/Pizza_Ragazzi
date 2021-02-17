@@ -70,7 +70,6 @@ section{
 }
 
 #cuttingSurface{
-    height: 100%;
     width: 100%;
     background: rgba(150, 150, 150, 0.2);
     margin: 10px 5px 0 0;
@@ -81,7 +80,6 @@ section{
 }
 
 #smashingSurface{
-    height: 100%;
     width: 100%;
     background: rgba(150, 150, 150, 0.2);
     margin: 10px 0 0 5px ;
@@ -260,8 +258,12 @@ div.draggable > img{ /* ingredients on pizzas */
     position: absolute;
     z-index: 50;
 
-    height: 99%;
+    height: 95%;
     width: 99%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #miniGame_window{
@@ -273,8 +275,6 @@ div.draggable > img{ /* ingredients on pizzas */
     min-width: 600px;
 
     padding: 20px;
-    margin-left: auto;
-    margin-right: auto;
 
     background-color: white;
     border: 4px solid black;
