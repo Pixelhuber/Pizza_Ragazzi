@@ -52,9 +52,12 @@ public class PizzaRushController extends Controller {
         }
         PizzaValidation validation = new PizzaValidation(orderPoints, orderIngredientIds, createdPizzaIngredientIds, createdPizzaBakeStatus);
 
-        int currentPoints = getCurrentPointsFromSession(request.session());
+        boolean pizzaEqualsOrder = validation.pizzaEqualsOrder();
 
-        String points = String.valueOf(currentPoints + validation.calculatePoints()); // temporär
+        int currentPoints = getCurrentPointsFromSession(request.session());
+        String points = String.valueOf(currentPoints + validation.calculatePoints());
+
+        ok().addingToSession(request, "pizzaCorrectness", String.valueOf(pizzaEqualsOrder));
         return ok().addingToSession(request, "currentPizzaRushPoints", points);
     }
 

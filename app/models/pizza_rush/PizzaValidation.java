@@ -21,7 +21,7 @@ public class PizzaValidation {
     // Calculates how many points this pizza should get
     public int calculatePoints(){
         int points=orderPoints;
-        if(listEquals(createdPizzaIngredientIds,orderIngredientIds)){
+        if(pizzaEqualsOrder()){
             switch(createdPizzaBakeStatus){
                 case 3: // UNBAKED
                     points=points/2;
@@ -37,6 +37,10 @@ public class PizzaValidation {
             points=10;
         }
         return points;
+    }
+
+    public boolean pizzaEqualsOrder (){
+        return listEquals(createdPizzaIngredientIds,orderIngredientIds);
     }
 
     public static <Integer> boolean listEquals(List<Integer> list1, List<Integer> list2) {
