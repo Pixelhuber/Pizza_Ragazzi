@@ -24,17 +24,17 @@ public class PizzaValidation {
         if(pizzaEqualsOrder()){
             switch(createdPizzaBakeStatus){
                 case 3: // UNBAKED
-                    points=points/2;
+                    points = (int)(points * 0.25);
                     break;
                 case 4: // WELL
                     //no negative Points since its baked
                     break;
                 case 5: // BURNT
-                    points=points-(points/4);
+                    points = (int)(points * 0.25);
                     break;
             }
-        }else{
-            points=10;
+        } else {
+            points = 0;
         }
         return points;
     }

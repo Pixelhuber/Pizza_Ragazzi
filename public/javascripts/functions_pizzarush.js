@@ -576,6 +576,8 @@ class Order {
 
     gameElement; //in game representation of the order
 
+    animationRunning = false;
+
     constructor(name, points, timeInSeconds, ingredients) {
         this.name = name;
         this.points = points;
@@ -587,17 +589,6 @@ class Order {
 
     getCopy() {
         return new Order(this.name, this.points, this.timeInSeconds, this.requestedPizza.ingredients);
-    }
-
-    deliver(pizza) {
-
-        // Server validates pizza and updates points
-        validatePizza(this, pizza);
-
-        pizza.whenDraggedInOrder(this);
-        OrderHandler.getInstance().notifyDelivered(this, pizza);
-
-        console.log("Delivered: " + pizza.getName() + "\nOrdered: " + this.name);
     }
 
     createGameElement() {
@@ -618,11 +609,13 @@ class Order {
 
     // starts the animation of the order timeIndicator
     startAnimation() {
-        const order = this;
+        const thisOrder = this;
         let start;
 
         let gameElement_box;
         let timeIndicator_box;
+
+        thisOrder.animationRunning = true;
 
         // this is one animation step
         function updateTimeIndicator(timestamp) {
@@ -630,30 +623,37 @@ class Order {
                 start = timestamp;
             const elapsed = timestamp - start; // elapsed = time passed since animation start [milliseconds]
 
-            gameElement_box = order.gameElement.getBoundingClientRect();
-            timeIndicator_box = order.gameElement.timeIndicator.getBoundingClientRect();
+            gameElement_box = thisOrder.gameElement.getBoundingClientRect();
+            timeIndicator_box = thisOrder.gameElement.timeIndicator.getBoundingClientRect();
 
             // update time indicator
-            let timeLeftInDecimal = Math.max(((order.timeInSeconds * 1000 - elapsed) / (order.timeInSeconds * 1000)), 0) // percentage of time left [min = 0]
-            order.gameElement.timeIndicator.style.height = (gameElement_box.height - 8) + "px"; // always the same
-            order.gameElement.timeIndicator.style.width = gameElement_box.width * (timeLeftInDecimal) + "px";
+            let timeLeftInDecimal = Math.max(((thisOrder.timeInSeconds * 1000 - elapsed) / (thisOrder.timeInSeconds * 1000)), 0) // percentage of time left [min = 0]
+            thisOrder.gameElement.timeIndicator.style.height = (gameElement_box.height - 8) + "px"; // always the same
+            thisOrder.gameElement.timeIndicator.style.width = gameElement_box.width * (timeLeftInDecimal) + "px";
 
             // set indicator color according to percentage of time left
             if (timeLeftInDecimal > 0.5)
-                order.gameElement.timeIndicator.style.backgroundColor = "green";
+                thisOrder.gameElement.timeIndicator.style.backgroundColor = "green";
             else if (timeLeftInDecimal > 0.2)
-                order.gameElement.timeIndicator.style.backgroundColor = "yellow";
+                thisOrder.gameElement.timeIndicator.style.backgroundColor = "yellow";
             else
-                order.gameElement.timeIndicator.style.backgroundColor = "red";
+                thisOrder.gameElement.timeIndicator.style.backgroundColor = "red";
 
 
-            if (elapsed < order.timeInSeconds * 1000) // Stop the animation when time is over
-                window.requestAnimationFrame(updateTimeIndicator);
+            if (elapsed < thisOrder.timeInSeconds * 1000){ // Stop the animation when time is over
+                if (thisOrder.animationRunning)
+                    window.requestAnimationFrame(updateTimeIndicator);
+            }
+
             else
-                OrderHandler.getInstance().notifyExpired(order);
+                OrderHandler.getInstance().notifyExpired(thisOrder);
         }
 
         window.requestAnimationFrame(updateTimeIndicator);
+    }
+
+    stopAnimation() {
+        this.animationRunning = false;
     }
 
     getName() {
@@ -706,6 +706,10 @@ class OrderHandler {
 
     stop() {
         this.isRunning = false;
+
+        this.activeOrders.forEach(function (item) {
+            item.stopAnimation();
+        })
     }
 
     drawRandomOrder() {
@@ -741,7 +745,7 @@ class OrderHandler {
 
     }
 
-    notifyDelivered(order, pizza) {
+    notifyDelivered(order, receivedPizza) {
         let orderIds = [];
         let pizzaIds = [];
 
@@ -763,16 +767,19 @@ class OrderHandler {
         }
 
         fillIdArray(order.requestedPizza.ingredients, orderIds)
-        fillIdArray(pizza.ingredients, pizzaIds)
+        fillIdArray(receivedPizza.ingredients, pizzaIds)
 
         // Play sound
-        if (equalsIgnoreOrder(orderIds,pizzaIds)) {
+        if (equalsIgnoreOrder(orderIds,pizzaIds) && receivedPizza.bakeStatus === DraggablePizzaInstance.bakeStatus.WELL)
             AudioPlayer.order_correct();
-        } else {
+        else
             AudioPlayer.distraction_hit();
-        }
 
+        // Server validates pizza and updates points
+        validatePizza(order, receivedPizza);
 
+        receivedPizza.whenDraggedInOrder(this);
+        order.stopAnimation();
         order.gameElement.remove();
         this.activeOrders.splice(this.activeOrders.indexOf(order), 1);
     }
@@ -782,6 +789,7 @@ class OrderHandler {
         // Play sound
         AudioPlayer.order_expired();
 
+        order.stopAnimation();
         order.gameElement.remove();
         this.activeOrders.splice(this.activeOrders.indexOf(order), 1);
     }
@@ -968,7 +976,7 @@ function makeDraggable(element) {
 
             if (checkOverlap(element.draggable, item.gameElement)) {
 
-                item.deliver(element)
+                OrderHandler.getInstance().notifyDelivered(item, element);
             }
         });
     }
