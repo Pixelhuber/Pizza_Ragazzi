@@ -8,6 +8,7 @@
 
         <link rel="stylesheet" type="text/css" href=@routes.Assets.versioned("stylesheets/style_profile-page.css")>
         <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_friendlist.css")">
+        <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_chat.css")">
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript" src=@routes.Assets.versioned("javascripts/functions_profile-page.js")></script>
@@ -56,6 +57,34 @@
 
             <div class="right_div">
                 <h1 id="chat_heading">Chat</h1>
+                <label for="chatWithWhoInput" id="chatWithWhoInputLabel">Wem willst du schreiben?</label>
+                <br>
+                <input id="chatWithWhoInput" type="text" placeholder="Nutzernamen eingeben...">
+
+                <div class="container">
+                    <img src="/images/pomodoro.png" alt="Avatar" style="width:100%;">
+                    <p>Hello. How are you today?</p>
+                    <span class="time-right">11:00</span>
+                </div>
+
+                <div class="container darker">
+                    <img src="/images/funghi.png" alt="Avatar" class="right" style="width:100%;">
+                    <p>Hey! I'm fine. Thanks for asking!</p>
+                    <span class="time-left">11:01</span>
+                </div>
+
+                <div class="container">
+                    <img src="/images/pomodoro.png" alt="Avatar" style="width:100%;">
+                    <p>Sweet! So, what do you wanna do today? Maybeasdfasdflsflsl   fslfjei aefsief kfk sd fae as  asdfasjhdfashejfhaskefh asjf kse fklaslfef asef ase </p>
+                    <span class="time-right">11:02</span>
+                </div>
+
+                <div class="container darker">
+                    <img src="/images/funghi.png" alt="Avatar" class="right" style="width:100%;">
+                    <p>Nah, I dunno. Play soccer.. or learn more coding perhaps?</p>
+                    <span class="time-left">11:05</span>
+                </div>
+
             </div>
         </div>
 

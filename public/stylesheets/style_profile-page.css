@@ -93,7 +93,7 @@
 }
 
 #friends_heading {
-    margin-top: 2%;
+    margin-top: 0;
     text-align: center;
 }
 
@@ -144,6 +144,12 @@
 #chat_heading {
     margin-top: 0;
     text-align: center;
+}
+
+#chatWithWhoInput {
+    margin: auto;
+    padding: 5px;
+    width: 50%;
 }
 
 #achievements_heading {
