@@ -78,6 +78,7 @@
 }
 
 #editProfileButton {
+    margin: auto;
     font-size: 100%;
     background-color: white;
     color: black;
@@ -97,7 +98,6 @@
 }
 
 #container_friends{
-    overflow-y: auto;
     max-height: 38vh;
 }
 
@@ -123,7 +123,7 @@
 }
 
 #backToMyProfileButton {
-    visibility: hidden;
+    display: none;
     font-size: 100%;
     background-color: white;
     color: black;
@@ -201,6 +201,35 @@
     border-width: 10px;
     border-style: solid;
     border-color: black transparent transparent transparent;
+}
+
+.loading {
+    border: 5px solid #d2d2d2;
+    border-radius: 50%;
+    border-top: 5px solid #000000;
+    width: 30px;
+    height: 30px;
+    -webkit-animation: spin 1s linear infinite; /* Safari */
+    animation: spin 1s linear infinite;
+}
+
+#loading_friends {
+    margin: auto;
+}
+
+#loading_achievements {
+    margin-left: 6%;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* Track */

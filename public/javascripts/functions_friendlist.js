@@ -1,12 +1,16 @@
 var viewOnly = false;           //falls Profil vom Freund angeklickt wird ist dieses Attribut true
 
 function getFriendsData() {
+    document.getElementById("loading_friends").style.display = "block" //loading friends anzeigen
+    document.getElementById("container_friends").style.overflowY = "hidden"; //scrollbar hiden, und erst nach der Erstellung der Freundesliste anzeigen
     fetch("/getFriendsData")
         .then(result => result.json())
         .then(result => createFriendlist(result));
 }
 
 function friendGetFriendsData(username) {
+    document.getElementById("loading_friends").style.display = "block" //loading friends anzeigen
+    document.getElementById("container_friends").style.overflowY = "hidden"; //scrollbar hiden, und erst nach der Erstellung der Freundesliste anzeigen
     fetch("/friendGetFriendsData", {
         method: 'POST',
         body: JSON.stringify(username),
@@ -54,6 +58,9 @@ function createFriendlist(data) {
         list.appendChild(friend);
     }
     document.getElementById("container_friends").append(list);
+
+    document.getElementById("loading_friends").style.display = "none"; //loading friends hiden
+    document.getElementById("container_friends").style.overflowY = "auto";  //erst hier scrollbar einfügen, damit sie nicht buggt
 }
 
 function beginHoverEffect(elm) {

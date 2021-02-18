@@ -13,8 +13,10 @@ function displayAchievements(allAchievements) {
             achievementDiv.appendChild(descriptionSpan);
 
             document.getElementById("achievements_table").appendChild(achievementDiv);
+
+            document.getElementById("loading_achievements").style.display = "none"; //loading achievements hiden
         });
-    }
+    } else document.getElementById("loading_achievements").style.display = "none"; //loading achievements hiden, wenn Nutzer keine achievements hat
 }
 
 $(function () {
@@ -127,6 +129,7 @@ function uploadProfilePictureIntoDB(){
 }
 
 function getAchievementsFromDatabase() {
+    document.getElementById("loading_achievements").style.display = "block" //loading achievements anzeigen
     $.get("/profile/getAchievements", function(data, status){
         displayAchievements(JSON.parse(data));
     }).fail(function (data, status){
@@ -210,11 +213,11 @@ function setupInformationFromFriend(elm) {
         deleteOldFriendList();          //Liste wird gelöscht, damit nur neue angezeigt wird
         friendGetFriendsData(name);
 
-        document.getElementById("editProfileButton").style.visibility = "hidden";       //Edit-Profile-Knopf hidden
-        document.getElementById("addFriendInputLabel").style.visibility = "hidden";         //Freund hinzufügen Label hidden
-        document.getElementById("addFriendInput").style.visibility = "hidden";         //Freund hinzufügen Searchbar hidden
-        document.getElementById("addFriendButton").style.visibility = "hidden";         //Freund hinzufügen Button hidden
-        document.getElementById("backToMyProfileButton").style.visibility = "visible";  //Zurück Button visible
+        document.getElementById("editProfileButton").style.display = "none";       //Edit-Profile-Knopf hidden
+        document.getElementById("addFriendInputLabel").style.display = "none";          //Freund hinzufügen Label hidden
+        document.getElementById("addFriendInput").style.display = "none";          //Freund hinzufügen Searchbar hidden
+        document.getElementById("addFriendButton").style.display = "none";          //Freund hinzufügen Button hidden
+        document.getElementById("backToMyProfileButton").style.display = "block";  //Zurück Button visible
         viewOnly = true;                //in functions_friendlist.js wird der Freundeslisten hoverEffect und onclick nicht mehr ausgeführt (diese Funktion auch nicht)
     }
 }
@@ -225,11 +228,11 @@ function backToMyProfile() {
 
     setup();
 
-    document.getElementById("editProfileButton").style.visibility = "visible";       //Edit-Profile-Knopf hidden
-    document.getElementById("addFriendInputLabel").style.visibility = "visible";         //Freund hinzufügen Label hidden
-    document.getElementById("addFriendInput").style.visibility = "visible";         //Freund hinzufügen Searchbar hidden
-    document.getElementById("addFriendButton").style.visibility = "visible";         //Freund hinzufügen Button hidden
-    document.getElementById("backToMyProfileButton").style.visibility = "hidden";  //Zurück Button visible
+    document.getElementById("editProfileButton").style.display = "block";       //Edit-Profile-Knopf hidden
+    document.getElementById("addFriendInputLabel").style.display = "inline";           //Freund hinzufügen Label hidden
+    document.getElementById("addFriendInput").style.display = "inline";          //Freund hinzufügen Searchbar hidden
+    document.getElementById("addFriendButton").style.display = "inline";         //Freund hinzufügen Button hidden
+    document.getElementById("backToMyProfileButton").style.display = "none";  //Zurück Button visible
     viewOnly = false;
 }
 
@@ -248,6 +251,7 @@ function deleteOldAchievements() {
 }
 
 function friendGetAchievementsFromDatabase(username) {
+    document.getElementById("loading_achievements").style.display = "block" //loading achievements anzeigen
     fetch("/profile/friendGetAchievements", {
         method: 'POST',
         body: JSON.stringify(username),
