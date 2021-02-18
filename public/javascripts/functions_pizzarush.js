@@ -111,15 +111,15 @@ class AbstractIngredient {
     picture_burnt;
 
     static picture_type = {
-        RAW : 1,
-        RAW_DISTRACTION : 2,
-        PROCESSED : 3,
-        BAKED : 4,
-        BURNT : 5
+        RAW: 1,
+        RAW_DISTRACTION: 2,
+        PROCESSED: 3,
+        BAKED: 4,
+        BURNT: 5
     }
 
     constructor(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt) {
-        this.id=id;
+        this.id = id;
         this.name = name;
         this.picture_raw = picture_raw;
         this.picture_raw_distraction = picture_raw_distraction;
@@ -136,16 +136,21 @@ class AbstractIngredient {
         const ret = document.createElement('img');
 
         switch (picture_type) {
-            case 1:     ret.setAttribute('src', this.picture_raw);
-                        break;
-            case 2:     ret.setAttribute('src', this.picture_raw_distraction);
-                        break;
-            case 3:     ret.setAttribute('src', this.picture_processed);
-                        break;
-            case 4:     ret.setAttribute('src', this.picture_baked);
-                        break;
-            case 5:     ret.setAttribute('src', this.picture_burnt);
-                        break;
+            case 1:
+                ret.setAttribute('src', this.picture_raw);
+                break;
+            case 2:
+                ret.setAttribute('src', this.picture_raw_distraction);
+                break;
+            case 3:
+                ret.setAttribute('src', this.picture_processed);
+                break;
+            case 4:
+                ret.setAttribute('src', this.picture_baked);
+                break;
+            case 5:
+                ret.setAttribute('src', this.picture_burnt);
+                break;
         }
 
         ret.setAttribute('alt', this.name);
@@ -154,20 +159,27 @@ class AbstractIngredient {
 
         // TODO: Früher oder später müssen wir die z-Indexes der Ingredients in der Datenbank speichern
         switch (this.name) {
-            case "Pomodoro":    ret.style.zIndex = "11";
-                                break;
-            case "Formaggio":   ret.style.zIndex = "12";
-                                break;
-            case "Salame":      ret.style.zIndex = "13";
-                                break;
-            case "Prociutto":      ret.style.zIndex = "14";
-                                break;
-            case "Paprica":   ret.style.zIndex = "15";
-                                break;
-            case "Funghi":      ret.style.zIndex = "16";
-                                break;
-            case "Ananas":      ret.style.zIndex = "17";
-                                break;
+            case "Pomodoro":
+                ret.style.zIndex = "11";
+                break;
+            case "Formaggio":
+                ret.style.zIndex = "12";
+                break;
+            case "Salame":
+                ret.style.zIndex = "13";
+                break;
+            case "Prociutto":
+                ret.style.zIndex = "14";
+                break;
+            case "Paprica":
+                ret.style.zIndex = "15";
+                break;
+            case "Funghi":
+                ret.style.zIndex = "16";
+                break;
+            case "Ananas":
+                ret.style.zIndex = "17";
+                break;
         }
 
         return ret;
@@ -177,7 +189,7 @@ class AbstractIngredient {
         return this.name;
     }
 
-    getId(){
+    getId() {
         return this.id;
     }
 
@@ -185,7 +197,7 @@ class AbstractIngredient {
     static getInstanceByName(name) {
         let ret = undefined
 
-        availableIngredients.forEach(function(item) {
+        availableIngredients.forEach(function (item) {
             if (name === item.name)
                 ret = item;
         });
@@ -234,7 +246,7 @@ class DraggableIngredientInstance extends AbstractIngredient {
     isDragEnabled;
 
     constructor(ingredient) {
-        super(ingredient.id, ingredient.name, ingredient.picture_raw, ingredient.picture_raw_distraction, ingredient.picture_processed, ingredient.picture_baked,ingredient.picture_burnt);
+        super(ingredient.id, ingredient.name, ingredient.picture_raw, ingredient.picture_raw_distraction, ingredient.picture_processed, ingredient.picture_baked, ingredient.picture_burnt);
         this.parentIngredient = ingredient;
         existingDraggableIngredientInstances.push(this);
 
@@ -268,7 +280,7 @@ class DraggableIngredientInstance extends AbstractIngredient {
     setStatus(status) {
         this.status = status;
 
-        switch (this.status){
+        switch (this.status) {
             case DraggableIngredientInstance.Status.RAW:
                 this.draggable.setAttribute('src', this.parentIngredient.picture_raw);
                 break;
@@ -320,10 +332,10 @@ class Pizza {
         this.ingredients.push(AbstractIngredient.getInstanceByName("Impasto"))
     }
 
-    getIngredientIds(){
+    getIngredientIds() {
         let ingredientIds = [];
 
-        this.ingredients.forEach(function (value){
+        this.ingredients.forEach(function (value) {
             ingredientIds.push(value.id)
         })
         return ingredientIds
@@ -363,7 +375,7 @@ class DraggablePizzaInstance extends Pizza {
 
 
     static findExistingPizzaByDiv(div) {
-        existingDraggablePizzaInstances.forEach(function(item){
+        existingDraggablePizzaInstances.forEach(function (item) {
             if (item.draggable === div)
                 return item;
         })
@@ -378,10 +390,13 @@ class DraggablePizzaInstance extends Pizza {
 
     getName() {
         // temporary return values
-        switch (this.bakeStatus){
-            case 0: return "unknown unbaked pizza";
-            case 1: return "unknown baked pizza";
-            case 2: return "unknown burnt pizza"
+        switch (this.bakeStatus) {
+            case 0:
+                return "unknown unbaked pizza";
+            case 1:
+                return "unknown baked pizza";
+            case 2:
+                return "unknown burnt pizza"
         }
     }
 
@@ -395,7 +410,7 @@ class DraggablePizzaInstance extends Pizza {
 
         pizzaDivUpdated.setAttribute('class', 'draggable');
 
-        this.ingredients.forEach(function(item){
+        this.ingredients.forEach(function (item) {
 
             const ingredient = item.createImg(currentBakeStatus);
             ingredient.style.position = "absolute";
@@ -456,7 +471,7 @@ class DraggablePizzaInstance extends Pizza {
 
     updateBakeStatus() {
         // determine bakeStatus of the pizza
-        const difference = this.bakingTimeInSeconds - this.timeInOvenInMilliseconds/1000;
+        const difference = this.bakingTimeInSeconds - this.timeInOvenInMilliseconds / 1000;
         if (difference < -7)
             this.setBakeStatus(DraggablePizzaInstance.bakeStatus.BURNT);
         else if (difference < 0)
@@ -509,7 +524,7 @@ class Oven {
 
         // this method describes one animation step
         function bakingAnimation(timestamp) {
-            if (start === undefined){
+            if (start === undefined) {
                 start = timestamp;
                 lastTimestamp = timestamp;
             }
@@ -521,7 +536,7 @@ class Oven {
             pizza.updateBakeStatus();
 
             // manipulate timer: update the timer
-            const timerCount = (Math.floor(pizza.bakingTimeInSeconds - pizza.timeInOvenInMilliseconds/1000 + 1));
+            const timerCount = (Math.floor(pizza.bakingTimeInSeconds - pizza.timeInOvenInMilliseconds / 1000 + 1));
             if (timerCount > 0)
                 timer.innerText = timerCount.toString();
             else if (timerCount > -4)
@@ -535,8 +550,7 @@ class Oven {
             if (!pizza.isInOven) { // pizza.ovenOut() method sets isInOven to false when pizza is dragged out of oven
                 // stop animation
                 timer.remove();
-            }
-            else {
+            } else {
                 // continue animation (a.k.a. continue baking)
                 lastTimestamp = timestamp;
                 pizza.updateDiv();
@@ -562,13 +576,13 @@ class Order {
 
     gameElement; //in game representation of the order
 
-    constructor(name, points, timeInSeconds, ingredients){
+    constructor(name, points, timeInSeconds, ingredients) {
         this.name = name;
         this.points = points;
         this.timeInSeconds = timeInSeconds;
         this.requestedPizza = new Pizza();
-        this.requestedPizza.ingredients=[];
-        this.requestedPizza.ingredients.push.apply(this.requestedPizza.ingredients,ingredients)
+        this.requestedPizza.ingredients = [];
+        this.requestedPizza.ingredients.push.apply(this.requestedPizza.ingredients, ingredients)
     }
 
     getCopy() {
@@ -581,7 +595,7 @@ class Order {
         validatePizza(this, pizza);
 
         pizza.whenDraggedInOrder(this);
-        OrderHandler.getInstance().notifyDelivered(this);
+        OrderHandler.getInstance().notifyDelivered(this, pizza);
 
         console.log("Delivered: " + pizza.getName() + "\nOrdered: " + this.name);
     }
@@ -620,7 +634,7 @@ class Order {
             timeIndicator_box = order.gameElement.timeIndicator.getBoundingClientRect();
 
             // update time indicator
-            let timeLeftInDecimal = Math.max(((order.timeInSeconds*1000 - elapsed) / (order.timeInSeconds*1000)), 0) // percentage of time left [min = 0]
+            let timeLeftInDecimal = Math.max(((order.timeInSeconds * 1000 - elapsed) / (order.timeInSeconds * 1000)), 0) // percentage of time left [min = 0]
             order.gameElement.timeIndicator.style.height = (gameElement_box.height - 8) + "px"; // always the same
             order.gameElement.timeIndicator.style.width = gameElement_box.width * (timeLeftInDecimal) + "px";
 
@@ -633,7 +647,7 @@ class Order {
                 order.gameElement.timeIndicator.style.backgroundColor = "red";
 
 
-            if (elapsed < order.timeInSeconds*1000) // Stop the animation when time is over
+            if (elapsed < order.timeInSeconds * 1000) // Stop the animation when time is over
                 window.requestAnimationFrame(updateTimeIndicator);
             else
                 OrderHandler.getInstance().notifyExpired(order);
@@ -642,7 +656,7 @@ class Order {
         window.requestAnimationFrame(updateTimeIndicator);
     }
 
-    getName(){
+    getName() {
         return this.name;
     }
 }
@@ -672,12 +686,12 @@ class OrderHandler {
             timeSinceLastOrder += timestamp - lastTimestamp;
             lastTimestamp = timestamp;
 
-            if (orderHandler.activeOrders.length <= 1){
+            if (orderHandler.activeOrders.length <= 1) {
                 orderHandler.activateOrder(orderHandler.drawRandomOrder(), 3000);
                 timeSinceLastOrder = 0;
             }
 
-            if (timeSinceLastOrder > 30000){
+            if (timeSinceLastOrder > 30000) {
                 orderHandler.activateOrder(orderHandler.drawRandomOrder());
                 timeSinceLastOrder = 0;
             }
@@ -711,7 +725,6 @@ class OrderHandler {
     activateOrder(order, delay = undefined) {
 
 
-
         this.activeOrders.push(order);
 
         if (delay)
@@ -728,10 +741,37 @@ class OrderHandler {
 
     }
 
-    notifyDelivered(order) {
+    notifyDelivered(order, pizza) {
+        let orderIds = [];
+        let pizzaIds = [];
+
+        function fillIdArray(origArray, idArray) {
+            for (var i = 0; i < origArray.length; i++) {
+                idArray.push(origArray[i].id);
+            }
+        }
+
+        const equalsIgnoreOrder = (order, pizza) => {
+            if (order.length !== pizza.length) return false;
+            const uniqueValues = new Set([...order, ...pizza]);
+            for (const v of uniqueValues) {
+                const aCount = order.filter(e => e === v).length;
+                const bCount = pizza.filter(e => e === v).length;
+                if (aCount !== bCount) return false;
+            }
+            return true;
+        }
+
+        fillIdArray(order.requestedPizza.ingredients, orderIds)
+        fillIdArray(pizza.ingredients, pizzaIds)
 
         // Play sound
-        AudioPlayer.order_correct();
+        if (equalsIgnoreOrder(orderIds,pizzaIds)) {
+            AudioPlayer.order_correct();
+        } else {
+            AudioPlayer.distraction_hit();
+        }
+
 
         order.gameElement.remove();
         this.activeOrders.splice(this.activeOrders.indexOf(order), 1);
@@ -765,33 +805,32 @@ async function setupAvailableIngredients() {
     const ingredients = await getAvailableIngredients(); // fetch ingredients Json-Array
     console.log("Fetched ingredients:")
     console.log(ingredients)
-    ingredients.forEach(function(item) {// Json-Array in availableIngredients-Array
-        if(item.hasOwnProperty("display_time")){
+    ingredients.forEach(function (item) {// Json-Array in availableIngredients-Array
+        if (item.hasOwnProperty("display_time")) {
             availableIngredients.push(
-                new StampingIngredient(item.id, item.name, item.picture_raw, item.picture_raw_distraction, item.picture_processed, item.picture_baked, item.picture_burnt,{
-                disabling_time: item.disabling_time,
-                hits_required: item.hits_required
-            }))
-        }
-        else{
+                new StampingIngredient(item.id, item.name, item.picture_raw, item.picture_raw_distraction, item.picture_processed, item.picture_baked, item.picture_burnt, {
+                    disabling_time: item.disabling_time,
+                    hits_required: item.hits_required
+                }))
+        } else {
             availableIngredients.push(
                 new ChoppingIngredient(item.id, item.name, item.picture_raw, item.picture_raw_distraction, item.picture_processed, item.picture_baked, item.picture_burnt, {
-                vertex_x_inPercent: item.vertex_x_inPercent,
-                vertex_y_inPercent: item.vertex_y_inPercent,
-                speed: item.speed,
-                rotation: item.rotation,
-                hits_required: item.hits_required
-            }))
+                    vertex_x_inPercent: item.vertex_x_inPercent,
+                    vertex_y_inPercent: item.vertex_y_inPercent,
+                    speed: item.speed,
+                    rotation: item.rotation,
+                    hits_required: item.hits_required
+                }))
         }
     });
 }
 
-async function  setupAvailablePizzas() {
+async function setupAvailablePizzas() {
     const orders = await getAvailablePizzas();
     console.log("Fetched Orders:");
     console.log(orders);
 
-    orders.forEach(function(item) {
+    orders.forEach(function (item) {
         possiblePizzas.push(new Order(item.name, item.points, item.order_time, item.ingredients));
     });
 }
@@ -813,15 +852,15 @@ async function loadGameElements() {
     await setupAvailableIngredients();
     await setupAvailablePizzas();
 
-    document.getElementById("loading").style.display='none';
+    document.getElementById("loading").style.display = 'none';
 
     loadIngredientSection();
     loadOvens();
 }
 
-function loadIngredientSection(){
+function loadIngredientSection() {
 
-    availableIngredients.forEach(function(item, index){
+    availableIngredients.forEach(function (item, index) {
         // simply create the <div> element
 
         const ingredient = document.createElement('div');
@@ -846,10 +885,10 @@ function loadOvens() {
 
     // this could later be dynamic:
     // for example load as many ovens as the player has bought
-    ovenList.push(  new Oven(),
-                    new Oven(),
-                    new Oven(),
-                    new Oven());
+    ovenList.push(new Oven(),
+        new Oven(),
+        new Oven(),
+        new Oven());
 }
 
 
@@ -918,15 +957,16 @@ function makeDraggable(element) {
             checkIfDraggedInOrder(); // check overlap with every order element
         }
     }
+
     // -------------------------------
 
     function checkIfDraggedInOrder() {
 
         const activeOrders = OrderHandler.getInstance().activeOrders;
 
-        activeOrders.forEach(function(item, index, array){
+        activeOrders.forEach(function (item, index, array) {
 
-            if (checkOverlap(element.draggable, item.gameElement)){
+            if (checkOverlap(element.draggable, item.gameElement)) {
 
                 item.deliver(element)
             }
@@ -934,16 +974,16 @@ function makeDraggable(element) {
     }
 
     function checkIfDraggedInPizza() {
-        existingDraggablePizzaInstances.forEach(function(currentPizza){
+        existingDraggablePizzaInstances.forEach(function (currentPizza) {
 
-            if (currentPizza.timeInOvenInMilliseconds < 1.5*1000) // you can only assemble (nearly) raw pizzas -> prevents cheating
+            if (currentPizza.timeInOvenInMilliseconds < 1.5 * 1000) // you can only assemble (nearly) raw pizzas -> prevents cheating
                 if (checkOverlap(element.draggable, currentPizza.draggable))
                     element.whenDraggedInPizza(currentPizza);
         });
     }
 
     function checkIfDraggedInOven() {
-        ovenList.forEach(function(item, index, array){
+        ovenList.forEach(function (item, index, array) {
 
             if (checkOverlap(element.draggable, item.gameElement.image)) {
 
@@ -960,14 +1000,14 @@ function makeDraggable(element) {
     }
 }
 
-function pullNewIngredient(ingredientIndex){
+function pullNewIngredient(ingredientIndex) {
     const draggable = availableIngredients[ingredientIndex].createDraggableInstance().draggable;
     const event = window.event;
     event.preventDefault();
 
     // set element position to cursor. Teig wird direkt als angefangene Pizza erstellt, deshalb anders behandelt
-    draggable.style.left = draggable.tagName === "IMG" ? event.clientX + scrollX - draggable.width/2 + "px" : event.clientX + scrollX - draggable.firstChild.width/2 + "px";
-    draggable.style.top = draggable.tagName === "IMG" ? event.clientY + scrollY - draggable.height/2 + "px" : event.clientY + scrollY - draggable.firstChild.height/2 + "px";
+    draggable.style.left = draggable.tagName === "IMG" ? event.clientX + scrollX - draggable.width / 2 + "px" : event.clientX + scrollX - draggable.firstChild.width / 2 + "px";
+    draggable.style.top = draggable.tagName === "IMG" ? event.clientY + scrollY - draggable.height / 2 + "px" : event.clientY + scrollY - draggable.firstChild.height / 2 + "px";
 }
 
 function checkOverlap(draggable, destination) {
@@ -975,8 +1015,8 @@ function checkOverlap(draggable, destination) {
     const destination_box = destination.getBoundingClientRect();
 
     //center-coordinates of the draggable element
-    const draggable_centerX = draggable_box.left + (draggable_box.right - draggable_box.left)/2;
-    const draggable_centerY = draggable_box.top + (draggable_box.bottom - draggable_box.top)/2;
+    const draggable_centerX = draggable_box.left + (draggable_box.right - draggable_box.left) / 2;
+    const draggable_centerY = draggable_box.top + (draggable_box.bottom - draggable_box.top) / 2;
 
     //are they overlapping in X or Y ?
     const isOverlapX = (draggable_centerX > destination_box.left && draggable_centerX < destination_box.right);
@@ -1029,13 +1069,13 @@ function alignDraggableToDestination(draggable, destination) {
 function rotateCoordinates(shape, pivot, angle) {
 
     // translate coordinates so that pivot is at 0x0
-    for (let i = 0; i < shape.length; i++){
+    for (let i = 0; i < shape.length; i++) {
         shape[i][0] -= pivot[0];
         shape[i][1] -= pivot[1];
     }
 
     // rotation around 0x0
-    for (let i = 0; i < shape.length; i++){
+    for (let i = 0; i < shape.length; i++) {
         const tmp = [];
         tmp[0] = shape[i][0] * Math.cos(angle) - shape[i][1] * Math.sin(angle);
         tmp[1] = shape[i][1] * Math.cos(angle) + shape[i][0] * Math.sin(angle);
@@ -1045,7 +1085,7 @@ function rotateCoordinates(shape, pivot, angle) {
     }
 
     // translate coordinates so that pivot is back in original position
-    for (let i = 0; i < shape.length; i++){
+    for (let i = 0; i < shape.length; i++) {
         shape[i][0] += pivot[0]
         shape[i][1] += pivot[1]
     }
@@ -1083,8 +1123,8 @@ function validatePizza(order, pizza) {
     fetch("/pizza_rush/validate_pizza", {
         method: 'POST',
         body: JSON.stringify({
-            orderPoints:order.points,
-            orderIngredientIds:order.requestedPizza.getIngredientIds(),
+            orderPoints: order.points,
+            orderIngredientIds: order.requestedPizza.getIngredientIds(),
             createdPizzaIngredientIds: pizza.getIngredientIds(),
             createdPizzaBakeStatus: pizza.bakeStatus
         }),
@@ -1094,8 +1134,8 @@ function validatePizza(order, pizza) {
         credentials: 'include'
     }).then(updateCurrentPoints)
         .catch((error) => {
-        console.error('Error:', error);
-    });
+            console.error('Error:', error);
+        });
 }
 
 async function updateCurrentPoints() {
@@ -1147,7 +1187,7 @@ async function getCurrentPlayerTotalPoints() {
         });
 }
 
-async function setCurrentPlayerPoints(newTotalPoints,newHighscore) {
+async function setCurrentPlayerPoints(newTotalPoints, newHighscore) {
     fetch("/pizza_rush/setPlayerPoints", {
         method: 'POST',
         body: JSON.stringify({
@@ -1167,11 +1207,13 @@ async function setCurrentPlayerPoints(newTotalPoints,newHighscore) {
 }
 
 function resetPoints() {
-    fetch("/pizza_rush/reset_points",{
+    fetch("/pizza_rush/reset_points", {
         method: 'POST',
         credentials: "include"
     }).then(updateCurrentPoints)
-        .catch((error) =>{console.log('Error', error)})
+        .catch((error) => {
+            console.log('Error', error)
+        })
 }
 
 
@@ -1195,7 +1237,7 @@ class AbstractCountdown {
 
 
     // do not override this method
-    startCountdown(){
+    startCountdown() {
         this.onCountdownStart(); // behavior to be specified in concrete class
 
         // Update the countdown every 1 second
@@ -1203,8 +1245,8 @@ class AbstractCountdown {
             this.secondsPassed += 1;
 
             if (this.secondsPassed >= this.durationInSeconds) {
-                    this.onCountdownEnd(); // behavior to be specified in concrete class
-                    clearInterval(x);
+                this.onCountdownEnd(); // behavior to be specified in concrete class
+                clearInterval(x);
 
             } else {
                 this.onCountdownInterval() // behavior to be specified in concrete class
@@ -1230,8 +1272,8 @@ class AbstractCountdown {
 
 let pizzaRushRunning = false;
 
-function manageRushCountdown(seconds, timerContainerId){
-    if (!pizzaRushRunning){
+function manageRushCountdown(seconds, timerContainerId) {
+    if (!pizzaRushRunning) {
 
         resetPoints();
 
@@ -1240,7 +1282,7 @@ function manageRushCountdown(seconds, timerContainerId){
             // @Override
             onCountdownStart() {
                 pizzaRushRunning = true;
-                document.getElementById("startStop_overlay").style.display='none';
+                document.getElementById("startStop_overlay").style.display = 'none';
 
                 OrderHandler.getInstance().start();
             }
@@ -1249,8 +1291,8 @@ function manageRushCountdown(seconds, timerContainerId){
             onCountdownInterval() {
                 // Time calculations
                 let secondsLeft = this.durationInSeconds - this.secondsPassed;
-                let minutes = "" + Math.floor(secondsLeft/60);
-                let seconds = "" + secondsLeft - minutes*60;
+                let minutes = "" + Math.floor(secondsLeft / 60);
+                let seconds = "" + secondsLeft - minutes * 60;
                 if (seconds.toString().length < 2)
                     seconds = "0" + seconds;
 
@@ -1263,18 +1305,19 @@ function manageRushCountdown(seconds, timerContainerId){
             async onCountdownEnd() {
                 pizzaRushRunning = false;
                 document.getElementById("startStop_overlay").style.display = 'block';
-                document.getElementById("startStop_overlay_text").innerHTML = "Round over!<br/>You scored " +await getCurrentPoints() +" Points<br/>Click to play again";
+                document.getElementById("startStop_overlay_text").innerHTML = "Round over!<br/>You scored " + await getCurrentPoints() + " Points<br/>Click to play again";
 
                 this.affectedObject.innerHTML = "END";
                 await endGame();
                 document.getElementById("startStop_overlay").onclick = restartGame;
             }
         }
+
         new RushCountdown(seconds, document.getElementById(timerContainerId)).startCountdown(); // Countdown wird gestartet
     }
 }
 
-function restartGame(){
+function restartGame() {
     window.location.reload(false);
 }
 
@@ -1290,10 +1333,10 @@ async function endGame() {
     let currentPoints = await getCurrentPoints();
     let currentPlayerHighscore = await getCurrentPlayerHighscore();
     let currentPlayerTotalPoints = await getCurrentPlayerTotalPoints();
-    if (currentPoints>currentPlayerHighscore){
-        currentPlayerHighscore=currentPoints;
+    if (currentPoints > currentPlayerHighscore) {
+        currentPlayerHighscore = currentPoints;
     }
-    await setCurrentPlayerPoints(currentPlayerTotalPoints + currentPoints,currentPlayerHighscore);
+    await setCurrentPlayerPoints(currentPlayerTotalPoints + currentPoints, currentPlayerHighscore);
 
     resetPoints();
 }
@@ -1311,9 +1354,9 @@ function startFromChoppingTable() {
     for (let i = 0; i < existingDraggableIngredientInstances.length; i++) {
         const current = existingDraggableIngredientInstances[i];
 
-        if (checkOverlap(current.draggable, document.getElementById("cuttingSurface"))){
+        if (checkOverlap(current.draggable, document.getElementById("cuttingSurface"))) {
 
-            if (!current.instanceOf(ChoppingIngredient)){
+            if (!current.instanceOf(ChoppingIngredient)) {
 
                 cuttingSurface.setAttribute("style", "outline: 4px solid red");
                 return;
@@ -1325,7 +1368,7 @@ function startFromChoppingTable() {
                 ingredientsToPlayWith.push(current);
             }
         }
-}
+    }
 
     if (ingredientsToPlayWith.length > 0)
         startMiniGame(ingredientsToPlayWith);
@@ -1341,9 +1384,9 @@ function startFromStampingTable() {
     for (let i = 0; i < existingDraggableIngredientInstances.length; i++) {
         const current = existingDraggableIngredientInstances[i];
 
-        if (checkOverlap(current.draggable, document.getElementById("smashingSurface"))){
+        if (checkOverlap(current.draggable, document.getElementById("smashingSurface"))) {
 
-            if (!current.instanceOf(StampingIngredient)){
+            if (!current.instanceOf(StampingIngredient)) {
 
                 stampingSurface.setAttribute("style", "outline: 4px solid red");
                 return;
@@ -1401,7 +1444,6 @@ function startMiniGame(ingredientList) {
     document.getElementById("miniGame_layer").appendChild(miniGame_window);
 
 
-
     if (ingredientList[0].parentIngredient instanceof ChoppingIngredient)
         fruit_ninja();
     else if (ingredientList[0].parentIngredient instanceof StampingIngredient)
@@ -1426,7 +1468,6 @@ function startMiniGame(ingredientList) {
     document.getElementById("miniGame_layer").style.visibility = "visible";
 
 
-
     function fruit_ninja() {
         fruitNinjaRunning = true;
 
@@ -1443,7 +1484,6 @@ function startMiniGame(ingredientList) {
             kurtosis; // defines how wide or narrow the parable trajectory is
             speed; // self explanatory [no specific value]
             rotation_increment; // speed of rotation [in degrees]
-
 
 
             // changes for every throw
@@ -1490,15 +1530,15 @@ function startMiniGame(ingredientList) {
                 this.x = this.parableYGiven(
                     canvas.height + 100,
                     this.kurtosis,
-                    canvas.width * (this.vertex_x_inPercent/100),
-                    canvas.height * (1 - (this.vertex_y_inPercent/100))
+                    canvas.width * (this.vertex_x_inPercent / 100),
+                    canvas.height * (1 - (this.vertex_y_inPercent / 100))
                 )
 
 
                 // randomly set flight direction (left -> right / right <- left)
-                if (Math.random() > 0.5){ // 50:50
+                if (Math.random() > 0.5) { // 50:50
                     this.speed = -1 * this.draggableIngredient.parentIngredient.flight_behavior.speed; // element will fly reversed
-                    this.x = canvas.width * (this.vertex_x_inPercent/100) + (canvas.width * (this.vertex_x_inPercent/100) - this.x);
+                    this.x = canvas.width * (this.vertex_x_inPercent / 100) + (canvas.width * (this.vertex_x_inPercent / 100) - this.x);
                 } else {
                     this.speed = this.draggableIngredient.parentIngredient.flight_behavior.speed;
                     // leave this.x as it is
@@ -1508,14 +1548,16 @@ function startMiniGame(ingredientList) {
 
                 // randomly set rotation direction
                 if (Math.random() > 0.5) // 50:50
-                    this.rotation_increment = - this.draggableIngredient.parentIngredient.flight_behavior.rotation;
+                    this.rotation_increment = -this.draggableIngredient.parentIngredient.flight_behavior.rotation;
                 else
                     this.rotation_increment = this.draggableIngredient.parentIngredient.flight_behavior.rotation;
             }
 
-            startThrow() {}
+            startThrow() {
+            }
 
-            endThrow() {}
+            endThrow() {
+            }
 
             // calculate next position and draw on canvas
             step() {
@@ -1524,8 +1566,8 @@ function startMiniGame(ingredientList) {
                 this.y = this.parableXGiven(
                     this.x,
                     this.kurtosis,
-                    canvas.width * (this.vertex_x_inPercent/100),
-                    canvas.height * (1 - (this.vertex_y_inPercent/100))
+                    canvas.width * (this.vertex_x_inPercent / 100),
+                    canvas.height * (1 - (this.vertex_y_inPercent / 100))
                 );
 
                 this.context.save();
@@ -1534,12 +1576,12 @@ function startMiniGame(ingredientList) {
                 this.context.translate(this.x, this.y);
 
                 // rotate the canvas to the specified degrees
-                this.context.rotate(this.rotation*Math.PI/180);
+                this.context.rotate(this.rotation * Math.PI / 180);
                 this.rotation = (this.rotation + this.rotation_increment) % 360;
 
                 // draw the image
                 // since the context is rotated, the image will be rotated as well
-                this.context.drawImage(this.ingredient_image,-this.ingredient_image.width/2,-this.ingredient_image.height/2);
+                this.context.drawImage(this.ingredient_image, -this.ingredient_image.width / 2, -this.ingredient_image.height / 2);
                 //this.context.fillRect(-20, -20, 40, 40);
 
                 this.context.restore();
@@ -1558,7 +1600,8 @@ function startMiniGame(ingredientList) {
                     return false;
             }
 
-            onHit() {}
+            onHit() {
+            }
 
             // form:  cur * (x - ver_x)^2 + ver_y
             parableXGiven(x, cur, ver_x, ver_y) {
@@ -1567,13 +1610,13 @@ function startMiniGame(ingredientList) {
 
             // form:  -((x - ver_y)/cur)^0.5 + ver_x
             parableYGiven(y, cur, ver_x, ver_y) {
-                return - Math.pow((y - ver_y) / cur, 0.5) + ver_x;
+                return -Math.pow((y - ver_y) / cur, 0.5) + ver_x;
             }
 
             randomize(value, range) {
 
-                const value_min = Math.max(value - range/2, 10);
-                const value_max = Math.min(value + range/2, 90);
+                const value_min = Math.max(value - range / 2, 10);
+                const value_max = Math.min(value + range / 2, 90);
 
                 const tmp = value_max - value_min; // Maximum value you can add to value_min
 
@@ -1581,10 +1624,10 @@ function startMiniGame(ingredientList) {
             }
 
             getShapeCoordinates() {
-                let lu = [this.x - this.ingredient_image.width/2, this.y - this.ingredient_image.height/2];
-                let lo = [this.x - this.ingredient_image.width/2, this.y + this.ingredient_image.height/2];
-                let ro = [this.x + this.ingredient_image.width/2, this.y + this.ingredient_image.height/2];
-                let ru = [this.x + this.ingredient_image.width/2, this.y - this.ingredient_image.height/2];
+                let lu = [this.x - this.ingredient_image.width / 2, this.y - this.ingredient_image.height / 2];
+                let lo = [this.x - this.ingredient_image.width / 2, this.y + this.ingredient_image.height / 2];
+                let ro = [this.x + this.ingredient_image.width / 2, this.y + this.ingredient_image.height / 2];
+                let ru = [this.x + this.ingredient_image.width / 2, this.y - this.ingredient_image.height / 2];
 
                 const shape = [lu, lo, ro, ru];
 
@@ -1695,7 +1738,7 @@ function startMiniGame(ingredientList) {
 
                 AudioPlayer.distraction_hit();
 
-                window.requestAnimationFrame(function (){
+                window.requestAnimationFrame(function () {
                     context.fillStyle = '#ab0000'
                     context.fillRect(0, 0, canvas.width, canvas.height);
                 });
@@ -1746,7 +1789,7 @@ function startMiniGame(ingredientList) {
 
             nextFrame(timestamp) {
 
-                if (this.disableTime > 0){
+                if (this.disableTime > 0) {
                     this.disableTime -= timestamp - this.lastTimestamp;
 
                     context.fillStyle = '#e57d7d'
@@ -1756,8 +1799,8 @@ function startMiniGame(ingredientList) {
                 this.lastTimestamp = timestamp;
 
                 if ((timestamp - this.timestampLastThrow) > this.minDistanceBetweenThrows)
-                    if (    this.ingredientsWaitingToBeThrown.length > 0 &&
-                            this.ingredientsCurrentlyInAir.length < this.maxIngredientsInAir) {
+                    if (this.ingredientsWaitingToBeThrown.length > 0 &&
+                        this.ingredientsCurrentlyInAir.length < this.maxIngredientsInAir) {
                         const randomIndex = Math.floor(Math.random() * this.ingredientsWaitingToBeThrown.length);
                         this.ingredientsWaitingToBeThrown[randomIndex].newThrow();
                         this.timestampLastThrow = timestamp;
@@ -1832,7 +1875,7 @@ function startMiniGame(ingredientList) {
                 start = timestamp;
 
             // clear the canvas before drawing the next frame
-            context.clearRect(0,0, canvas.width, canvas.height);
+            context.clearRect(0, 0, canvas.width, canvas.height);
 
             // calculating & drawing next frame for every current throw
             ingredientJuggler.nextFrame(timestamp);
@@ -1908,7 +1951,7 @@ function startMiniGame(ingredientList) {
 
                 this.moleHandler.moleDrawer.drawInHole(this.holeNumber, this.ingredient_image);
 
-                if (this.time_shown <= 0){
+                if (this.time_shown <= 0) {
                     this.endShow();
                 }
             }
@@ -1917,15 +1960,16 @@ function startMiniGame(ingredientList) {
                 return isInside([cursorX, cursorY], this.getShapeCoordinates());
             }
 
-            onHit() {}
+            onHit() {
+            }
 
             getShapeCoordinates() {
                 const holeCoordinates = this.moleHandler.moleDrawer.holeCoordinates[this.holeNumber];
 
-                let lu = [holeCoordinates[0] - this.ingredient_image.width/2, holeCoordinates[1] - this.ingredient_image.height/2];
-                let lo = [holeCoordinates[0] - this.ingredient_image.width/2, holeCoordinates[1] + this.ingredient_image.height/2];
-                let ro = [holeCoordinates[0] + this.ingredient_image.width/2, holeCoordinates[1] + this.ingredient_image.height/2];
-                let ru = [holeCoordinates[0] + this.ingredient_image.width/2, holeCoordinates[1] - this.ingredient_image.height/2];
+                let lu = [holeCoordinates[0] - this.ingredient_image.width / 2, holeCoordinates[1] - this.ingredient_image.height / 2];
+                let lo = [holeCoordinates[0] - this.ingredient_image.width / 2, holeCoordinates[1] + this.ingredient_image.height / 2];
+                let ro = [holeCoordinates[0] + this.ingredient_image.width / 2, holeCoordinates[1] + this.ingredient_image.height / 2];
+                let ru = [holeCoordinates[0] + this.ingredient_image.width / 2, holeCoordinates[1] - this.ingredient_image.height / 2];
 
                 return [lu, lo, ro, ru];
             }
@@ -1987,7 +2031,7 @@ function startMiniGame(ingredientList) {
 
                     this.moleHandler.dropIngredient(this);
 
-                    if(this.draggableIngredient.name === "Impasto"){
+                    if (this.draggableIngredient.name === "Impasto") {
                         const newPizza = new DraggablePizzaInstance();
                         alignDraggableToDestination(newPizza.draggable, this.draggableIngredient.draggable);
                         this.draggableIngredient.delete();
@@ -2042,7 +2086,7 @@ function startMiniGame(ingredientList) {
 
                 AudioPlayer.distraction_hit(); // TODO: Change this
 
-                window.requestAnimationFrame(function (){
+                window.requestAnimationFrame(function () {
                     context.fillStyle = '#ab0000'
                     context.fillRect(0, 0, canvas.width, canvas.height);
                 });
@@ -2075,7 +2119,7 @@ function startMiniGame(ingredientList) {
 
             moleDrawer;
 
-            constructor(ingredientList, numberOfHoles, show_duration,  minDistanceBetweenShows, maxIngredientsShownAtOnce) {
+            constructor(ingredientList, numberOfHoles, show_duration, minDistanceBetweenShows, maxIngredientsShownAtOnce) {
                 this.numberOfHoles = numberOfHoles;
                 this.show_duration = show_duration;
                 this.moleDrawer = new MoleDrawer(numberOfHoles, canvas, context);
@@ -2108,7 +2152,7 @@ function startMiniGame(ingredientList) {
 
             nextFrame(timestamp) {
 
-                if (this.disableTime > 0){
+                if (this.disableTime > 0) {
                     this.disableTime -= timestamp - this.lastTimestamp
 
                     context.fillStyle = '#e57d7d'
@@ -2120,8 +2164,8 @@ function startMiniGame(ingredientList) {
                 this.lastTimestamp = timestamp;
 
                 if ((timestamp - this.timestampLastShow) > this.minDistanceBetweenShows)
-                    if (    this.ingredientsWaitingToBeShown.length > 0 &&
-                            this.ingredientsCurrentlyShown.length < this.maxIngredientsShownAtOnce) {
+                    if (this.ingredientsWaitingToBeShown.length > 0 &&
+                        this.ingredientsCurrentlyShown.length < this.maxIngredientsShownAtOnce) {
                         const randomIndex = Math.floor(Math.random() * this.ingredientsWaitingToBeShown.length);
                         this.ingredientsWaitingToBeShown[randomIndex].newShow(this.show_duration);
                         this.timestampLastShow = timestamp;
@@ -2173,20 +2217,20 @@ function startMiniGame(ingredientList) {
                 let y = topGap;
 
                 for (let i = 0; i < 3; i++) {
-                    y += this.holeSize/2
+                    y += this.holeSize / 2
 
                     for (let j = 0; j < 3; j++) {
-                        x += this.holeSize/2
+                        x += this.holeSize / 2
 
                         this.holeCoordinates.push([x, y]);
 
                         x += this.gapSize;
-                        x += this.holeSize/2;
+                        x += this.holeSize / 2;
                     }
 
                     x = leftGap;
                     y += this.gapSize;
-                    y += this.holeSize/2;
+                    y += this.holeSize / 2;
                 }
             }
 
@@ -2195,7 +2239,7 @@ function startMiniGame(ingredientList) {
                 for (let i = 0; i < this.holeCoordinates.length; i++) {
 
                     context.beginPath();
-                    context.arc(this.holeCoordinates[i][0], this.holeCoordinates[i][1], this.holeSize/2, 0, 2 * Math.PI, false);
+                    context.arc(this.holeCoordinates[i][0], this.holeCoordinates[i][1], this.holeSize / 2, 0, 2 * Math.PI, false);
                     context.lineWidth = 10;
                     context.strokeStyle = '#000000';
                     context.stroke();
@@ -2207,7 +2251,7 @@ function startMiniGame(ingredientList) {
             drawInHole(holeNumber, image) {
                 context.save();
                 context.translate(this.holeCoordinates[holeNumber][0], this.holeCoordinates[holeNumber][1]);
-                context.drawImage(image,-image.width/2,-image.height/2);
+                context.drawImage(image, -image.width / 2, -image.height / 2);
                 context.restore();
             }
         }
@@ -2240,7 +2284,7 @@ function startMiniGame(ingredientList) {
         setCanvasSize();
 
 
-        const moleHandler = new MoleHandler(ingredientList, 9, 700,0, 2);
+        const moleHandler = new MoleHandler(ingredientList, 9, 700, 0, 2);
         addHitListener(moleHandler);
 
         let start;
@@ -2250,7 +2294,7 @@ function startMiniGame(ingredientList) {
                 start = timestamp;
 
             // clear the canvas before drawing the next frame
-            context.clearRect(0,0, canvas.width, canvas.height);
+            context.clearRect(0, 0, canvas.width, canvas.height);
 
             moleHandler.nextFrame(timestamp);
 
