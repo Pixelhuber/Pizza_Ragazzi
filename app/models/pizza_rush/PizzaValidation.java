@@ -18,17 +18,18 @@ public class PizzaValidation {
         this.createdPizzaBakeStatus=createdPizzaBakeStatus;
     }
 
+    // Calculates how many points this pizza should get
     public int calculatePoints(){
         int points=orderPoints;
         if(listEquals(createdPizzaIngredientIds,orderIngredientIds)){
             switch(createdPizzaBakeStatus){
-                case 0:
+                case 3: // UNBAKED
                     points=points/2;
                     break;
-                case 1:
+                case 4: // WELL
                     //no negative Points since its baked
                     break;
-                case 2:
+                case 5: // BURNT
                     points=points-(points/4);
                     break;
             }

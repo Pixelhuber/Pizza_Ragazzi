@@ -411,12 +411,14 @@ public class PizzaRushFactory {
         int id;
         String name;
         int points;
+        int order_time;
         List<Ingredient> ingredients;
 
         public Order(ResultSet rs) throws SQLException {
             this.id = rs.getInt("idPizza");
             this.name = rs.getString("name");
             this.points = rs.getInt("points");
+            this.order_time = rs.getInt("order_time");
             this.ingredients = new ArrayList<>(setOrderIngredientsFromDatabase());
         }
 
@@ -450,5 +452,8 @@ public class PizzaRushFactory {
             return ingredients;
         }
 
+        public int getOrder_time() {
+            return order_time;
+        }
     }
 }

@@ -16,9 +16,25 @@ class AudioPlayer {
         sound.play();
     }
 
-    static short_ring() {
+    static order_correct() {
         const sound = document.createElement("AUDIO");
-        sound.setAttribute('src', "/assets/sounds/short_ring.wav");
+        sound.setAttribute('src', "/assets/sounds/order_correct.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static order_expired() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/order_expired.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static order_new() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/order_new.wav");
         sound.setAttribute('type', "audio/wav");
         sound.volume = 0.4;
         sound.play();
@@ -288,9 +304,6 @@ class DraggableIngredientInstance extends AbstractIngredient {
     }
 }
 
-
-
-// ingredient & draggableIngredientInstance class above
 // --------------------------------------------------------------------------------------------------------------------
 
 // A "Pizza" is only a definition of ingredients without any behavior.
@@ -451,7 +464,6 @@ class DraggablePizzaInstance extends Pizza {
     }
 }
 
-// pizza & draggablePizzaInstance class above
 // --------------------------------------------------------------------------------------------------------------------
 
 class Oven {
@@ -536,7 +548,6 @@ class Oven {
     }
 }
 
-// oven class above
 // --------------------------------------------------------------------------------------------------------------------
 
 class Order {
@@ -555,24 +566,23 @@ class Order {
         this.name = name;
         this.points = points;
         this.timeInSeconds = timeInSeconds;
-        this.requestedPizza=new Pizza()
-        this.requestedPizza.ingredients=[]
+        this.requestedPizza = new Pizza();
+        this.requestedPizza.ingredients=[];
         this.requestedPizza.ingredients.push.apply(this.requestedPizza.ingredients,ingredients)
     }
 
+    getCopy() {
+        return new Order(this.name, this.points, this.timeInSeconds, this.requestedPizza.ingredients);
+    }
 
     deliver(pizza) {
-
-        // Play sound
-        AudioPlayer.short_ring();
-
-        pizza.whenDraggedInOrder(this);
 
         // Server validates pizza and updates points
         validatePizza(this, pizza);
 
-        this.gameElement.remove();
-        orderList.splice(orderList.indexOf(this), 1);
+        pizza.whenDraggedInOrder(this);
+        OrderHandler.getInstance().notifyDelivered(this);
+
         console.log("Delivered: " + pizza.getName() + "\nOrdered: " + this.name);
     }
 
@@ -623,14 +633,10 @@ class Order {
                 order.gameElement.timeIndicator.style.backgroundColor = "red";
 
 
-            if (elapsed < order.timeInSeconds*1000) { // Stop the animation when time is over
+            if (elapsed < order.timeInSeconds*1000) // Stop the animation when time is over
                 window.requestAnimationFrame(updateTimeIndicator);
-            } else {
-                if (order.gameElement.isConnected){ // SEHR wichtige Abfrage, hat mich viel Zeit gekostet
-                    order.gameElement.remove();
-                    orderList.splice(orderList.indexOf(order), 1);
-                }
-            }
+            else
+                OrderHandler.getInstance().notifyExpired(order);
         }
 
         window.requestAnimationFrame(updateTimeIndicator);
@@ -641,12 +647,111 @@ class Order {
     }
 }
 
-// order class above
+class OrderHandler {
+
+    static orderHandler = new OrderHandler();
+    activeOrders = [];
+    isRunning;
+
+    static getInstance() {
+        return this.orderHandler;
+    }
+
+    start() {
+
+        this.isRunning = true;
+        const orderHandler = this;
+        let lastTimestamp = window.performance.now();
+        let timeSinceLastOrder = 0;
+
+        this.activateOrder(this.drawRandomOrder());
+        this.activateOrder(this.drawRandomOrder());
+
+        function orderFlow(timestamp) {
+
+            timeSinceLastOrder += timestamp - lastTimestamp;
+            lastTimestamp = timestamp;
+
+            if (orderHandler.activeOrders.length <= 1){
+                orderHandler.activateOrder(orderHandler.drawRandomOrder(), 3000);
+                timeSinceLastOrder = 0;
+            }
+
+            if (timeSinceLastOrder > 30000){
+                orderHandler.activateOrder(orderHandler.drawRandomOrder());
+                timeSinceLastOrder = 0;
+            }
+
+
+            if (orderHandler.isRunning)
+                window.requestAnimationFrame(orderFlow);
+        }
+
+        window.requestAnimationFrame(orderFlow);
+    }
+
+    stop() {
+        this.isRunning = false;
+    }
+
+    drawRandomOrder() {
+
+        const ordersToChooseFrom = [];
+        ordersToChooseFrom.push.apply(ordersToChooseFrom, possiblePizzas);
+        // this.activeOrders.forEach(function (item) {
+        //     if (ordersToChooseFrom.includes(item))
+        //         ordersToChooseFrom.splice(item, 1);
+        // })
+
+        const randomIndex = Math.floor(ordersToChooseFrom.length * Math.random());
+
+        return ordersToChooseFrom[randomIndex].getCopy();
+    }
+
+    activateOrder(order, delay = undefined) {
+
+
+
+        this.activeOrders.push(order);
+
+        if (delay)
+            setTimeout(function () {
+                AudioPlayer.order_new();
+                order.createGameElement();
+                order.startAnimation();
+            }, 1000);
+        else {
+            AudioPlayer.order_new();
+            order.createGameElement();
+            order.startAnimation();
+        }
+
+    }
+
+    notifyDelivered(order) {
+
+        // Play sound
+        AudioPlayer.order_correct();
+
+        order.gameElement.remove();
+        this.activeOrders.splice(this.activeOrders.indexOf(order), 1);
+    }
+
+    notifyExpired(order) {
+
+        // Play sound
+        AudioPlayer.order_expired();
+
+        order.gameElement.remove();
+        this.activeOrders.splice(this.activeOrders.indexOf(order), 1);
+    }
+}
+
 // OBJECT COLLECTIONS -------------------------------------------------------------------------------------------------
 
 const availableIngredients = [];
 
-const orderList = [];
+const possiblePizzas = [];
 
 const ovenList = [];
 
@@ -657,7 +762,7 @@ const existingDraggableIngredientInstances = [];
 // AT STARTUP ---------------------------------------------------------------------------------------------------------
 
 async function setupAvailableIngredients() {
-    const ingredients = await getAvailableIngredients(); //ingredients Json-Array fetchen
+    const ingredients = await getAvailableIngredients(); // fetch ingredients Json-Array
     console.log("Fetched ingredients:")
     console.log(ingredients)
     ingredients.forEach(function(item) {// Json-Array in availableIngredients-Array
@@ -683,14 +788,12 @@ async function setupAvailableIngredients() {
 
 async function  setupAvailablePizzas() {
     const orders = await getAvailablePizzas();
+    console.log("Fetched Orders:");
+    console.log(orders);
 
     orders.forEach(function(item) {
-        orderList.push(new Order(item.name, item.points, 80, item.ingredients))  //TODO: timeInSeconds vielleicht auch in Datenbank speichern
+        possiblePizzas.push(new Order(item.name, item.points, item.order_time, item.ingredients));
     });
-
-    orderList.forEach(function(item){
-        item.createGameElement();
-    })
 }
 
 async function getAvailableIngredients() {
@@ -818,7 +921,10 @@ function makeDraggable(element) {
     // -------------------------------
 
     function checkIfDraggedInOrder() {
-        orderList.forEach(function(item, index, array){
+
+        const activeOrders = OrderHandler.getInstance().activeOrders;
+
+        activeOrders.forEach(function(item, index, array){
 
             if (checkOverlap(element.draggable, item.gameElement)){
 
@@ -981,7 +1087,6 @@ function validatePizza(order, pizza) {
             orderIngredientIds:order.requestedPizza.getIngredientIds(),
             createdPizzaIngredientIds: pizza.getIngredientIds(),
             createdPizzaBakeStatus: pizza.bakeStatus
-
         }),
         headers: {
             "Content-Type": "application/json"
@@ -1067,13 +1172,6 @@ function resetPoints() {
         credentials: "include"
     }).then(updateCurrentPoints)
         .catch((error) =>{console.log('Error', error)})
-
-    orderList.forEach(function (item, index, array){
-
-        item.gameElement.remove();
-        item.createGameElement();
-        item.startAnimation();
-    })
 }
 
 
@@ -1130,23 +1228,21 @@ class AbstractCountdown {
     }
 }
 
-let timerActive = false;
+let pizzaRushRunning = false;
 
 function manageRushCountdown(seconds, timerContainerId){
-    if (!timerActive){
+    if (!pizzaRushRunning){
 
         resetPoints();
 
-        class RushCountdown extends AbstractCountdown { // Hier wird die spezifische RushCountdown Klasse definiert
+        class RushCountdown extends AbstractCountdown {
 
             // @Override
             onCountdownStart() {
-                timerActive = true;
+                pizzaRushRunning = true;
                 document.getElementById("startStop_overlay").style.display='none';
 
-                orderList.forEach(function(item, index, array){
-                    item.startAnimation();
-                })
+                OrderHandler.getInstance().start();
             }
 
             // @Override
@@ -1165,7 +1261,7 @@ function manageRushCountdown(seconds, timerContainerId){
             // @Override
             // Hier könnte später die PizzaRush Runde beendet werden
             async onCountdownEnd() {
-                timerActive = false;
+                pizzaRushRunning = false;
                 document.getElementById("startStop_overlay").style.display = 'block';
                 document.getElementById("startStop_overlay_text").innerHTML = "Round over!<br/>You scored " +await getCurrentPoints() +" Points<br/>Click to play again";
 
@@ -1183,13 +1279,23 @@ function restartGame(){
 }
 
 async function endGame() {
+
+    // Stop all processes
+    pizzaRushRunning = false;
+    fruitNinjaRunning = false;
+    whackAMoleRunning = false;
+    OrderHandler.getInstance().stop();
+
+    // Update player stats
     let currentPoints = await getCurrentPoints();
     let currentPlayerHighscore = await getCurrentPlayerHighscore();
     let currentPlayerTotalPoints = await getCurrentPlayerTotalPoints();
     if (currentPoints>currentPlayerHighscore){
         currentPlayerHighscore=currentPoints;
     }
-    await setCurrentPlayerPoints(currentPlayerTotalPoints + currentPoints,currentPlayerHighscore)
+    await setCurrentPlayerPoints(currentPlayerTotalPoints + currentPoints,currentPlayerHighscore);
+
+    resetPoints();
 }
 
 
@@ -1739,8 +1845,6 @@ function startMiniGame(ingredientList) {
 
         window.requestAnimationFrame(animationStep); // initially start the game-animation
     }
-
-
 
     function whackAMole() {
         whackAMoleRunning = true;
