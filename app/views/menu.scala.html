@@ -4,28 +4,28 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <link rel="stylesheet" media="screen" href="@assetsFinder.path("stylesheets/menu.css")">
+        <link rel="shortcut icon" type="image_path/png" href="@assetsFinder.path("images/favicon.png")">
         <title>Menu</title>
-        <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_menu.css")">
     </head>
     <body>
             <!--Navigation bar-->
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
             <!--end of Navigation bar-->
 
-        <div id="menuItem_container">
-            <form action="/pizzaRush">
-                <input type="submit" value="Pizza Rush" />
-            </form>
-
-            <form action="">
-                <input type="submit" value="Tutorial" />
-            </form>
-
-            <form action="">
-                <input type="submit" value="Memory" />
-            </form>
+        <div class="container">
+            <button class="button" onclick="location.href = ''" type="button">
+                Memory
+            </button>
+            <br>
+            <button class="button" onclick="location.href = '/pizzaRush'" type="button">
+                Pizza Rush
+            </button>
+            <br>
+            <button class="button" onclick="location.href = ''" type="button">
+                Tutorial
+            </button>
         </div>
-
 
     </body>
 </html>

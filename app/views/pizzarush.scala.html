@@ -5,23 +5,39 @@
         <meta charset="UTF-8">
         <link rel="shortcut icon" type="image_path/png" href="@assetsFinder.path("images/favicon.png")">
         <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_pizzarush.css")">
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.js"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/functions_pizzarush.js")"></script>
 
         <title>Pizza-Rush</title>
     </head>
 
-    <body onload="  loadGameElements()">
-
+    <body onload="loadGameElements()">
             <!--NAVIGATION BAR ------------->
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
             <!------------------------------>
+        <div id="loading">
+            <img id="loading_image" alt="Loading Pictures..." src=@routes.Assets.versioned("images/LoadingGif_Pizza.gif")>
+            <div id="loading_text">Loading Pictures...</div>
+        </div>
 
-        <div id="startStop_overlay" onclick="manageRushCountdown(120, 'timerRushmode')">
+        <div id="startStop_overlay" onclick="manageRushCountdown(300, 'rushCountdown')">
             <div id="startStop_overlay_text">Click anywhere to start!</div>
         </div>
 
-        <div id="miniGame_layer"> </div>
-
+        <div id="miniGame_layer">
+            <div id="miniGame_window">
+                <div id="miniGame_playArea">
+                    <canvas id="miniGame_canvas"></canvas>
+                </div>
+                <div id="miniGame_sideBar">
+                    <div id="miniGame_sideBar_counter"></div>
+                    <button id="miniGame_sideBar_closeButton" onclick="stopMiniGame()">
+                        End Game
+                    </button>
+                </div>
+            </div>
+        </div>
         <div id="pizza_layer"> </div>
 
         <div id="ingredient_layer"> </div>
@@ -31,13 +47,13 @@
             <div id="left_upper_container">
 
 
-                <h1 id="timerRushmode"></h1>
+                <h1 id="rushCountdown"></h1>
             </div>
 
             <div id="oven_container"></div>
 
             <div id="right_upper_container">
-                <h1 id="currentlyDisplayedPoints">Points: 0</h1>
+                <h1 id="currentlyDisplayedPoints"></h1>
             </div>
         </div>
 
@@ -59,15 +75,11 @@
 
                 <div id="lowerSurfaces">
                     <div id="cuttingSurface">
-                        <div class="buttonContainer">
-                            <input onclick="startMiniGame()" class="miniGameButton" id="startFruitNinja" type="image" src="/assets/images/knife.png"/>
-                        </div>
+                        <input class="miniGameButton" id="startFruitNinja" onclick="startFromChoppingTable()" type="image" src="/assets/images/knife.png"/>
                     </div>
 
                     <div id="smashingSurface">
-                        <div class="buttonContainer">
-                            <input class="miniGameButton" id="startWhackAMole" type="image" src="/assets/images/rollingpin.png"/>
-                        </div>
+                        <input class="miniGameButton" id="startWhackAMole" onclick="startFromStampingTable()" type="image" src="/assets/images/rollingpin.png"/>
                     </div>
                 </div>
             </div>
@@ -82,12 +94,15 @@
 
                 </div>
 
+                <div id="trash" class="box">
+                    <img src="/assets/images/trash_icon.svg">
+                </div>
+
             </div>
 
         </section>
 
         <div id="lower_container">
-
 
 
         </div>

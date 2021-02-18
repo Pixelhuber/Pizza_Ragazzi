@@ -109,7 +109,7 @@ function validateCreateAccountData() {
 }
 
 function changePage() {
-    window.location.href = "login";
+    window.location.href = "logout";
 }
 
 function createAccount() {

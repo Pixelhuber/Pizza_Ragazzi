@@ -1,12 +1,12 @@
 $(function () {
-    var visibilityToggle1 = document.getElementById("visibilityButton1");
+    let visibilityToggle1 = document.getElementById("visibilityButton1");
 
-    var email = document.getElementById("email");
-    var password = document.getElementById("password");
+    let email = document.getElementById("email");
+    let password = document.getElementById("password");
 
-    var email_error = document.getElementById("email_error");
-    var password_error = document.getElementById("password_error");
-    var login_error = document.getElementById("login_error");
+    let email_error = document.getElementById("email_error");
+    let password_error = document.getElementById("password_error");
+    let login_error = document.getElementById("login_error");
 
     email.addEventListener('input', function () {
         if (email.value.length >= 1) {
