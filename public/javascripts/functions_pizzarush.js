@@ -1,118 +1,16 @@
-class AudioPlayer {
 
-    static mash() {
-        const sound = document.createElement("AUDIO");
-        sound.setAttribute('src', "/assets/sounds/mash_kürzer.wav");
-        sound.setAttribute('type', "audio/wav");
-        sound.volume = 0.4;
-        sound.play();
-    }
+const availableIngredients = [];
 
-    static fire() {
-        const sound = document.createElement("AUDIO");
-        sound.setAttribute('src', "/assets/sounds/epic_fire.wav");
-        sound.setAttribute('type', "audio/wav");
-        sound.volume = 0.4;
-        sound.play();
-    }
+const possiblePizzas = [];
 
-    static order_correct() {
-        const sound = document.createElement("AUDIO");
-        sound.setAttribute('src', "/assets/sounds/order_correct.wav");
-        sound.setAttribute('type', "audio/wav");
-        sound.volume = 0.4;
-        sound.play();
-    }
+const ovenList = [];
 
-    static order_expired() {
-        const sound = document.createElement("AUDIO");
-        sound.setAttribute('src', "/assets/sounds/order_expired.wav");
-        sound.setAttribute('type', "audio/wav");
-        sound.volume = 0.4;
-        sound.play();
-    }
+const existingDraggablePizzaInstances = [];
 
-    static order_new() {
-        const sound = document.createElement("AUDIO");
-        sound.setAttribute('src', "/assets/sounds/order_new.wav");
-        sound.setAttribute('type', "audio/wav");
-        sound.volume = 0.4;
-        sound.play();
-    }
+const existingDraggableIngredientInstances = [];
 
-    static ingredient_hit() {
-        const sound = document.createElement("AUDIO");
-        sound.setAttribute('src', "/assets/sounds/ingredient_hit.wav");
-        sound.setAttribute('type', "audio/wav");
-        sound.volume = 0.4;
-        sound.play();
-    }
 
-    static ingredient_finalHit() {
-        const sound = document.createElement("AUDIO");
-        sound.setAttribute('src', "/assets/sounds/ingredient_finalHit.wav");
-        sound.setAttribute('type', "audio/wav");
-        sound.volume = 0.4;
-        sound.play();
-    }
-
-    static distraction_hit() {
-        const sound = document.createElement("AUDIO");
-        sound.setAttribute('src', "/assets/sounds/distraction_hit.wav");
-        sound.setAttribute('type', "audio/wav");
-        sound.volume = 0.4;
-        sound.play();
-    }
-
-    static throw() {
-        const sound = document.createElement("AUDIO");
-        sound.setAttribute('src', "/assets/sounds/ingredient_throw.wav");
-        sound.setAttribute('type', "audio/wav");
-        sound.volume = 0.4;
-        sound.play();
-    }
-
-    static ingredient_stamp() {
-        const sound = document.createElement("AUDIO");
-        sound.setAttribute('src', "/assets/sounds/stamp_small.wav");
-        sound.setAttribute('type', "audio/wav");
-        sound.volume = 0.4;
-        sound.play();
-    }
-
-    static ingredient_finalStamp() {
-        const sound = document.createElement("AUDIO");
-        sound.setAttribute('src', "/assets/sounds/stamp_big.wav");
-        sound.setAttribute('type', "audio/wav");
-        sound.volume = 0.4;
-        sound.play();
-    }
-
-    static trashcan() {
-        const sound = document.createElement("AUDIO");
-        sound.setAttribute('src', "/assets/sounds/trashcan.wav");
-        sound.setAttribute('type', "audio/wav");
-        sound.volume = 0.4;
-        sound.play();
-    }
-
-    static round_lastFive() {
-        const sound = document.createElement("AUDIO");
-        sound.setAttribute('src', "/assets/sounds/round_lastFive.wav");
-        sound.setAttribute('type', "audio/wav");
-        sound.volume = 0.4;
-        sound.play();
-    }
-
-    static round_end() {
-        const sound = document.createElement("AUDIO");
-        sound.setAttribute('src', "/assets/sounds/round_end.wav");
-        sound.setAttribute('type', "audio/wav");
-        sound.volume = 0.4;
-        sound.play();
-    }
-}
-
+// CLASSES ------------------------------------------------------------------------------------------------------------
 
 // An "Ingredient" is only a definition of an ingredient without any behavior.
 class AbstractIngredient {
@@ -332,7 +230,7 @@ class DraggableIngredientInstance extends AbstractIngredient {
     }
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------
 
 // A "Pizza" is only a definition of ingredients without any behavior.
 // Example: A "Pizza" is something on the menu in the restaurant
@@ -495,7 +393,7 @@ class DraggablePizzaInstance extends Pizza {
     }
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------
 
 class Oven {
 
@@ -578,7 +476,7 @@ class Oven {
     }
 }
 
-// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------
 
 class Order {
 
@@ -677,6 +575,7 @@ class Order {
     }
 }
 
+// Responsible for WHAT is ordered and WHEN
 class OrderHandler {
 
     static orderHandler = new OrderHandler();
@@ -811,17 +710,173 @@ class OrderHandler {
     }
 }
 
-// OBJECT COLLECTIONS -------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------
 
-const availableIngredients = [];
+class AudioPlayer {
 
-const possiblePizzas = [];
+    static mash() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/mash_kürzer.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
 
-const ovenList = [];
+    static fire() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/epic_fire.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
 
-const existingDraggablePizzaInstances = [];
+    static order_correct() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/order_correct.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
 
-const existingDraggableIngredientInstances = [];
+    static order_expired() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/order_expired.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static order_new() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/order_new.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static ingredient_hit() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/ingredient_hit.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static ingredient_finalHit() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/ingredient_finalHit.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static distraction_hit() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/distraction_hit.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static throw() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/ingredient_throw.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static ingredient_stamp() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/stamp_small.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static ingredient_finalStamp() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/stamp_big.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static trashcan() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/trashcan.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static round_lastFive() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/round_lastFive.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static round_end() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/round_end.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+}
+
+class AbstractCountdown {
+
+    constructor(durationInSeconds, affectedObject) {
+        this.durationInSeconds = durationInSeconds;
+        this.secondsPassed = 0;
+
+        this.affectedObject = affectedObject;
+
+    }
+
+    durationInSeconds;
+    secondsPassed;
+
+    affectedObject;
+
+
+    // do not override this method
+    startCountdown() {
+        this.onCountdownStart(); // behavior to be specified in concrete class
+
+        // Update the countdown every 1 second
+        let x = setInterval(() => {
+            this.secondsPassed += 1;
+
+            if (this.secondsPassed >= this.durationInSeconds) {
+                this.onCountdownEnd(); // behavior to be specified in concrete class
+                clearInterval(x);
+
+            } else {
+                this.onCountdownInterval() // behavior to be specified in concrete class
+            }
+        }, 1000); // 1000 millisecond (= 1 second) interval
+    }
+
+    // Override this method in concrete class
+    onCountdownStart() {
+        alert("onCountdownStart() hasn't been overridden for this countdown type")
+    }
+
+    // Override this method in concrete class
+    onCountdownInterval() {
+        alert("onCountdownInterval() hasn't been overridden for this countdown type")
+    }
+
+    // Override this method in concrete class
+    onCountdownEnd() {
+        alert("onCountdownEnd() hasn't been overridden for this countdown type")
+    }
+}
+
 
 // AT STARTUP ---------------------------------------------------------------------------------------------------------
 
@@ -869,9 +924,8 @@ async function getAvailablePizzas() {
     return response.json();
 }
 
-// STARTUP ---------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------
 
-// called at startup
 async function loadGameElements() {
     await setupAvailableIngredients();
     await setupAvailablePizzas();
@@ -916,224 +970,88 @@ function loadOvens() {
 }
 
 
-// FUNCTIONALITY & BEHAVIOR -------------------------------------------------------------------------------------------
+// ROUND LIFECYCLE ----------------------------------------------------------------------------------------------------
 
-function makeDraggable(element) {
-    let diff_x = 0, diff_y = 0, x = 0, y = 0;
+let pizzaRushRunning = false;
 
-    if (!(element instanceof DraggableIngredientInstance || element instanceof DraggablePizzaInstance))
-        alert("this element is not a DraggableIngredientInstance or a DraggablePizzaInstance");
+function manageRushCountdown(seconds, timerContainerId) {
+    if (!pizzaRushRunning) {
 
-    // if element is pressed down -> start dragging
-    element.draggable.onmousedown = initiateDrag;
+        resetPoints();
 
-    function initiateDrag(event) {
-        if (!element.isDragEnabled)
-            return;
+        class RushCountdown extends AbstractCountdown {
 
-        if (element.isInOven)
-            element.ovenOut();
+            // @Override
+            onCountdownStart() {
+                pizzaRushRunning = true;
+                document.getElementById("startStop_overlay").style.visibility = "hidden";
 
-        event = event || window.event;
-        event.preventDefault();
+                this.onCountdownInterval();
 
-        // get the mouse cursor position at startup:
-        x = event.clientX;
-        y = event.clientY;
-        document.onmouseup = endDrag;
-
-        // calls function whenever the cursor moves:
-        document.onmousemove = updateDragPosition;
-    }
-
-    function updateDragPosition(event) {
-        event = event || window.event;
-        event.preventDefault();
-
-        // calculate the new cursor position:
-        diff_x = x - event.clientX;
-        diff_y = y - event.clientY;
-        x = event.clientX;
-        y = event.clientY;
-
-        // set the element's new position:
-        element.draggable.style.top = (element.draggable.offsetTop - diff_y) + "px";
-        element.draggable.style.left = (element.draggable.offsetLeft - diff_x) + "px";
-    }
-
-
-    // defines what to do when element is released
-    function endDrag(event) {
-        event = event || window.event;
-        event.preventDefault();
-
-        // stop moving when mouse button is released:
-        document.onmouseup = null;
-        document.onmousemove = null;
-
-        checkIfDraggedInTrash();
-
-        if (element instanceof DraggableIngredientInstance && element.status === DraggableIngredientInstance.Status.PROCESSED)
-            checkIfDraggedInPizza(); // check overlap with every existing pizza
-
-        else if (element instanceof DraggablePizzaInstance) {
-            checkIfDraggedInOven(); // check overlap with every oven
-            checkIfDraggedInOrder(); // check overlap with every order element
-        }
-    }
-
-    // -------------------------------
-
-    function checkIfDraggedInOrder() {
-
-        const activeOrders = OrderHandler.getInstance().activeOrders;
-
-        activeOrders.forEach(function (item, index, array) {
-
-            if (checkOverlap(element.draggable, item.gameElement)) {
-
-                OrderHandler.getInstance().notifyDelivered(item, element);
+                OrderHandler.getInstance().start();
             }
-        });
-    }
 
-    function checkIfDraggedInPizza() {
-        existingDraggablePizzaInstances.forEach(function (currentPizza) {
+            // @Override
+            onCountdownInterval() {
 
-            if (currentPizza.timeInOvenInMilliseconds < 1.5 * 1000) // you can only assemble (nearly) raw pizzas -> prevents cheating
-                if (checkOverlap(element.draggable, currentPizza.draggable))
-                    element.whenDraggedInPizza(currentPizza);
-        });
-    }
+                // Time calculations
+                let secondsLeft = this.durationInSeconds - this.secondsPassed;
+                let minutes = "" + Math.floor(secondsLeft / 60);
+                let seconds = "" + secondsLeft - minutes * 60;
+                if (seconds.toString().length < 2)
+                    seconds = "0" + seconds;
 
-    function checkIfDraggedInOven() {
-        ovenList.forEach(function (item, index, array) {
+                if (secondsLeft < 6)
+                    AudioPlayer.round_lastFive();
 
-            if (checkOverlap(element.draggable, item.gameElement.image)) {
+                // Display the result in the affectedObject
+                this.affectedObject.innerHTML = "TIME: " + minutes + ":" + seconds;
 
-                element.whenDraggedInOven(item);
+
             }
-        });
-    }
 
-    function checkIfDraggedInTrash() {
-        if (checkOverlap(element.draggable, document.getElementById("trash"))) {
-            AudioPlayer.trashcan();
-            element.delete();
+            // @Override
+            // Hier könnte später die PizzaRush Runde beendet werden
+            async onCountdownEnd() {
+                AudioPlayer.round_end();
+
+                pizzaRushRunning = false;
+                document.getElementById("startStop_overlay").style.visibility = "visible";
+                document.getElementById("startStop_overlay_text").innerHTML = "Round over!<br/>You scored " + await getCurrentPoints() + " Points";
+                document.getElementById("startStop_overlay_button").innerHTML = "Play Again!"
+
+                this.affectedObject.innerHTML = "END";
+                await endGame();
+                document.getElementById("startStop_overlay_button").onclick = restartGame;
+            }
         }
+
+        new RushCountdown(seconds, document.getElementById(timerContainerId)).startCountdown(); // Countdown wird gestartet
     }
 }
 
-function pullNewIngredient(ingredientIndex) {
-    const draggable = availableIngredients[ingredientIndex].createDraggableInstance().draggable;
-    const event = window.event;
-    event.preventDefault();
+async function endGame() {
 
-    // set element position to cursor. Teig wird direkt als angefangene Pizza erstellt, deshalb anders behandelt
-    draggable.style.left = draggable.tagName === "IMG" ? event.clientX + scrollX - draggable.width / 2 + "px" : event.clientX + scrollX - draggable.firstChild.width / 2 + "px";
-    draggable.style.top = draggable.tagName === "IMG" ? event.clientY + scrollY - draggable.height / 2 + "px" : event.clientY + scrollY - draggable.firstChild.height / 2 + "px";
+    // Stop all processes
+    pizzaRushRunning = false;
+    fruitNinjaRunning = false;
+    whackAMoleRunning = false;
+    OrderHandler.getInstance().stop();
+
+    // Update player stats
+    let currentPoints = await getCurrentPoints();
+    let currentPlayerHighscore = await getCurrentPlayerHighscore();
+    let currentPlayerTotalPoints = await getCurrentPlayerTotalPoints();
+    if (currentPoints > currentPlayerHighscore) {
+        currentPlayerHighscore = currentPoints;
+    }
+    await setCurrentPlayerPoints(currentPlayerTotalPoints + currentPoints, currentPlayerHighscore);
+
+    resetPoints();
 }
 
-function checkOverlap(draggable, destination) {
-    const draggable_box = draggable.getBoundingClientRect();
-    const destination_box = destination.getBoundingClientRect();
-
-    //center-coordinates of the draggable element
-    const draggable_centerX = draggable_box.left + (draggable_box.right - draggable_box.left) / 2;
-    const draggable_centerY = draggable_box.top + (draggable_box.bottom - draggable_box.top) / 2;
-
-    //are they overlapping in X or Y ?
-    const isOverlapX = (draggable_centerX > destination_box.left && draggable_centerX < destination_box.right);
-    const isOverlapY = (draggable_centerY > destination_box.top && draggable_centerY < destination_box.bottom);
-
-    return isOverlapX && isOverlapY;
-}
-
-/*
-var checkOverlap = (function () {
-    function getPositions( elem ) {
-        var pos, width, height;
-        pos = $( elem ).position();
-        width = $( elem ).width();
-        height = $( elem ).height();
-        const ret = [ [ pos.left, pos.left + width ], [ pos.top, pos.top + height ] ]
-        return ret;
-    }
-
-    function comparePositions( p1, p2 ) {
-        var r1, r2;
-        r1 = p1[0] < p2[0] ? p1 : p2;
-        r2 = p1[0] < p2[0] ? p2 : p1;
-        const ret = r1[1] > r2[0] || r1[0] === r2[0]
-        return ret;
-    }
-
-    return function ( a, b ) {
-        var pos1 = getPositions( a ),
-            pos2 = getPositions( b );
-        const ret = comparePositions( pos1[0], pos2[0] ) && comparePositions( pos1[1], pos2[1] )
-        return ret;
-    };
-})();
-*/
-
-function alignDraggableToDestination(draggable, destination) {
-
-    const draggable_box = draggable.getBoundingClientRect();
-    const destination_box = destination.getBoundingClientRect();
-
-    const x = destination_box.left + (destination_box.width - draggable_box.width) / 2
-    const y = destination_box.top + (destination_box.height - draggable_box.height) / 2
-
-    //Align pizza and oven position
-    draggable.style.left = x + "px";
-    draggable.style.top = y + "px";
-}
-
-function rotateCoordinates(shape, pivot, angle) {
-
-    // translate coordinates so that pivot is at 0x0
-    for (let i = 0; i < shape.length; i++) {
-        shape[i][0] -= pivot[0];
-        shape[i][1] -= pivot[1];
-    }
-
-    // rotation around 0x0
-    for (let i = 0; i < shape.length; i++) {
-        const tmp = [];
-        tmp[0] = shape[i][0] * Math.cos(angle) - shape[i][1] * Math.sin(angle);
-        tmp[1] = shape[i][1] * Math.cos(angle) + shape[i][0] * Math.sin(angle);
-
-        shape[i][0] = tmp[0];
-        shape[i][1] = tmp[1];
-    }
-
-    // translate coordinates so that pivot is back in original position
-    for (let i = 0; i < shape.length; i++) {
-        shape[i][0] += pivot[0]
-        shape[i][1] += pivot[1]
-    }
-
-    return shape;
-}
-
-function isInside(point, shape) {
-    // ray-casting algorithm based on
-    // https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html/pnpoly.html
-
-    const x = point[0], y = point[1];
-
-    let inside = false;
-    for (let i = 0, j = shape.length - 1; i < shape.length; j = i++) {
-        const xi = shape[i][0], yi = shape[i][1];
-        const xj = shape[j][0], yj = shape[j][1];
-
-        const intersect = ((yi > y) !== (yj > y))
-            && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-        if (intersect) inside = !inside;
-    }
-
-    return inside;
+function restartGame() {
+    window.location.reload(false);
 }
 
 
@@ -1241,143 +1159,10 @@ function resetPoints() {
 }
 
 
-// COUNTDOWN-STUFF ----------------------------------------------------------------------------------------------------
-
-// spezifische Countdown-Anwendungen erben von dieser Klasse und müssen nurnoch die drei methoden "onCountdownX()" überschreiben
-class AbstractCountdown {
-
-    constructor(durationInSeconds, affectedObject) {
-        this.durationInSeconds = durationInSeconds;
-        this.secondsPassed = 0;
-
-        this.affectedObject = affectedObject;
-
-    }
-
-    durationInSeconds;
-    secondsPassed;
-
-    affectedObject;
-
-
-    // do not override this method
-    startCountdown() {
-        this.onCountdownStart(); // behavior to be specified in concrete class
-
-        // Update the countdown every 1 second
-        let x = setInterval(() => {
-            this.secondsPassed += 1;
-
-            if (this.secondsPassed >= this.durationInSeconds) {
-                this.onCountdownEnd(); // behavior to be specified in concrete class
-                clearInterval(x);
-
-            } else {
-                this.onCountdownInterval() // behavior to be specified in concrete class
-            }
-        }, 1000); // 1000 millisecond (= 1 second) interval
-    }
-
-    // Override this method in concrete class
-    onCountdownStart() {
-        alert("onCountdownStart() hasn't been overridden for this countdown type")
-    }
-
-    // Override this method in concrete class
-    onCountdownInterval() {
-        alert("onCountdownInterval() hasn't been overridden for this countdown type")
-    }
-
-    // Override this method in concrete class
-    onCountdownEnd() {
-        alert("onCountdownEnd() hasn't been overridden for this countdown type")
-    }
-}
-
-let pizzaRushRunning = false;
-
-function manageRushCountdown(seconds, timerContainerId) {
-    if (!pizzaRushRunning) {
-
-        resetPoints();
-
-        class RushCountdown extends AbstractCountdown {
-
-            // @Override
-            onCountdownStart() {
-                pizzaRushRunning = true;
-                document.getElementById("startStop_overlay").style.visibility = "hidden";
-
-                this.onCountdownInterval();
-
-                OrderHandler.getInstance().start();
-            }
-
-            // @Override
-            onCountdownInterval() {
-
-                // Time calculations
-                let secondsLeft = this.durationInSeconds - this.secondsPassed;
-                let minutes = "" + Math.floor(secondsLeft / 60);
-                let seconds = "" + secondsLeft - minutes * 60;
-                if (seconds.toString().length < 2)
-                    seconds = "0" + seconds;
-
-                if (secondsLeft < 6)
-                    AudioPlayer.round_lastFive();
-
-                // Display the result in the affectedObject
-                this.affectedObject.innerHTML = "TIME: " + minutes + ":" + seconds;
-
-
-            }
-
-            // @Override
-            // Hier könnte später die PizzaRush Runde beendet werden
-            async onCountdownEnd() {
-                AudioPlayer.round_end();
-
-                pizzaRushRunning = false;
-                document.getElementById("startStop_overlay").style.visibility = "visible";
-                document.getElementById("startStop_overlay_text").innerHTML = "Round over!<br/>You scored " + await getCurrentPoints() + " Points";
-                document.getElementById("startStop_overlay_button").innerHTML = "Play Again!"
-
-                this.affectedObject.innerHTML = "END";
-                await endGame();
-                document.getElementById("startStop_overlay_button").onclick = restartGame;
-            }
-        }
-
-        new RushCountdown(seconds, document.getElementById(timerContainerId)).startCountdown(); // Countdown wird gestartet
-    }
-}
-
-function restartGame() {
-    window.location.reload(false);
-}
-
-async function endGame() {
-
-    // Stop all processes
-    pizzaRushRunning = false;
-    fruitNinjaRunning = false;
-    whackAMoleRunning = false;
-    OrderHandler.getInstance().stop();
-
-    // Update player stats
-    let currentPoints = await getCurrentPoints();
-    let currentPlayerHighscore = await getCurrentPlayerHighscore();
-    let currentPlayerTotalPoints = await getCurrentPlayerTotalPoints();
-    if (currentPoints > currentPlayerHighscore) {
-        currentPlayerHighscore = currentPoints;
-    }
-    await setCurrentPlayerPoints(currentPlayerTotalPoints + currentPoints, currentPlayerHighscore);
-
-    resetPoints();
-}
-
-
 // MINI GAMES ---------------------------------------------------------------------------------------------------------
+
+let fruitNinjaRunning = false;
+let whackAMoleRunning = false;
 
 function startFromChoppingTable() {
 
@@ -1439,17 +1224,7 @@ function startFromStampingTable() {
         startMiniGame(ingredientsToPlayWith);
 }
 
-
-let fruitNinjaRunning = false;
-let whackAMoleRunning = false;
-
-function stopMiniGame() {
-    fruitNinjaRunning = false;
-    whackAMoleRunning = false;
-
-    document.getElementById("miniGame_layer").style.visibility = "hidden";
-}
-
+// all functionality for both mini games
 function startMiniGame(ingredientList) {
 
     const processedIngredients = []; // type: DraggableIngredientInstance
@@ -2343,3 +2118,208 @@ function startMiniGame(ingredientList) {
     }
 
 }
+
+function stopMiniGame() {
+    fruitNinjaRunning = false;
+    whackAMoleRunning = false;
+
+    document.getElementById("miniGame_layer").style.visibility = "hidden";
+}
+
+
+// FUNCTIONALITY & BEHAVIOR -------------------------------------------------------------------------------------------
+
+// drag functionality
+function makeDraggable(element) {
+    let diff_x = 0, diff_y = 0, x = 0, y = 0;
+
+    if (!(element instanceof DraggableIngredientInstance || element instanceof DraggablePizzaInstance))
+        alert("this element is not a DraggableIngredientInstance or a DraggablePizzaInstance");
+
+    // if element is pressed down -> start dragging
+    element.draggable.onmousedown = initiateDrag;
+
+    function initiateDrag(event) {
+        if (!element.isDragEnabled)
+            return;
+
+        if (element.isInOven)
+            element.ovenOut();
+
+        event = event || window.event;
+        event.preventDefault();
+
+        // get the mouse cursor position at startup:
+        x = event.clientX;
+        y = event.clientY;
+        document.onmouseup = endDrag;
+
+        // calls function whenever the cursor moves:
+        document.onmousemove = updateDragPosition;
+    }
+
+    function updateDragPosition(event) {
+        event = event || window.event;
+        event.preventDefault();
+
+        // calculate the new cursor position:
+        diff_x = x - event.clientX;
+        diff_y = y - event.clientY;
+        x = event.clientX;
+        y = event.clientY;
+
+        // set the element's new position:
+        element.draggable.style.top = (element.draggable.offsetTop - diff_y) + "px";
+        element.draggable.style.left = (element.draggable.offsetLeft - diff_x) + "px";
+    }
+
+
+    // defines what to do when element is released
+    function endDrag(event) {
+        event = event || window.event;
+        event.preventDefault();
+
+        // stop moving when mouse button is released:
+        document.onmouseup = null;
+        document.onmousemove = null;
+
+        checkIfDraggedInTrash();
+
+        if (element instanceof DraggableIngredientInstance && element.status === DraggableIngredientInstance.Status.PROCESSED)
+            checkIfDraggedInPizza(); // check overlap with every existing pizza
+
+        else if (element instanceof DraggablePizzaInstance) {
+            checkIfDraggedInOven(); // check overlap with every oven
+            checkIfDraggedInOrder(); // check overlap with every order element
+        }
+    }
+
+    // -------------------------------
+
+    function checkIfDraggedInOrder() {
+
+        const activeOrders = OrderHandler.getInstance().activeOrders;
+
+        activeOrders.forEach(function (item, index, array) {
+
+            if (checkOverlap(element.draggable, item.gameElement)) {
+
+                OrderHandler.getInstance().notifyDelivered(item, element);
+            }
+        });
+    }
+
+    function checkIfDraggedInPizza() {
+        existingDraggablePizzaInstances.forEach(function (currentPizza) {
+
+            if (currentPizza.timeInOvenInMilliseconds < 1.5 * 1000) // you can only assemble (nearly) raw pizzas -> prevents cheating
+                if (checkOverlap(element.draggable, currentPizza.draggable))
+                    element.whenDraggedInPizza(currentPizza);
+        });
+    }
+
+    function checkIfDraggedInOven() {
+        ovenList.forEach(function (item, index, array) {
+
+            if (checkOverlap(element.draggable, item.gameElement.image)) {
+
+                element.whenDraggedInOven(item);
+            }
+        });
+    }
+
+    function checkIfDraggedInTrash() {
+        if (checkOverlap(element.draggable, document.getElementById("trash"))) {
+            AudioPlayer.trashcan();
+            element.delete();
+        }
+    }
+}
+
+// get a new raw ingredient
+function pullNewIngredient(ingredientIndex) {
+    const draggable = availableIngredients[ingredientIndex].createDraggableInstance().draggable;
+    const event = window.event;
+    event.preventDefault();
+
+    // set element position to cursor. Teig wird direkt als angefangene Pizza erstellt, deshalb anders behandelt
+    draggable.style.left = draggable.tagName === "IMG" ? event.clientX + scrollX - draggable.width / 2 + "px" : event.clientX + scrollX - draggable.firstChild.width / 2 + "px";
+    draggable.style.top = draggable.tagName === "IMG" ? event.clientY + scrollY - draggable.height / 2 + "px" : event.clientY + scrollY - draggable.firstChild.height / 2 + "px";
+}
+
+function checkOverlap(draggable, destination) {
+    const draggable_box = draggable.getBoundingClientRect();
+    const destination_box = destination.getBoundingClientRect();
+
+    //center-coordinates of the draggable element
+    const draggable_centerX = draggable_box.left + (draggable_box.right - draggable_box.left) / 2;
+    const draggable_centerY = draggable_box.top + (draggable_box.bottom - draggable_box.top) / 2;
+
+    //are they overlapping in X or Y ?
+    const isOverlapX = (draggable_centerX > destination_box.left && draggable_centerX < destination_box.right);
+    const isOverlapY = (draggable_centerY > destination_box.top && draggable_centerY < destination_box.bottom);
+
+    return isOverlapX && isOverlapY;
+}
+
+function alignDraggableToDestination(draggable, destination) {
+
+    const draggable_box = draggable.getBoundingClientRect();
+    const destination_box = destination.getBoundingClientRect();
+
+    const x = destination_box.left + (destination_box.width - draggable_box.width) / 2
+    const y = destination_box.top + (destination_box.height - draggable_box.height) / 2
+
+    //Align pizza and oven position
+    draggable.style.left = x + "px";
+    draggable.style.top = y + "px";
+}
+
+function rotateCoordinates(shape, pivot, angle) {
+
+    // translate coordinates so that pivot is at 0x0
+    for (let i = 0; i < shape.length; i++) {
+        shape[i][0] -= pivot[0];
+        shape[i][1] -= pivot[1];
+    }
+
+    // rotation around 0x0
+    for (let i = 0; i < shape.length; i++) {
+        const tmp = [];
+        tmp[0] = shape[i][0] * Math.cos(angle) - shape[i][1] * Math.sin(angle);
+        tmp[1] = shape[i][1] * Math.cos(angle) + shape[i][0] * Math.sin(angle);
+
+        shape[i][0] = tmp[0];
+        shape[i][1] = tmp[1];
+    }
+
+    // translate coordinates so that pivot is back in original position
+    for (let i = 0; i < shape.length; i++) {
+        shape[i][0] += pivot[0]
+        shape[i][1] += pivot[1]
+    }
+
+    return shape;
+}
+
+function isInside(point, shape) {
+    // ray-casting algorithm based on
+    // https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html/pnpoly.html
+
+    const x = point[0], y = point[1];
+
+    let inside = false;
+    for (let i = 0, j = shape.length - 1; i < shape.length; j = i++) {
+        const xi = shape[i][0], yi = shape[i][1];
+        const xj = shape[j][0], yj = shape[j][1];
+
+        const intersect = ((yi > y) !== (yj > y))
+            && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+    }
+
+    return inside;
+}
+
+
+
