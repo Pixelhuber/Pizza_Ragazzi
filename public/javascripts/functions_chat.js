@@ -1,8 +1,10 @@
 var chatPartner;
 
 function setupChatStuff(username) {
-    document.getElementById("loading_messages").style.display = "block"; //ladesymbol anzeigen
-    getMessagesFromDatabase(username);
+    if (username !== chatPartner) {    //nur wenn neuer Name eingegeben wurde, wird gefetcht
+        document.getElementById("loading_messages").style.display = "block"; //ladesymbol anzeigen
+        getMessagesFromDatabase(username);
+    }
 }
 
 function getMessagesFromDatabase(username) {
@@ -17,9 +19,22 @@ function getMessagesFromDatabase(username) {
         .then(result => displayChatMessages(result, username))
 }
 
+function sendMessage(username) {
+    fetch("/profile/sendMessage", {
+        method: 'POST',
+        body: JSON.stringify(username),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    }).then(result => result.text())
+        .then(result => console.log(result))
+}
+
 function displayChatMessages(messages, user2Username) {
     if (messages != null && messages !== 'undefined') {
         this.chatPartner = user2Username;  //chatPartner-Variable in Zeile 1 zuweisen
+        document.getElementById("chatMessages_div").innerHTML = ''; //alten Chat löschen
 
         document.getElementById("chatWithWhoInput").style.borderColor = "black"; //roten Rand des Inputs entfernen, falls er da war
         document.getElementById("chat_heading").textContent = "Chat mit " + user2Username.toString().toUpperCase();  //Überschrift mit Username2
@@ -38,7 +53,7 @@ function displayChatMessages(messages, user2Username) {
             var date = new Date(item.time)
             timeSpan.textContent = date.getHours() + ":" + date.getMinutes() + " " + date.toDateString();
 
-            if (item.senderName === user2Username) {  //falls ausgewählter Freund Nachricht gesendet hat
+            if (item.senderName.toLowerCase() === user2Username.toLowerCase()) {  //falls ausgewählter Freund Nachricht gesendet hat
                 container.setAttribute('class', 'container');
                 timeSpan.setAttribute('class', 'time-right');
             }
@@ -58,6 +73,5 @@ function displayChatMessages(messages, user2Username) {
         document.getElementById("chatWithWhoInput").style.borderColor = "red"; //roten Rand beim Input hinzufügen
         document.getElementById("sendMessageInput").style.display = "none"; //SendeInput verstecken
         document.getElementById("sendMessageButton").style.display = "none"; //SendeButton verstecken
-        document.getElementById("chat_heading").textContent = "Chat";  //Überschrift mit Username2
     }
 }
