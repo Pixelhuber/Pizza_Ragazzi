@@ -132,13 +132,16 @@ section{
 }
 
 .order{
+    position: relative;
 
-    height: 2.5em;
-    /*padding-left: 5px;*/
+    height: 3.5em;
 }
 
 .order > p{
-    box-sizing: border-box;
+    position: absolute;
+    top: auto;
+    bottom: auto;
+
     padding-left: 5px;
 }
 

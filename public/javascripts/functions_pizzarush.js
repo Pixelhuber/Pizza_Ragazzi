@@ -1,4 +1,27 @@
 
+const gameProperties = {
+    roundLength: 300,
+
+    maxTimeBetweenOrders: 30,
+    orderDelay: 2,
+    minOrdersActive: 2,
+    ordersActiveWhenStarting: 2,
+
+    pizza_timeUntilBurnt: 7, // additional to regular baking time
+    pizza_timeUntilWarning: 4, // additional to regular baking time
+    pizza_bakingTime: 5,
+
+    fruitNinja_distractionChance_percent: 10,
+    fruitNinja_distractionDisablingTime: 5,
+    fruitNinja_maxIngredientsInAir: 6,
+    fruitNinja_minTimeBetweenThrows: 0.7,
+
+    whack_distractionChance_percent: 0,
+    whack_maxIngredientsShownAtOnce: 2,
+    whack_minTimeBetweenShows: 0
+}
+
+
 const availableIngredients = [];
 
 const possiblePizzas = [];
@@ -284,7 +307,7 @@ class DraggablePizzaInstance extends Pizza {
         document.getElementById("pizza_layer").appendChild(this.draggable);
 
         this.isDragEnabled = true;
-        this.bakingTimeInSeconds = 5;
+        this.bakingTimeInSeconds = gameProperties.pizza_bakingTime;
     }
 
 
@@ -386,7 +409,7 @@ class DraggablePizzaInstance extends Pizza {
     updateBakeStatus() {
         // determine bakeStatus of the pizza
         const difference = this.bakingTimeInSeconds - this.timeInOvenInMilliseconds / 1000;
-        if (difference < -7)
+        if (difference < -gameProperties.pizza_timeUntilBurnt)
             this.setBakeStatus(DraggablePizzaInstance.bakeStatus.BURNT);
         else if (difference < 0)
             this.setBakeStatus(DraggablePizzaInstance.bakeStatus.WELL);
@@ -450,12 +473,13 @@ class Oven {
             pizza.updateBakeStatus();
 
             // manipulate timer: update the timer
+            console.assert(gameProperties.pizza_timeUntilBurnt > gameProperties.pizza_timeUntilWarning);
             const timerCount = (Math.floor(pizza.bakingTimeInSeconds - pizza.timeInOvenInMilliseconds / 1000 + 1));
             if (timerCount > 0)
                 timer.innerText = timerCount.toString();
-            else if (timerCount > -4)
+            else if (timerCount > -gameProperties.pizza_timeUntilWarning)
                 timer.innerText = "DONE";
-            else if (timerCount > -7)
+            else if (timerCount > -gameProperties.pizza_timeUntilBurnt)
                 timer.innerText = "!!!"
             else
                 timer.innerText = "BURNT"
@@ -512,11 +536,10 @@ class Order {
 
         this.gameElement.setAttribute('class', 'box order');
 
-        this.gameElement.text.setAttribute('style', 'position: absolute; z-index: 2');
         this.gameElement.text.innerHTML = this.name;
 
-        this.gameElement.appendChild(this.gameElement.timeIndicator);
         this.gameElement.appendChild(this.gameElement.text);
+        this.gameElement.appendChild(this.gameElement.timeIndicator);
 
         document.getElementById('orderSection').getElementsByClassName('scroll_container').item(0).appendChild(this.gameElement);
     }
@@ -593,20 +616,20 @@ class OrderHandler {
         let lastTimestamp = window.performance.now();
         let timeSinceLastOrder = 0;
 
-        this.activateOrder(this.drawRandomOrder());
-        this.activateOrder(this.drawRandomOrder());
+        for (let i = 0; i < gameProperties.ordersActiveWhenStarting; i++)
+            this.activateOrder(this.drawRandomOrder());
 
         function orderFlow(timestamp) {
 
             timeSinceLastOrder += timestamp - lastTimestamp;
             lastTimestamp = timestamp;
 
-            if (orderHandler.activeOrders.length <= 1) {
-                orderHandler.activateOrder(orderHandler.drawRandomOrder(), 3000);
+            if (orderHandler.activeOrders.length < gameProperties.minOrdersActive) {
+                orderHandler.activateOrder(orderHandler.drawRandomOrder(), gameProperties.orderDelay*1000);
                 timeSinceLastOrder = 0;
             }
 
-            if (timeSinceLastOrder > 30000) {
+            if (timeSinceLastOrder > gameProperties.maxTimeBetweenOrders*1000) {
                 orderHandler.activateOrder(orderHandler.drawRandomOrder());
                 timeSinceLastOrder = 0;
             }
@@ -651,7 +674,7 @@ class OrderHandler {
                 AudioPlayer.order_new();
                 order.createGameElement();
                 order.startAnimation();
-            }, 1000);
+            }, delay);
         else {
             AudioPlayer.order_new();
             order.createGameElement();
@@ -889,7 +912,8 @@ async function setupAvailableIngredients() {
             availableIngredients.push(
                 new StampingIngredient(item.id, item.name, item.picture_raw, item.picture_raw_distraction, item.picture_processed, item.picture_baked, item.picture_burnt, {
                     disabling_time: item.disabling_time,
-                    hits_required: item.hits_required
+                    hits_required: item.hits_required,
+                    display_time: item.display_time
                 }))
         } else {
             availableIngredients.push(
@@ -974,7 +998,7 @@ function loadOvens() {
 
 let pizzaRushRunning = false;
 
-function manageRushCountdown(seconds, timerContainerId) {
+function manageRushCountdown(timerContainerId) {
     if (!pizzaRushRunning) {
 
         resetPoints();
@@ -1026,7 +1050,7 @@ function manageRushCountdown(seconds, timerContainerId) {
             }
         }
 
-        new RushCountdown(seconds, document.getElementById(timerContainerId)).startCountdown(); // Countdown wird gestartet
+        new RushCountdown(gameProperties.roundLength, document.getElementById(timerContainerId)).startCountdown(); // Countdown wird gestartet
     }
 }
 
@@ -1474,7 +1498,7 @@ function startMiniGame(ingredientList) {
                 this.ingredientJuggler.ingredientsWaitingToBeThrown.splice(index, 1);
 
                 // tell juggler to either throw yourself OR a distraction
-                if (Math.random() < 0.1)
+                if (Math.random() < gameProperties.fruitNinja_distractionChance_percent/100)
                     this.ingredientJuggler.ingredientsCurrentlyInAir.push(this.createDistraction());
                 else
                     this.ingredientJuggler.ingredientsCurrentlyInAir.push(this);
@@ -1514,7 +1538,7 @@ function startMiniGame(ingredientList) {
 
             createDistraction() {
 
-                return new DistractionThrower(this, 3000);
+                return new DistractionThrower(this, gameProperties.fruitNinja_distractionDisablingTime*1000);
             }
         }
 
@@ -1568,15 +1592,15 @@ function startMiniGame(ingredientList) {
             ingredientsWaitingToBeThrown = []
             ingredientsCurrentlyInAir = [];
 
-            minDistanceBetweenThrows;
+            minTimeBetweenThrows;
             timestampLastThrow = 0;
             maxIngredientsInAir;
 
             disableTime = 0;
             lastTimestamp;
 
-            constructor(ingredientList, minDistanceBetweenThrows, maxIngredientsInAir) {
-                this.minDistanceBetweenThrows = minDistanceBetweenThrows;
+            constructor(ingredientList, minTimeBetweenThrows, maxIngredientsInAir) {
+                this.minTimeBetweenThrows = minTimeBetweenThrows;
                 this.maxIngredientsInAir = maxIngredientsInAir;
 
                 for (let i = 0; i < ingredientList.length; i++) {
@@ -1608,7 +1632,7 @@ function startMiniGame(ingredientList) {
 
                 this.lastTimestamp = timestamp;
 
-                if ((timestamp - this.timestampLastThrow) > this.minDistanceBetweenThrows)
+                if ((timestamp - this.timestampLastThrow) > this.minTimeBetweenThrows*1000)
                     if (this.ingredientsWaitingToBeThrown.length > 0 &&
                         this.ingredientsCurrentlyInAir.length < this.maxIngredientsInAir) {
                         const randomIndex = Math.floor(Math.random() * this.ingredientsWaitingToBeThrown.length);
@@ -1674,8 +1698,11 @@ function startMiniGame(ingredientList) {
 
         setCanvasSize();
 
+        const ingredientJuggler = new IngredientJuggler(
+            ingredientList,
+            gameProperties.fruitNinja_minTimeBetweenThrows,
+            gameProperties.fruitNinja_maxIngredientsInAir);
 
-        const ingredientJuggler = new IngredientJuggler(ingredientList, 400, 6);
         addHitListener(ingredientJuggler);
 
         let start;
@@ -1723,10 +1750,10 @@ function startMiniGame(ingredientList) {
                 this.context = context;
             }
 
-            newShow(duration) {
+            newShow() {
 
                 this.lastTimestamp = window.performance.now();
-                this.time_shown = duration;
+                this.time_shown = this.draggableIngredient.parentIngredient.stamp_behavior.display_time;
                 this.defineNewShow();
                 this.startShow();
             }
@@ -1811,7 +1838,7 @@ function startMiniGame(ingredientList) {
                 this.moleHandler.ingredientsWaitingToBeShown.splice(index, 1);
 
                 // tell MoleHandler to either show yourself OR a distraction
-                if (Math.random() < 0.0)
+                if (Math.random() < gameProperties.whack_distractionChance_percent/100)
                     this.moleHandler.ingredientsCurrentlyShown.push(this.createDistraction());
                 else
                     this.moleHandler.ingredientsCurrentlyShown.push(this);
@@ -1864,6 +1891,7 @@ function startMiniGame(ingredientList) {
         class DistractionShower extends AbstractShower {
 
             disabling_time;
+            display_time;
 
             realIngredientShower;
 
@@ -1880,6 +1908,7 @@ function startMiniGame(ingredientList) {
                 this.moleHandler = ingredientShower.moleHandler;
 
                 this.disabling_time = ingredientShower.draggableIngredient.parentIngredient.stamp_behavior.disabling_time;
+                this.display_time = ingredientShower.draggableIngredient.parentIngredient.stamp_behavior.display_time;
                 this.realIngredientShower = ingredientShower;
             }
 
@@ -1919,7 +1948,6 @@ function startMiniGame(ingredientList) {
             freeHoles = [];
 
             numberOfHoles;
-            show_duration;
             minDistanceBetweenShows;
             timestampLastShow = 0;
             maxIngredientsShownAtOnce;
@@ -1929,9 +1957,8 @@ function startMiniGame(ingredientList) {
 
             moleDrawer;
 
-            constructor(ingredientList, numberOfHoles, show_duration, minDistanceBetweenShows, maxIngredientsShownAtOnce) {
+            constructor(ingredientList, numberOfHoles, minDistanceBetweenShows, maxIngredientsShownAtOnce) {
                 this.numberOfHoles = numberOfHoles;
-                this.show_duration = show_duration;
                 this.moleDrawer = new MoleDrawer(numberOfHoles, canvas, context);
 
                 this.minDistanceBetweenShows = minDistanceBetweenShows;
@@ -1977,7 +2004,7 @@ function startMiniGame(ingredientList) {
                     if (this.ingredientsWaitingToBeShown.length > 0 &&
                         this.ingredientsCurrentlyShown.length < this.maxIngredientsShownAtOnce) {
                         const randomIndex = Math.floor(Math.random() * this.ingredientsWaitingToBeShown.length);
-                        this.ingredientsWaitingToBeShown[randomIndex].newShow(this.show_duration);
+                        this.ingredientsWaitingToBeShown[randomIndex].newShow();
                         this.timestampLastShow = timestamp;
                     }
 
@@ -2094,7 +2121,12 @@ function startMiniGame(ingredientList) {
         setCanvasSize();
 
 
-        const moleHandler = new MoleHandler(ingredientList, 9, 700, 0, 2);
+        const moleHandler = new MoleHandler(
+            ingredientList,
+            9,
+            gameProperties.whack_minTimeBetweenShows*1000,
+            gameProperties.whack_maxIngredientsShownAtOnce);
+
         addHitListener(moleHandler);
 
         let start;
@@ -2320,6 +2352,3 @@ function isInside(point, shape) {
 
     return inside;
 }
-
-
-
