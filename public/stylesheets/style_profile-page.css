@@ -102,6 +102,7 @@
 }
 
 #addFriendInput {
+    border-color: black;
     float: left;
     margin: auto;
     padding: 5px;
@@ -147,9 +148,28 @@
 }
 
 #chatWithWhoInput {
+    border-color: black;
     margin: auto;
     padding: 5px;
     width: 50%;
+}
+
+#chatWithWhoButton {
+    background-color: white;
+    color: black;
+    padding: 5px;
+    border: 2px black solid;
+}
+
+#chatWithWhoButton:hover {
+    color: white;
+    background-color: black;
+    cursor: pointer;
+}
+
+#chatMessages_div {
+    max-height: 40vh;
+    overflow-y: auto;
 }
 
 #achievements_heading {

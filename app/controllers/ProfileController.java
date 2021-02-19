@@ -3,6 +3,7 @@ package controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import factory.UserFactory;
 import models.Achievement;
+import models.Message;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
@@ -121,6 +122,17 @@ public class ProfileController extends Controller {
         UserFactory.User user = userFactory.getUserByEmail(email);
         List<Achievement> achievements = user.getAchievements();
         String json = listToJson(achievements);
+        return ok(json);
+    }
+
+    //gibt Messages mit bestimmtem Freund zurück
+    public Result getMessagesFromDatabase(Http.Request request) {
+        String email = request.session().get("email").get();
+        String username = request.body().asJson().asText();
+        UserFactory.User user1 = userFactory.getUserByEmail(email);
+        UserFactory.User user2 = userFactory.getUserByUsername(username);
+        List<Message> messages = user1.getMessages(user2);
+        String json = listToJson(messages);
         return ok(json);
     }
 

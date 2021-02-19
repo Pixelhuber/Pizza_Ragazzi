@@ -5,6 +5,7 @@ import factory.FactoryExceptions.InvalidEmailException;
 import factory.FactoryExceptions.ProfilePictureException;
 import factory.FactoryExceptions.UsernameAlreadyInUseException;
 import models.Achievement;
+import models.Message;
 import play.db.Database;
 import scala.Console;
 
@@ -313,15 +314,15 @@ public class UserFactory {
             });
         }
 
-        public Map<String,String> getFriendsData() throws IOException {
+        public Map<String, String> getFriendsData() throws IOException {
 
             List<User> users = getFriends();
 
-            Map<String,String> data = new HashMap<>();
+            Map<String, String> data = new HashMap<>();
 
             for (User user : users) {
                 //Sets default Profile pic if none was Uploaded
-                String path=user.getProfilePictureSrc();
+                String path = user.getProfilePictureSrc();
                 data.put(user.username, path);
             }
             return data;
@@ -346,16 +347,59 @@ public class UserFactory {
 
         public Achievement getAchievementByAchievementId(int achievementId) {
             return db.withConnection(conn -> {
-                    Achievement achievement = null;
-                    PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `Reward` WHERE idReward = ?");
-                    stmt.setInt(1, achievementId);
+                Achievement achievement = null;
+                PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `Reward` WHERE idReward = ?");
+                stmt.setInt(1, achievementId);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    achievement = new Achievement(rs);
+                }
+                stmt.close();
+                return achievement;
+            });
+        }
+
+        public List<Message> getMessages(User user2) {
+            if (user2 == null) return null;
+
+            List<User> friends = getFriends();
+
+            boolean isFriend = false;  //checken, ob sie befreundet sind
+            for (User user : friends) {
+                if (user.getId() == user2.getId()) {
+                    isFriend = true;
+                    break;
+                }
+            }
+
+            if (isFriend) {
+                return db.withConnection(conn -> {
+                    List<Message> result = new ArrayList<>();
+
+                    String sql = "SELECT * FROM `Message` WHERE (sender = ? AND receiver = ?) OR (sender = ? AND receiver = ?) ORDER BY `time`";
+                    PreparedStatement stmt = conn.prepareStatement(sql);
+                    stmt.setInt(1, this.id);
+                    stmt.setInt(2, user2.getId());
+                    stmt.setInt(3, user2.getId());
+                    stmt.setInt(4, this.id);
                     ResultSet rs = stmt.executeQuery();
-                    if (rs.next()) {
-                        achievement = new Achievement(rs);
+                    while (rs.next()) {
+                        Message message = new Message(rs);
+                        //ich füge für jedes Message Objekt noch den username der Beteiligten hinzu
+                        if (message.getSender() == this.id) {
+                            message.setSenderName(this.getUsername());
+                            message.setReceiverName(user2.getUsername());
+                        } else {
+                            message.setReceiverName(this.getUsername());
+                            message.setSenderName(user2.getUsername());
+                        }
+                        result.add(message);
                     }
                     stmt.close();
-                    return achievement;
+                    return result;
                 });
+            }
+            return null;
         }
 
         public String getNameFromTierId() {
@@ -422,9 +466,9 @@ public class UserFactory {
         }
 
         public String getProfilePictureSrc() throws IOException {
-            String path=null;
+            String path = null;
             if (profilePicture != null) {
-                path=encodeToString(profilePicture,"jpg");
+                path = encodeToString(profilePicture, "jpg");
             }
             return path;
         }
@@ -437,7 +481,7 @@ public class UserFactory {
                 ImageIO.write(image, type, bos);
                 byte[] imageBytes = bos.toByteArray();
 
-                imageString = "data:image/"+type+";base64," + Base64.getEncoder().encodeToString(imageBytes);
+                imageString = "data:image/" + type + ";base64," + Base64.getEncoder().encodeToString(imageBytes);
 
                 bos.close();
             } catch (IOException e) {

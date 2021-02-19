@@ -7,6 +7,7 @@
 }
 
 .darker {
+    text-align: right;
     border-color: #454545;
     background-color: #acacac;
 }
@@ -17,26 +18,12 @@
     display: table;
 }
 
-.container img {
-    float: left;
-    max-width: 60px;
-    width: 100%;
-    margin-right: 20px;
-    border-radius: 50%;
-}
-
-.container img.right {
-    float: right;
-    margin-left: 20px;
-    margin-right:0;
-}
-
 .time-right {
-    float: right;
+    float: left;
     color: #5d5d5d;
 }
 
 .time-left {
-    float: left;
+    float: right;
     color: #5d5d5d;
 }

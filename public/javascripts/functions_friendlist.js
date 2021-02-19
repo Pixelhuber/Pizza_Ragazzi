@@ -102,7 +102,7 @@ function addFriend() {
                 deleteOldFriendList();
                 getFriendsData();
                 document.getElementById("addFriendInput").value = '';
-                document.getElementById("addFriendInput").style.border = "0";
+                document.getElementById("addFriendInput").style.borderColor = "black";
             }
         })
 }

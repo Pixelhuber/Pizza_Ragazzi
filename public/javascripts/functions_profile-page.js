@@ -1,6 +1,5 @@
-
 function displayAchievements(allAchievements) {
-    if (allAchievements !== 'undefined' && allAchievements.length > 0) {
+    if (allAchievements !== 'undefined') {
         // Display Achievements
         allAchievements.forEach(function (item) {
             const achievementDiv = document.createElement('div');
@@ -13,10 +12,44 @@ function displayAchievements(allAchievements) {
             achievementDiv.appendChild(descriptionSpan);
 
             document.getElementById("achievements_table").appendChild(achievementDiv);
-
-            document.getElementById("loading_achievements").style.display = "none"; //loading achievements hiden
         });
+        document.getElementById("loading_achievements").style.display = "none"; //loading achievements hiden
+
     } else document.getElementById("loading_achievements").style.display = "none"; //loading achievements hiden, wenn Nutzer keine achievements hat
+}
+
+function displayChatMessages(messages, user2Username) {
+    if (messages != null && messages !== 'undefined') {
+        document.getElementById("chatWithWhoInput").style.borderColor = "black"; //roten Rand des Inputs entfernen, falls er da war
+        document.getElementById("chat_heading").textContent = "Chat mit " + user2Username;  //Überschrift mit Username2
+
+        //Display Messages
+        messages.forEach(function (item) {
+            const container = document.createElement('div');
+
+            const content = document.createElement('p');
+            content.textContent = item.message_text;
+
+            const timeSpan = document.createElement('span');
+            timeSpan.textContent = item.time;
+
+            if (item.senderName === user2Username) {  //falls ausgewählter Freund Nachricht gesendet hat
+                container.setAttribute('class', 'container');
+                timeSpan.setAttribute('class', 'time-right');
+            }
+            else {
+                container.setAttribute('class', 'container darker');
+                timeSpan.setAttribute('class', 'time-left');
+            }
+
+            container.appendChild(content);
+            container.appendChild(timeSpan);
+            document.getElementById("chatMessages_div").appendChild(container);
+        });
+    }
+    else {
+        document.getElementById("chatWithWhoInput").style.borderColor = "red"; //roten Rand beim Input hinzufügen
+    }
 }
 
 $(function () {
@@ -40,18 +73,18 @@ $(function () {
             // display field to change profile-picture
             const selectFileButton = "<input style='font-size: 18px' id=\"file-upload\" type=\"file\" accept=\"image/*\"/>"
             selectFile.html(selectFileButton);
-            $("#file-upload").on('change', function(){
+            $("#file-upload").on('change', function () {
                 readURL(this);
             });
 
             profileButton.text("Save Profile");
 
-        } else if (profileButton.text() === "Save Profile"){
+        } else if (profileButton.text() === "Save Profile") {
 
             const newUsername = document.forms["userForm"]["new_username"].value;
             if (newUsername === "") {
                 alert("Your Username should not be empty");
-            }else {
+            } else {
                 usernameField.html(newUsername);
                 //updateUsernameInDatabaseAndSession(newUsername);
                 selectFile.html("");
@@ -82,7 +115,11 @@ function setup() {
     getProfilePicFromDatabase();
     getAchievementsFromDatabase();
     getFriendsData();
+    document.getElementById("chatWithWhoButton").onclick = function () {
+        parseChatWithWhoInput(document.getElementById("chatWithWhoInput").value)
+    };
 }
+
 //TODO update username und profilepic zusammenlegen
 
 // Sends a request to update the username in the session
@@ -94,16 +131,16 @@ function updateUsernameInDatabaseAndSession(newUsername) {
     }
 
     $.post("/profile/updateUsername", loginViewModel,
-        function (data, status){
+        function (data, status) {
             // Das funktioniert noch nicht ganz! Beim ausführen sieht man, dass "data" irgendwie leer bleibt... aber der Wert wird korrekt gespeichert
             alert("Session and Database updated!\nData: " + data + "\nStatus: " + status)
         }
-        ).fail(function (){
-            alert("Something went wrong")
-        });
+    ).fail(function () {
+        alert("Something went wrong")
+    });
 }
 
-function uploadProfilePictureIntoDB(){
+function uploadProfilePictureIntoDB() {
     let im = document.getElementById("profile-picture");
     console.log(im);
     let s = document.getElementById("profile-picture").src;
@@ -128,20 +165,38 @@ function uploadProfilePictureIntoDB(){
         })
 }
 
+function parseChatWithWhoInput(username) {
+    if (username !== undefined) { //TODO: muss noch genauer geparset werden
+        getMessagesFromDatabase(username);
+    }
+}
+
+function getMessagesFromDatabase(username) {
+    fetch("/profile/getMessages", {
+        method: 'POST',
+        body: JSON.stringify(username),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    }).then(result => result.json())
+        .then(result => displayChatMessages(result, username))
+}
+
 function getAchievementsFromDatabase() {
     document.getElementById("loading_achievements").style.display = "block" //loading achievements anzeigen
-    $.get("/profile/getAchievements", function(data, status){
+    $.get("/profile/getAchievements", function (data, status) {
         displayAchievements(JSON.parse(data));
-    }).fail(function (data, status){
+    }).fail(function (data, status) {
         alert("Couldn't retrieve achievements from database");
     });
 }
 
 // Reads username from Database and updates html
 function getUsernameFromDatabase() {
-    $.get("/getUsername", function(data, status){
+    $.get("/getUsername", function (data, status) {
         document.getElementById("username").textContent = data
-    }).fail(function (data, status){
+    }).fail(function (data, status) {
         document.getElementById("username").textContent = "Default Name";
         alert("Couldn't retrieve username from database");
     });
@@ -149,50 +204,49 @@ function getUsernameFromDatabase() {
 
 //TODO hier evtl "getMail" route nutzen
 function getMailFromDatabase() {
-    $.get("/profile/getMail", function(data, status){
+    $.get("/profile/getMail", function (data, status) {
         document.getElementById("mail").textContent = "Email: " + data
-    }).fail(function (data, status){
+    }).fail(function (data, status) {
         document.getElementById("mail").textContent = "Default Mail";
         alert("Couldn't retrieve mail from database");
     });
 }
 
 function getGesamtpunkteFromDatabase() {
-    $.get("/profile/getTotalPoints", function(data, status){
+    $.get("/profile/getTotalPoints", function (data, status) {
         document.getElementById("gesamtpunkte").textContent = "Gesamtpunkte: " + data
-    }).fail(function (data, status){
+    }).fail(function (data, status) {
         document.getElementById("gesamtpunkte").textContent = "Default Gesamtpunkte";
         alert("Couldn't retrieve gesamtpunkte from database");
     });
 }
 
 function getHighscoreFromDatabase() {
-    $.get("/profile/getHighScore", function(data, status){
+    $.get("/profile/getHighScore", function (data, status) {
         document.getElementById("highscore").textContent = "Highscore: " + data
-    }).fail(function (data, status){
+    }).fail(function (data, status) {
         document.getElementById("highscore").textContent = "Default Highscore";
         alert("Couldn't retrieve highscore from database");
     });
 }
 
 function getTierFromDatabase() {
-    $.get("/profile/getTierName", function(data, status){
+    $.get("/profile/getTierName", function (data, status) {
         document.getElementById("tier").textContent = "Rang: " + data
-    }).fail(function (data, status){
+    }).fail(function (data, status) {
         document.getElementById("highscore").textContent = "Default Tier";
         alert("Couldn't retrieve tier from database");
     });
 }
 
 function getProfilePicFromDatabase() {
-        $.get("/profile/getProfilePic", function(data, status){
-            if (data != null) {
-                document.getElementById("profile-picture").setAttribute("src", data)
-            }
-            else document.getElementById("profile-picture").setAttribute("src","https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
-        }).fail(function (data, status){
-            alert("Couldn't retrieve Profile Picture from database");
-        });
+    $.get("/profile/getProfilePic", function (data, status) {
+        if (data != null) {
+            document.getElementById("profile-picture").setAttribute("src", data)
+        } else document.getElementById("profile-picture").setAttribute("src", "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+    }).fail(function (data, status) {
+        alert("Couldn't retrieve Profile Picture from database");
+    });
 }
 
 //onclick-function von friend aus friendlist (functions_friendlist.js)
@@ -334,14 +388,13 @@ function friendGetProfilePicFromDatabase(username) {
     }).then(result => result.json())
         .then(result => setFriendsProfilePic(result))
         .catch((error) => {
-        alert("Couldn't retrieve Profile Picture from database");
-        console.error('Error:', error);
-    });
+            alert("Couldn't retrieve Profile Picture from database");
+            console.error('Error:', error);
+        });
 }
 
 function setFriendsProfilePic(result) {
     if (result != null) {
         document.getElementById("profile-picture").setAttribute("src", result)
-    }
-    else document.getElementById("profile-picture").setAttribute("src","https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+    } else document.getElementById("profile-picture").setAttribute("src", "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
 }
