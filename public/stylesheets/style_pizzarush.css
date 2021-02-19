@@ -43,8 +43,9 @@ section{
 #right_upper_container{
     flex: 1;
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-end;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
 
     min-width: 200px;
     margin: 0 20px 0 20px;
@@ -284,6 +285,58 @@ div.draggable > img{
     height: 20vh;
     width: auto;
 
+}
+
+#recipeList{
+    z-index: 80;
+    position: absolute;
+    float: right;
+    right: 0;
+    top: 45px;
+    margin-right: 40px;
+
+    height: fit-content;
+    max-height: 600px;
+    min-height: 40px;
+    width: fit-content;
+    max-width: 750px;
+    min-width: 100px;
+    overflow-y: scroll;
+
+    background-color: white;
+    border: 4px solid black;
+
+    text-transform: uppercase;
+}
+
+#recipeList > div{
+    display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    padding: 20px;
+}
+
+#recipeList > div > div{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    padding-bottom: 15px;
+    border-bottom: 1px solid black;
+    margin-bottom: 5px;
+}
+
+#recipeList > div > div > h2{
+    text-transform: uppercase;
+    margin: 0;
+}
+
+#recipeList > div > div > div{
+    font-family: Arial, sans-serif;
+    text-transform: none;
+
+    margin-top: 10px;
 }
 
 

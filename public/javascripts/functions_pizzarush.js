@@ -24,7 +24,7 @@ const gameProperties = {
 
 const availableIngredients = [];
 
-const possiblePizzas = [];
+const possibleOrders = [];
 
 const ovenList = [];
 
@@ -309,6 +309,7 @@ class DraggablePizzaInstance extends Pizza {
         this.isDragEnabled = true;
         this.bakingTimeInSeconds = gameProperties.pizza_bakingTime;
     }
+
 
 
     static findExistingPizzaByDiv(div) {
@@ -653,7 +654,7 @@ class OrderHandler {
     drawRandomOrder() {
 
         const ordersToChooseFrom = [];
-        ordersToChooseFrom.push.apply(ordersToChooseFrom, possiblePizzas);
+        ordersToChooseFrom.push.apply(ordersToChooseFrom, possibleOrders);
         // this.activeOrders.forEach(function (item) {
         //     if (ordersToChooseFrom.includes(item))
         //         ordersToChooseFrom.splice(item, 1);
@@ -934,7 +935,7 @@ async function setupAvailablePizzas() {
     console.log(orders);
 
     orders.forEach(function (item) {
-        possiblePizzas.push(new Order(item.name, item.points, item.order_time, item.ingredients));
+        possibleOrders.push(new Order(item.name, item.points, item.order_time, item.ingredients));
     });
 }
 
@@ -958,6 +959,7 @@ async function loadGameElements() {
 
     loadIngredientSection();
     loadOvens();
+    loadRecipeList();
 }
 
 function loadIngredientSection() {
@@ -991,6 +993,45 @@ function loadOvens() {
         new Oven(),
         new Oven(),
         new Oven());
+}
+
+function loadRecipeList() {
+    const recipeList = document.getElementById("recipeList");
+    recipeList.onmouseenter = function (){
+        expanded.style.display = "flex";
+        // recipeList.innerText = "";
+    };
+    recipeList.onmouseleave = function (){
+        expanded.style.display = "none";
+        // recipeList.innerText = "recipes"
+    };
+
+    const expanded = document.createElement('div');
+    recipeList.appendChild(expanded);
+
+    for (let i = 0; i < possibleOrders.length; i++) {
+        const current = possibleOrders[i];
+        const div = createElement(current);
+        expanded.appendChild(div);
+    }
+
+
+    function createElement(order) {
+        const div = document.createElement('div');
+        const heading = document.createElement('h2');
+        const description = document.createElement('div');
+
+        heading.innerHTML = order.name;
+        let text = "";
+        order.requestedPizza.ingredients.forEach(function (item) {
+            text += item.name + ", ";
+        })
+        description.innerHTML = text;
+
+        div.appendChild(heading);
+        div.appendChild(description);
+        return div;
+    }
 }
 
 
