@@ -151,7 +151,7 @@
     border-color: black;
     margin: auto;
     padding: 5px;
-    width: 50%;
+    width: 47%;
 }
 
 #chatWithWhoButton {
@@ -168,8 +168,27 @@
 }
 
 #chatMessages_div {
-    max-height: 40vh;
+    max-height: 38vh;
     overflow-y: auto;
+}
+
+#sendMessageInput {
+    display: none;
+    border: 2px black solid;
+    border-radius: 6px;
+    margin: auto;
+    padding: 5px;
+    width: 85%;
+}
+
+#sendMessageButton {
+    display: none;
+    float: right;
+    background-color: white;
+    color: black;
+    padding: 5px;
+    border: 2px black solid;
+    border-radius: 6px;
 }
 
 #achievements_heading {
@@ -245,6 +264,11 @@
 
 #loading_achievements {
     margin-left: 6%;
+}
+
+#loading_messages {
+    display: none;
+    margin: 10px auto;
 }
 
 /* Safari */

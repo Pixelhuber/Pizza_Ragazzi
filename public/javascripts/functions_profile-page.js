@@ -18,40 +18,6 @@ function displayAchievements(allAchievements) {
     } else document.getElementById("loading_achievements").style.display = "none"; //loading achievements hiden, wenn Nutzer keine achievements hat
 }
 
-function displayChatMessages(messages, user2Username) {
-    if (messages != null && messages !== 'undefined') {
-        document.getElementById("chatWithWhoInput").style.borderColor = "black"; //roten Rand des Inputs entfernen, falls er da war
-        document.getElementById("chat_heading").textContent = "Chat mit " + user2Username;  //Überschrift mit Username2
-
-        //Display Messages
-        messages.forEach(function (item) {
-            const container = document.createElement('div');
-
-            const content = document.createElement('p');
-            content.textContent = item.message_text;
-
-            const timeSpan = document.createElement('span');
-            timeSpan.textContent = item.time;
-
-            if (item.senderName === user2Username) {  //falls ausgewählter Freund Nachricht gesendet hat
-                container.setAttribute('class', 'container');
-                timeSpan.setAttribute('class', 'time-right');
-            }
-            else {
-                container.setAttribute('class', 'container darker');
-                timeSpan.setAttribute('class', 'time-left');
-            }
-
-            container.appendChild(content);
-            container.appendChild(timeSpan);
-            document.getElementById("chatMessages_div").appendChild(container);
-        });
-    }
-    else {
-        document.getElementById("chatWithWhoInput").style.borderColor = "red"; //roten Rand beim Input hinzufügen
-    }
-}
-
 $(function () {
 
     //edit the profile (username, picture) (email and password could be added in the future)
@@ -63,7 +29,7 @@ $(function () {
         const selectFile = $("#p-image");
         // ---------------------------------------------
 
-        if (profileButton.text() === "Edit Profile") {
+        if (profileButton.text() === "Profil bearbeiten") {
             const usernameText = usernameField.text();
 
             // change usernameField into an inputField
@@ -77,9 +43,9 @@ $(function () {
                 readURL(this);
             });
 
-            profileButton.text("Save Profile");
+            profileButton.text("Speichern");
 
-        } else if (profileButton.text() === "Save Profile") {
+        } else if (profileButton.text() === "Speichern") {
 
             const newUsername = document.forms["userForm"]["new_username"].value;
             if (newUsername === "") {
@@ -89,7 +55,7 @@ $(function () {
                 //updateUsernameInDatabaseAndSession(newUsername);
                 selectFile.html("");
                 uploadProfilePictureIntoDB();
-                profileButton.text("Edit Profile");
+                profileButton.text("Profil bearbeiten");
             }
         }
     });
@@ -107,6 +73,10 @@ $(function () {
 });
 
 function setup() {
+    document.getElementById("chatWithWhoButton").onclick = function () { //onclick für Chat mit Freund eingabe
+        setupChatStuff(document.getElementById("chatWithWhoInput").value)
+    };
+
     getUsernameFromDatabase();
     getGesamtpunkteFromDatabase();
     getHighscoreFromDatabase();
@@ -115,9 +85,6 @@ function setup() {
     getProfilePicFromDatabase();
     getAchievementsFromDatabase();
     getFriendsData();
-    document.getElementById("chatWithWhoButton").onclick = function () {
-        parseChatWithWhoInput(document.getElementById("chatWithWhoInput").value)
-    };
 }
 
 //TODO update username und profilepic zusammenlegen
@@ -163,24 +130,6 @@ function uploadProfilePictureIntoDB() {
             console.log('ERROR: ');
             console.error();
         })
-}
-
-function parseChatWithWhoInput(username) {
-    if (username !== undefined) { //TODO: muss noch genauer geparset werden
-        getMessagesFromDatabase(username);
-    }
-}
-
-function getMessagesFromDatabase(username) {
-    fetch("/profile/getMessages", {
-        method: 'POST',
-        body: JSON.stringify(username),
-        headers: {
-            "Content-Type": "application/json"
-        },
-        credentials: 'include'
-    }).then(result => result.json())
-        .then(result => displayChatMessages(result, username))
 }
 
 function getAchievementsFromDatabase() {
@@ -251,7 +200,11 @@ function getProfilePicFromDatabase() {
 
 //onclick-function von friend aus friendlist (functions_friendlist.js)
 function setupInformationFromFriend(elm) {
-    if (!viewOnly) {        //Funktion wird nur ausgeführt, wenn man auf dem eigenen Profil ist
+    if (document.getElementById("editProfileButton").innerText === "Speichern") {  //gegen seltenen Bug: während dem Editieren des Profiles das Profil eines Freundes anschauen
+        alert("Bitte erst Profil speichern!")
+    }
+
+    else if (!viewOnly) {        //Funktion wird nur ausgeführt, wenn man auf dem eigenen Profil ist
         var name = elm.childNodes[1].innerHTML;  //childnodes[1] gibt das "name" child von friend
 
         friendGetUsernameFromDatabase(name);
@@ -261,17 +214,17 @@ function setupInformationFromFriend(elm) {
         friendGetTierFromDatabase(name);
         friendGetProfilePicFromDatabase(name);
 
-        deleteOldAchievements();
+        deleteOldAchievements();            //Achievements werden gelöscht, damit nur neue angezeigt werden
         friendGetAchievementsFromDatabase(name);
 
         deleteOldFriendList();          //Liste wird gelöscht, damit nur neue angezeigt wird
         friendGetFriendsData(name);
 
-        document.getElementById("editProfileButton").style.display = "none";       //Edit-Profile-Knopf hidden
-        document.getElementById("addFriendInputLabel").style.display = "none";          //Freund hinzufügen Label hidden
-        document.getElementById("addFriendInput").style.display = "none";          //Freund hinzufügen Searchbar hidden
-        document.getElementById("addFriendButton").style.display = "none";          //Freund hinzufügen Button hidden
+        hideSensibleStuff();
+
         document.getElementById("backToMyProfileButton").style.display = "block";  //Zurück Button visible
+        document.getElementById("chat_heading").textContent = "Chat"; //Chat-Überschrift neutral machen
+
         viewOnly = true;                //in functions_friendlist.js wird der Freundeslisten hoverEffect und onclick nicht mehr ausgeführt (diese Funktion auch nicht)
     }
 }
@@ -282,12 +235,38 @@ function backToMyProfile() {
 
     setup();
 
-    document.getElementById("editProfileButton").style.display = "block";       //Edit-Profile-Knopf hidden
-    document.getElementById("addFriendInputLabel").style.display = "inline";           //Freund hinzufügen Label hidden
-    document.getElementById("addFriendInput").style.display = "inline";          //Freund hinzufügen Searchbar hidden
-    document.getElementById("addFriendButton").style.display = "inline";         //Freund hinzufügen Button hidden
-    document.getElementById("backToMyProfileButton").style.display = "none";  //Zurück Button visible
+    showSensibleStuff();
+
     viewOnly = false;
+}
+
+function hideSensibleStuff() {
+    document.getElementById("editProfileButton").style.display = "none";       //Edit-Profile-Knopf hidden
+    document.getElementById("addFriendInputLabel").style.display = "none";          //Freund hinzufügen Label hidden
+    document.getElementById("addFriendInput").style.display = "none";          //Freund hinzufügen Searchbar hidden
+    document.getElementById("addFriendButton").style.display = "none";          //Freund hinzufügen Button hidden
+    //chatStuff hiden
+    document.getElementById("chatWithWhoInputLabel").style.display = "none";
+    document.getElementById("chatWithWhoInput").style.display = "none";
+    document.getElementById("chatWithWhoButton").style.display = "none";
+    document.getElementById("sendMessageInput").style.display = "none";
+    document.getElementById("sendMessageButton").style.display = "none";
+    document.getElementById("chatMessages_div").style.display = "none"; //alles Messages hiden
+}
+
+function showSensibleStuff() {
+    document.getElementById("editProfileButton").style.display = "block";       //Edit-Profile-Knopf zeigen
+    document.getElementById("addFriendInputLabel").style.display = "inline";           //Freund hinzufügen Label zeigen
+    document.getElementById("addFriendInput").style.display = "inline";          //Freund hinzufügen Searchbar zeigen
+    document.getElementById("addFriendButton").style.display = "inline";         //Freund hinzufügen Button zeigen
+    document.getElementById("backToMyProfileButton").style.display = "none";  //Zurück Button verstecken
+    //chatStuff zeigen
+    document.getElementById("chatWithWhoInputLabel").style.display = "inline";
+    document.getElementById("chatWithWhoInput").style.display = "inline";
+    document.getElementById("chatWithWhoButton").style.display = "inline";
+    document.getElementById("sendMessageInput").style.display = "inline";
+    document.getElementById("sendMessageButton").style.display = "inline";
+    document.getElementById("chatMessages_div").style.display = "block"; //alles Messages zeigen
 }
 
 //löscht Freundesliste um nur Freundesliste des Freundes zu sehen
