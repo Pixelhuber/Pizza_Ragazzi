@@ -19,21 +19,23 @@ function getMessagesFromDatabase(username) {
         .then(result => displayChatMessages(result, username))
 }
 
-function sendMessage(username) {
+function sendMessage(message) {
     fetch("/profile/sendMessage", {
         method: 'POST',
-        body: JSON.stringify(username),
+        body: JSON.stringify({
+            receiver: chatPartner,
+            message_text: message
+        }),
         headers: {
             "Content-Type": "application/json"
         },
         credentials: 'include'
-    }).then(result => result.text())
-        .then(result => console.log(result))
+    })
 }
 
 function displayChatMessages(messages, user2Username) {
     if (messages != null && messages !== 'undefined') {
-        this.chatPartner = user2Username;  //chatPartner-Variable in Zeile 1 zuweisen
+        chatPartner = user2Username;  //chatPartner-Variable in Zeile 1 zuweisen
         document.getElementById("chatMessages_div").innerHTML = ''; //alten Chat löschen
 
         document.getElementById("chatWithWhoInput").style.borderColor = "black"; //roten Rand des Inputs entfernen, falls er da war
@@ -71,7 +73,5 @@ function displayChatMessages(messages, user2Username) {
     else {  //nicht befreundet oder Übergabeparameter == null
         document.getElementById("loading_messages").style.display = "none";
         document.getElementById("chatWithWhoInput").style.borderColor = "red"; //roten Rand beim Input hinzufügen
-        document.getElementById("sendMessageInput").style.display = "none"; //SendeInput verstecken
-        document.getElementById("sendMessageButton").style.display = "none"; //SendeButton verstecken
     }
 }

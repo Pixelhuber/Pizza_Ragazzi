@@ -76,6 +76,9 @@ function setup() {
     document.getElementById("chatWithWhoButton").onclick = function () { //onclick für Chat mit Freund input (Wem willst du schreiben?)
         setupChatStuff(document.getElementById("chatWithWhoInput").value)
     };
+    document.getElementById("sendMessageButton").onclick = function () { //onclick für Chat sendMessage
+        sendMessage(document.getElementById("sendMessageInput").value)
+    };
 
     getUsernameFromDatabase();
     getGesamtpunkteFromDatabase();

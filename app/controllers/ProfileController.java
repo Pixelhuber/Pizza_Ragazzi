@@ -136,6 +136,12 @@ public class ProfileController extends Controller {
         return ok(json);
     }
 
+    public Result sendMessage(Http.Request request) {
+        String email = request.session().get("email").get();
+        UserFactory.User sender = userFactory.getUserByEmail(email);
+        return ok();
+    }
+
     public Result addFriend(Http.Request request) {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);

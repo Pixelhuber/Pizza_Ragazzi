@@ -47,7 +47,9 @@ GET     /profile/getProfilePic      controllers.ProfileController.getProfilePict
 
 GET     /profile/getAchievements    controllers.ProfileController.getAchievementsFromDatabase(request: Request)
 
-POST     /profile/getMessages        controllers.ProfileController.getMessagesFromDatabase(request: Request)
+POST    /profile/getMessages        controllers.ProfileController.getMessagesFromDatabase(request: Request)
+
+POST    /profile/sendMessage        controllers.ProfileController.sendMessage(request: Request)
 
 POST    /profile/addFriend          controllers.ProfileController.addFriend(request: Request)
 
