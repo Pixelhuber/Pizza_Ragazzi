@@ -95,6 +95,22 @@ class AudioPlayer {
         sound.volume = 0.4;
         sound.play();
     }
+
+    static round_lastFive() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/round_lastFive.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+
+    static round_end() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/round_end.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
 }
 
 
@@ -1290,13 +1306,16 @@ function manageRushCountdown(seconds, timerContainerId) {
             // @Override
             onCountdownStart() {
                 pizzaRushRunning = true;
-                document.getElementById("startStop_overlay").style.display = 'none';
+                document.getElementById("startStop_overlay").style.visibility = "hidden";
+
+                this.onCountdownInterval();
 
                 OrderHandler.getInstance().start();
             }
 
             // @Override
             onCountdownInterval() {
+
                 // Time calculations
                 let secondsLeft = this.durationInSeconds - this.secondsPassed;
                 let minutes = "" + Math.floor(secondsLeft / 60);
@@ -1304,20 +1323,28 @@ function manageRushCountdown(seconds, timerContainerId) {
                 if (seconds.toString().length < 2)
                     seconds = "0" + seconds;
 
+                if (secondsLeft < 6)
+                    AudioPlayer.round_lastFive();
+
                 // Display the result in the affectedObject
                 this.affectedObject.innerHTML = "TIME: " + minutes + ":" + seconds;
+
+
             }
 
             // @Override
             // Hier könnte später die PizzaRush Runde beendet werden
             async onCountdownEnd() {
+                AudioPlayer.round_end();
+
                 pizzaRushRunning = false;
-                document.getElementById("startStop_overlay").style.display = 'block';
-                document.getElementById("startStop_overlay_text").innerHTML = "Round over!<br/>You scored " + await getCurrentPoints() + " Points<br/>Click to play again";
+                document.getElementById("startStop_overlay").style.visibility = "visible";
+                document.getElementById("startStop_overlay_text").innerHTML = "Round over!<br/>You scored " + await getCurrentPoints() + " Points";
+                document.getElementById("startStop_overlay_button").innerHTML = "Play Again!"
 
                 this.affectedObject.innerHTML = "END";
                 await endGame();
-                document.getElementById("startStop_overlay").onclick = restartGame;
+                document.getElementById("startStop_overlay_button").onclick = restartGame;
             }
         }
 

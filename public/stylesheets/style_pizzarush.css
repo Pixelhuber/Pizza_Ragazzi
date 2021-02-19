@@ -233,25 +233,45 @@ div.draggable > img{
 
 #startStop_overlay {
     position: fixed; /* Sit on top of the page content */
-    display: block; /* Hidden by default */
+    display: flex; /* Hidden by default */
+    flex-direction: column;
+    align-items: center;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     background-color: rgba(0,0,0,0.5); /* Black background with 50% opacity */
     z-index: 90; /* Specify a stack order in case you're using a different order for other elements */
-    cursor: pointer; /* Add a pointer on hover */
 }
 
 #startStop_overlay_text{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    font-size: 50px;
     text-align: center;
+    font-size: 3em;
     color: white;
-    transform: translate(-50%,-50%);
-    -ms-transform: translate(-50%,-50%);
+
+    margin-top: auto;
+}
+
+#startStop_overlay_button{
+    font-size: 2em;
+    text-transform: uppercase;
+    
+    width: 25vw;
+    height: 10vh;
+    margin-bottom: auto;
+    margin-top: 20px;
+
+    border: 4px solid white;
+    background-color: transparent;
+    color: white;
+
+    cursor: pointer;
+}
+
+#startStop_overlay_button:hover{
+
+    background-color: white;
+    color: black;
 }
 
 .miniGameButton{
