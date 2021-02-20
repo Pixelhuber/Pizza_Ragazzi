@@ -41,6 +41,8 @@ GET     /profile/getTotalPoints         controllers.ProfileController.getGesamtp
 
 GET     /profile/getHighScore           controllers.ProfileController.getHighscoreFromDatabase(request: Request)
 
+GET     /profile/getTierName            controllers.ProfileController.getTierNameFromDatabase(request: Request)
+
 GET     /profile/getProfilePic      controllers.ProfileController.getProfilePictureFromDatabase(request: Request)
 
 GET     /profile/getAchievements    controllers.ProfileController.getAchievementsFromDatabase(request: Request)

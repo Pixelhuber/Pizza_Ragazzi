@@ -118,7 +118,7 @@ function refreshChat() {
         if (chatPartner !== undefined && chatPartner !== null && !viewOnly) {
             getMessagesFromDatabase(chatPartner, false);
         }
-    }, 5000);
+    }, 2000);
 }
 
 function displayChatMessages(messages, user2Username) {

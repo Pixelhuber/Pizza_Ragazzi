@@ -305,6 +305,7 @@ function showSensibleStuff() {
     if (chatPartner !== undefined) {
         document.getElementById("sendMessageInput").style.display = "inline";
         document.getElementById("sendMessageButton").style.display = "inline";
+        document.getElementById("chat_heading").textContent = "Chat mit " + chatPartner.toString().toUpperCase();  //Überschrift mit Username2
     }
     document.getElementById("chatMessages_div").style.display = "block"; //alles Messages zeigen
 }
