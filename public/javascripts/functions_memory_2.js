@@ -63,12 +63,12 @@ class AbstractMemoryCard {
 
     // private
     showContent() {
-        //TODO: Display the content of the card
+        document.getElementById('teig').p.style.display = "none";
     }
 
     // private
     hideContent() {
-        //TODO: Hide the content of the card
+        document.getElementById('teig').p.style.display = "block";
     }
 
     createGameElement() {} // wird in Unterklassen spezifiziert
@@ -86,7 +86,8 @@ class NameCard extends AbstractMemoryCard {
     constructor(memoryIngredient, card_number) {
         super(memoryIngredient, card_number);
 
-        this.ingredient_name = memoryIngredient.name;
+        //this.ingredient_name = memoryIngredient.name;
+        this.ingredient_name = "Platzhalter name";
         this.ingredient_picture = document.createElement('img');
         this.ingredient_picture.setAttribute("src", memoryIngredient.picture_string);
 
@@ -98,10 +99,18 @@ class NameCard extends AbstractMemoryCard {
         // TODO: Create <div> however you want
         const tmp = document.createElement('div');
         tmp.setAttribute('class', 'memoryCard');
+        tmp.setAttribute('id', 'teig');
+        tmp.text = document.createElement('p');
+
+        tmp.text.innerHTML = this.ingredient_name;
 
         tmp.setAttribute("onclick", "CardHandler.flipCard(" + this.card_number + ")");
 
+        tmp.appendChild(tmp.text);
+
         document.getElementById('memoryBox').appendChild(tmp);
+
+        this.hideContent();
     }
 }
 
@@ -124,10 +133,18 @@ class DescriptionCard extends AbstractMemoryCard {
 
         const tmp = document.createElement('div');
         tmp.setAttribute('class', 'memoryCard');
+        tmp.setAttribute('id', this.card_number);
+        tmp.text = document.createElement('p');
+
+        tmp.text.innerHTML = this.ingredient_description;
 
         tmp.setAttribute("onclick", "CardHandler.flipCard(" + this.card_number + ")");
 
+        tmp.appendChild(tmp.text);
+
         document.getElementById('memoryBox').appendChild(tmp);
+
+        this.hideContent();
     }
 }
 
