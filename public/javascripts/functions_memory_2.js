@@ -53,7 +53,8 @@ class AbstractMemoryCard {
     toggleFlipped() {
         this.isFlipped = !this.isFlipped;
 
-        CardHandler.handle();
+        if (CardHandler.handle())
+            this.isFlipped = !this.isFlipped;
 
         if (this.isFlipped)
             this.showContent();
@@ -63,12 +64,12 @@ class AbstractMemoryCard {
 
     // private
     showContent() {
-        document.getElementById('teig').p.style.display = "none";
+        document.getElementById(String(this.card_number)).text.style.display = "block";
     }
 
     // private
     hideContent() {
-        document.getElementById('teig').p.style.display = "block";
+        document.getElementById(String(this.card_number)).text.style.display = "none";
     }
 
     createGameElement() {} // wird in Unterklassen spezifiziert
@@ -86,8 +87,7 @@ class NameCard extends AbstractMemoryCard {
     constructor(memoryIngredient, card_number) {
         super(memoryIngredient, card_number);
 
-        //this.ingredient_name = memoryIngredient.name;
-        this.ingredient_name = "Platzhalter name";
+        this.ingredient_name = memoryIngredient.name;
         this.ingredient_picture = document.createElement('img');
         this.ingredient_picture.setAttribute("src", memoryIngredient.picture_string);
 
@@ -99,7 +99,7 @@ class NameCard extends AbstractMemoryCard {
         // TODO: Create <div> however you want
         const tmp = document.createElement('div');
         tmp.setAttribute('class', 'memoryCard');
-        tmp.setAttribute('id', 'teig');
+        tmp.setAttribute('id', this.card_number);
         tmp.text = document.createElement('p');
 
         tmp.text.innerHTML = this.ingredient_name;
@@ -161,12 +161,19 @@ class CardHandler {
                 numberFlippedCards++;
         })
 
-        if (numberFlippedCards > 2)
+        if (numberFlippedCards > 2){
             this.hideAllCards();
+            return true;                            //informiert toggleFlipped, ob alle Karten umgedreht wurden (dann muss aktuelle Karte nochmal umgedreht werden)
+        } else if (numberFlippedCards == 2){
+            let that = this;
+            setTimeout(function(){that.checkPair();}, 1500);
+        } else {
+            return false;
+        }
     }
 
     static flipCard(number) {
-        memoryCards[number].toggleFlipped();
+        memoryCards[number-1].toggleFlipped();
 
     }
 
@@ -175,6 +182,57 @@ class CardHandler {
             item.setFlipped(false);
         })
     }
+
+    static checkPair(){
+        let indicesOfFlippedCards = this.getIndicesOfFlippedCards();
+        if (memoryCards[indicesOfFlippedCards[0]].memoryIngredient.name == memoryCards[indicesOfFlippedCards[1]].memoryIngredient.name){
+            this.deletePair(indicesOfFlippedCards);
+        } else {
+            this.hideAllCards();
+        }
+    }
+
+    static getIndicesOfFlippedCards(){
+        let indicesOfFlippedCards = [];
+        memoryCards.forEach(function (item,index) {
+            if (item.isFlipped){
+                indicesOfFlippedCards.push(index)
+            }
+        })
+        return indicesOfFlippedCards;
+    }
+    static deletePair(indicesOfFlippedCards){
+        document.getElementById(memoryCards[indicesOfFlippedCards[0]].card_number).remove();        //Löschen der jeweiligen Divs
+        document.getElementById(memoryCards[indicesOfFlippedCards[1]].card_number).remove();
+
+        delete memoryCards[indicesOfFlippedCards[0]];                                               //Löschen der MemoryCards im Array
+        delete memoryCards[indicesOfFlippedCards[1]];
+
+
+    }
+
+    static shuffle() {
+        let memoryBox = document.getElementById("memoryBox");
+        let divArray = Array.prototype.slice.call(memoryBox.getElementsByClassName('memoryCard'));
+        divArray.forEach(function(item){
+            memoryBox.removeChild(item);
+        })
+        this.shuffleDivArray(divArray);
+        divArray.forEach(function(item){
+            memoryBox.appendChild(item);
+        })
+    }
+
+    static shuffleDivArray(divArray) {
+        for (let i = divArray.length - 1; i > 0; i--) {
+            let j = Math.floor(Math.random() * (i + 1));
+            let temp = divArray[i];
+            divArray[i] = divArray[j];
+            divArray[j] = temp;
+        }
+        return divArray;
+    }
+
 }
 
 // DATABASE STUFF -----------------------------------------------------------------------------------------------------
@@ -182,15 +240,21 @@ class CardHandler {
 async function createMemoryCards() {
     const ingredients = await getMemoryIngredients();
 
+
     ingredients.forEach(function (item) {
-        const memoryIngredient = new MemoryIngredient(item.id, item.name, item.description, item.picture_string)
+        const memoryIngredient = new MemoryIngredient(item.id, item.name, item.name, item.picture_string)
         memoryCards.push(AbstractMemoryCard.createNameCard(memoryIngredient));
         memoryCards.push(AbstractMemoryCard.createFactCard(memoryIngredient));
     })
+    CardHandler.shuffle();
 }
+
+
 
 async function getMemoryIngredients() {
 
     let response = await fetch("memory/getMemoryIngredients");
     return response.json();
 }
+
+
