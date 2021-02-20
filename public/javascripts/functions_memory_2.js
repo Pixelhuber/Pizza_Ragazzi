@@ -3,13 +3,13 @@ class MemoryIngredient {
     id;
     name;
     description;
-    picture_string;
+    picture;
 
     constructor(id, name, description, picture_src) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.picture_string = picture_src;
+        this.picture = picture_src;
     }
 }
 
@@ -64,11 +64,13 @@ class AbstractMemoryCard {
 
     // private
     showContent() {
+        document.getElementById(String(this.card_number)).img.display = "block";
         document.getElementById(String(this.card_number)).text.style.display = "block";
     }
 
     // private
     hideContent() {
+        document.getElementById(String(this.card_number)).children.display = "none";
         document.getElementById(String(this.card_number)).text.style.display = "none";
     }
 
@@ -89,7 +91,7 @@ class NameCard extends AbstractMemoryCard {
 
         this.ingredient_name = memoryIngredient.name;
         this.ingredient_picture = document.createElement('img');
-        this.ingredient_picture.setAttribute("src", memoryIngredient.picture_string);
+        this.ingredient_picture.setAttribute("src", memoryIngredient.picture);
 
         this.createGameElement();
     }
@@ -100,17 +102,27 @@ class NameCard extends AbstractMemoryCard {
         const tmp = document.createElement('div');
         tmp.setAttribute('class', 'memoryCard');
         tmp.setAttribute('id', this.card_number);
-        tmp.text = document.createElement('p');
+        //tmp.text = document.createElement('p');
 
-        tmp.text.innerHTML = this.ingredient_name;
+        //tmp.text.innerHTML = this.ingredient_name;
+
+        tmp.appendChild(this.ingredient_picture);
+        this.ingredient_picture.style.maxWidth = '40%';
 
         tmp.setAttribute("onclick", "CardHandler.flipCard(" + this.card_number + ")");
-
-        tmp.appendChild(tmp.text);
 
         document.getElementById('memoryBox').appendChild(tmp);
 
         this.hideContent();
+    }
+    // private
+    showContent() {
+        this.ingredient_picture.style.display = "block";
+    }
+
+    // private
+    hideContent() {
+        this.ingredient_picture.style.display = "none";
     }
 }
 
@@ -145,6 +157,16 @@ class DescriptionCard extends AbstractMemoryCard {
         document.getElementById('memoryBox').appendChild(tmp);
 
         this.hideContent();
+    }
+
+    // private
+    showContent() {
+        document.getElementById(String(this.card_number)).text.style.display = "block";
+    }
+
+    // private
+    hideContent() {
+        document.getElementById(String(this.card_number)).text.style.display = "none";
     }
 }
 
@@ -205,8 +227,8 @@ class CardHandler {
         //document.getElementById(memoryCards[indicesOfFlippedCards[0]].card_number).remove();        //Löschen der jeweiligen Divs
         //document.getElementById(memoryCards[indicesOfFlippedCards[1]].card_number).remove();
 
-        document.getElementById(memoryCards[indicesOfFlippedCards[0]].card_number).style.backgroundColor = "red"       //Löschen der jeweiligen Divs
-        document.getElementById(memoryCards[indicesOfFlippedCards[1]].card_number).style.backgroundColor = "red"
+        document.getElementById(memoryCards[indicesOfFlippedCards[0]].card_number).style.backgroundColor = "rgba(150, 150, 150, 0.2)";       //Farbmakierung, Karten nicht mehr im Spiel
+        document.getElementById(memoryCards[indicesOfFlippedCards[1]].card_number).style.backgroundColor = "rgba(150, 150, 150, 0.2)";
 
         delete memoryCards[indicesOfFlippedCards[0]];                                               //Löschen der MemoryCards im Array
         delete memoryCards[indicesOfFlippedCards[1]];
@@ -245,7 +267,7 @@ async function createMemoryCards() {
 
 
     ingredients.forEach(function (item) {
-        const memoryIngredient = new MemoryIngredient(item.id, item.name, item.name, item.picture_string)
+        const memoryIngredient = new MemoryIngredient(item.id, item.name, item.name, item.picture)
         memoryCards.push(AbstractMemoryCard.createNameCard(memoryIngredient));
         memoryCards.push(AbstractMemoryCard.createFactCard(memoryIngredient));
     })

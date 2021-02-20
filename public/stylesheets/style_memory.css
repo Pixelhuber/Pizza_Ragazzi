@@ -33,7 +33,7 @@ body{
 
     margin: 10px;
 
-    background-color: #2d6201;
+    background: rgba(150, 150, 150, 1);
     border: 1px solid grey;
 }
 
@@ -44,7 +44,7 @@ body{
     justify-content: center;
 
     width: 50vw;
-    max-height: 80vh;
+    max-height: 90vh;
 
     overflow: hidden;
 

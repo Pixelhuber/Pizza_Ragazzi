@@ -31,7 +31,7 @@ public class MemoryFactory {
 
         return db.withConnection(conn -> {
             List<MemoryIngredient> result = new ArrayList<>();
-            String sql = "SELECT idIngredient, name, picture_raw, description FROM Ingredient JOIN Memory M on Ingredient.idIngredient = M.Ingredient_fk WHERE Tier_idTier <= (SELECT Tier_idTier FROM `User` WHERE email = ?)";
+            String sql = "SELECT idIngredient, name, description, picture_raw FROM Ingredient JOIN Memory M on Ingredient.idIngredient = M.Ingredient_fk WHERE Tier_idTier <= (SELECT Tier_idTier FROM `User` WHERE email = ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
