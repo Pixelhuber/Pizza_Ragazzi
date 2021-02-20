@@ -97,8 +97,11 @@ class NameCard extends AbstractMemoryCard {
 
         // TODO: Create <div> however you want
         const tmp = document.createElement('div');
+        tmp.setAttribute('class', 'memoryCard');
 
         tmp.setAttribute("onclick", "CardHandler.flipCard(" + this.card_number + ")");
+
+        document.getElementById('memoryBox').appendChild(tmp);
     }
 }
 
@@ -119,7 +122,12 @@ class DescriptionCard extends AbstractMemoryCard {
 
     createGameElement() {
 
-        // TODO: Create <div> however you want
+        const tmp = document.createElement('div');
+        tmp.setAttribute('class', 'memoryCard');
+
+        tmp.setAttribute("onclick", "CardHandler.flipCard(" + this.card_number + ")");
+
+        document.getElementById('memoryBox').appendChild(tmp);
     }
 }
 
@@ -141,6 +149,7 @@ class CardHandler {
     }
 
     static flipCard(number) {
+        memoryCards[number].toggleFlipped();
 
     }
 
