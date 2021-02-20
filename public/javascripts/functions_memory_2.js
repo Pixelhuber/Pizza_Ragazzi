@@ -62,17 +62,6 @@ class AbstractMemoryCard {
             this.hideContent();
     }
 
-    // private
-    showContent() {
-        document.getElementById(String(this.card_number)).img.display = "block";
-        document.getElementById(String(this.card_number)).text.style.display = "block";
-    }
-
-    // private
-    hideContent() {
-        document.getElementById(String(this.card_number)).children.display = "none";
-        document.getElementById(String(this.card_number)).text.style.display = "none";
-    }
 
     createGameElement() {} // wird in Unterklassen spezifiziert
 }
@@ -98,7 +87,6 @@ class NameCard extends AbstractMemoryCard {
 
     createGameElement() {
 
-        // TODO: Create <div> however you want
         const tmp = document.createElement('div');
         tmp.setAttribute('class', 'memoryCard');
         tmp.setAttribute('id', this.card_number);
@@ -118,11 +106,13 @@ class NameCard extends AbstractMemoryCard {
     // private
     showContent() {
         this.ingredient_picture.style.display = "block";
+        document.getElementById(this.card_number).style.backgroundColor = "rgba(150, 150, 150, 0.1)";
     }
 
     // private
     hideContent() {
         this.ingredient_picture.style.display = "none";
+        document.getElementById(this.card_number).style.backgroundColor = "rgba(150, 150, 150, 0.5)";
     }
 }
 
@@ -162,11 +152,13 @@ class DescriptionCard extends AbstractMemoryCard {
     // private
     showContent() {
         document.getElementById(String(this.card_number)).text.style.display = "block";
+        document.getElementById(this.card_number).style.backgroundColor = "rgba(150, 150, 150, 0.1)";
     }
 
     // private
     hideContent() {
         document.getElementById(String(this.card_number)).text.style.display = "none";
+        document.getElementById(this.card_number).style.backgroundColor = "rgba(150, 150, 150, 0.5)";
     }
 }
 
@@ -177,6 +169,8 @@ class CardHandler {
     static handle() {
 
         let numberFlippedCards = 0;
+
+        clearTimeout();
 
         memoryCards.forEach(function (item) {
             if (item.isFlipped)
@@ -207,7 +201,7 @@ class CardHandler {
     static checkPair(){
         let indicesOfFlippedCards = this.getIndicesOfFlippedCards();
         if (memoryCards[indicesOfFlippedCards[0]].memoryIngredient.name == memoryCards[indicesOfFlippedCards[1]].memoryIngredient.name){
-            this.deletePair(indicesOfFlippedCards);
+            this.removePair(indicesOfFlippedCards);
         } else {
             let that = this;
             setTimeout(function(){that.hideAllCards();}, 1500);
@@ -223,12 +217,10 @@ class CardHandler {
         })
         return indicesOfFlippedCards;
     }
-    static deletePair(indicesOfFlippedCards){
+    static removePair(indicesOfFlippedCards){
         //document.getElementById(memoryCards[indicesOfFlippedCards[0]].card_number).remove();        //Löschen der jeweiligen Divs
         //document.getElementById(memoryCards[indicesOfFlippedCards[1]].card_number).remove();
 
-        document.getElementById(memoryCards[indicesOfFlippedCards[0]].card_number).style.backgroundColor = "rgba(150, 150, 150, 0.2)";       //Farbmakierung, Karten nicht mehr im Spiel
-        document.getElementById(memoryCards[indicesOfFlippedCards[1]].card_number).style.backgroundColor = "rgba(150, 150, 150, 0.2)";
 
         delete memoryCards[indicesOfFlippedCards[0]];                                               //Löschen der MemoryCards im Array
         delete memoryCards[indicesOfFlippedCards[1]];
