@@ -19,18 +19,45 @@ function getMessagesFromDatabase(username) {
         .then(result => displayChatMessages(result, username))
 }
 
-function sendMessage(message) {
-    fetch("/profile/sendMessage", {
-        method: 'POST',
-        body: JSON.stringify({
-            receiver: chatPartner,
-            message_text: message
-        }),
-        headers: {
-            "Content-Type": "application/json"
-        },
-        credentials: 'include'
-    })
+function sendMessage(message, time) {
+    if (message !== "") {
+        document.getElementById("sendMessageInput").value = ""; //Input clearen
+        appendMessageToChat(message, time);
+        //automatically scroll down
+        let chat_div = document.getElementById("chatMessages_div");
+        chat_div.scrollTo(0, chat_div.scrollHeight);
+
+        fetch("/profile/sendMessage", {
+            method: 'POST',
+            body: JSON.stringify({
+                receiver: chatPartner,
+                message_text: message,
+                time: time
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: 'include'
+        })
+    }
+}
+
+function appendMessageToChat(message, time) {
+    const container = document.createElement('div');
+
+    const content = document.createElement('p');
+    content.textContent = message;
+
+    const timeSpan = document.createElement('span');
+    var date = new Date(time);
+    timeSpan.textContent = date.toLocaleTimeString() + " " + date.toLocaleDateString();
+
+    container.setAttribute('class', 'container darker');
+    timeSpan.setAttribute('class', 'time-left');
+
+    container.appendChild(content);
+    container.appendChild(timeSpan);
+    document.getElementById("chatMessages_div").appendChild(container);
 }
 
 function displayChatMessages(messages, user2Username) {
@@ -53,7 +80,7 @@ function displayChatMessages(messages, user2Username) {
 
             const timeSpan = document.createElement('span');
             var date = new Date(item.time)
-            timeSpan.textContent = date.getHours() + ":" + date.getMinutes() + " " + date.toDateString();
+            timeSpan.textContent = date.toLocaleTimeString() + " " + date.toLocaleDateString();
 
             if (item.senderName.toLowerCase() === user2Username.toLowerCase()) {  //falls ausgewählter Freund Nachricht gesendet hat
                 container.setAttribute('class', 'container');

@@ -77,7 +77,8 @@ function setup() {
         setupChatStuff(document.getElementById("chatWithWhoInput").value)
     };
     document.getElementById("sendMessageButton").onclick = function () { //onclick für Chat sendMessage
-        sendMessage(document.getElementById("sendMessageInput").value)
+        let currentDate = new Date();
+        sendMessage(document.getElementById("sendMessageInput").value, currentDate.getTime());
     };
 
     getUsernameFromDatabase();
@@ -267,8 +268,10 @@ function showSensibleStuff() {
     document.getElementById("chatWithWhoInputLabel").style.display = "inline";
     document.getElementById("chatWithWhoInput").style.display = "inline";
     document.getElementById("chatWithWhoButton").style.display = "inline";
-    document.getElementById("sendMessageInput").style.display = "inline";
-    document.getElementById("sendMessageButton").style.display = "inline";
+    if (chatPartner !== undefined) {
+        document.getElementById("sendMessageInput").style.display = "inline";
+        document.getElementById("sendMessageButton").style.display = "inline";
+    }
     document.getElementById("chatMessages_div").style.display = "block"; //alles Messages zeigen
 }
 

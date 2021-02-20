@@ -18,6 +18,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 
 @Singleton
@@ -400,6 +404,19 @@ public class UserFactory {
                 });
             }
             return null;
+        }
+
+        public void sendMessage(int receiverId, Timestamp timestamp, String message_text) {
+            db.withConnection(conn -> {
+                    String sql = "INSERT INTO `Message` (sender, receiver, time, message_text ) VALUES (?, ?, ?, ?)";
+                    PreparedStatement stmt = conn.prepareStatement(sql);
+                    stmt.setInt(1, this.id);
+                    stmt.setInt(2, receiverId);
+                    stmt.setObject(3, timestamp);
+                    stmt.setString(4, message_text);
+                    stmt.executeUpdate();
+                    stmt.close();
+                });
         }
 
         public String getNameFromTierId() {

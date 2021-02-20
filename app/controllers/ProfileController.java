@@ -17,6 +17,11 @@ import viewmodels.UserViewModel;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -139,6 +144,11 @@ public class ProfileController extends Controller {
     public Result sendMessage(Http.Request request) {
         String email = request.session().get("email").get();
         UserFactory.User sender = userFactory.getUserByEmail(email);
+        UserFactory.User receiver = userFactory.getUserByUsername(request.body().asJson().get("receiver").asText());
+        String message_text = request.body().asJson().get("message_text").asText();
+        long time = request.body().asJson().get("time").asLong();
+        Timestamp timestampSQL = new Timestamp(time + 3600000); //milliseconds to add for localTime
+        sender.sendMessage(receiver.getId(), timestampSQL, message_text);
         return ok();
     }
 

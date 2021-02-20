@@ -76,7 +76,7 @@ function beginHoverEffect(elm) {
 
 function endHoverEffect(elm) {
     if (!viewOnly) {
-        elm.style.backgroundColor = "#eeeeee";
+        elm.style.backgroundColor = "#dbdbdb";
         elm.childNodes[2].style.display = "none";
         let name = elm.childNodes[1];
         name.style.display = "block";
