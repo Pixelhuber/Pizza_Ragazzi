@@ -73,13 +73,7 @@ $(function () {
 });
 
 function setup() {
-    document.getElementById("chatWithWhoButton").onclick = function () { //onclick für Chat mit Freund input (Wem willst du schreiben?)
-        setupChatStuff(document.getElementById("chatWithWhoInput").value)
-    };
-    document.getElementById("sendMessageButton").onclick = function () { //onclick für Chat sendMessage
-        let currentDate = new Date();
-        sendMessage(document.getElementById("sendMessageInput").value, currentDate.getTime());
-    };
+    setupButtonOnclicksAndInputs();  //Buttons funktional machen
 
     getUsernameFromDatabase();
     getGesamtpunkteFromDatabase();
@@ -89,6 +83,46 @@ function setup() {
     getProfilePicFromDatabase();
     getAchievementsFromDatabase();
     getFriendsData();
+}
+
+function setupButtonOnclicksAndInputs() {
+    document.getElementById("chatWithWhoButton").onclick = function () { //onclick für Chat mit Freund input (Wem willst du schreiben?)
+        setupChatStuff(document.getElementById("chatWithWhoInput").value)
+    };
+    document.getElementById("sendMessageButton").onclick = function () { //onclick für Chat sendMessage
+        let currentDate = new Date();
+        sendMessage(document.getElementById("sendMessageInput").value, currentDate.getTime());
+    };
+    //Enter-Funktionalität
+    document.getElementById("sendMessageInput").addEventListener("keyup", function(event) {
+        // Number 13 is the "Enter" key on the keyboard
+        if (event.code === 'Enter') {
+            // Cancel the default action, if needed
+            event.preventDefault();
+            // Trigger the button element with a click
+            document.getElementById("sendMessageButton").click();
+        }
+    });
+    //Enter-Funktionalität
+    document.getElementById("chatWithWhoInput").addEventListener("keyup", function(event) {
+        // Number 13 is the "Enter" key on the keyboard
+        if (event.code === 'Enter') {
+            // Cancel the default action, if needed
+            event.preventDefault();
+            // Trigger the button element with a click
+            document.getElementById("chatWithWhoButton").click();
+        }
+    });
+    //Enter-Funktionalität
+    document.getElementById("addFriendInput").addEventListener("keyup", function(event) {
+        // Number 13 is the "Enter" key on the keyboard
+        if (event.code === 'Enter') {
+            // Cancel the default action, if needed
+            event.preventDefault();
+            // Trigger the button element with a click
+            document.getElementById("addFriendButton").click();
+        }
+    });
 }
 
 //TODO update username und profilepic zusammenlegen

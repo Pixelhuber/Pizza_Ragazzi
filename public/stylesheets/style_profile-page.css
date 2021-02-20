@@ -98,7 +98,7 @@
 }
 
 #container_friends{
-    max-height: 38vh;
+    max-height: 39vh;
 }
 
 #addFriendInput {
@@ -168,7 +168,7 @@
 }
 
 #chatMessages_div {
-    max-height: 38vh;
+    max-height: 34vh;
     overflow-y: auto;
 }
 
