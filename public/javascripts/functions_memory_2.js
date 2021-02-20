@@ -165,8 +165,7 @@ class CardHandler {
             this.hideAllCards();
             return true;                            //informiert toggleFlipped, ob alle Karten umgedreht wurden (dann muss aktuelle Karte nochmal umgedreht werden)
         } else if (numberFlippedCards == 2){
-            let that = this;
-            setTimeout(function(){that.checkPair();}, 1500);
+            this.checkPair();
         } else {
             return false;
         }
@@ -188,7 +187,8 @@ class CardHandler {
         if (memoryCards[indicesOfFlippedCards[0]].memoryIngredient.name == memoryCards[indicesOfFlippedCards[1]].memoryIngredient.name){
             this.deletePair(indicesOfFlippedCards);
         } else {
-            this.hideAllCards();
+            let that = this;
+            setTimeout(function(){that.hideAllCards();}, 1500);
         }
     }
 
@@ -202,8 +202,11 @@ class CardHandler {
         return indicesOfFlippedCards;
     }
     static deletePair(indicesOfFlippedCards){
-        document.getElementById(memoryCards[indicesOfFlippedCards[0]].card_number).remove();        //Löschen der jeweiligen Divs
-        document.getElementById(memoryCards[indicesOfFlippedCards[1]].card_number).remove();
+        //document.getElementById(memoryCards[indicesOfFlippedCards[0]].card_number).remove();        //Löschen der jeweiligen Divs
+        //document.getElementById(memoryCards[indicesOfFlippedCards[1]].card_number).remove();
+
+        document.getElementById(memoryCards[indicesOfFlippedCards[0]].card_number).style.backgroundColor = "red"       //Löschen der jeweiligen Divs
+        document.getElementById(memoryCards[indicesOfFlippedCards[1]].card_number).style.backgroundColor = "red"
 
         delete memoryCards[indicesOfFlippedCards[0]];                                               //Löschen der MemoryCards im Array
         delete memoryCards[indicesOfFlippedCards[1]];
