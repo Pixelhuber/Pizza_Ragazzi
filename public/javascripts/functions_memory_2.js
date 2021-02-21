@@ -259,7 +259,7 @@ async function createMemoryCards() {
 
 
     ingredients.forEach(function (item) {
-        const memoryIngredient = new MemoryIngredient(item.id, item.name, item.name, item.picture)
+        const memoryIngredient = new MemoryIngredient(item.id, item.name, item.description, item.picture)
         memoryCards.push(AbstractMemoryCard.createNameCard(memoryIngredient));
         memoryCards.push(AbstractMemoryCard.createFactCard(memoryIngredient));
     })

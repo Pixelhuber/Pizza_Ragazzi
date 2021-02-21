@@ -74,7 +74,7 @@ public class MemoryFactory {
 
             this.id = rs.getInt("idIngredient");
             this.name = rs.getString("name");
-            this.name = rs.getString("description");
+            this.description = rs.getString("description");
 
             BufferedInputStream bis = new BufferedInputStream(rs.getBinaryStream("picture_raw"));
             try {
