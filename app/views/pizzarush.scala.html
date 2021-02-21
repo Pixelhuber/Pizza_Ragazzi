@@ -22,8 +22,11 @@
         </div>
 
         <div id="startStop_overlay">
-            <div id="startStop_overlay_text">Welcome to Pizzarush!</div>
-            <button id="startStop_overlay_button" onclick="manageRushCountdown('rushCountdown')">Start game</button>
+
+                <div id="startStop_overlay_text">Welcome to Pizzarush!</div>
+                <button id="startStop_overlay_button" onclick="manageRushCountdown('rushCountdown')">Start game</button>
+                <button onclick="location.href='menu'">Back to menu</button>
+
         </div>
 
         <div id="miniGame_layer">
@@ -33,9 +36,7 @@
                 </div>
                 <div id="miniGame_sideBar">
                     <div id="miniGame_sideBar_counter"></div>
-                    <button id="miniGame_sideBar_closeButton" onclick="stopMiniGame()">
-                        End Game
-                    </button>
+                    <button id="miniGame_sideBar_closeButton" onclick="stopMiniGame()">End Game</button>
                 </div>
             </div>
         </div>
