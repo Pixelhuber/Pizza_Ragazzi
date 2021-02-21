@@ -1,6 +1,9 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import factory.UserFactory;
+import models.Achievement;
+import models.Message;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
@@ -14,6 +17,12 @@ import viewmodels.UserViewModel;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -86,6 +95,18 @@ public class ProfileController extends Controller {
         return ok(Integer.toString(user.getHighScore()));
     }
 
+    public Result getTierNameFromDatabase(Http.Request request) {
+        String email = request.session().get("email").get();
+        UserFactory.User user = userFactory.getUserByEmail(email);
+        return ok(user.getNameFromTierId());
+    }
+
+    public Result getProfilePictureFromDatabase(Http.Request request) throws IOException {
+        String email = request.session().get("email").get();
+        UserFactory.User user = userFactory.getUserByEmail(email);
+        return ok(Json.toJson(user.getProfilePictureSrc()));
+    }
+
     public Result getPasswordFromSession(Http.Request request) {
 
         return request
@@ -99,5 +120,123 @@ public class ProfileController extends Controller {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(Json.toJson(user.getFriendsData()));
+    }
+
+    public Result getAchievementsFromDatabase(Http.Request request) {
+        String email = request.session().get("email").get();
+        UserFactory.User user = userFactory.getUserByEmail(email);
+        List<Achievement> achievements = user.getAchievements();
+        String json = listToJson(achievements);
+        return ok(json);
+    }
+
+    //gibt Messages mit bestimmtem Freund zurück
+    public Result getMessagesFromDatabase(Http.Request request) {
+        String email = request.session().get("email").get();
+        String username = request.body().asJson().asText();
+        UserFactory.User user1 = userFactory.getUserByEmail(email);
+        UserFactory.User user2 = userFactory.getUserByUsername(username);
+        List<Message> messages = user1.getMessages(user2);
+        String json = listToJson(messages);
+        return ok(json);
+    }
+
+    public Result sendMessage(Http.Request request) {
+        String email = request.session().get("email").get();
+        UserFactory.User sender = userFactory.getUserByEmail(email);
+        UserFactory.User receiver = userFactory.getUserByUsername(request.body().asJson().get("receiver").asText());
+        String message_text = request.body().asJson().get("message_text").asText();
+        long time = request.body().asJson().get("time").asLong();
+        Timestamp timestampSQL = new Timestamp(time + 3600000); //milliseconds to add for localTime
+        sender.sendMessage(receiver.getId(), timestampSQL, message_text);
+        return ok();
+    }
+
+    public Result addFriend(Http.Request request) {
+        String email = request.session().get("email").get();
+        UserFactory.User user = userFactory.getUserByEmail(email);
+
+        String newFriendUsername = request.body().asJson().asText();
+        UserFactory.User newFriendUser = userFactory.getUserByUsername(newFriendUsername);
+
+        boolean successfull;
+        if (newFriendUser != null) {
+            successfull = user.addFriend(newFriendUser.getId());
+        } else return badRequest("username not valid");
+
+        if (successfull) return ok();
+        else return badRequest("username not valid");
+    }
+
+    //macht aus einer beliebigen Liste ein Json
+    public <T> String listToJson (List<T> list) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = "";
+        try {
+            json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+
+
+
+    //AB HIER METHODEN ZUM ANSCHAUEN DES PROFILS EINES FREUNDES
+
+    /**
+     * returns the username
+     * by getting the user from the db with it`s email from the session
+     * @return Result
+     */
+    public Result friendGetUsernameFromDatabase(Http.Request request){
+        String username = request.body().asJson().asText();
+        UserFactory.User user = userFactory.getUserByUsername(username);
+        return ok(user.getUsername());
+    }
+
+    //evtl getEmailFromSession verwenden oder getUsername
+    public Result friendGetEmailFromDatabase(Http.Request request) {
+        String username = request.body().asJson().asText();
+        UserFactory.User user = userFactory.getUserByUsername(username);
+        return ok(user.getEmail());
+    }
+
+    public Result friendGetGesamtpunkteFromDatabase(Http.Request request) {
+        String username = request.body().asJson().asText();
+        UserFactory.User user = userFactory.getUserByUsername(username);
+        return ok(Integer.toString(user.getTotalPoints()));
+    }
+
+    public Result friendGetHighscoreFromDatabase(Http.Request request) {
+        String username = request.body().asJson().asText();
+        UserFactory.User user = userFactory.getUserByUsername(username);
+        return ok(Integer.toString(user.getHighScore()));
+    }
+
+    public Result friendGetTierNameFromDatabase(Http.Request request) {
+        String username = request.body().asJson().asText();
+        UserFactory.User user = userFactory.getUserByUsername(username);
+        return ok(user.getNameFromTierId());
+    }
+
+    public Result friendGetProfilePictureFromDatabase(Http.Request request) throws IOException {
+        String username = request.body().asJson().asText();
+        UserFactory.User user = userFactory.getUserByUsername(username);
+        return ok(Json.toJson(user.getProfilePictureSrc()));
+    }
+
+    public Result friendFriendsData(Http.Request request) throws IOException{
+        String username = request.body().asJson().asText();
+        UserFactory.User user = userFactory.getUserByUsername(username);
+        return ok(Json.toJson(user.getFriendsData()));
+    }
+
+    public Result friendGetAchievementsFromDatabase(Http.Request request) {
+        String username = request.body().asJson().asText();
+        UserFactory.User user = userFactory.getUserByUsername(username);
+        List<Achievement> achievements = user.getAchievements();
+        String json = listToJson(achievements);
+        return ok(json);
     }
 }

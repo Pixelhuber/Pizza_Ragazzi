@@ -4,59 +4,13 @@
 
 body {
     background-color: white;
-    /*background-color: rgba(230,214,144,0.5);*/
+    min-width: 800px;
 }
 
-.draggable{
-    position: absolute;
-    z-index: 10;
-    cursor: move;
-}
+section{
+    display: flex;
 
-img.draggable{ /* all draggableIngredients */
-    height: 100px;
-    width: auto;
-}
-
-div.draggable{ /* all draggable pizzas */
-    display: inline-block;
-}
-
-div.draggable > img{ /* ingredients on pizzas */
-    height: 100px;
-    width: auto;
-}
-
-.unclickable{
-    pointer-events: none;
-}
-
-#startStop_overlay {
-    position: fixed; /* Sit on top of the page content */
-    display: block; /* Hidden by default */
-    width: 100%; /* Full width (cover the whole page) */
-    height: 100%; /* Full height (cover the whole page) */
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0,0,0,0.5); /* Black background with 50% opacity */
-    z-index: 90; /* Specify a stack order in case you're using a different order for other elements */
-    cursor: pointer; /* Add a pointer on hover */
-}
-
-#startStop_overlay_text{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    font-size: 50px;
-    color: white;
-    transform: translate(-50%,-50%);
-    -ms-transform: translate(-50%,-50%);
-}
-#timerRushmode{
-    position: relative;
-    top: 20%;
+    height: 77vh;
 }
 
 #upper_container{
@@ -64,143 +18,144 @@ div.draggable > img{ /* ingredients on pizzas */
 
     width: 100%;
     height: 15vh;
-    margin: 20px auto 20px auto;
-}
-
-#left_upper_container{
-    width: 25%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#right_upper_container{
-    width: 25%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: 20px 0 20px 0;
 }
 
 #oven_container{
+    flex: 3;
     display: flex;
     justify-content: center;
-    align-items: center;
-
-    width: 50%;
-    /*height: 150px;
-    margin: 20px auto 20px auto;*/
-
+    align-items: flex-end;
 }
 
-.oven{
+#left_upper_container{
+    flex: 1;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-end;
+    align-items: flex-end;
 
-    width: fit-content;
-    height: 100%;
+    min-width: 200px;
+    margin: 0 20px 0 20px;
+
+    font-size: 0.8em;
 }
 
-.oven > img{
-    height: 100%;
-    width: auto;
-    padding: 10px;
-}
-
-section{
+#right_upper_container{
+    flex: 1;
     display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
 
-    height: 70vh;
+    min-width: 200px;
+    margin: 0 20px 0 20px;
+
+    font-size: 0.8em;
 }
 
-::-webkit-scrollbar {
-    width: 10px;
+#workSurface{
+    display: flex;
+    flex-flow: column;
+    flex: 3;
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-    background: transparent;
+#ingredientSurface{
+    flex: 6;
+
+    background: rgba(150, 150, 150, 0.2);
 }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #888;
+#lowerSurfaces{
+    display: flex;
+    flex: 4;
 }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
+#cuttingSurface{
+    width: 100%;
+    background: rgba(150, 150, 150, 0.2);
+    margin: 10px 5px 0 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+#smashingSurface{
+    width: 100%;
+    background: rgba(150, 150, 150, 0.2);
+    margin: 10px 0 0 5px ;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 .scroll_container{
+    overflow-x: hidden;
     overflow-y: scroll;
 
-    height: 80%;
+    flex: 1;
 }
+
+
+/* INGREDIENT SECTION ----------------------------------------------------------------------------------*/
 
 #ingredientSection{
     flex: 1;
     min-width: 200px;
     margin: 0 20px 0 20px;
 
+    display: flex;
+    flex-flow: column;
 }
+
+.ingredientSectionItem{
+
+}
+
+.ingredientSectionItem > img{
+    height: 30px;
+    width: auto;
+
+    margin: 7px;
+}
+
+
+/* ORDER SECTION ----------------------------------------------------------------------------------*/
 
 #orderSection{
     flex: 1;
-    margin: 0 20px 0 20px;
     min-width: 200px;
+    margin: 0 20px 0 20px;
 
-}
-
-#workSurface{
     display: flex;
-    flex-direction: column;
-    flex: 3;
+    flex-flow: column;
 }
 
-#ingredientSurface{
-    height: 80vh;
-    background: rgba(150, 150, 150, 0.2);
-}
-
-#lowerSurfaces{
-    display: flex;
-}
-
-#cuttingSurface{
-    height: 30vh;
-    width: 100%;
-    background: rgba(150, 150, 150, 0.2);
-    margin: 10px 5px 0 0;
-}
-
-#smashingSurface{
-    height: 30vh;
-    width: 100%;
-    background: rgba(150, 150, 150, 0.2);
-    margin: 10px 0 0 5px ;
-}
-
-.buttonContainer {
-    float: right;
+.order{
     position: relative;
-    width: 20%;
-    height: 100%
+
+    height: 3.5em;
 }
 
-.miniGameButton{
-    width: auto;
-    height: 20vh;
-    position: relative;
-    top: 15%;
-    left: 50%;
+.order > p{
+    position: absolute;
+    top: auto;
+    bottom: auto;
+
+    padding-left: 5px;
 }
 
-.miniGameButton:hover {
-    -webkit-filter: drop-shadow(2px 2px 0 black)
-    drop-shadow(-2px -2px 0 black);
-    filter: drop-shadow(2px 2px 0 black)
-    drop-shadow(-2px -2px 0 black);
+.order > div{
+    border-top: 4px solid black;
+    border-bottom: 4px solid black;
+}
+
+
+/* SINGLE ELEMENTS ----------------------------------------------------------------------------------*/
+
+.unclickable{
+    pointer-events: none;
 }
 
 .box{
@@ -217,32 +172,174 @@ section{
     background-color: rgba(150, 150, 150, 0.2);
 }
 
-.ingredientSectionItem{
+.draggable{
+    position: absolute;
+    z-index: 10;
+    cursor: move;
+}
+
+/* all draggableIngredients */
+img.draggable{
+    height: 110px;
+    width: 110px;
+    object-fit: contain;
+}
+/* all draggable pizzas */
+div.draggable{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Impasto should be a little bigger */
+.draggable > img:nth-child(1){
+    height: 125px;
+    width: 125px;
+    object-fit: contain;
+}
+
+/* ingredients on pizzas */
+div.draggable > img{
+    height: 110px;
+    width: 110px;
+    object-fit: contain;
+}
+
+.oven{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 5px;
+}
+
+.oven > img{
+    height: auto;
+    width: 100%;
+    max-width: 160px;
+}
+
+#rushCountdown{
 
 }
 
-.ingredientSectionItem > img{
-    height: 30px;
+#trash{
+    width: 40%;
+    min-width: 100px;
+}
+
+#trash > img{
+    padding: 10px;
+
+    width: 100%;
+    height: auto;
+}
+
+#startStop_overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: flex; /* Hidden by default */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with 50% opacity */
+    z-index: 90; /* Specify a stack order in case you're using a different order for other elements */
+}
+
+#startStop_overlay_text{
+    text-align: center;
+    font-size: 3em;
+    color: white;
+}
+
+
+#startStop_overlay > button{
+    font-size: 2em;
+    text-transform: uppercase;
+    
+    width: 25vw;
+    height: 10vh;
+    margin-top: 20px;
+
+    border: 4px solid white;
+    background-color: transparent;
+    color: white;
+
+    cursor: pointer;
+}
+
+#startStop_overlay > button:hover{
+
+    background-color: white;
+    color: black;
+}
+
+.miniGameButton{
+    position: relative;
+    right: 30px;
+
+    height: 20vh;
     width: auto;
 
-    margin: 7px;
 }
 
-.order{
+#recipeList{
+    z-index: 80;
+    position: absolute;
+    float: right;
+    right: 0;
+    top: 45px;
+    margin-right: 40px;
 
-    height: 2.5em;
-    /*padding-left: 5px;*/
+    height: fit-content;
+    max-height: 600px;
+    min-height: 40px;
+    width: fit-content;
+    max-width: 750px;
+    min-width: 100px;
+    overflow-y: scroll;
+
+    background-color: white;
+    border: 4px solid black;
+
+    text-transform: uppercase;
 }
 
-.order > p{
-    box-sizing: border-box;
-    padding-left: 5px;
+#recipeList > div{
+    display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    padding: 20px;
 }
 
-.order > div{
-    border-top: 4px solid black;
-    border-bottom: 4px solid black;
+#recipeList > div > div{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    padding-bottom: 15px;
+    border-bottom: 1px solid black;
+    margin-bottom: 5px;
 }
+
+#recipeList > div > div > h2{
+    text-transform: uppercase;
+    margin: 0;
+}
+
+#recipeList > div > div > div{
+    font-family: Arial, sans-serif;
+    text-transform: none;
+
+    margin-top: 10px;
+}
+
+
+/* MINI GAMES ----------------------------------------------------------------------------------*/
 
 #miniGame_layer{
     visibility: hidden;
@@ -250,11 +347,15 @@ section{
     position: absolute;
     z-index: 50;
 
-    height: 99vh;
-    width: 99vw;
+    height: 95%;
+    width: 99%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.miniGame_window{
+#miniGame_window{
     display: flex;
 
     width: 75vw;
@@ -263,24 +364,131 @@ section{
     min-width: 600px;
 
     padding: 20px;
-    margin-left: auto;
-    margin-right: auto;
 
     background-color: white;
     border: 4px solid black;
 }
 
-.miniGame_playArea{
+#miniGame_playArea{
     flex: 4;
 
     outline: 2px solid black;
 }
 
-.miniGame_sideBar{
+#miniGame_sideBar{
     flex: 1;
 
     max-width: 180px;
     margin-left: 20px;
 
     display: block;
+}
+
+#miniGame_sideBar_counter{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 4px solid black;
+    font-size: 1.5em;
+
+    margin-bottom: 30px;
+}
+
+#miniGame_sideBar_closeButton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 4px solid black;
+    font-size: 1.2em;
+    text-transform: uppercase;
+}
+
+#miniGame_sideBar_closeButton:hover{
+    background: black;
+
+    color: white;
+}
+
+.miniGameButton:hover {
+    -webkit-filter: drop-shadow(2px 2px 0 black)
+    drop-shadow(-2px -2px 0 black);
+    filter: drop-shadow(2px 2px 0 black)
+    drop-shadow(-2px -2px 0 black);
+}
+
+/* SPECIAL ----------------------------------------------------------------------------------*/
+
+#loading {
+     width: 100%;
+     height: 100%;
+     top: 0;
+     left: 0;
+     position: fixed;
+     display: block;
+     opacity: 1;
+     background-color: #fff;
+     z-index: 95;
+     text-align: center;
+ }
+
+#loading_image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: 97;
+}
+
+@keyframes load {
+    0%{
+        opacity: 0.08;
+        /*         font-size: 10px; */
+        /* 				font-weight: 400; */
+        filter: blur(3px);
+        letter-spacing: 3px;
+    }
+    100%{
+        /*         opacity: 1; */
+        /*         font-size: 12px; */
+        /* 				font-weight:600; */
+        /* 				filter: blur(0); */
+    }
+}
+
+#loading_text {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    margin: auto;
+    font-family: Helvetica, sans-serif, Arial;
+    font-size: 22pt;
+    font-weight: 900;
+    animation: load 1.2s infinite 0s ease-in-out;
+    animation-direction: alternate;
+    text-shadow: 0 0 1px white;
+    z-index: 97;
+}
+
+::-webkit-scrollbar {
+     width: 10px;
+ }
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }

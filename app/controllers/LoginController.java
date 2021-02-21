@@ -67,6 +67,8 @@ public class LoginController extends Controller {
                 return badRequest("password does not match password2");
             }else if (!userFactory.isEmailAvailable(email)){
                 return badRequest("email already in use");
+            }else if (!userFactory.isUsernameAvailable(username)){
+                return badRequest("username already in use");
             }else {
                 UserFactory.User authenticatedUser = userFactory.createUser(email,username,password);
                 if (authenticatedUser == null){

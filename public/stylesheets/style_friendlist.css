@@ -8,7 +8,7 @@ Position im jeweiligen Seitenstylesheet unter container_friends*/
     width: auto;
     height: auto;
     overflow: auto;
-    background: #EEE;
+    background: #dbdbdb;
     list-style-type: none;
     border-radius: 25px;
 }
@@ -18,8 +18,8 @@ Position im jeweiligen Seitenstylesheet unter container_friends*/
     width: auto;
     padding-right: 10px;
     height: 60px;
-    background: #EEE;
-    border-bottom: 1px solid #DDD;
+    background: #dbdbdb;
+    border-bottom: 2px solid #ececec;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -46,8 +46,4 @@ Position im jeweiligen Seitenstylesheet unter container_friends*/
 
 .friend.selected img {
     border-color: white;
-}
-
-.friend:not(.selected):hover {
-    background: #DDD;
 }

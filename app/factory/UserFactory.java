@@ -3,6 +3,9 @@ package factory;
 import factory.FactoryExceptions.EmailAlreadyInUseException;
 import factory.FactoryExceptions.InvalidEmailException;
 import factory.FactoryExceptions.ProfilePictureException;
+import factory.FactoryExceptions.UsernameAlreadyInUseException;
+import models.Achievement;
+import models.Message;
 import play.db.Database;
 import scala.Console;
 
@@ -10,12 +13,15 @@ import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 
 @Singleton
@@ -56,6 +62,8 @@ public class UserFactory {
             throw new InvalidEmailException("The e-mail " + email + " is not valid");
         if (!isEmailAvailable(email))
             throw new EmailAlreadyInUseException("The e-mail " + email + " is already in use");
+        if (!isUsernameAvailable(email))
+            throw new UsernameAlreadyInUseException("The username " + name + " is already in use");
         return db.withConnection(conn -> {
             String sql = "INSERT INTO User (username, email, password, gesamtpunkte, highscore, Tier_idTier) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -91,6 +99,33 @@ public class UserFactory {
             User user = null;
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM User WHERE email = ?");
             stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                user = new User(rs);
+            }
+            stmt.close();
+            return user;
+        });
+    }
+
+    /**
+     * checks if a user exists in the db
+     *
+     * @param username the unique identifier of the user, his email address
+     * @return true if there is no user, false if the email is already in use
+     */
+    public boolean isUsernameAvailable(String username) {
+        User user = getUserByUsername(username);
+        if (user == null)
+            return true;
+        return false;
+    }
+
+    public User getUserByUsername(String username) {
+        return db.withConnection(conn -> {
+            User user = null;
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM User WHERE username = ?");
+            stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 user = new User(rs);
@@ -226,6 +261,41 @@ public class UserFactory {
             });
         }
 
+        public boolean addFriend(int id2) {
+            if (this.id == id2) return false;
+
+            List<User> allUsers = getAllUsers();
+            List<User> friends = getFriends();
+            boolean id2Exists = false;
+            boolean alreadyFriend = false;
+
+            for (User user : allUsers) {        //checken ob es User mit der id gibt
+                if (user.getId() == id2) {
+                    id2Exists = true;
+                    break;
+                }
+            }
+
+            for (User user : friends) {         //checken ob sie schon befreundet sind
+                if (user.getId() == id2) {
+                    alreadyFriend = true;
+                    break;
+                }
+            }
+
+            if (id2Exists && !alreadyFriend) {
+                db.withConnection(conn -> {
+                    PreparedStatement stmt = conn.prepareStatement("INSERT INTO `Friendship` (User_idUser_one, User_idUser_two) VALUES (?, ?)");
+                    stmt.setInt(1, this.id);
+                    stmt.setInt(2, id2);
+                    stmt.executeUpdate();
+                    stmt.close();
+                });
+                return true;
+            }
+            return false;
+        }
+
         public List<User> getFriends() {
             return db.withConnection(conn -> {
                 List<User> result = new ArrayList<>();
@@ -248,25 +318,119 @@ public class UserFactory {
             });
         }
 
-        public Map<String,String> getFriendsData() throws IOException {
+        public Map<String, String> getFriendsData() throws IOException {
 
             List<User> users = getFriends();
 
-            Map<String,String> data = new HashMap<>();
+            Map<String, String> data = new HashMap<>();
 
             for (User user : users) {
                 //Sets default Profile pic if none was Uploaded
-                String path="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
-                if (user.profilePicture != null) {
-                    ImageIO.write(user.getProfilePicture(), "jpg", new File("tmpImage.jpg"));
-                    byte[] imageBytes = Files.readAllBytes(Paths.get("tmpImage.jpg"));
-                    Base64.Encoder encoder = Base64.getEncoder();
-                    path = "data:image/png;base64," + encoder.encodeToString(imageBytes);
-                }
+                String path = user.getProfilePictureSrc();
                 data.put(user.username, path);
             }
             return data;
 
+        }
+
+        public List<Achievement> getAchievements() {
+            return db.withConnection(conn -> {
+                List<Achievement> result = new ArrayList<>();
+                String sql = "SELECT `Reward_idReward` FROM `User_has_Reward` WHERE User_idUser = ?";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, this.id);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    int achievementId = rs.getInt("Reward_idReward");
+                    result.add(getAchievementByAchievementId(achievementId));
+                }
+                stmt.close();
+                return result;
+            });
+        }
+
+        public Achievement getAchievementByAchievementId(int achievementId) {
+            return db.withConnection(conn -> {
+                Achievement achievement = null;
+                PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `Reward` WHERE idReward = ?");
+                stmt.setInt(1, achievementId);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    achievement = new Achievement(rs);
+                }
+                stmt.close();
+                return achievement;
+            });
+        }
+
+        public List<Message> getMessages(User user2) {
+            if (user2 == null) return null;
+
+            List<User> friends = getFriends();
+
+            boolean isFriend = false;  //checken, ob sie befreundet sind
+            for (User user : friends) {
+                if (user.getId() == user2.getId()) {
+                    isFriend = true;
+                    break;
+                }
+            }
+
+            if (isFriend) {
+                return db.withConnection(conn -> {
+                    List<Message> result = new ArrayList<>();
+
+                    String sql = "SELECT * FROM `Message` WHERE (sender = ? AND receiver = ?) OR (sender = ? AND receiver = ?) ORDER BY `time`";
+                    PreparedStatement stmt = conn.prepareStatement(sql);
+                    stmt.setInt(1, this.id);
+                    stmt.setInt(2, user2.getId());
+                    stmt.setInt(3, user2.getId());
+                    stmt.setInt(4, this.id);
+                    ResultSet rs = stmt.executeQuery();
+                    while (rs.next()) {
+                        Message message = new Message(rs);
+                        //ich füge für jedes Message Objekt noch den username der Beteiligten hinzu
+                        if (message.getSender() == this.id) {
+                            message.setSenderName(this.getUsername());
+                            message.setReceiverName(user2.getUsername());
+                        } else {
+                            message.setReceiverName(this.getUsername());
+                            message.setSenderName(user2.getUsername());
+                        }
+                        result.add(message);
+                    }
+                    stmt.close();
+                    return result;
+                });
+            }
+            return null;
+        }
+
+        public void sendMessage(int receiverId, Timestamp timestamp, String message_text) {
+            db.withConnection(conn -> {
+                    String sql = "INSERT INTO `Message` (sender, receiver, time, message_text ) VALUES (?, ?, ?, ?)";
+                    PreparedStatement stmt = conn.prepareStatement(sql);
+                    stmt.setInt(1, this.id);
+                    stmt.setInt(2, receiverId);
+                    stmt.setObject(3, timestamp);
+                    stmt.setString(4, message_text);
+                    stmt.executeUpdate();
+                    stmt.close();
+                });
+        }
+
+        public String getNameFromTierId() {
+            return db.withConnection(conn -> {
+                String tierName = null;
+                PreparedStatement stmt = conn.prepareStatement("SELECT name FROM `Tier` WHERE idTier = ?");
+                stmt.setInt(1, this.currentTier);
+                ResultSet rs = stmt.executeQuery();
+                if (rs.next()) {
+                    tierName = rs.getString("name");
+                }
+                stmt.close();
+                return tierName;
+            });
         }
 
         public int getId() {
@@ -317,6 +481,32 @@ public class UserFactory {
         public BufferedImage getProfilePicture() {
             return profilePicture;
         }
+
+        public String getProfilePictureSrc() throws IOException {
+            String path = null;
+            if (profilePicture != null) {
+                path = encodeToString(profilePicture, "jpg");
+            }
+            return path;
+        }
+
+        public String encodeToString(BufferedImage image, String type) {
+            String imageString = null;
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+            try {
+                ImageIO.write(image, type, bos);
+                byte[] imageBytes = bos.toByteArray();
+
+                imageString = "data:image/" + type + ";base64," + Base64.getEncoder().encodeToString(imageBytes);
+
+                bos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return imageString;
+        }
+
 
         public void setProfilePicture(BufferedImage profilePicture) {
             this.profilePicture = profilePicture;
