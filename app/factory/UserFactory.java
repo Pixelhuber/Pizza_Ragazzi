@@ -8,22 +8,15 @@ import factory.FactoryExceptions.UsernameAlreadyInUseException;
 import models.Achievement;
 import models.Message;
 import play.db.Database;
-import scala.Console;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.*;
+import java.util.Base64.Decoder;
 
 /**
  * The type User factory.
@@ -267,7 +260,7 @@ public class UserFactory {
         /**
          * Instantiates a new User with ResultSet from db
          *
-         * @param rs        the ResultSet from db
+         * @param rs the ResultSet from db
          * @throws SQLException
          */
         private User(ResultSet rs) throws SQLException {
@@ -508,15 +501,15 @@ public class UserFactory {
          */
         public void sendMessage(int receiverId, Timestamp timestamp, String message_text) {
             db.withConnection(conn -> {
-                    String sql = "INSERT INTO `Message` (sender, receiver, time, message_text ) VALUES (?, ?, ?, ?)";
-                    PreparedStatement stmt = conn.prepareStatement(sql);
-                    stmt.setInt(1, this.id);
-                    stmt.setInt(2, receiverId);
-                    stmt.setObject(3, timestamp);
-                    stmt.setString(4, message_text);
-                    stmt.executeUpdate();
-                    stmt.close();
-                });
+                String sql = "INSERT INTO `Message` (sender, receiver, time, message_text ) VALUES (?, ?, ?, ?)";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, this.id);
+                stmt.setInt(2, receiverId);
+                stmt.setObject(3, timestamp);
+                stmt.setString(4, message_text);
+                stmt.executeUpdate();
+                stmt.close();
+            });
         }
 
         /**
@@ -690,22 +683,37 @@ public class UserFactory {
             this.profilePicture = profilePicture;
         }
 
-        public void updateProfilePicture(InputStream image){
-                db.withConnection(conn -> {
-                    String sql = "UPDATE User SET profilepicture=? WHERE idUser = ?";
-                    PreparedStatement stmt = conn.prepareStatement(sql);
-                    InputStream photoStream = new BufferedInputStream(image);
-                    try {
-                        stmt.setBinaryStream(1, photoStream, photoStream.available());
-                        stmt.setInt(2, this.id);
-                    } catch (MysqlDataTruncation | IOException large){
+        public void updateProfilePicture(String sourceData) {
+            db.withConnection(conn -> {
+                String sql = "UPDATE User SET profilepicture=? WHERE idUser = ?";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                try {
+                    def parts = sourceData.tokenize(",");
+                    def imageString = parts[1];
 
-                        System.out.println("Image is too large to be safed");
-                        large.printStackTrace();
-                    }
-                    stmt.executeUpdate();
-                    stmt.close();
-                });
+// create a buffered image
+                    BufferedImage image = null;
+                    byte[] imageByte;
+
+                    Decoder decoder = Base64.getDecoder();
+                    imageByte = decoder.decode()
+                    ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+                    image = ImageIO.read(bis);
+                    bis.close();
+
+// write the image to a file
+                    File outputfile = new File("image.png");
+                    InputStream dafuq = new FileInputStream();
+                    InputStream photoStream = new BufferedInputStream(dafuq);
+                    stmt.setBinaryStream(1, photoStream, photoStream.available());
+                    stmt.setInt(2, this.id);
+                } catch (MysqlDataTruncation | IOException large) {
+                    System.out.println("Image is too large to be safed");
+                    large.printStackTrace();
+                }
+                stmt.executeUpdate();
+                stmt.close();
+            });
         }
 
         /**

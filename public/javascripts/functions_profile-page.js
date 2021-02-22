@@ -41,7 +41,6 @@ $(function () {
             selectFile.html(selectFileButton);
             $("#file-upload").on('change', function () {
                 readURL(this);
-                uploadProfilePictureIntoDB(document.getElementById("profile-picture").getAttribute("src"));
             });
 
             editButton.text("Speichern");
@@ -58,7 +57,6 @@ $(function () {
                 selectFile.html("");
 
                 updateUsernameInDatabaseAndSession(newUsername);
-
             }
         }
     });
@@ -69,6 +67,7 @@ function readURL(input) {
             const reader = new FileReader();
             reader.onload = function (e) {
                 $('#profile-picture').attr('src', e.target.result);
+                uploadProfilePictureIntoDB(e.target.result)
             }
             reader.readAsDataURL(input.files[0]); //Actually change the picture
         }
@@ -148,16 +147,15 @@ function updateUsernameInDatabaseAndSession(newUsername) {
     alert("Session and Database updated!");
 }
 
-function uploadProfilePictureIntoDB(inputStream) {
-    let s = document.getElementById("profile-picture").src;
+function uploadProfilePictureIntoDB(image) {
 
     //let img = document.getElementById("profile-picture").files[0];
     //console.log(img)
-    console.log(JSON.stringify({img: inputStream}));
+    console.log(image)
     fetch('/profile/uploadProfilePicture',
         {
             method: 'POST',
-            body: JSON.stringify({img: inputStream}),
+            body: JSON.stringify({img: image}),
             headers: {'Content-Type': 'application/json'},
             credentials: 'include'
         }

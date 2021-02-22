@@ -26,6 +26,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -81,15 +82,8 @@ public class ProfileController extends Controller {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
 
-        InputStream image = null;
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode json = request.body().asJson().get("img");
-            byte[] bytes = objectMapper.writeValueAsBytes(json);
-            image = new ByteArrayInputStream(bytes);
-        }catch (JsonProcessingException e){
-            e.printStackTrace();
-        }
+        String image = request.body().asJson().get("img").toString();
+
         user.updateProfilePicture(image);
         System.out.println();
         boolean successfull;
