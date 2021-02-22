@@ -1,5 +1,6 @@
 package factory;
 
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import factory.FactoryExceptions.EmailAlreadyInUseException;
 import factory.FactoryExceptions.InvalidEmailException;
 import factory.FactoryExceptions.ProfilePictureException;
@@ -687,7 +688,24 @@ public class UserFactory {
          */
         public void setProfilePicture(BufferedImage profilePicture) {
             this.profilePicture = profilePicture;
-            save();
+        }
+
+        public void updateProfilePicture(InputStream image){
+                db.withConnection(conn -> {
+                    String sql = "UPDATE User SET profilepicture=? WHERE idUser = ?";
+                    PreparedStatement stmt = conn.prepareStatement(sql);
+                    InputStream photoStream = new BufferedInputStream(image);
+                    try {
+                        stmt.setBinaryStream(1, photoStream, photoStream.available());
+                        stmt.setInt(2, this.id);
+                    } catch (MysqlDataTruncation | IOException large){
+
+                        System.out.println("Image is too large to be safed");
+                        large.printStackTrace();
+                    }
+                    stmt.executeUpdate();
+                    stmt.close();
+                });
         }
 
         /**

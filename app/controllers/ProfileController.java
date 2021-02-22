@@ -1,5 +1,7 @@
 package controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import factory.UserFactory;
 import models.Achievement;
@@ -15,8 +17,11 @@ import scala.Console;
 import viewmodels.UserViewModel;
 
 import javax.inject.Inject;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -73,8 +78,24 @@ public class ProfileController extends Controller {
      * @param request the request
      * @return the result
      */
-    public Result setProfilePicture(Http.Request request){
-        return badRequest();
+    public Result setProfilePicture(Http.Request request) throws JsonProcessingException {
+        String email = request.session().get("email").get();
+        UserFactory.User user = userFactory.getUserByEmail(email);
+
+        InputStream image = null;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode json = request.body().asJson().get("img");
+            byte[] bytes = objectMapper.writeValueAsBytes(json);
+            image = new ByteArrayInputStream(bytes);
+        }catch (JsonProcessingException e){
+            e.printStackTrace();
+        }
+        user.updateProfilePicture(image);
+        System.out.println();
+        boolean successfull;
+        //user.setProfilePicture(image);
+        return ok();
     }
 
     /**

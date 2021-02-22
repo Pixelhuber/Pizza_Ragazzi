@@ -24,12 +24,12 @@ $(function () {
     $("#editProfileButton").on('click', function () {
 
         // CONSTANTS -----------------------------------
-        const profileButton = $(this);
+        const editButton = $(this);
         const usernameField = $("#username");
         const selectFile = $("#p-image");
         // ---------------------------------------------
 
-        if (profileButton.text() === "Profil bearbeiten") {
+        if (editButton.text() === "Profil bearbeiten") {
             const usernameText = usernameField.text();
 
             // change usernameField into an inputField
@@ -40,22 +40,26 @@ $(function () {
             const selectFileButton = "<input style='font-size: 18px' id=\"file-upload\" type=\"file\" accept=\"image/*\"/>"
             selectFile.html(selectFileButton);
             $("#file-upload").on('change', function () {
+                console.log("dingeling");
+
                 readURL(this);
             });
 
-            profileButton.text("Speichern");
+            editButton.text("Speichern");
 
-        } else if (profileButton.text() === "Speichern") {
+        } else if (editButton.text() === "Speichern") {
 
             const newUsername = document.forms["userForm"]["new_username"].value;
             if (newUsername === "") {
                 alert("Your Username should not be empty");
             } else {
+                editButton.text("Profil bearbeiten");
                 usernameField.html(newUsername);
                 //updateUsernameInDatabaseAndSession(newUsername);
                 selectFile.html("");
                 uploadProfilePictureIntoDB();
-                profileButton.text("Profil bearbeiten");
+                updateUsernameInDatabaseAndSession(newUsername);
+
             }
         }
     });
@@ -129,34 +133,28 @@ function setupButtonOnclicksAndInputs() {
 
 // Sends a request to update the username in the session
 function updateUsernameInDatabaseAndSession(newUsername) {
-
-    let loginViewModel = {
-        username: newUsername,
-        password: "Hallo" // Passwort brauch ich hier eigentlich nicht, ich lass es trotzdem mal drin
-    }
-
-    $.post("/profile/updateUsername", loginViewModel,
-        function (data, status) {
-            // Das funktioniert noch nicht ganz! Beim ausführen sieht man, dass "data" irgendwie leer bleibt... aber der Wert wird korrekt gespeichert
-            alert("Session and Database updated!\nData: " + data + "\nStatus: " + status)
+    fetch("/profile/updateUsername", {
+        method: 'POST',
+        body: JSON.stringify({username:newUsername}),
+        headers: {'Content-Type': 'application/json'},
+        credentials: 'include'
         }
     ).fail(function () {
-        alert("Something went wrong")
+        alert("Couldn`t safe the Username in Database or session ")
     });
+        alert("Session and Database updated!");
 }
 
-function uploadProfilePictureIntoDB() {
-    let im = document.getElementById("profile-picture");
-    console.log(im);
+function uploadProfilePictureIntoDB(inputStream) {
     let s = document.getElementById("profile-picture").src;
-    console.log(s);
+
     //let img = document.getElementById("profile-picture").files[0];
     //console.log(img)
-    console.log(JSON.stringify({img: s}));
+    console.log(JSON.stringify({img: inputStream}));
     fetch('/profile/uploadProfilePicture',
         {
             method: 'POST',
-            body: JSON.stringify({img: s}),
+            body: JSON.stringify({img: inputStream}),
             headers: {'Content-Type': 'application/json'},
             credentials: 'include'
         }
