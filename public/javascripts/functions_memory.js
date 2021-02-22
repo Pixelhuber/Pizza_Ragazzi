@@ -1,3 +1,17 @@
+class AudioPlayer {
+    static short_ring() {
+        const sound = document.createElement("AUDIO");
+        sound.setAttribute('src', "/assets/sounds/short_ring.wav");
+        sound.setAttribute('type', "audio/wav");
+        sound.volume = 0.4;
+        sound.play();
+    }
+}
+
+// CLASSES ------------------------------------------------------------------------------------------------------------
+
+// An "Ingredient" is only a definition of an ingredient without any behavior.
+
 class MemoryIngredient {
 
     id;
@@ -14,6 +28,8 @@ class MemoryIngredient {
 }
 
 // ---------------------------------------------------
+
+// Abstract Memory Card is used and creates both NameCard and FactCard for one Ingredient
 
 class AbstractMemoryCard {
 
@@ -170,8 +186,6 @@ class CardHandler {
 
         let numberFlippedCards = 0;
 
-        clearTimeout();
-
         memoryCards.forEach(function (item) {
             if (item.isFlipped)
                 numberFlippedCards++;
@@ -202,9 +216,6 @@ class CardHandler {
         let indicesOfFlippedCards = this.getIndicesOfFlippedCards();
         if (memoryCards[indicesOfFlippedCards[0]].memoryIngredient.name == memoryCards[indicesOfFlippedCards[1]].memoryIngredient.name){
             this.removePair(indicesOfFlippedCards);
-        } else {
-            let that = this;
-            setTimeout(function(){that.hideAllCards();}, 1500);
         }
     }
 
@@ -218,14 +229,25 @@ class CardHandler {
         return indicesOfFlippedCards;
     }
     static removePair(indicesOfFlippedCards){
-        //document.getElementById(memoryCards[indicesOfFlippedCards[0]].card_number).remove();        //Löschen der jeweiligen Divs
-        //document.getElementById(memoryCards[indicesOfFlippedCards[1]].card_number).remove();
+        document.getElementById(memoryCards[indicesOfFlippedCards[0]].card_number).style.borderColor = "green";
+        document.getElementById(memoryCards[indicesOfFlippedCards[0]].card_number).style.borderWidth = "thick";
+
+        document.getElementById(memoryCards[indicesOfFlippedCards[1]].card_number).style.borderColor = "green";
+        document.getElementById(memoryCards[indicesOfFlippedCards[1]].card_number).style.borderWidth = "thick";
 
 
         delete memoryCards[indicesOfFlippedCards[0]];                                               //Löschen der MemoryCards im Array
         delete memoryCards[indicesOfFlippedCards[1]];
 
+        AudioPlayer.short_ring();
 
+        this.checkGameOver();
+    }
+
+    static checkGameOver(){
+        if (Object.values(memoryCards).length == 0){
+            updateTierInDatabase();
+        }
     }
 
     static shuffle() {
@@ -249,7 +271,6 @@ class CardHandler {
         }
         return divArray;
     }
-
 }
 
 // DATABASE STUFF -----------------------------------------------------------------------------------------------------
@@ -272,6 +293,10 @@ async function getMemoryIngredients() {
 
     let response = await fetch("memory/getMemoryIngredients");
     return response.json();
+}
+
+function updateTierInDatabase(){
+
 }
 
 
