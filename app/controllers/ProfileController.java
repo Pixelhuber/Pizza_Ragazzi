@@ -60,7 +60,6 @@ public class ProfileController extends Controller {
      * @param request the request
      * @return the username
      */
-// Sets the username to the value in the request-body
     public Result setUsername(Http.Request request) {
         Form<UserViewModel> form = formFactory.form(UserViewModel.class); // Ein ViewModel gibt quasi die Form vor, wie aus einem request gelesen werden soll (dafür auch das Package "ViewModels" :))
         UserViewModel userViewModel = form.bindFromRequest(request).get();
@@ -73,10 +72,10 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Set profile picture result.
      *
-     * @param request the request
+     * @param request the html request
      * @return the result
+     * @throws JsonProcessingException if the image couldnt be processed
      */
     public Result setProfilePicture(Http.Request request) throws JsonProcessingException {
         String email = request.session().get("email").get();

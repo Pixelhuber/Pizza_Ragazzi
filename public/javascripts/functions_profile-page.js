@@ -26,7 +26,7 @@ $(function () {
         // CONSTANTS -----------------------------------
         const editButton = $(this);
         const usernameField = $("#username");
-        const selectFile = $("#p-image");
+        const selectFile = $("#fileChooser");
         // ---------------------------------------------
 
         if (editButton.text() === "Profil bearbeiten") {
@@ -40,9 +40,8 @@ $(function () {
             const selectFileButton = "<input style='font-size: 18px' id=\"file-upload\" type=\"file\" accept=\"image/*\"/>"
             selectFile.html(selectFileButton);
             $("#file-upload").on('change', function () {
-                console.log("dingeling");
-
                 readURL(this);
+                uploadProfilePictureIntoDB(document.getElementById("profile-picture").getAttribute("src"));
             });
 
             editButton.text("Speichern");
@@ -57,7 +56,7 @@ $(function () {
                 usernameField.html(newUsername);
                 //updateUsernameInDatabaseAndSession(newUsername);
                 selectFile.html("");
-                uploadProfilePictureIntoDB();
+
                 updateUsernameInDatabaseAndSession(newUsername);
 
             }
@@ -65,7 +64,7 @@ $(function () {
     });
 
     //function to upload pictures
-    function readURL(input) {
+function readURL(input) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
             reader.onload = function (e) {
@@ -139,10 +138,14 @@ function updateUsernameInDatabaseAndSession(newUsername) {
         headers: {'Content-Type': 'application/json'},
         credentials: 'include'
         }
-    ).fail(function () {
-        alert("Couldn`t safe the Username in Database or session ")
-    });
-        alert("Session and Database updated!");
+    ).then(
+        result => result.text()
+    ).then(data => {
+            let msg = data.toString();
+            console.log(msg);
+        }
+    );
+    alert("Session and Database updated!");
 }
 
 function uploadProfilePictureIntoDB(inputStream) {
