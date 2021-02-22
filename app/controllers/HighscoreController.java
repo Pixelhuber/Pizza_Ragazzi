@@ -30,9 +30,9 @@ public class HighscoreController extends Controller {
 }*/
 
     /**
-     * Gets table data.
+     * Gets Highscore-table data.
      *
-     * @return the table data
+     * @return the table data containing username and highscore
      */
     public Result getTableData() {
         return ok(Json.toJson(userFactory.getHighscoreData()));

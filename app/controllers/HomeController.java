@@ -48,7 +48,7 @@ public class HomeController extends Controller {
     }
 
     /**
-     * Highscore result.
+     * Renders Highscore-page
      *
      * @param request the request
      * @return the result
@@ -62,7 +62,7 @@ public class HomeController extends Controller {
     }
 
     /**
-     * Profile result.
+     * Renders Profile-Page.
      *
      * @param request the request
      * @return the result
@@ -76,7 +76,7 @@ public class HomeController extends Controller {
     }
 
     /**
-     * Menu result.
+     * Renders Menu.
      *
      * @param request the request
      * @return the result
@@ -89,7 +89,7 @@ public class HomeController extends Controller {
     }
 
     /**
-     * Create account result.
+     * Renders the createAccount-page
      *
      * @return the result
      */
@@ -98,7 +98,7 @@ public class HomeController extends Controller {
     }
 
     /**
-     * Pizza rush result.
+     * Renders the PizzaRush-page
      *
      * @param request the request
      * @return the result

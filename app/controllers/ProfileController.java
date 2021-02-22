@@ -57,11 +57,12 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Sets username.
+     * Updates Username and adds it to session
      *
      * @param request the request
      * @return the username
      */
+// Sets the username to the value in the request-body
     public Result setUsername(Http.Request request) {
         Form<UserViewModel> form = formFactory.form(UserViewModel.class); // Ein ViewModel gibt quasi die Form vor, wie aus einem request gelesen werden soll (dafür auch das Package "ViewModels" :))
         UserViewModel userViewModel = form.bindFromRequest(request).get();
@@ -74,9 +75,10 @@ public class ProfileController extends Controller {
     }
 
     /**
+     * Updates Users Profile Picture.
      *
-     * @param request the html request
-     * @return the result
+     * @param request the request
+     * @return the result with ok-Status if successfull, else badRequest with ProfilePictureException-message
      */
     public Result setProfilePicture(Http.Request request){
         String email = request.session().get("email").get();
@@ -121,7 +123,7 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Gets email from database.
+     * Gets Users email from database.
      *
      * @param request the request
      * @return the email from database
@@ -134,7 +136,7 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Gets gesamtpunkte from database.
+     * Gets Users gesamtpunkte from database.
      *
      * @param request the request
      * @return the gesamtpunkte from database
@@ -146,7 +148,7 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Gets highscore from database.
+     * Gets Users highscore from database.
      *
      * @param request the request
      * @return the highscore from database
@@ -158,7 +160,7 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Gets tier name from database.
+     * Gets Users tier name from database.
      *
      * @param request the request
      * @return the tier name from database
@@ -170,7 +172,7 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Gets profile picture from database.
+     * Gets Users profile picture from database.
      *
      * @param request the request
      * @return the profile picture from database
@@ -183,12 +185,12 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Gets password from session.
+     * Gets Users password from session.
      *
      * @param request the request
      * @return the password from session
      */
-    public Result getPasswordFromSession(Http.Request request) {
+    public Result getPasswordFromSession(Http.Request request) { //TODO: unused
 
         return request
                 .session()
@@ -198,7 +200,7 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Gets friends data.
+     * Gets Users specific Friends Data (ProfilePic and Username).
      *
      * @param request the request
      * @return the friends data
@@ -211,7 +213,7 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Gets achievements from database.
+     * Gets Users achievements from database.
      *
      * @param request the request
      * @return the achievements from database
@@ -225,7 +227,7 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Gets messages from database.
+     * Gets Users messages from database.
      *
      * @param request the request
      * @return the messages from database
@@ -242,7 +244,7 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Send message result.
+     * Inserts a sent message into Message-Table in db.
      *
      * @param request the request
      * @return the result
@@ -259,10 +261,10 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Add friend result.
+     * Inserts a new row in Friendship-Table.
      *
      * @param request the request
-     * @return the result
+     * @return the result with ok-Status if successfull else badRequest
      */
     public Result addFriend(Http.Request request) {
         String email = request.session().get("email").get();
@@ -281,7 +283,7 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * List to json string.
+     * Converts any list to json string.
      *
      * @param <T>  the type parameter
      * @param list the list
@@ -304,8 +306,7 @@ public class ProfileController extends Controller {
     //AB HIER METHODEN ZUM ANSCHAUEN DES PROFILS EINES FREUNDES
 
     /**
-     * returns the username
-     * by getting the user from the db with it`s email from the session
+     * Gets Friends Username from db
      *
      * @param request the request
      * @return Result result
@@ -317,12 +318,11 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Friend get email from database result.
+     * Gets Friends Email from db
      *
      * @param request the request
      * @return the result
      */
-//evtl getEmailFromSession verwenden oder getUsername
     public Result friendGetEmailFromDatabase(Http.Request request) {
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
@@ -330,7 +330,7 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Friend get gesamtpunkte from database result.
+     * Gets Friends Gesamtpunkte from db
      *
      * @param request the request
      * @return the result
@@ -342,7 +342,7 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Friend get highscore from database result.
+     * Gets Friends Highscore from db
      *
      * @param request the request
      * @return the result
@@ -354,7 +354,7 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Friend get tier name from database result.
+     * Gets Friends Tier name from db
      *
      * @param request the request
      * @return the result
@@ -366,7 +366,7 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Friend get profile picture from database result.
+     * Gets Friends ProfilePic from db
      *
      * @param request the request
      * @return the result
@@ -379,7 +379,7 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Friend friends data result.
+     * Gets Friends friendsData (ProfilePic and Username) from db
      *
      * @param request the request
      * @return the result
@@ -392,7 +392,7 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Friend get achievements from database result.
+     * Gets Friends achievements from db
      *
      * @param request the request
      * @return the result

@@ -33,10 +33,10 @@ public class LoginController extends Controller {
 
 
     /**
-     * Authenticate result.
+     * Authenticates the User.
      *
      * @param request the request
-     * @return the result
+     * @return the result with an ok-Status if the authentication was successfull, else bad-Request
      */
     public Result authenticate(Http.Request request) {
         JsonNode json = request.body().asJson();
@@ -64,10 +64,10 @@ public class LoginController extends Controller {
     }
 
     /**
-     * Create account result.
+     * Creates account with User-Input.
      *
      * @param request the request
-     * @return the result
+     * @return the result with ok-Status if it was possible to create an account, else badRequest
      */
     public Result createAccount(Http.Request request){
         JsonNode json = request.body().asJson();
@@ -102,7 +102,7 @@ public class LoginController extends Controller {
     }
 
     /**
-     * Logout result.
+     * Logs out the user from current session and rendres Login-page
      *
      * @param request the request
      * @return the result

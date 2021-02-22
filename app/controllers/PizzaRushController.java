@@ -41,7 +41,7 @@ public class PizzaRushController extends Controller {
 
 
     /**
-     * Validate pizza result.
+     * Validates Pizza by comparing Ingredients with perfect-Pizza-Ingredients and puts the boolean into session + updates Points from User in session
      *
      * @param request the request
      * @return the result
@@ -78,7 +78,7 @@ public class PizzaRushController extends Controller {
     }
 
     /**
-     * Gets current points from session.
+     * Gets current points from User from session.
      *
      * @param request the request
      * @return the current points from session
@@ -92,6 +92,12 @@ public class PizzaRushController extends Controller {
                 .orElseGet(() -> unauthorized("0"));
     }
 
+    /**
+     * private-methode helping getCurrentPointsFromSession()
+     *
+     * @param session
+     * @return
+     */
     private int getCurrentPointsFromSession(Http.Session session) {
         if (session.get("currentPizzaRushPoints").isPresent()) {
             String current = session.get("currentPizzaRushPoints").get();
@@ -102,10 +108,10 @@ public class PizzaRushController extends Controller {
     }
 
     /**
-     * Sets player points.
+     * Updates player points in db aswell as highscore.
      *
      * @param request the request
-     * @return the player points
+     * @return the result with ok-Status if operation was successfull, else badRequest
      */
     public Result setPlayerPoints(Http.Request request) {
         JsonNode json = request.body().asJson();
@@ -123,13 +129,13 @@ public class PizzaRushController extends Controller {
                 return badRequest("user co uld be fetched via mail");
             }
             user.setTotalPoints(newTotalPoints);
-            user.setHighScore(newHighscore);
+            user.setHighScore(newHighscore);//TODO: if highscore is lower then old highscore, it shouldnt be updated
             return ok("TotalPoints and Highscore successfully updated");
         }
     }
 
     /**
-     * Reset points result.
+     * Resets users points in session.
      *
      * @param request the request
      * @return the result
@@ -139,10 +145,10 @@ public class PizzaRushController extends Controller {
     }
 
     /**
-     * Gets available ingredients.
+     * Gets available Ingredients from Users tier.
      *
      * @param request the request
-     * @return the available ingredients
+     * @return the available ingredients or badRequest if mail isnt in session
      */
     public Result getAvailableIngredients(Http.Request request) {
         String email;
@@ -157,10 +163,10 @@ public class PizzaRushController extends Controller {
     }
 
     /**
-     * Gets available pizzas.
+     * Gets available Pizzas from Users tier.
      *
      * @param request the request
-     * @return the available pizzas
+     * @return the available pizzas or badRequest if mail isnt in session
      */
     public Result getAvailablePizzas(Http.Request request) {
         String email;
@@ -176,7 +182,7 @@ public class PizzaRushController extends Controller {
 
 
     /**
-     * List to json string.
+     * Converts any List to json string.
      *
      * @param <T>  the type parameter
      * @param list the list

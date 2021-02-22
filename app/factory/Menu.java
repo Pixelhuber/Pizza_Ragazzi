@@ -10,15 +10,32 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Menu.
+ */
 public class Menu {
+    /**
+     * The Db.
+     */
     Database db;
 
+    /**
+     * Instantiates a new Menu.
+     *
+     * @param db the db
+     */
     @Inject
     public Menu(Database db) {
         this.db = db;
     }
 
 
+    /**
+     * Check for level up level up view model.
+     *
+     * @param user the user
+     * @return the level up view model
+     */
     public LevelUpViewModel checkForLevelUp(UserFactory.User user) {
         int userTotalPoints = user.getTotalPoints();
         int userCurrentTier = user.getCurrentTier();
@@ -53,26 +70,60 @@ public class Menu {
         });
     }
 
+    /**
+     * The type Level up view model.
+     */
     public class LevelUpViewModel {
 
+        /**
+         * The Is level up possible.
+         */
         boolean isLevelUpPossible;
+        /**
+         * The Next tier.
+         */
         String nextTier;
+        /**
+         * The Next tier points.
+         */
         int nextTierPoints;
 
+        /**
+         * Instantiates a new Level up view model.
+         *
+         * @param isLevelUpPossible the is level up possible
+         * @param nextTier          the next tier
+         * @param nextTierPoints    the next tier points
+         */
         public LevelUpViewModel(boolean isLevelUpPossible, String nextTier, int nextTierPoints) {
             this.isLevelUpPossible = isLevelUpPossible;
             this.nextTier = nextTier;
             this.nextTierPoints = nextTierPoints;
         }
 
+        /**
+         * Is level up possible boolean.
+         *
+         * @return the boolean
+         */
         public boolean isLevelUpPossible() {
             return isLevelUpPossible;
         }
 
+        /**
+         * Gets next tier.
+         *
+         * @return the next tier
+         */
         public String getNextTier() {
             return nextTier;
         }
 
+        /**
+         * Gets next tier points.
+         *
+         * @return the next tier points
+         */
         public int getNextTierPoints() {
             return nextTierPoints;
         }
