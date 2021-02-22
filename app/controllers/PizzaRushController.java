@@ -18,11 +18,21 @@ import java.io.IOException;
 import java.util.List;
 
 
+/**
+ * The type Pizza rush controller.
+ */
 public class PizzaRushController extends Controller {
     private final AssetsFinder assetsFinder;
     private final PizzaRushFactory pizzaRushFactory;
     private final UserFactory userFactory;
 
+    /**
+     * Instantiates a new Pizza rush controller.
+     *
+     * @param assetsFinder     the assets finder
+     * @param pizzaRushFactory the pizza rush factory
+     * @param userFactory      the user factory
+     */
     @Inject
     public PizzaRushController(AssetsFinder assetsFinder, PizzaRushFactory pizzaRushFactory, UserFactory userFactory) {
         this.assetsFinder = assetsFinder;
@@ -31,7 +41,14 @@ public class PizzaRushController extends Controller {
     }
 
 
-    //TODO fertig übersetzen
+    /**
+     * Validate pizza result.
+     *
+     * @param request the request
+     * @return the result
+     * @throws IOException the io exception
+     */
+//TODO fertig übersetzen
     public Result validatePizza(Http.Request request) throws IOException {
         int orderPoints = 0;
         List<Integer> orderIngredientIds = null;
@@ -61,6 +78,12 @@ public class PizzaRushController extends Controller {
         return ok().addingToSession(request, "currentPizzaRushPoints", points);
     }
 
+    /**
+     * Gets current points from session.
+     *
+     * @param request the request
+     * @return the current points from session
+     */
     public Result getCurrentPointsFromSession(Http.Request request) {
         getCurrentPointsFromSession(request.session());
         return request
@@ -79,6 +102,12 @@ public class PizzaRushController extends Controller {
         return 0;
     }
 
+    /**
+     * Sets player points.
+     *
+     * @param request the request
+     * @return the player points
+     */
     public Result setPlayerPoints(Http.Request request) {
         JsonNode json = request.body().asJson();
         String email = request.session().get("email").get();
@@ -100,10 +129,22 @@ public class PizzaRushController extends Controller {
         }
     }
 
+    /**
+     * Reset points result.
+     *
+     * @param request the request
+     * @return the result
+     */
     public Result resetPoints(Http.Request request) {
         return ok().addingToSession(request, "currentPizzaRushPoints", "0");
     }
 
+    /**
+     * Gets available ingredients.
+     *
+     * @param request the request
+     * @return the available ingredients
+     */
     public Result getAvailableIngredients(Http.Request request) {
         String email;
         if (request.session().get("email").isPresent())
@@ -116,6 +157,12 @@ public class PizzaRushController extends Controller {
         return ok(json);
     }
 
+    /**
+     * Gets available pizzas.
+     *
+     * @param request the request
+     * @return the available pizzas
+     */
     public Result getAvailablePizzas(Http.Request request) {
         String email;
         if (request.session().get("email").isPresent())
@@ -129,7 +176,14 @@ public class PizzaRushController extends Controller {
     }
 
 
-    // converts any list into Json
+    /**
+     * List to json string.
+     *
+     * @param <T>  the type parameter
+     * @param list the list
+     * @return the string
+     */
+// converts any list into Json
     public <T> String listToJson(List<T> list) {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = "";

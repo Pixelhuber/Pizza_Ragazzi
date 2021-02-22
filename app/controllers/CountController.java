@@ -18,6 +18,11 @@ public class CountController extends Controller {
 
     private final Counter counter;
 
+    /**
+     * Instantiates a new Count controller.
+     *
+     * @param counter the counter
+     */
     @Inject
     public CountController(Counter counter) {
        this.counter = counter;
@@ -28,6 +33,8 @@ public class CountController extends Controller {
      * count. The result is plain text. This action is mapped to
      * <code>GET</code> requests with a path of <code>/count</code>
      * requests by an entry in the <code>routes</code> config file.
+     *
+     * @return the result
      */
     public Result count() {
         return ok(Integer.toString(counter.nextCount()));

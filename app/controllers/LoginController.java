@@ -11,11 +11,20 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import javax.inject.Inject;
 
+/**
+ * The type Login controller.
+ */
 public class LoginController extends Controller {
 
     private final AssetsFinder assetsFinder;
     private final UserFactory userFactory;
 
+    /**
+     * Instantiates a new Login controller.
+     *
+     * @param assetsFinder the assets finder
+     * @param userFactory  the user factory
+     */
     @Inject
     public LoginController(AssetsFinder assetsFinder, UserFactory userFactory) {
         this.assetsFinder = assetsFinder;
@@ -23,6 +32,12 @@ public class LoginController extends Controller {
     }
 
 
+    /**
+     * Authenticate result.
+     *
+     * @param request the request
+     * @return the result
+     */
     public Result authenticate(Http.Request request) {
         JsonNode json = request.body().asJson();
         if (json == null) {
@@ -48,6 +63,12 @@ public class LoginController extends Controller {
         }
     }
 
+    /**
+     * Create account result.
+     *
+     * @param request the request
+     * @return the result
+     */
     public Result createAccount(Http.Request request){
         JsonNode json = request.body().asJson();
         if (json == null) {
@@ -80,6 +101,12 @@ public class LoginController extends Controller {
         }
     }
 
+    /**
+     * Logout result.
+     *
+     * @param request the request
+     * @return the result
+     */
     public Result logout(Http.Request request) {
         return ok(login.render("Login", assetsFinder)).withNewSession();
     }

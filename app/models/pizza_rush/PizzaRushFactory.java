@@ -16,17 +16,34 @@ import java.util.Base64;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * The type Pizza rush factory.
+ */
 @Singleton
 public class PizzaRushFactory {
+    /**
+     * The Db.
+     */
     Database db;
 
+    /**
+     * Instantiates a new Pizza rush factory.
+     *
+     * @param db the db
+     */
     @Inject
     public PizzaRushFactory(Database db) {
         this.db = db;
     }
 
 
-    // WARNING: Returns non-specified Ingredients
+    /**
+     * Gets ingredient by id.
+     *
+     * @param id the id
+     * @return the ingredient by id
+     */
+// WARNING: Returns non-specified Ingredients
     public Ingredient getIngredientById(int id) {
         return db.withConnection(conn -> {
             Ingredient ingredient = null;
@@ -41,7 +58,12 @@ public class PizzaRushFactory {
         });
     }
 
-    // Gets ALL Ingredients
+    /**
+     * Gets ingredients.
+     *
+     * @return the ingredients
+     */
+// Gets ALL Ingredients
     public List<Ingredient> getIngredients() {
         List<Ingredient> result = new ArrayList<>();
 
@@ -53,7 +75,13 @@ public class PizzaRushFactory {
         return result;
     }
 
-    // Gets available ingredients for specific User
+    /**
+     * Gets ingredients.
+     *
+     * @param email the email
+     * @return the ingredients
+     */
+// Gets available ingredients for specific User
     public List<Ingredient> getIngredients(String email) {
         List<Ingredient> result = new ArrayList<>();
         result.addAll(getChoppingIngredients(email));
@@ -131,7 +159,12 @@ public class PizzaRushFactory {
         });
     }
 
-    // Gets ALL Pizzas
+    /**
+     * Gets pizzas.
+     *
+     * @return the pizzas
+     */
+// Gets ALL Pizzas
     public List<Order> getPizzas() {
         return db.withConnection(conn -> {
             List<Order> result = new ArrayList<>();
@@ -147,7 +180,13 @@ public class PizzaRushFactory {
         });
     }
 
-    // Gets available Pizzas for specific User
+    /**
+     * Gets pizzas.
+     *
+     * @param email the email
+     * @return the pizzas
+     */
+// Gets available Pizzas for specific User
     public List<Order> getPizzas(String email) {
         return db.withConnection(conn -> {
             List<Order> result = new ArrayList<>();
@@ -165,6 +204,13 @@ public class PizzaRushFactory {
     }
 
 
+    /**
+     * Encode image to string string.
+     *
+     * @param image the image
+     * @param type  the type
+     * @return the string
+     */
     public String encodeImageToString(BufferedImage image, String type) {
         String imageString = null;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -185,17 +231,50 @@ public class PizzaRushFactory {
 
     // CLASSES --------------------------------------------------------------------------------------------------------
 
+    /**
+     * The type Ingredient.
+     */
     public class Ingredient {
+        /**
+         * The Id.
+         */
         int id;
+        /**
+         * The Name.
+         */
         String name; // https://gist.github.com/vikrum/4758434
+        /**
+         * The Picture raw.
+         */
         String picture_raw;
+        /**
+         * The Picture raw distraction.
+         */
         String picture_raw_distraction;
+        /**
+         * The Picture processed.
+         */
         String picture_processed;
+        /**
+         * The Picture baked.
+         */
         String picture_baked;
+        /**
+         * The Picture burnt.
+         */
         String picture_burnt;
+        /**
+         * The Tier.
+         */
         int tier;
 
 
+        /**
+         * Instantiates a new Ingredient.
+         *
+         * @param rs the rs
+         * @throws SQLException the sql exception
+         */
         public Ingredient(ResultSet rs) throws SQLException {
             this.id = rs.getInt("idIngredient");
             this.name = rs.getString("name");
@@ -232,34 +311,74 @@ public class PizzaRushFactory {
             this.tier = rs.getInt("Tier_idTier");
         }
 
+        /**
+         * Gets id.
+         *
+         * @return the id
+         */
         public int getId() {
             return id;
         }
 
+        /**
+         * Gets name.
+         *
+         * @return the name
+         */
         public String getName() {
             return name;
         }
 
+        /**
+         * Gets picture raw.
+         *
+         * @return the picture raw
+         */
         public String getPicture_raw() {
             return picture_raw;
         }
 
+        /**
+         * Gets picture raw distraction.
+         *
+         * @return the picture raw distraction
+         */
         public String getPicture_raw_distraction() {
             return picture_raw_distraction;
         }
 
+        /**
+         * Gets picture processed.
+         *
+         * @return the picture processed
+         */
         public String getPicture_processed() {
             return picture_processed;
         }
 
+        /**
+         * Gets picture baked.
+         *
+         * @return the picture baked
+         */
         public String getPicture_baked() {
             return picture_baked;
         }
 
+        /**
+         * Gets picture burnt.
+         *
+         * @return the picture burnt
+         */
         public String getPicture_burnt() {
             return picture_burnt;
         }
 
+        /**
+         * Gets tier.
+         *
+         * @return the tier
+         */
         public int getTier() {
             return tier;
         }
@@ -280,14 +399,38 @@ public class PizzaRushFactory {
         }
     }
 
+    /**
+     * The type Chopping ingredient.
+     */
     public class ChoppingIngredient extends Ingredient {
 
+        /**
+         * The Vertex x in percent.
+         */
         int vertex_x_inPercent;
+        /**
+         * The Vertex y in percent.
+         */
         int vertex_y_inPercent;
+        /**
+         * The Speed.
+         */
         int speed;
+        /**
+         * The Rotation.
+         */
         int rotation;
+        /**
+         * The Hits required.
+         */
         int hits_required;
 
+        /**
+         * Instantiates a new Chopping ingredient.
+         *
+         * @param rs the rs
+         * @throws SQLException the sql exception
+         */
         public ChoppingIngredient(ResultSet rs) throws SQLException {
             super(rs);
 
@@ -310,22 +453,47 @@ public class PizzaRushFactory {
             });
         }
 
+        /**
+         * Gets vertex x in percent.
+         *
+         * @return the vertex x in percent
+         */
         public int getVertex_x_inPercent() {
             return vertex_x_inPercent;
         }
 
+        /**
+         * Gets vertex y in percent.
+         *
+         * @return the vertex y in percent
+         */
         public int getVertex_y_inPercent() {
             return vertex_y_inPercent;
         }
 
+        /**
+         * Gets speed.
+         *
+         * @return the speed
+         */
         public int getSpeed() {
             return speed;
         }
 
+        /**
+         * Gets rotation.
+         *
+         * @return the rotation
+         */
         public int getRotation() {
             return rotation;
         }
 
+        /**
+         * Gets hits required.
+         *
+         * @return the hits required
+         */
         public int getHits_required() {
             return hits_required;
         }
@@ -350,12 +518,30 @@ public class PizzaRushFactory {
         }
     }
 
+    /**
+     * The type Stamping ingredient.
+     */
     public class StampingIngredient extends Ingredient {
 
+        /**
+         * The Display time.
+         */
         int display_time;
+        /**
+         * The Disabling time.
+         */
         int disabling_time;
+        /**
+         * The Hits required.
+         */
         int hits_required;
 
+        /**
+         * Instantiates a new Stamping ingredient.
+         *
+         * @param rs the rs
+         * @throws SQLException the sql exception
+         */
         public StampingIngredient(ResultSet rs) throws SQLException {
             super(rs);
 
@@ -376,14 +562,29 @@ public class PizzaRushFactory {
             });
         }
 
+        /**
+         * Gets display time.
+         *
+         * @return the display time
+         */
         public int getDisplay_time() {
             return display_time;
         }
 
+        /**
+         * Gets disabling time.
+         *
+         * @return the disabling time
+         */
         public int getDisabling_time() {
             return disabling_time;
         }
 
+        /**
+         * Gets hits required.
+         *
+         * @return the hits required
+         */
         public int getHits_required() {
             return hits_required;
         }
@@ -407,13 +608,37 @@ public class PizzaRushFactory {
     }
 
 
+    /**
+     * The type Order.
+     */
     public class Order { //Ideale Pizza, also einfach Pizza aus Datenbank
+        /**
+         * The Id.
+         */
         int id;
+        /**
+         * The Name.
+         */
         String name;
+        /**
+         * The Points.
+         */
         int points;
+        /**
+         * The Order time.
+         */
         int order_time;
+        /**
+         * The Ingredients.
+         */
         List<Ingredient> ingredients;
 
+        /**
+         * Instantiates a new Order.
+         *
+         * @param rs the rs
+         * @throws SQLException the sql exception
+         */
         public Order(ResultSet rs) throws SQLException {
             this.id = rs.getInt("idPizza");
             this.name = rs.getString("name");
@@ -436,22 +661,47 @@ public class PizzaRushFactory {
             });
         }
 
+        /**
+         * Gets id.
+         *
+         * @return the id
+         */
         public int getId() {
             return id;
         }
 
+        /**
+         * Gets name.
+         *
+         * @return the name
+         */
         public String getName() {
             return name;
         }
 
+        /**
+         * Gets points.
+         *
+         * @return the points
+         */
         public int getPoints() {
             return points;
         }
 
+        /**
+         * Gets ingredients.
+         *
+         * @return the ingredients
+         */
         public List<Ingredient> getIngredients() {
             return ingredients;
         }
 
+        /**
+         * Gets order time.
+         *
+         * @return the order time
+         */
         public int getOrder_time() {
             return order_time;
         }
