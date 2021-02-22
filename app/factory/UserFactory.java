@@ -24,11 +24,19 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
 
+/**
+ * The type User factory.
+ */
 @Singleton
 public class UserFactory {
 
     private Database db;
 
+    /**
+     * Instantiates a new User factory.
+     *
+     * @param db the db
+     */
     @Inject
     public UserFactory(Database db) {
         this.db = db;
@@ -56,7 +64,15 @@ public class UserFactory {
         });
     }
 
-    //TODO complete this
+    /**
+     * Creates a user in the db but throws Exceptions if its not possible.
+     *
+     * @param email    the email
+     * @param name     the name
+     * @param password the password
+     * @return the user
+     */
+//TODO complete this
     public User createUser(String email, String name, String password) {
         if (!email.matches("[a-zA-Z0-9._%+-]+[@]+[a-zA-Z0-9.-]+[.]+[a-zA-Z]{2,6}"))
             throw new InvalidEmailException("The e-mail " + email + " is not valid");
@@ -80,7 +96,7 @@ public class UserFactory {
     }
 
     /**
-     * checks if a user exists in the db
+     * Checks if a user exists in the db
      *
      * @param email the unique identifier of the user, his email address
      * @return true if there is no user, false if the email is already in use
@@ -90,6 +106,12 @@ public class UserFactory {
         return user == null;
     }
 
+    /**
+     * Gets user from db by email.
+     *
+     * @param email the email
+     * @return the user by email
+     */
     public User getUserByEmail(String email) {
         if (!email.matches("[a-zA-Z0-9._%+-]+[@]+[a-zA-Z0-9.-]+[.]+[a-zA-Z]{2,6}"))
             throw new InvalidEmailException("The e-mail \"" + email + "\" is not valid");
@@ -107,7 +129,7 @@ public class UserFactory {
     }
 
     /**
-     * checks if a user exists in the db
+     * Checks if a user exists in the db
      *
      * @param username the unique identifier of the user, his email address
      * @return true if there is no user, false if the email is already in use
@@ -117,6 +139,12 @@ public class UserFactory {
         return user == null;
     }
 
+    /**
+     * Gets user from db by username.
+     *
+     * @param username the username
+     * @return the user by username
+     */
     public User getUserByUsername(String username) {
         return db.withConnection(conn -> {
             User user = null;
@@ -161,6 +189,11 @@ public class UserFactory {
         return getUserById(Integer.parseInt(id));
     }
 
+    /**
+     * Gets all users from db.
+     *
+     * @return all users
+     */
     public List<User> getAllUsers() {
         return db.withConnection(conn -> {
             List<User> users = new ArrayList<>();
@@ -175,6 +208,11 @@ public class UserFactory {
         });
     }
 
+    /**
+     * Get highscore data string [username] [highscore].
+     *
+     * @return the string [ ] [ ]
+     */
     public String[][] getHighscoreData() {
 
         List<UserFactory.User> users = getAllUsers();
@@ -188,6 +226,9 @@ public class UserFactory {
         return data;
     }
 
+    /**
+     * The type User.
+     */
     public class User {
         private int id;
         private String username;
@@ -197,6 +238,17 @@ public class UserFactory {
         private BufferedImage profilePicture;
         private int currentTier;
 
+        /**
+         * Instantiates a new User.
+         *
+         * @param id             the id
+         * @param username       the username
+         * @param email          the email
+         * @param totalPoints    the total points
+         * @param highScore      the high score
+         * @param profilePicture the profile picture
+         * @param currentTier    the current tier
+         */
         public User(int id, String username, String email, int totalPoints, int highScore, BufferedImage profilePicture, int currentTier) {
             this.id = id;
             this.username = username;
@@ -207,6 +259,12 @@ public class UserFactory {
             this.currentTier = currentTier;
         }
 
+        /**
+         * Instantiates a new User with ResultSet from db
+         *
+         * @param rs        the ResultSet from db
+         * @throws SQLException
+         */
         private User(ResultSet rs) throws SQLException {
             this.id = rs.getInt("idUser");
             this.username = rs.getString("username");
@@ -228,7 +286,7 @@ public class UserFactory {
          * Updates the user if it already exists and creates it otherwise. Assumes an
          * autoincrement id column.
          */
-        //TODO: add BufferedImage profilePicture
+//TODO: add BufferedImage profilePicture
         public void save() {
             db.withConnection(conn -> {
                 String sql = "UPDATE User SET username = ?, email = ?, gesamtpunkte = ?, highscore = ?, Tier_idTier = ? WHERE idUser = ?";
@@ -257,6 +315,12 @@ public class UserFactory {
             });
         }
 
+        /**
+         * Add a friend by his id
+         *
+         * @param id2 the id 2
+         * @return the boolean if it was successfull
+         */
         public boolean addFriend(int id2) {
             if (this.id == id2) return false;
 
@@ -292,6 +356,11 @@ public class UserFactory {
             return false;
         }
 
+        /**
+         * Gets friends of user as List.
+         *
+         * @return the friends-List
+         */
         public List<User> getFriends() {
             return db.withConnection(conn -> {
                 List<User> result = new ArrayList<>();
@@ -314,6 +383,12 @@ public class UserFactory {
             });
         }
 
+        /**
+         * Gets friends-Map with profilePictureSource and username.
+         *
+         * @return the friends data
+         * @throws IOException the io exception
+         */
         public Map<String, String> getFriendsData() throws IOException {
 
             List<User> users = getFriends();
@@ -329,6 +404,11 @@ public class UserFactory {
 
         }
 
+        /**
+         * Gets achievements-List.
+         *
+         * @return the achievements
+         */
         public List<Achievement> getAchievements() {
             return db.withConnection(conn -> {
                 List<Achievement> result = new ArrayList<>();
@@ -345,6 +425,12 @@ public class UserFactory {
             });
         }
 
+        /**
+         * Gets achievement by achievement id.
+         *
+         * @param achievementId the achievement id
+         * @return the achievement by achievement id
+         */
         public Achievement getAchievementByAchievementId(int achievementId) {
             return db.withConnection(conn -> {
                 Achievement achievement = null;
@@ -359,6 +445,12 @@ public class UserFactory {
             });
         }
 
+        /**
+         * Gets messages-List from db sent to and retrieved from user2.
+         *
+         * @param user2 the user 2
+         * @return the messages
+         */
         public List<Message> getMessages(User user2) {
             if (user2 == null) return null;
 
@@ -402,6 +494,13 @@ public class UserFactory {
             return null;
         }
 
+        /**
+         * Inserts a new Row into Message db-Table.
+         *
+         * @param receiverId   the receiver id
+         * @param timestamp    the timestamp
+         * @param message_text the message text
+         */
         public void sendMessage(int receiverId, Timestamp timestamp, String message_text) {
             db.withConnection(conn -> {
                     String sql = "INSERT INTO `Message` (sender, receiver, time, message_text ) VALUES (?, ?, ?, ?)";
@@ -415,6 +514,11 @@ public class UserFactory {
                 });
         }
 
+        /**
+         * Gets name of Tier from tier id.
+         *
+         * @return the name from tier id
+         */
         public String getNameFromTierId() {
             return db.withConnection(conn -> {
                 String tierName = null;
@@ -429,55 +533,116 @@ public class UserFactory {
             });
         }
 
+        /**
+         * Gets id.
+         *
+         * @return the id
+         */
         public int getId() {
             return id;
         }
 
+        /**
+         * Sets id.
+         *
+         * @param id the id
+         */
         public void setId(int id) {
             this.id = id;
             save();
         }
 
+        /**
+         * Gets username.
+         *
+         * @return the username
+         */
         public String getUsername() {
             return username;
         }
 
+        /**
+         * Sets username.
+         *
+         * @param username the username
+         */
         public void setUsername(String username) {
             this.username = username;
             save();
         }
 
+        /**
+         * Gets email.
+         *
+         * @return the email
+         */
         public String getEmail() {
             return email;
         }
 
+        /**
+         * Sets email.
+         *
+         * @param email the email
+         */
         public void setEmail(String email) {
             this.email = email;
             save();
         }
 
+        /**
+         * Gets total points.
+         *
+         * @return the total points
+         */
         public int getTotalPoints() {
             return totalPoints;
         }
 
+        /**
+         * Sets total points.
+         *
+         * @param totalPoints the total points
+         */
         public void setTotalPoints(int totalPoints) {
             this.totalPoints = totalPoints;
             save();
         }
 
+        /**
+         * Gets high score.
+         *
+         * @return the high score
+         */
         public int getHighScore() {
             return highScore;
         }
 
+        /**
+         * Sets high score.
+         *
+         * @param highScore the high score
+         */
         public void setHighScore(int highScore) {
             this.highScore = highScore;
             save();
         }
 
+        /**
+         * Gets profile picture.
+         *
+         * @return the profile picture
+         */
         public BufferedImage getProfilePicture() {
             return profilePicture;
         }
 
+        /**
+         * Gets profile picture src.
+         *
+         * @return the profile picture src
+         * @throws IOException the io exception
+         */
         public String getProfilePictureSrc() throws IOException {
             String path = null;
             if (profilePicture != null) {
@@ -486,6 +651,13 @@ public class UserFactory {
             return path;
         }
 
+        /**
+         * Encode to string string.
+         *
+         * @param image the image
+         * @param type  the type
+         * @return the string
+         */
         public String encodeToString(BufferedImage image, String type) {
             String imageString = null;
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -504,15 +676,30 @@ public class UserFactory {
         }
 
 
+        /**
+         * Sets profile picture.
+         *
+         * @param profilePicture the profile picture
+         */
         public void setProfilePicture(BufferedImage profilePicture) {
             this.profilePicture = profilePicture;
             save();
         }
 
+        /**
+         * Gets current tier.
+         *
+         * @return the current tier
+         */
         public int getCurrentTier() {
             return currentTier;
         }
 
+        /**
+         * Sets current tier.
+         *
+         * @param currentTier the current tier
+         */
         public void setCurrentTier(int currentTier) {
             this.currentTier = currentTier;
             save();
