@@ -1,5 +1,6 @@
 package factory;
 
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import factory.FactoryExceptions.EmailAlreadyInUseException;
 import factory.FactoryExceptions.InvalidEmailException;
 import factory.FactoryExceptions.ProfilePictureException;
@@ -7,22 +8,15 @@ import factory.FactoryExceptions.UsernameAlreadyInUseException;
 import models.Achievement;
 import models.Message;
 import play.db.Database;
-import scala.Console;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.*;
+import java.util.Base64.Decoder;
 
 /**
  * The type User factory.
@@ -262,7 +256,7 @@ public class UserFactory {
         /**
          * Instantiates a new User with ResultSet from db
          *
-         * @param rs        the ResultSet from db
+         * @param rs the ResultSet from db
          * @throws SQLException
          */
         private User(ResultSet rs) throws SQLException {
@@ -503,15 +497,15 @@ public class UserFactory {
          */
         public void sendMessage(int receiverId, Timestamp timestamp, String message_text) {
             db.withConnection(conn -> {
-                    String sql = "INSERT INTO `Message` (sender, receiver, time, message_text ) VALUES (?, ?, ?, ?)";
-                    PreparedStatement stmt = conn.prepareStatement(sql);
-                    stmt.setInt(1, this.id);
-                    stmt.setInt(2, receiverId);
-                    stmt.setObject(3, timestamp);
-                    stmt.setString(4, message_text);
-                    stmt.executeUpdate();
-                    stmt.close();
-                });
+                String sql = "INSERT INTO `Message` (sender, receiver, time, message_text ) VALUES (?, ?, ?, ?)";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, this.id);
+                stmt.setInt(2, receiverId);
+                stmt.setObject(3, timestamp);
+                stmt.setString(4, message_text);
+                stmt.executeUpdate();
+                stmt.close();
+            });
         }
 
         /**
@@ -683,7 +677,24 @@ public class UserFactory {
          */
         public void setProfilePicture(BufferedImage profilePicture) {
             this.profilePicture = profilePicture;
-            save();
+        }
+
+        public void updateProfilePicture(String sourceData) {
+            db.withConnection(conn -> {
+                String sql = "UPDATE User SET profilepicture=? WHERE idUser = ?";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                try {
+                    var imageData = sourceData.split("base64,")[1];
+                    byte[] bytes= Base64.getMimeDecoder().decode(imageData);
+                    stmt.setBytes(1,bytes);
+                    stmt.setInt(2, this.id);
+                } catch (MysqlDataTruncation large) {
+                    large.printStackTrace();
+                    throw new ProfilePictureException("Image was too large");
+                }
+                stmt.executeUpdate();
+                stmt.close();
+            });
         }
 
         /**

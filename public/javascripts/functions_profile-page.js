@@ -24,12 +24,12 @@ $(function () {
     $("#editProfileButton").on('click', function () {
 
         // CONSTANTS -----------------------------------
-        const profileButton = $(this);
+        const editButton = $(this);
         const usernameField = $("#username");
-        const selectFile = $("#p-image");
+        const selectFile = $("#fileChooser");
         // ---------------------------------------------
 
-        if (profileButton.text() === "Profil bearbeiten") {
+        if (editButton.text() === "Profil bearbeiten") {
             const usernameText = usernameField.text();
 
             // change usernameField into an inputField
@@ -43,31 +43,41 @@ $(function () {
                 readURL(this);
             });
 
-            profileButton.text("Speichern");
+            editButton.text("Speichern");
 
-        } else if (profileButton.text() === "Speichern") {
+        } else if (editButton.text() === "Speichern") {
 
             const newUsername = document.forms["userForm"]["new_username"].value;
             if (newUsername === "") {
                 alert("Your Username should not be empty");
             } else {
+                editButton.text("Profil bearbeiten");
                 usernameField.html(newUsername);
                 //updateUsernameInDatabaseAndSession(newUsername);
                 selectFile.html("");
-                uploadProfilePictureIntoDB();
-                profileButton.text("Profil bearbeiten");
+
+                updateUsernameInDatabaseAndSession(newUsername);
             }
         }
     });
 
     //function to upload pictures
-    function readURL(input) {
+    async function readURL(input) {
         if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                $('#profile-picture').attr('src', e.target.result);
+            const file = input.files[0];
+            const fileType = file['type'];
+            const validImageTypes = ['image/jpeg'];
+            if (!validImageTypes.includes(fileType)) {
+                alert("you can only choose jpegs")
+            } else {
+                const reader = new FileReader();
+                reader.onload = async function (e) {
+                    await uploadProfilePictureIntoDB(e.target.result);
+                    $('#profile-picture').attr('src', e.target.result);
+
+                }
+                reader.readAsDataURL(file);//Actually change the picture
             }
-            reader.readAsDataURL(input.files[0]); //Actually change the picture
         }
     }
 });
@@ -94,7 +104,7 @@ function setupButtonOnclicksAndInputs() {
         sendMessage(document.getElementById("sendMessageInput").value, currentDate.getTime());
     };
     //Enter-Funktionalität
-    document.getElementById("sendMessageInput").addEventListener("keyup", function(event) {
+    document.getElementById("sendMessageInput").addEventListener("keyup", function (event) {
         // Number 13 is the "Enter" key on the keyboard
         if (event.code === 'Enter') {
             // Cancel the default action, if needed
@@ -104,7 +114,7 @@ function setupButtonOnclicksAndInputs() {
         }
     });
     //Enter-Funktionalität
-    document.getElementById("chatWithWhoInput").addEventListener("keyup", function(event) {
+    document.getElementById("chatWithWhoInput").addEventListener("keyup", function (event) {
         // Number 13 is the "Enter" key on the keyboard
         if (event.code === 'Enter') {
             // Cancel the default action, if needed
@@ -114,7 +124,7 @@ function setupButtonOnclicksAndInputs() {
         }
     });
     //Enter-Funktionalität
-    document.getElementById("addFriendInput").addEventListener("keyup", function(event) {
+    document.getElementById("addFriendInput").addEventListener("keyup", function (event) {
         // Number 13 is the "Enter" key on the keyboard
         if (event.code === 'Enter') {
             // Cancel the default action, if needed
@@ -129,34 +139,31 @@ function setupButtonOnclicksAndInputs() {
 
 // Sends a request to update the username in the session
 function updateUsernameInDatabaseAndSession(newUsername) {
-
-    let loginViewModel = {
-        username: newUsername,
-        password: "Hallo" // Passwort brauch ich hier eigentlich nicht, ich lass es trotzdem mal drin
-    }
-
-    $.post("/profile/updateUsername", loginViewModel,
-        function (data, status) {
-            // Das funktioniert noch nicht ganz! Beim ausführen sieht man, dass "data" irgendwie leer bleibt... aber der Wert wird korrekt gespeichert
-            alert("Session and Database updated!\nData: " + data + "\nStatus: " + status)
+    fetch("/profile/updateUsername", {
+            method: 'POST',
+            body: JSON.stringify({username: newUsername}),
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include'
         }
-    ).fail(function () {
-        alert("Something went wrong")
-    });
+    ).then(
+        result => result.text()
+    ).then(data => {
+            let msg = data.toString();
+            console.log(msg);
+        }
+    );
+    alert("Session and Database updated!");
 }
 
-function uploadProfilePictureIntoDB() {
-    let im = document.getElementById("profile-picture");
-    console.log(im);
-    let s = document.getElementById("profile-picture").src;
-    console.log(s);
+async function uploadProfilePictureIntoDB(image) {
+
     //let img = document.getElementById("profile-picture").files[0];
     //console.log(img)
-    console.log(JSON.stringify({img: s}));
+    let imageFits = true;
     fetch('/profile/uploadProfilePicture',
         {
             method: 'POST',
-            body: JSON.stringify({img: s}),
+            body: JSON.stringify({img: image}),
             headers: {'Content-Type': 'application/json'},
             credentials: 'include'
         }
@@ -164,10 +171,6 @@ function uploadProfilePictureIntoDB() {
         .then(
             result => result.text()
         )
-        .catch(err => {
-            console.log('ERROR: ');
-            console.error();
-        })
 }
 
 function getAchievementsFromDatabase() {
@@ -240,9 +243,7 @@ function getProfilePicFromDatabase() {
 function setupInformationFromFriend(elm) {
     if (document.getElementById("editProfileButton").innerText === "Speichern") {  //gegen seltenen Bug: während dem Editieren des Profiles das Profil eines Freundes anschauen
         alert("Bitte erst Profil speichern!")
-    }
-
-    else if (!viewOnly) {        //Funktion wird nur ausgeführt, wenn man auf dem eigenen Profil ist
+    } else if (!viewOnly) {        //Funktion wird nur ausgeführt, wenn man auf dem eigenen Profil ist
         var name = elm.childNodes[1].innerHTML;  //childnodes[1] gibt das "name" child von friend
 
         friendGetUsernameFromDatabase(name);

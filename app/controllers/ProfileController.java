@@ -1,6 +1,9 @@
 package controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import factory.FactoryExceptions.ProfilePictureException;
 import factory.UserFactory;
 import models.Achievement;
 import models.Message;
@@ -15,12 +18,16 @@ import scala.Console;
 import viewmodels.UserViewModel;
 
 import javax.inject.Inject;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -55,7 +62,6 @@ public class ProfileController extends Controller {
      * @param request the request
      * @return the username
      */
-// Sets the username to the value in the request-body
     public Result setUsername(Http.Request request) {
         Form<UserViewModel> form = formFactory.form(UserViewModel.class); // Ein ViewModel gibt quasi die Form vor, wie aus einem request gelesen werden soll (dafür auch das Package "ViewModels" :))
         UserViewModel userViewModel = form.bindFromRequest(request).get();
@@ -68,13 +74,22 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Set profile picture result.
      *
-     * @param request the request
+     * @param request the html request
      * @return the result
      */
     public Result setProfilePicture(Http.Request request){
-        return badRequest();
+        String email = request.session().get("email").get();
+        UserFactory.User user = userFactory.getUserByEmail(email);
+
+        String image = request.body().asJson().get("img").toString();
+        try{
+            user.updateProfilePicture(image);
+        }catch (ProfilePictureException e){
+            return badRequest(e.getMessage());
+        }
+        //user.setProfilePicture(image);
+        return ok();
     }
 
     /**
