@@ -688,26 +688,11 @@ public class UserFactory {
                 String sql = "UPDATE User SET profilepicture=? WHERE idUser = ?";
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 try {
-                    def parts = sourceData.tokenize(",");
-                    def imageString = parts[1];
-
-// create a buffered image
-                    BufferedImage image = null;
-                    byte[] imageByte;
-
-                    Decoder decoder = Base64.getDecoder();
-                    imageByte = decoder.decode()
-                    ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
-                    image = ImageIO.read(bis);
-                    bis.close();
-
-// write the image to a file
-                    File outputfile = new File("image.png");
-                    InputStream dafuq = new FileInputStream();
-                    InputStream photoStream = new BufferedInputStream(dafuq);
-                    stmt.setBinaryStream(1, photoStream, photoStream.available());
+                    var imageData = sourceData.split("base64,")[1];
+                    byte[] bytes= Base64.getMimeDecoder().decode(imageData);
+                    stmt.setBytes(1,bytes);
                     stmt.setInt(2, this.id);
-                } catch (MysqlDataTruncation | IOException large) {
+                } catch (MysqlDataTruncation large) {
                     System.out.println("Image is too large to be safed");
                     large.printStackTrace();
                 }
