@@ -87,14 +87,12 @@ public class UserFactory {
      */
     public boolean isEmailAvailable(String email) {
         User user = getUserByEmail(email);
-        if (user == null)
-            return true;
-        return false;
+        return user == null;
     }
 
     public User getUserByEmail(String email) {
         if (!email.matches("[a-zA-Z0-9._%+-]+[@]+[a-zA-Z0-9.-]+[.]+[a-zA-Z]{2,6}"))
-            throw new InvalidEmailException("The e-mail " + email + " is not valid");
+            throw new InvalidEmailException("The e-mail \"" + email + "\" is not valid");
         return db.withConnection(conn -> {
             User user = null;
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM User WHERE email = ?");
@@ -116,9 +114,7 @@ public class UserFactory {
      */
     public boolean isUsernameAvailable(String username) {
         User user = getUserByUsername(username);
-        if (user == null)
-            return true;
-        return false;
+        return user == null;
     }
 
     public User getUserByUsername(String username) {

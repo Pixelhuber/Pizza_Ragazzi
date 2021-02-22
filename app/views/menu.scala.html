@@ -4,17 +4,25 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" media="screen" href="@assetsFinder.path("stylesheets/menu.css")">
+        <link rel="stylesheet" media="screen" href="@assetsFinder.path("stylesheets/style_menu.css")">
         <link rel="shortcut icon" type="image_path/png" href="@assetsFinder.path("images/favicon.png")">
+        <script type="text/javascript" src="@routes.Assets.versioned("javascripts/functions_menu.js")"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <title>Menu</title>
     </head>
-    <body>
+    <body onload="setup()">
             <!--Navigation bar-->
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
             <!--end of Navigation bar-->
 
+        <div id="user_data" onclick="location.href = '/profile'">
+            <div id="username"></div>
+            <div id="tier_name"></div>
+            <div id="total_points"></div>
+        </div>
+
         <div class="container">
-            <button class="button" onclick="location.href = ''" type="button">
+            <button id="button_memory" class="button" onclick="location.href = ''" type="button">
                 Memory
             </button>
             <br>

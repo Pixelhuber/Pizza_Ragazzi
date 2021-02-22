@@ -24,6 +24,10 @@ GET     /pizzaRush                      controllers.HomeController.pizzaRush(req
 GET     /menu                           controllers.HomeController.menu(request: Request)
 
 
+# MENU -----------------------------------------------------------------------------
+
+GET     /menu/checkForLevelUp           controllers.MenuController.checkForLevelUp(request: Request)
+
 # HIGHSCORE ------------------------------------------------------------------------
 GET     /highscore/getTableData         controllers.HighscoreController.getTableData
 

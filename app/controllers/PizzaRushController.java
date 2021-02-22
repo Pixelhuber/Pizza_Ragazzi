@@ -19,13 +19,12 @@ import java.util.List;
 
 
 public class PizzaRushController extends Controller {
-    private final AssetsFinder assetsFinder;
+
     private final PizzaRushFactory pizzaRushFactory;
     private final UserFactory userFactory;
 
     @Inject
-    public PizzaRushController(AssetsFinder assetsFinder, PizzaRushFactory pizzaRushFactory, UserFactory userFactory) {
-        this.assetsFinder = assetsFinder;
+    public PizzaRushController(PizzaRushFactory pizzaRushFactory, UserFactory userFactory) {
         this.pizzaRushFactory = pizzaRushFactory;
         this.userFactory = userFactory;
     }
