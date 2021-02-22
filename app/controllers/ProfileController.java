@@ -3,6 +3,7 @@ package controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import factory.FactoryExceptions.ProfilePictureException;
 import factory.UserFactory;
 import models.Achievement;
 import models.Message;
@@ -76,17 +77,17 @@ public class ProfileController extends Controller {
      *
      * @param request the html request
      * @return the result
-     * @throws JsonProcessingException if the image couldnt be processed
      */
-    public Result setProfilePicture(Http.Request request) throws JsonProcessingException {
+    public Result setProfilePicture(Http.Request request){
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
 
         String image = request.body().asJson().get("img").toString();
-
-        user.updateProfilePicture(image);
-        System.out.println();
-        boolean successfull;
+        try{
+            user.updateProfilePicture(image);
+        }catch (ProfilePictureException e){
+            return badRequest(e.getMessage());
+        }
         //user.setProfilePicture(image);
         return ok();
     }

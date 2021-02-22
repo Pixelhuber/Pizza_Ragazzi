@@ -62,14 +62,22 @@ $(function () {
     });
 
     //function to upload pictures
-function readURL(input) {
+    async function readURL(input) {
         if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                $('#profile-picture').attr('src', e.target.result);
-                uploadProfilePictureIntoDB(e.target.result)
+            const file = input.files[0];
+            const fileType = file['type'];
+            const validImageTypes = ['image/jpeg'];
+            if (!validImageTypes.includes(fileType)) {
+                alert("you can only choose jpegs")
+            } else {
+                const reader = new FileReader();
+                reader.onload = async function (e) {
+                    await uploadProfilePictureIntoDB(e.target.result);
+                    $('#profile-picture').attr('src', e.target.result);
+
+                }
+                reader.readAsDataURL(file);//Actually change the picture
             }
-            reader.readAsDataURL(input.files[0]); //Actually change the picture
         }
     }
 });
@@ -96,7 +104,7 @@ function setupButtonOnclicksAndInputs() {
         sendMessage(document.getElementById("sendMessageInput").value, currentDate.getTime());
     };
     //Enter-Funktionalität
-    document.getElementById("sendMessageInput").addEventListener("keyup", function(event) {
+    document.getElementById("sendMessageInput").addEventListener("keyup", function (event) {
         // Number 13 is the "Enter" key on the keyboard
         if (event.code === 'Enter') {
             // Cancel the default action, if needed
@@ -106,7 +114,7 @@ function setupButtonOnclicksAndInputs() {
         }
     });
     //Enter-Funktionalität
-    document.getElementById("chatWithWhoInput").addEventListener("keyup", function(event) {
+    document.getElementById("chatWithWhoInput").addEventListener("keyup", function (event) {
         // Number 13 is the "Enter" key on the keyboard
         if (event.code === 'Enter') {
             // Cancel the default action, if needed
@@ -116,7 +124,7 @@ function setupButtonOnclicksAndInputs() {
         }
     });
     //Enter-Funktionalität
-    document.getElementById("addFriendInput").addEventListener("keyup", function(event) {
+    document.getElementById("addFriendInput").addEventListener("keyup", function (event) {
         // Number 13 is the "Enter" key on the keyboard
         if (event.code === 'Enter') {
             // Cancel the default action, if needed
@@ -132,10 +140,10 @@ function setupButtonOnclicksAndInputs() {
 // Sends a request to update the username in the session
 function updateUsernameInDatabaseAndSession(newUsername) {
     fetch("/profile/updateUsername", {
-        method: 'POST',
-        body: JSON.stringify({username:newUsername}),
-        headers: {'Content-Type': 'application/json'},
-        credentials: 'include'
+            method: 'POST',
+            body: JSON.stringify({username: newUsername}),
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'include'
         }
     ).then(
         result => result.text()
@@ -147,11 +155,11 @@ function updateUsernameInDatabaseAndSession(newUsername) {
     alert("Session and Database updated!");
 }
 
-function uploadProfilePictureIntoDB(image) {
+async function uploadProfilePictureIntoDB(image) {
 
     //let img = document.getElementById("profile-picture").files[0];
     //console.log(img)
-    console.log(image)
+    let imageFits = true;
     fetch('/profile/uploadProfilePicture',
         {
             method: 'POST',
@@ -163,10 +171,6 @@ function uploadProfilePictureIntoDB(image) {
         .then(
             result => result.text()
         )
-        .catch(err => {
-            console.log('ERROR: ');
-            console.error();
-        })
 }
 
 function getAchievementsFromDatabase() {
@@ -239,9 +243,7 @@ function getProfilePicFromDatabase() {
 function setupInformationFromFriend(elm) {
     if (document.getElementById("editProfileButton").innerText === "Speichern") {  //gegen seltenen Bug: während dem Editieren des Profiles das Profil eines Freundes anschauen
         alert("Bitte erst Profil speichern!")
-    }
-
-    else if (!viewOnly) {        //Funktion wird nur ausgeführt, wenn man auf dem eigenen Profil ist
+    } else if (!viewOnly) {        //Funktion wird nur ausgeführt, wenn man auf dem eigenen Profil ist
         var name = elm.childNodes[1].innerHTML;  //childnodes[1] gibt das "name" child von friend
 
         friendGetUsernameFromDatabase(name);

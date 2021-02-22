@@ -693,8 +693,8 @@ public class UserFactory {
                     stmt.setBytes(1,bytes);
                     stmt.setInt(2, this.id);
                 } catch (MysqlDataTruncation large) {
-                    System.out.println("Image is too large to be safed");
                     large.printStackTrace();
+                    throw new ProfilePictureException("Image was too large");
                 }
                 stmt.executeUpdate();
                 stmt.close();
