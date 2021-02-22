@@ -1396,8 +1396,8 @@ function startMiniGame(ingredientList) {
                 // prepare values for next throw --------------------
 
                 // new coordinates of highpoint
-                this.vertex_x_inPercent = this.randomize(this.draggableIngredient.parentIngredient.flight_behavior.vertex_x_inPercent, 80);
-                this.vertex_y_inPercent = this.randomize(this.draggableIngredient.parentIngredient.flight_behavior.vertex_y_inPercent, 25);
+                this.vertex_x_inPercent = this.randomize(this.draggableIngredient.parentIngredient.flight_behavior.vertex_x_inPercent, 30);
+                this.vertex_y_inPercent = this.randomize(this.draggableIngredient.parentIngredient.flight_behavior.vertex_y_inPercent, 15);
                 this.rotation = 0;
 
                 // set the initial x to the value where y is 100px under the canvas
