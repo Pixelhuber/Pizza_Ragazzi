@@ -1,8 +1,10 @@
 package controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import factory.FactoryExceptions.ProfilePictureException;
 import factory.UserFactory;
-import models.Achievement;
 import models.Message;
 import play.data.Form;
 import play.data.FormFactory;
@@ -15,23 +17,37 @@ import scala.Console;
 import viewmodels.UserViewModel;
 
 import javax.inject.Inject;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 
+/**
+ * The type Profile controller.
+ */
 public class ProfileController extends Controller {
 
     private final AssetsFinder assetsFinder;
     private final FormFactory formFactory;
     private final UserFactory userFactory;
 
+    /**
+     * Instantiates a new Profile controller.
+     *
+     * @param assetsFinder the assets finder
+     * @param formFactory  the form factory
+     * @param userFactory  the user factory
+     */
     @Inject
     public ProfileController(AssetsFinder assetsFinder, FormFactory formFactory, UserFactory userFactory) {
         this.assetsFinder = assetsFinder;
@@ -39,7 +55,13 @@ public class ProfileController extends Controller {
         this.userFactory = userFactory;
     }
 
-    // Sets the username to the value in the request-body
+    /**
+     * Updates Username and adds it to session
+     *
+     * @param request the request
+     * @return the username
+     */
+// Sets the username to the value in the request-body
     public Result setUsername(Http.Request request) {
         Form<UserViewModel> form = formFactory.form(UserViewModel.class); // Ein ViewModel gibt quasi die Form vor, wie aus einem request gelesen werden soll (dafür auch das Package "ViewModels" :))
         UserViewModel userViewModel = form.bindFromRequest(request).get();
@@ -51,11 +73,33 @@ public class ProfileController extends Controller {
         return ok(userViewModel.getUsername()).addingToSession(request, "username", userViewModel.getUsername()); // Speichert den Username in der Session unter dem Key "username"
     }
 
+    /**
+     * Updates Users Profile Picture.
+     *
+     * @param request the request
+     * @return the result with ok-Status if successfull, else badRequest with ProfilePictureException-message
+     */
     public Result setProfilePicture(Http.Request request){
-        return badRequest();
+        String email = request.session().get("email").get();
+        UserFactory.User user = userFactory.getUserByEmail(email);
+
+        String image = request.body().asJson().get("img").toString();
+        try{
+            user.updateProfilePicture(image);
+        }catch (ProfilePictureException e){
+            return badRequest(e.getMessage());
+        }
+        //user.setProfilePicture(image);
+        return ok();
     }
 
-    // Reads key "email" from session and returns it
+    /**
+     * Gets email from session.
+     *
+     * @param request the request
+     * @return the email from session
+     */
+// Reads key "email" from session and returns it
     public Result getEmailFromSession(Http.Request request) {
         return request
                 .session()
@@ -67,8 +111,9 @@ public class ProfileController extends Controller {
     /**
      * returns the username
      * by getting the user from the db with it`s email from the session
-     * @param request
-     * @return
+     *
+     * @param request the request
+     * @return result
      */
     public Result getUsernameFromDatabase(Http.Request request){
         String email = request.session().get("email").get();
@@ -76,38 +121,75 @@ public class ProfileController extends Controller {
         return ok(user.getUsername());
     }
 
-    //evtl getEmailFromSession verwenden oder getUsername
+    /**
+     * Gets Users email from database.
+     *
+     * @param request the request
+     * @return the email from database
+     */
+//evtl getEmailFromSession verwenden oder getUsername
     public Result getEmailFromDatabase(Http.Request request) {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(user.getEmail());
     }
 
+    /**
+     * Gets Users gesamtpunkte from database.
+     *
+     * @param request the request
+     * @return the gesamtpunkte from database
+     */
     public Result getGesamtpunkteFromDatabase(Http.Request request) {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(Integer.toString(user.getTotalPoints()));
     }
 
+    /**
+     * Gets Users highscore from database.
+     *
+     * @param request the request
+     * @return the highscore from database
+     */
     public Result getHighscoreFromDatabase(Http.Request request) {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(Integer.toString(user.getHighScore()));
     }
 
+    /**
+     * Gets Users tier name from database.
+     *
+     * @param request the request
+     * @return the tier name from database
+     */
     public Result getTierNameFromDatabase(Http.Request request) {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(user.getNameFromTierId());
     }
 
+    /**
+     * Gets Users profile picture from database.
+     *
+     * @param request the request
+     * @return the profile picture from database
+     * @throws IOException the io exception
+     */
     public Result getProfilePictureFromDatabase(Http.Request request) throws IOException {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(Json.toJson(user.getProfilePictureSrc()));
     }
 
-    public Result getPasswordFromSession(Http.Request request) {
+    /**
+     * Gets Users password from session.
+     *
+     * @param request the request
+     * @return the password from session
+     */
+    public Result getPasswordFromSession(Http.Request request) { //TODO: unused
 
         return request
                 .session()
@@ -116,21 +198,27 @@ public class ProfileController extends Controller {
                 .orElseGet(Results::notFound);
     }
 
+    /**
+     * Gets Users specific Friends Data (ProfilePic and Username).
+     *
+     * @param request the request
+     * @return the friends data
+     * @throws IOException the io exception
+     */
     public Result getFriendsData(Http.Request request) throws IOException {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(Json.toJson(user.getFriendsData()));
     }
 
-    public Result getAchievementsFromDatabase(Http.Request request) {
-        String email = request.session().get("email").get();
-        UserFactory.User user = userFactory.getUserByEmail(email);
-        List<Achievement> achievements = user.getAchievements();
-        String json = listToJson(achievements);
-        return ok(json);
-    }
 
-    //gibt Messages mit bestimmtem Freund zurück
+    /**
+     * Gets Users messages from database.
+     *
+     * @param request the request
+     * @return the messages from database
+     */
+//gibt Messages mit bestimmtem Freund zurück
     public Result getMessagesFromDatabase(Http.Request request) {
         String email = request.session().get("email").get();
         String username = request.body().asJson().asText();
@@ -141,6 +229,12 @@ public class ProfileController extends Controller {
         return ok(json);
     }
 
+    /**
+     * Inserts a sent message into Message-Table in db.
+     *
+     * @param request the request
+     * @return the result
+     */
     public Result sendMessage(Http.Request request) {
         String email = request.session().get("email").get();
         UserFactory.User sender = userFactory.getUserByEmail(email);
@@ -152,6 +246,12 @@ public class ProfileController extends Controller {
         return ok();
     }
 
+    /**
+     * Inserts a new row in Friendship-Table.
+     *
+     * @param request the request
+     * @return the result with ok-Status if successfull else badRequest
+     */
     public Result addFriend(Http.Request request) {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
@@ -168,7 +268,14 @@ public class ProfileController extends Controller {
         else return badRequest("username not valid");
     }
 
-    //macht aus einer beliebigen Liste ein Json
+    /**
+     * Converts any list to json string.
+     *
+     * @param <T>  the type parameter
+     * @param list the list
+     * @return the string
+     */
+//macht aus einer beliebigen Liste ein Json
     public <T> String listToJson (List<T> list) {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = "";
@@ -185,9 +292,10 @@ public class ProfileController extends Controller {
     //AB HIER METHODEN ZUM ANSCHAUEN DES PROFILS EINES FREUNDES
 
     /**
-     * returns the username
-     * by getting the user from the db with it`s email from the session
-     * @return Result
+     * Gets Friends Username from db
+     *
+     * @param request the request
+     * @return Result result
      */
     public Result friendGetUsernameFromDatabase(Http.Request request){
         String username = request.body().asJson().asText();
@@ -195,48 +303,79 @@ public class ProfileController extends Controller {
         return ok(user.getUsername());
     }
 
-    //evtl getEmailFromSession verwenden oder getUsername
+    /**
+     * Gets Friends Email from db
+     *
+     * @param request the request
+     * @return the result
+     */
     public Result friendGetEmailFromDatabase(Http.Request request) {
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
         return ok(user.getEmail());
     }
 
+    /**
+     * Gets Friends Gesamtpunkte from db
+     *
+     * @param request the request
+     * @return the result
+     */
     public Result friendGetGesamtpunkteFromDatabase(Http.Request request) {
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
         return ok(Integer.toString(user.getTotalPoints()));
     }
 
+    /**
+     * Gets Friends Highscore from db
+     *
+     * @param request the request
+     * @return the result
+     */
     public Result friendGetHighscoreFromDatabase(Http.Request request) {
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
         return ok(Integer.toString(user.getHighScore()));
     }
 
+    /**
+     * Gets Friends Tier name from db
+     *
+     * @param request the request
+     * @return the result
+     */
     public Result friendGetTierNameFromDatabase(Http.Request request) {
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
         return ok(user.getNameFromTierId());
     }
 
+    /**
+     * Gets Friends ProfilePic from db
+     *
+     * @param request the request
+     * @return the result
+     * @throws IOException the io exception
+     */
     public Result friendGetProfilePictureFromDatabase(Http.Request request) throws IOException {
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
         return ok(Json.toJson(user.getProfilePictureSrc()));
     }
 
+    /**
+     * Gets Friends friendsData (ProfilePic and Username) from db
+     *
+     * @param request the request
+     * @return the result
+     * @throws IOException the io exception
+     */
     public Result friendFriendsData(Http.Request request) throws IOException{
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
         return ok(Json.toJson(user.getFriendsData()));
     }
 
-    public Result friendGetAchievementsFromDatabase(Http.Request request) {
-        String username = request.body().asJson().asText();
-        UserFactory.User user = userFactory.getUserByUsername(username);
-        List<Achievement> achievements = user.getAchievements();
-        String json = listToJson(achievements);
-        return ok(json);
-    }
+
 }

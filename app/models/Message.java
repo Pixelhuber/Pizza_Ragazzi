@@ -3,6 +3,9 @@ package models;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * The type Message.
+ */
 public class Message {
     private final int sender;
     private final int receiver;
@@ -11,6 +14,12 @@ public class Message {
     private final String time;
     private final String message_text;
 
+    /**
+     * Instantiates a new Message.
+     *
+     * @param rs the rs
+     * @throws SQLException the sql exception
+     */
     public Message(ResultSet rs) throws SQLException {
         this.sender = rs.getInt("sender");
         this.receiver = rs.getInt("receiver");
@@ -18,34 +27,74 @@ public class Message {
         this.message_text = rs.getString("message_text");
     }
 
+    /**
+     * Sets sender name.
+     *
+     * @param senderName the sender name
+     */
     public void setSenderName(String senderName) {
         this.senderName = senderName;
     }
 
+    /**
+     * Sets receiver name.
+     *
+     * @param receiverName the receiver name
+     */
     public void setReceiverName(String receiverName) {
         this.receiverName = receiverName;
     }
 
+    /**
+     * Gets sender.
+     *
+     * @return the sender
+     */
     public int getSender() {
         return sender;
     }
 
+    /**
+     * Gets receiver.
+     *
+     * @return the receiver
+     */
     public int getReceiver() {
         return receiver;
     }
 
+    /**
+     * Gets sender name.
+     *
+     * @return the sender name
+     */
     public String getSenderName() {
         return senderName;
     }
 
+    /**
+     * Gets receiver name.
+     *
+     * @return the receiver name
+     */
     public String getReceiverName() {
         return receiverName;
     }
 
+    /**
+     * Gets time.
+     *
+     * @return the time
+     */
     public String getTime() {
         return time;
     }
 
+    /**
+     * Gets message text.
+     *
+     * @return the message text
+     */
     public String getMessage_text() {
         return message_text;
     }

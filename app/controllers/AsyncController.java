@@ -27,12 +27,10 @@ public class AsyncController extends Controller {
     private final ExecutionContextExecutor exec;
 
     /**
-     * @param actorSystem We need the {@link ActorSystem}'s
-     * {@link Scheduler} to run code after a delay.
-     * @param exec We need a Java {@link Executor} to apply the result
-     * of the {@link CompletableFuture} and a Scala
-     * {@link ExecutionContext} so we can use the Akka {@link Scheduler}.
-     * An {@link ExecutionContextExecutor} implements both interfaces.
+     * Instantiates a new Async controller.
+     *
+     * @param actorSystem We need the {@link ActorSystem}'s {@link Scheduler} to run code after a delay.
+     * @param exec        We need a Java {@link Executor} to apply the result of the {@link CompletableFuture} and a Scala {@link ExecutionContext} so we can use the Akka {@link Scheduler}. An {@link ExecutionContextExecutor} implements both interfaces.
      */
     @Inject
     public AsyncController(ActorSystem actorSystem, ExecutionContextExecutor exec) {
@@ -43,10 +41,12 @@ public class AsyncController extends Controller {
     /**
      * An action that returns a plain text message after a delay
      * of 1 second.
-     *
+     * <p>
      * The configuration in the <code>routes</code> file means that this method
      * will be called when the application receives a <code>GET</code> request with
      * a path of <code>/message</code>.
+     *
+     * @return the completion stage
      */
     public CompletionStage<Result> message() {
         return getFutureMessage(1, TimeUnit.SECONDS).thenApplyAsync(Results::ok, exec);

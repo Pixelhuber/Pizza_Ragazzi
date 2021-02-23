@@ -20,6 +20,11 @@ public class HomeController extends Controller {
 
     private final AssetsFinder assetsFinder;
 
+    /**
+     * Instantiates a new Home controller.
+     *
+     * @param assetsFinder the assets finder
+     */
     @Inject
     public HomeController(AssetsFinder assetsFinder) {
         this.assetsFinder = assetsFinder;
@@ -30,6 +35,9 @@ public class HomeController extends Controller {
      * The configuration in the <code>routes</code> file means that
      * this method will be called when the application receives a
      * <code>GET</code> request with a path of <code>/</code>.
+     *
+     * @param request the request
+     * @return the result
      */
     public Result index(Http.Request request) {
         if (request.session().get("email").isPresent()) // check if User is logged in
@@ -39,6 +47,12 @@ public class HomeController extends Controller {
             return ok(login.render("Login", assetsFinder));
     }
 
+    /**
+     * Renders Highscore-page
+     *
+     * @param request the request
+     * @return the result
+     */
     public Result highscore(Http.Request request) {
         if (request.session().get("email").isPresent()) // check if User is logged in
 
@@ -47,6 +61,12 @@ public class HomeController extends Controller {
             return ok(login.render("Login", assetsFinder));
     }
 
+    /**
+     * Renders Profile-Page.
+     *
+     * @param request the request
+     * @return the result
+     */
     public Result profile(Http.Request request) {
         if (request.session().get("email").isPresent()) // check if User is logged in
 
@@ -55,6 +75,12 @@ public class HomeController extends Controller {
             return ok(login.render("Login", assetsFinder));
     }
 
+    /**
+     * Renders Menu.
+     *
+     * @param request the request
+     * @return the result
+     */
     public Result menu(Http.Request request){
         if (request.session().get("email").isPresent()) // check if User is logged in
             return ok(menu.render("Menu",assetsFinder));
@@ -62,10 +88,21 @@ public class HomeController extends Controller {
             return ok(login.render("Login", assetsFinder));
     }
 
+    /**
+     * Renders the createAccount-page
+     *
+     * @return the result
+     */
     public Result createAccount() {
         return ok(createAccount.render("CreateAccount", assetsFinder));
     }
 
+    /**
+     * Renders the PizzaRush-page
+     *
+     * @param request the request
+     * @return the result
+     */
     public Result pizzaRush(Http.Request request) {
         if (request.session().get("email").isPresent()) // check if User is logged in
 

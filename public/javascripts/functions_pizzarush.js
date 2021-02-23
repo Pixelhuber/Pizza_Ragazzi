@@ -11,13 +11,15 @@ const gameProperties = {
     pizza_timeUntilWarning: 4, // additional to regular baking time
     pizza_bakingTime: 5,
 
-    fruitNinja_distractionChance_percent: 10,
+    fruitNinja_distractionChance_percent: 20,
     fruitNinja_distractionDisablingTime: 5,
-    fruitNinja_maxIngredientsInAir: 6,
-    fruitNinja_minTimeBetweenThrows: 0.7,
+    fruitNinja_maxIngredientsInAir: 10,
+    fruitNinja_minTimeBetweenThrows: 0.1,
+    fruitNinja_xRange: 30,
+    fruitNinja_yRange: 30,
 
     whack_distractionChance_percent: 0,
-    whack_maxIngredientsShownAtOnce: 2,
+    whack_maxIngredientsShownAtOnce: 4,
     whack_minTimeBetweenShows: 0
 }
 
@@ -1396,8 +1398,8 @@ function startMiniGame(ingredientList) {
                 // prepare values for next throw --------------------
 
                 // new coordinates of highpoint
-                this.vertex_x_inPercent = this.randomize(this.draggableIngredient.parentIngredient.flight_behavior.vertex_x_inPercent, 80);
-                this.vertex_y_inPercent = this.randomize(this.draggableIngredient.parentIngredient.flight_behavior.vertex_y_inPercent, 25);
+                this.vertex_x_inPercent = this.randomize(this.draggableIngredient.parentIngredient.flight_behavior.vertex_x_inPercent, gameProperties.fruitNinja_xRange);
+                this.vertex_y_inPercent = this.randomize(this.draggableIngredient.parentIngredient.flight_behavior.vertex_y_inPercent, gameProperties.fruitNinja_yRange);
                 this.rotation = 0;
 
                 // set the initial x to the value where y is 100px under the canvas
