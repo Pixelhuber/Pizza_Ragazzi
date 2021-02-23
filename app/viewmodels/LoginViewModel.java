@@ -48,4 +48,3 @@ public class LoginViewModel {
         return this;
     }
 }
-
