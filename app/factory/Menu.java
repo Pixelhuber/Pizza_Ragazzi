@@ -14,7 +14,7 @@ public class Menu {
     /**
      * The Db.
      */
-    Database db;
+    final Database db;
 
     /**
      * Instantiates a new Menu.

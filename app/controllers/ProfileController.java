@@ -161,7 +161,7 @@ public class ProfileController extends Controller {
      * @return the profile picture from database
      * @throws IOException the io exception
      */
-    public Result getProfilePictureFromDatabase(Http.Request request) throws IOException {
+    public Result getProfilePictureFromDatabase(Http.Request request){
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(Json.toJson(user.getProfilePictureSrc()));
@@ -189,7 +189,7 @@ public class ProfileController extends Controller {
      * @return the friends data
      * @throws IOException the io exception
      */
-    public Result getFriendsData(Http.Request request) throws IOException {
+    public Result getFriendsData(Http.Request request){
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(Json.toJson(user.getFriendsData()));
@@ -346,7 +346,7 @@ public class ProfileController extends Controller {
      * @return the result
      * @throws IOException the io exception
      */
-    public Result friendGetProfilePictureFromDatabase(Http.Request request) throws IOException {
+    public Result friendGetProfilePictureFromDatabase(Http.Request request){
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
         return ok(Json.toJson(user.getProfilePictureSrc()));
@@ -359,11 +359,9 @@ public class ProfileController extends Controller {
      * @return the result
      * @throws IOException the io exception
      */
-    public Result friendFriendsData(Http.Request request) throws IOException {
+    public Result friendFriendsData(Http.Request request){
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
         return ok(Json.toJson(user.getFriendsData()));
     }
-
-
 }
