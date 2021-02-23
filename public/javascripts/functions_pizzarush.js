@@ -11,13 +11,13 @@ const gameProperties = {
     pizza_timeUntilWarning: 4, // additional to regular baking time
     pizza_bakingTime: 5,
 
-    fruitNinja_distractionChance_percent: 10,
+    fruitNinja_distractionChance_percent: 20,
     fruitNinja_distractionDisablingTime: 5,
-    fruitNinja_maxIngredientsInAir: 6,
-    fruitNinja_minTimeBetweenThrows: 0.7,
+    fruitNinja_maxIngredientsInAir: 10,
+    fruitNinja_minTimeBetweenThrows: 0.1,
 
     whack_distractionChance_percent: 0,
-    whack_maxIngredientsShownAtOnce: 2,
+    whack_maxIngredientsShownAtOnce: 4,
     whack_minTimeBetweenShows: 0
 }
 

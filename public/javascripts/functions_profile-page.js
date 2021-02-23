@@ -37,7 +37,7 @@ $(function () {
             usernameField.html(usernameInputField);
 
             // display field to change profile-picture
-            const selectFileButton = "<input style='font-size: 18px' id=\"file-upload\" type=\"file\" accept=\"image/*\"/>"
+            const selectFileButton = "<input style='font-size: 18px' id=\"file-upload\" type=\"file\" accept=\"image/jpeg\"/>"
             selectFile.html(selectFileButton);
             $("#file-upload").on('change', function () {
                 readURL(this);
