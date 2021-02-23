@@ -143,8 +143,7 @@ async function uploadProfilePictureIntoDB(image) {
             headers: {'Content-Type': 'application/json'},
             credentials: 'include'
         }
-    )
-        .then(
+    ).then(
             result => result.text()
         )
 }
