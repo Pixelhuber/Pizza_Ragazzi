@@ -48,6 +48,7 @@ class AbstractIngredient {
     picture_processed;
     picture_baked;
     picture_burnt;
+    zIndex;
 
     static picture_type = {
         RAW: 1,
@@ -57,7 +58,7 @@ class AbstractIngredient {
         BURNT: 5
     }
 
-    constructor(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt) {
+    constructor(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt, zIndex) {
         this.id = id;
         this.name = name;
         this.picture_raw = picture_raw;
@@ -65,6 +66,7 @@ class AbstractIngredient {
         this.picture_processed = picture_processed;
         this.picture_baked = picture_baked;
         this.picture_burnt = picture_burnt;
+        this.zIndex = zIndex;
     }
 
     createDraggableInstance() {
@@ -96,30 +98,7 @@ class AbstractIngredient {
         ret.setAttribute('width', '110px');
         ret.setAttribute('height', '110px');
 
-        // TODO: Früher oder später müssen wir die z-Indexes der Ingredients in der Datenbank speichern
-        switch (this.name) {
-            case "Pomodoro":
-                ret.style.zIndex = "11";
-                break;
-            case "Formaggio":
-                ret.style.zIndex = "12";
-                break;
-            case "Salame":
-                ret.style.zIndex = "13";
-                break;
-            case "Prociutto":
-                ret.style.zIndex = "14";
-                break;
-            case "Paprica":
-                ret.style.zIndex = "15";
-                break;
-            case "Funghi":
-                ret.style.zIndex = "16";
-                break;
-            case "Ananas":
-                ret.style.zIndex = "17";
-                break;
-        }
+        ret.style.zIndex = this.zIndex;
 
         return ret;
     }
@@ -149,8 +128,8 @@ class ChoppingIngredient extends AbstractIngredient {
 
     flight_behavior;
 
-    constructor(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt, flight_behavior) {
-        super(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt);
+    constructor(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt, zIndex, flight_behavior) {
+        super(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt, zIndex);
         this.flight_behavior = flight_behavior;
     }
 }
@@ -159,8 +138,8 @@ class StampingIngredient extends AbstractIngredient {
 
     stamp_behavior;
 
-    constructor(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt, stamp_behavior) {
-        super(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt);
+    constructor(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt, zIndex, stamp_behavior) {
+        super(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt, zIndex);
         this.stamp_behavior = stamp_behavior;
     }
 }
@@ -913,14 +892,14 @@ async function setupAvailableIngredients() {
     ingredients.forEach(function (item) {// Json-Array in availableIngredients-Array
         if (item.hasOwnProperty("display_time")) {
             availableIngredients.push(
-                new StampingIngredient(item.id, item.name, item.picture_raw, item.picture_raw_distraction, item.picture_processed, item.picture_baked, item.picture_burnt, {
+                new StampingIngredient(item.id, item.name, item.picture_raw, item.picture_raw_distraction, item.picture_processed, item.picture_baked, item.picture_burnt, item.zIndex, {
                     disabling_time: item.disabling_time,
                     hits_required: item.hits_required,
                     display_time: item.display_time
                 }))
         } else {
             availableIngredients.push(
-                new ChoppingIngredient(item.id, item.name, item.picture_raw, item.picture_raw_distraction, item.picture_processed, item.picture_baked, item.picture_burnt, {
+                new ChoppingIngredient(item.id, item.name, item.picture_raw, item.picture_raw_distraction, item.picture_processed, item.picture_baked, item.picture_burnt, item.zIndex, {
                     vertex_x_inPercent: item.vertex_x_inPercent,
                     vertex_y_inPercent: item.vertex_y_inPercent,
                     speed: item.speed,

@@ -263,6 +263,9 @@ public class PizzaRushFactory {
          * The Picture burnt.
          */
         String picture_burnt;
+
+        int zIndex;
+
         /**
          * The Tier.
          */
@@ -308,6 +311,7 @@ public class PizzaRushFactory {
             } catch (IOException invalidProfilePicture) {
                 throw new ProfilePictureException("We had trouble getting \"picture_burnt\"");
             }
+            this.zIndex = rs.getInt("zIndex");
             this.tier = rs.getInt("Tier_idTier");
         }
 
@@ -372,6 +376,10 @@ public class PizzaRushFactory {
          */
         public String getPicture_burnt() {
             return picture_burnt;
+        }
+
+        public int getzIndex() {
+            return zIndex;
         }
 
         /**
