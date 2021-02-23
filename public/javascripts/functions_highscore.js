@@ -19,26 +19,26 @@ function createHighscoreTable(tableData) {
 
     /*Sortiert die Tabelle nach Punktewerten*/
     tableData.sort(sortFunction);
+
     function sortFunction(a, b) {
         let aInt = parseInt(a[1], 10);
         let bInt = parseInt(b[1], 10);
         if (aInt === bInt) {
             return 0;
-        }
-        else {
+        } else {
             return (aInt > bInt) ? -1 : 1;
         }
     }
 
     /*Iteriert über das 2D Array*/
-    tableData.forEach(function(rowData,index) {
+    tableData.forEach(function (rowData, index) {
         var row = document.createElement('tr');
 
         var cellRank = document.createElement('th');
-        cellRank.appendChild(document.createTextNode(index+1));
+        cellRank.appendChild(document.createTextNode(index + 1));
         row.appendChild(cellRank);
 
-        rowData.forEach(function(cellData) {
+        rowData.forEach(function (cellData) {
             var cell = document.createElement('td');
             cell.appendChild(document.createTextNode(cellData));
             row.appendChild(cell);

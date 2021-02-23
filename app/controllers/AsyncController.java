@@ -1,19 +1,20 @@
 package controllers;
 
 import akka.actor.ActorSystem;
-import javax.inject.*;
-
 import akka.actor.Scheduler;
-import play.*;
-import play.mvc.*;
-import java.util.concurrent.Executor;
+import play.mvc.Controller;
+import play.mvc.Result;
+import play.mvc.Results;
+import scala.concurrent.ExecutionContext;
+import scala.concurrent.ExecutionContextExecutor;
+import scala.concurrent.duration.Duration;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
-
-import scala.concurrent.ExecutionContext;
-import scala.concurrent.duration.Duration;
-import scala.concurrent.ExecutionContextExecutor;
 
 /**
  * This controller contains an action that demonstrates how to write
@@ -34,8 +35,8 @@ public class AsyncController extends Controller {
      */
     @Inject
     public AsyncController(ActorSystem actorSystem, ExecutionContextExecutor exec) {
-      this.actorSystem = actorSystem;
-      this.exec = exec;
+        this.actorSystem = actorSystem;
+        this.exec = exec;
     }
 
     /**
@@ -55,9 +56,9 @@ public class AsyncController extends Controller {
     private CompletionStage<String> getFutureMessage(long time, TimeUnit timeUnit) {
         CompletableFuture<String> future = new CompletableFuture<>();
         actorSystem.scheduler().scheduleOnce(
-            Duration.create(time, timeUnit),
-            () -> future.complete("Hi!"),
-            exec
+                Duration.create(time, timeUnit),
+                () -> future.complete("Hi!"),
+                exec
         );
         return future;
     }

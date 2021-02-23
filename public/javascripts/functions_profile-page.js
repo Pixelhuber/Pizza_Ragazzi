@@ -1,4 +1,3 @@
-
 $(function () {
 
     //edit the profile (username, picture) (email and password could be added in the future)
@@ -144,8 +143,8 @@ async function uploadProfilePictureIntoDB(image) {
             credentials: 'include'
         }
     ).then(
-            result => result.text()
-        )
+        result => result.text()
+    )
 }
 
 // Reads username from Database and updates html

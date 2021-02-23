@@ -21,12 +21,13 @@ public class PizzaValidation {
      * @param createdPizzaIngredientIds the created pizza ingredient ids
      * @param createdPizzaBakeStatus    the created pizza bake status
      */
-    public PizzaValidation(int orderPoints,List<Integer> orderIngredientIds,List<Integer> createdPizzaIngredientIds,int createdPizzaBakeStatus){
-        if(orderPoints==0||orderIngredientIds==null||createdPizzaIngredientIds==null)throw new NullPointerException("Parameter ist null");
-        this.orderPoints=orderPoints;
-        this.orderIngredientIds=orderIngredientIds;
-        this.createdPizzaIngredientIds=createdPizzaIngredientIds;
-        this.createdPizzaBakeStatus=createdPizzaBakeStatus;
+    public PizzaValidation(int orderPoints, List<Integer> orderIngredientIds, List<Integer> createdPizzaIngredientIds, int createdPizzaBakeStatus) {
+        if (orderPoints == 0 || orderIngredientIds == null || createdPizzaIngredientIds == null)
+            throw new NullPointerException("Parameter ist null");
+        this.orderPoints = orderPoints;
+        this.orderIngredientIds = orderIngredientIds;
+        this.createdPizzaIngredientIds = createdPizzaIngredientIds;
+        this.createdPizzaBakeStatus = createdPizzaBakeStatus;
     }
 
     /**
@@ -35,18 +36,18 @@ public class PizzaValidation {
      * @return the int
      */
 // Calculates how many points this pizza should get
-    public int calculatePoints(){
-        int points=orderPoints;
-        if(pizzaEqualsOrder()){
-            switch(createdPizzaBakeStatus){
+    public int calculatePoints() {
+        int points = orderPoints;
+        if (pizzaEqualsOrder()) {
+            switch (createdPizzaBakeStatus) {
                 case 3: // UNBAKED
-                    points = (int)(points * 0.25);
+                    points = (int) (points * 0.25);
                     break;
                 case 4: // WELL
                     //no negative Points since its baked
                     break;
                 case 5: // BURNT
-                    points = (int)(points * 0.25);
+                    points = (int) (points * 0.25);
                     break;
             }
         } else {
@@ -60,8 +61,8 @@ public class PizzaValidation {
      *
      * @return the boolean
      */
-    public boolean pizzaEqualsOrder (){
-        return listEquals(createdPizzaIngredientIds,orderIngredientIds);
+    public boolean pizzaEqualsOrder() {
+        return listEquals(createdPizzaIngredientIds, orderIngredientIds);
     }
 
     /**

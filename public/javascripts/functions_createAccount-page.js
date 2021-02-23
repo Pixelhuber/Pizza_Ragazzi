@@ -87,7 +87,7 @@ function validateCreateAccountData() {
         password_error.style.display = "none";
         password2_error.style.display = "none";
         validAccountData = false;
-    }else {
+    } else {
         password_duplicate_error.style.display = "none";
     }
 
@@ -103,7 +103,7 @@ function validateCreateAccountData() {
         validAccountData = false;
     }
 
-    if (validAccountData){
+    if (validAccountData) {
         createAccount();
     }
 }
@@ -138,19 +138,19 @@ function createAccount() {
         .then(result => result.text())
         .then(data => {
             let msg = data.toString();
-            if (msg === "username is empty"){
+            if (msg === "username is empty") {
                 //already handled in validateCreateAccountData()
-            } else if (msg === "email is not valid"){
+            } else if (msg === "email is not valid") {
                 //already handled in validateCreateAccountData()
-            } else if (msg === "password is empty"){
+            } else if (msg === "password is empty") {
                 //already handled in validateCreateAccountData()
-            } else if (msg === "password does not match password2"){
+            } else if (msg === "password does not match password2") {
                 //already handled in validateCreateAccountData()
-            } else if (msg === "email already in use"){
+            } else if (msg === "email already in use") {
                 email_exists_error.style.display = "block";
-            } else if (msg === "username already in use"){
+            } else if (msg === "username already in use") {
                 username_exists_error.style.display = "block";
-            } else if (msg === "user could not be created"){
+            } else if (msg === "user could not be created") {
                 create_account_error.style.display = "block";
             } else {
                 //TODO change this to game menu

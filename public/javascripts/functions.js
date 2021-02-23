@@ -19,24 +19,24 @@ function createHighscoreTable(tableData) {
 
     /*Sortiert die Tabelle nach Punktewerten*/
     tableData.sort(sortFunction);
+
     function sortFunction(a, b) {
         if (a[1] === b[1]) {
             return 0;
-        }
-        else {
-            return (a[1]> b[1]) ? -1 : 1;
+        } else {
+            return (a[1] > b[1]) ? -1 : 1;
         }
     }
 
     /*Iteriert über das 2D Array*/
-    tableData.forEach(function(rowData,index) {
+    tableData.forEach(function (rowData, index) {
         var row = document.createElement('tr');
 
         var cellRank = document.createElement('th');
-        cellRank.appendChild(document.createTextNode(index+1));
+        cellRank.appendChild(document.createTextNode(index + 1));
         row.appendChild(cellRank);
 
-        rowData.forEach(function(cellData) {
+        rowData.forEach(function (cellData) {
             var cell = document.createElement('td');
             cell.appendChild(document.createTextNode(cellData));
             row.appendChild(cell);

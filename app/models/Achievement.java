@@ -19,7 +19,7 @@ public class Achievement {
      * @throws SQLException the sql exception
      */
     public Achievement(ResultSet rs) throws SQLException {
-        this.id  =rs.getInt("idReward");
+        this.id = rs.getInt("idReward");
         this.name = rs.getString("name");
         this.description = rs.getString("description");
     }

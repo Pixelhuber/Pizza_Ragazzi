@@ -5,7 +5,6 @@ import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-
 import javax.inject.Inject;
 
 /**

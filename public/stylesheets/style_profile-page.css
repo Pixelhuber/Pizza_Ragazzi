@@ -48,9 +48,11 @@
     .left_div {
         width: 100%;
     }
+
     .middle_div {
         width: 100%;
     }
+
     .right_div {
         width: 100%;
     }
@@ -63,7 +65,7 @@
     background-color: #eaeaea;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 10px;
-    float: left;    /* aus irgendeinem Grund werden nur mit float die Achievements im div angezeigt https://stackoverflow.com/questions/2062258/floating-elements-within-a-div-floats-outside-of-div-why */
+    float: left; /* aus irgendeinem Grund werden nur mit float die Achievements im div angezeigt https://stackoverflow.com/questions/2062258/floating-elements-within-a-div-floats-outside-of-div-why */
 }
 
 #profile-picture {
@@ -97,7 +99,7 @@
     text-align: center;
 }
 
-#container_friends{
+#container_friends {
     max-height: 39vh;
 }
 
@@ -109,7 +111,7 @@
     width: 80%;
 }
 
-#addFriendButton{
+#addFriendButton {
     font-size: 132%;
     background-color: white;
     color: black;
@@ -190,6 +192,7 @@
     border: 2px black solid;
     border-radius: 6px;
 }
+
 #sendMessageButton:hover {
     color: white;
     background-color: black;
@@ -218,6 +221,7 @@
     background-color: black;
     cursor: pointer;
 }
+
 /*für description hover: https://www.w3schools.com/css/tryit.asp?filename=trycss_tooltip_arrow_top*/
 
 .achievementBox:hover .achievementDescription {
@@ -278,13 +282,21 @@
 
 /* Safari */
 @-webkit-keyframes spin {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* Track */

@@ -1,20 +1,20 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
-*{
+* {
     font-family: "Arial Black", sans-serif;
 }
 
-form{
+form {
     margin: auto;
     width: min-content;
 }
 
-h1{
+h1 {
     text-align: center;
     font-size: 7em;
 }
 
-input{
+input {
     width: 300px;
     height: 30px;
 }
@@ -27,7 +27,7 @@ input{
     border: 0;
 }
 
-button{
+button {
     width: 49%;
     height: 30px;
     background-color: black;

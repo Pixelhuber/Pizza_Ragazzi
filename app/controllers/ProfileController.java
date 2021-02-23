@@ -1,7 +1,5 @@
 package controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import factory.FactoryExceptions.ProfilePictureException;
 import factory.UserFactory;
@@ -13,23 +11,12 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
-import scala.Console;
 import viewmodels.UserViewModel;
 
 import javax.inject.Inject;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.Base64;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 
 /**
@@ -79,14 +66,14 @@ public class ProfileController extends Controller {
      * @param request the request
      * @return the result with ok-Status if successfull, else badRequest with ProfilePictureException-message
      */
-    public Result setProfilePicture(Http.Request request){
+    public Result setProfilePicture(Http.Request request) {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
 
         String image = request.body().asJson().get("img").toString();
-        try{
+        try {
             user.updateProfilePicture(image);
-        }catch (ProfilePictureException e){
+        } catch (ProfilePictureException e) {
             return badRequest(e.getMessage());
         }
         //user.setProfilePicture(image);
@@ -115,7 +102,7 @@ public class ProfileController extends Controller {
      * @param request the request
      * @return result
      */
-    public Result getUsernameFromDatabase(Http.Request request){
+    public Result getUsernameFromDatabase(Http.Request request) {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(user.getUsername());
@@ -276,17 +263,16 @@ public class ProfileController extends Controller {
      * @return the string
      */
 //macht aus einer beliebigen Liste ein Json
-    public <T> String listToJson (List<T> list) {
+    public <T> String listToJson(List<T> list) {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = "";
         try {
             json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return json;
     }
-
 
 
     //AB HIER METHODEN ZUM ANSCHAUEN DES PROFILS EINES FREUNDES
@@ -297,7 +283,7 @@ public class ProfileController extends Controller {
      * @param request the request
      * @return Result result
      */
-    public Result friendGetUsernameFromDatabase(Http.Request request){
+    public Result friendGetUsernameFromDatabase(Http.Request request) {
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
         return ok(user.getUsername());
@@ -371,7 +357,7 @@ public class ProfileController extends Controller {
      * @return the result
      * @throws IOException the io exception
      */
-    public Result friendFriendsData(Http.Request request) throws IOException{
+    public Result friendFriendsData(Http.Request request) throws IOException {
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
         return ok(Json.toJson(user.getFriendsData()));

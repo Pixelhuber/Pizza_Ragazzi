@@ -1,16 +1,11 @@
 package controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import play.libs.Json;
-import play.mvc.*;
-import play.db.*;
-
-import scala.util.parsing.json.JSON;
+import play.mvc.Controller;
+import play.mvc.Http;
+import play.mvc.Result;
 import views.html.*;
 
 import javax.inject.Inject;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * This controller contains an action to handle HTTP requests
@@ -41,7 +36,6 @@ public class HomeController extends Controller {
      */
     public Result index(Http.Request request) {
         if (request.session().get("email").isPresent()) // check if User is logged in
-
             return ok(pizzarush.render("Login", assetsFinder));
         else
             return ok(login.render("Login", assetsFinder));
@@ -81,9 +75,9 @@ public class HomeController extends Controller {
      * @param request the request
      * @return the result
      */
-    public Result menu(Http.Request request){
+    public Result menu(Http.Request request) {
         if (request.session().get("email").isPresent()) // check if User is logged in
-            return ok(menu.render("Menu",assetsFinder));
+            return ok(menu.render("Menu", assetsFinder));
         else
             return ok(login.render("Login", assetsFinder));
     }

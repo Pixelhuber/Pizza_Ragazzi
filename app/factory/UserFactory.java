@@ -5,7 +5,6 @@ import factory.FactoryExceptions.EmailAlreadyInUseException;
 import factory.FactoryExceptions.InvalidEmailException;
 import factory.FactoryExceptions.ProfilePictureException;
 import factory.FactoryExceptions.UsernameAlreadyInUseException;
-
 import models.Message;
 import play.db.Database;
 
@@ -13,7 +12,9 @@ import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 
@@ -645,8 +646,8 @@ public class UserFactory {
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 try {
                     var imageData = sourceData.split("base64,")[1];
-                    byte[] bytes= Base64.getMimeDecoder().decode(imageData);
-                    stmt.setBytes(1,bytes);
+                    byte[] bytes = Base64.getMimeDecoder().decode(imageData);
+                    stmt.setBytes(1, bytes);
                     stmt.setInt(2, this.id);
                 } catch (MysqlDataTruncation large) {
                     large.printStackTrace();

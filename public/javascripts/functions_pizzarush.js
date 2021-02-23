@@ -1,4 +1,3 @@
-
 const gameProperties = {
     roundLength: 300,
 
@@ -292,7 +291,6 @@ class DraggablePizzaInstance extends Pizza {
     }
 
 
-
     static findExistingPizzaByDiv(div) {
         existingDraggablePizzaInstances.forEach(function (item) {
             if (item.draggable === div)
@@ -559,12 +557,10 @@ class Order {
                 thisOrder.gameElement.timeIndicator.style.backgroundColor = "red";
 
 
-            if (elapsed < thisOrder.timeInSeconds * 1000){ // Stop the animation when time is over
+            if (elapsed < thisOrder.timeInSeconds * 1000) { // Stop the animation when time is over
                 if (thisOrder.animationRunning)
                     window.requestAnimationFrame(updateTimeIndicator);
-            }
-
-            else
+            } else
                 OrderHandler.getInstance().notifyExpired(thisOrder);
         }
 
@@ -607,11 +603,11 @@ class OrderHandler {
             lastTimestamp = timestamp;
 
             if (orderHandler.activeOrders.length < gameProperties.minOrdersActive) {
-                orderHandler.activateOrder(orderHandler.drawRandomOrder(), gameProperties.orderDelay*1000);
+                orderHandler.activateOrder(orderHandler.drawRandomOrder(), gameProperties.orderDelay * 1000);
                 timeSinceLastOrder = 0;
             }
 
-            if (timeSinceLastOrder > gameProperties.maxTimeBetweenOrders*1000) {
+            if (timeSinceLastOrder > gameProperties.maxTimeBetweenOrders * 1000) {
                 orderHandler.activateOrder(orderHandler.drawRandomOrder());
                 timeSinceLastOrder = 0;
             }
@@ -690,7 +686,7 @@ class OrderHandler {
         fillIdArray(receivedPizza.ingredients, pizzaIds)
 
         // Play sound
-        if (equalsIgnoreOrder(orderIds,pizzaIds) && receivedPizza.bakeStatus === DraggablePizzaInstance.bakeStatus.WELL)
+        if (equalsIgnoreOrder(orderIds, pizzaIds) && receivedPizza.bakeStatus === DraggablePizzaInstance.bakeStatus.WELL)
             AudioPlayer.order_correct();
         else
             AudioPlayer.distraction_hit();
@@ -978,11 +974,11 @@ function loadOvens() {
 
 function loadRecipeList() {
     const recipeList = document.getElementById("recipeList");
-    recipeList.onmouseenter = function (){
+    recipeList.onmouseenter = function () {
         expanded.style.display = "flex";
         // recipeList.innerText = "";
     };
-    recipeList.onmouseleave = function (){
+    recipeList.onmouseleave = function () {
         expanded.style.display = "none";
         // recipeList.innerText = "recipes"
     };
@@ -1520,7 +1516,7 @@ function startMiniGame(ingredientList) {
                 this.ingredientJuggler.ingredientsWaitingToBeThrown.splice(index, 1);
 
                 // tell juggler to either throw yourself OR a distraction
-                if (Math.random() < gameProperties.fruitNinja_distractionChance_percent/100)
+                if (Math.random() < gameProperties.fruitNinja_distractionChance_percent / 100)
                     this.ingredientJuggler.ingredientsCurrentlyInAir.push(this.createDistraction());
                 else
                     this.ingredientJuggler.ingredientsCurrentlyInAir.push(this);
@@ -1560,7 +1556,7 @@ function startMiniGame(ingredientList) {
 
             createDistraction() {
 
-                return new DistractionThrower(this, gameProperties.fruitNinja_distractionDisablingTime*1000);
+                return new DistractionThrower(this, gameProperties.fruitNinja_distractionDisablingTime * 1000);
             }
         }
 
@@ -1654,7 +1650,7 @@ function startMiniGame(ingredientList) {
 
                 this.lastTimestamp = timestamp;
 
-                if ((timestamp - this.timestampLastThrow) > this.minTimeBetweenThrows*1000)
+                if ((timestamp - this.timestampLastThrow) > this.minTimeBetweenThrows * 1000)
                     if (this.ingredientsWaitingToBeThrown.length > 0 &&
                         this.ingredientsCurrentlyInAir.length < this.maxIngredientsInAir) {
                         const randomIndex = Math.floor(Math.random() * this.ingredientsWaitingToBeThrown.length);
@@ -1860,7 +1856,7 @@ function startMiniGame(ingredientList) {
                 this.moleHandler.ingredientsWaitingToBeShown.splice(index, 1);
 
                 // tell MoleHandler to either show yourself OR a distraction
-                if (Math.random() < gameProperties.whack_distractionChance_percent/100)
+                if (Math.random() < gameProperties.whack_distractionChance_percent / 100)
                     this.moleHandler.ingredientsCurrentlyShown.push(this.createDistraction());
                 else
                     this.moleHandler.ingredientsCurrentlyShown.push(this);
@@ -2146,7 +2142,7 @@ function startMiniGame(ingredientList) {
         const moleHandler = new MoleHandler(
             ingredientList,
             9,
-            gameProperties.whack_minTimeBetweenShows*1000,
+            gameProperties.whack_minTimeBetweenShows * 1000,
             gameProperties.whack_maxIngredientsShownAtOnce);
 
         addHitListener(moleHandler);

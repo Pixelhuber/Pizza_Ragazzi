@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import factory.UserFactory;
-import factory.UserFactory.User;
 import models.pizza_rush.PizzaRushFactory;
 import models.pizza_rush.PizzaValidation;
 import play.mvc.Controller;
@@ -29,7 +28,6 @@ public class PizzaRushController extends Controller {
     /**
      * Instantiates a new Pizza rush controller.
      *
-     * @param assetsFinder     the assets finder
      * @param pizzaRushFactory the pizza rush factory
      * @param userFactory      the user factory
      */
@@ -120,7 +118,7 @@ public class PizzaRushController extends Controller {
             return badRequest("Expecting Json data");
         } else {
             int newTotalPoints = json.findPath("newTotalPoints").asInt();
-            int newHighscore= json.findPath("newHighscore").asInt();
+            int newHighscore = json.findPath("newHighscore").asInt();
             if (email.isEmpty()) {
                 return badRequest("usermail was empty");
             }
