@@ -14,9 +14,6 @@ import java.util.List;
  * The type Menu.
  */
 public class Menu {
-    /**
-     * The Db.
-     */
     Database db;
 
     /**
@@ -75,17 +72,8 @@ public class Menu {
      */
     public class LevelUpViewModel {
 
-        /**
-         * The Is level up possible.
-         */
         boolean isLevelUpPossible;
-        /**
-         * The Next tier.
-         */
         String nextTier;
-        /**
-         * The Next tier points.
-         */
         int nextTierPoints;
 
         /**

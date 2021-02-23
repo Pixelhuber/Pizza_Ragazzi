@@ -102,7 +102,7 @@ public class LoginController extends Controller {
     }
 
     /**
-     * Logs out the user from current session and rendres Login-page
+     * Logs out the user from current session and renders Login-page
      *
      * @param request the request
      * @return the result
