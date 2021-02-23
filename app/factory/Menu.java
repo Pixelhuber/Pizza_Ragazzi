@@ -39,6 +39,7 @@ public class Menu {
     public LevelUpViewModel checkForLevelUp(UserFactory.User user) {
         int userTotalPoints = user.getTotalPoints();
         int userCurrentTier = user.getCurrentTier();
+        int userNextTier = userCurrentTier+1;
 
         return db.withConnection(conn -> {
             String sql = "SELECT * FROM Tier";
@@ -62,11 +63,11 @@ public class Menu {
             boolean isLevelUpPossible = Integer.parseInt(rsAsList.get(iHighestPossibleTier)[0]) > userCurrentTier;
 
             if (isLevelUpPossible) // User can level up
-                return new LevelUpViewModel(true, highestPossibleTier[1], Integer.parseInt(highestPossibleTier[2]));
+                return new LevelUpViewModel(true, highestPossibleTier[1], Integer.parseInt(highestPossibleTier[2]), userCurrentTier+1);
             else if (iHighestPossibleTier < rsAsList.size()-1) // User can't level up yet
-                return new LevelUpViewModel(false, rsAsList.get(iHighestPossibleTier+1)[1], Integer.parseInt(rsAsList.get(iHighestPossibleTier+1)[2]));
+                return new LevelUpViewModel(false, rsAsList.get(iHighestPossibleTier+1)[1], Integer.parseInt(rsAsList.get(iHighestPossibleTier+1)[2]), userCurrentTier+1);
             else // User already is highest level
-                return new LevelUpViewModel(false, "", 0);
+                return new LevelUpViewModel(false, "", 0, userCurrentTier+1);
         });
     }
 
@@ -88,6 +89,8 @@ public class Menu {
          */
         int nextTierPoints;
 
+        int nextTierAsFigure;
+
         /**
          * Instantiates a new Level up view model.
          *
@@ -95,10 +98,11 @@ public class Menu {
          * @param nextTier          the next tier
          * @param nextTierPoints    the next tier points
          */
-        public LevelUpViewModel(boolean isLevelUpPossible, String nextTier, int nextTierPoints) {
+        public LevelUpViewModel(boolean isLevelUpPossible, String nextTier, int nextTierPoints, int nextTierAsFigure) {
             this.isLevelUpPossible = isLevelUpPossible;
             this.nextTier = nextTier;
             this.nextTierPoints = nextTierPoints;
+            this.nextTierAsFigure = nextTierAsFigure;
         }
 
         /**
@@ -126,6 +130,9 @@ public class Menu {
          */
         public int getNextTierPoints() {
             return nextTierPoints;
+        }
+        public int getNextTierAsFigure() {
+            return nextTierAsFigure;
         }
     }
 }

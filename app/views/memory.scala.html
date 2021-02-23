@@ -6,6 +6,7 @@
         <link rel="shortcut icon" type="image_path/png" href="@assetsFinder.path("images/favicon.png")">
         <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_memory.css")">
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/functions_memory.js")"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
         <title>Memory</title>
     </head>
@@ -23,7 +24,7 @@
         </div>
 
         <div id="memoryBox"></div>
-        <button id="skipMemory" onclick="updateTierInDatabase()">Skip Memory</button>
+        <button id="skipMemory" onclick="checkForLevelUp()">Skip Memory</button>
 
     </body>
 </html>

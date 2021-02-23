@@ -60,8 +60,6 @@ public class MemoryFactory {
         return imageString;
     }
 
-
-
     public class MemoryIngredient {
 
         int id;
@@ -85,6 +83,7 @@ public class MemoryFactory {
 
         }
 
+
         public int getId() {
             return id;
         }
@@ -101,4 +100,63 @@ public class MemoryFactory {
             return picture;
         }
     }
+
+    /**
+     * The type Level up view model.
+     */
+    /*public class LevelUpViewModel {
+
+        *//**
+         * The Is level up possible.
+         *//*
+        boolean isLevelUpPossible;
+        *//**
+         * The Next tier.
+         *//*
+        String nextTier;
+        *//**
+         * The Next tier points.
+         *//*
+        int nextTierPoints;
+
+        *//**
+         * Instantiates a new Level up view model.
+         *
+         * @param isLevelUpPossible the is level up possible
+         * @param nextTier          the next tier
+         * @param nextTierPoints    the next tier points
+         *//*
+        public LevelUpViewModel(boolean isLevelUpPossible, String nextTier, int nextTierPoints) {
+            this.isLevelUpPossible = isLevelUpPossible;
+            this.nextTier = nextTier;
+            this.nextTierPoints = nextTierPoints;
+        }
+
+        *//**
+         * Is level up possible boolean.
+         *
+         * @return the boolean
+         *//*
+        public boolean isLevelUpPossible() {
+            return isLevelUpPossible;
+        }
+
+        *//**
+         * Gets next tier.
+         *
+         * @return the next tier
+         *//*
+        public String getNextTier() {
+            return nextTier;
+        }
+
+        *//**
+         * Gets next tier points.
+         *
+         * @return the next tier points
+         *//*
+        public int getNextTierPoints() {
+            return nextTierPoints;
+        }
+    }*/
 }

@@ -246,7 +246,7 @@ class CardHandler {
 
     static checkGameOver(){
         if (Object.values(memoryCards).length == 0){
-            updateTierInDatabase();
+            checkForLevelUp();
             document.getElementById("tier_update").style.visibility = "block";
         }
     }
@@ -301,32 +301,6 @@ async function getMemoryIngredients() {
     return response.json();
 }
 
-async function updateTierInDatabase() {
-    let currentPoints = await getCurrentPlayerTotalPoints();
-    if (currentPoints < 5000) {
-    } else if (currentPoints < 10000) {
-        await setCurrentPlayerTier(2)
-    } else {
-        await setCurrentPlayerTier(3)
-    }
-
-}
-
-async function getCurrentPlayerTotalPoints() {
-    let returnedPoints = -1;
-    return await fetch("/profile/getTotalPoints")
-        .then(
-            result => result.text()
-        ).then(
-            result => {
-                returnedPoints = parseInt(result);
-                return returnedPoints;
-            }
-        ).catch((error) => {
-            console.error('Error:', error);
-        });
-}
-
 async function setCurrentPlayerTier(tier) {
     fetch("/memory/setCurrentPlayerTier", {
         method: 'POST',
@@ -344,5 +318,55 @@ async function setCurrentPlayerTier(tier) {
         })
 
 }
+
+function setupUserData() {
+
+    const username = document.getElementById("username");
+    const total_points = document.getElementById("total_points");
+    const tier_name = document.getElementById("tier_name");
+
+    $.get("/getUsername", function (data, status) {
+        username.innerHTML = data;
+    }).fail(function (data, status) {
+        username.innerHTML = "Error"
+        alert("Couldn't retrieve Username from session");
+    });
+
+    $.get("/profile/getTierName", function (data, status) {
+        tier_name.innerHTML = data;
+    }).fail(function (data, status) {
+        tier_name.innerHTML = "Error"
+        alert("Couldn't retrieve Tier name from database");
+    });
+
+    $.get("/profile/getTotalPoints", function (data, status) {
+        total_points.innerHTML = "Gesamtpunkte: " + data;
+    }).fail(function (data, status) {
+        total_points.innerHTML = "Error"
+        alert("Couldn't retrieve Total points from database");
+    });
+}
+
+function checkForLevelUp() {
+
+    $.get("/menu/checkForLevelUp", function (data, status) {
+        const levelUpViewModel = JSON.parse(data);
+
+        console.log(levelUpViewModel);
+
+        if(levelUpViewModel.nextTierPoints === 0)
+            document.getElementById("memory_description").innerHTML =
+                "Du hast bereits das höchste Tier!<br>Spiele Memory um Punkte zu sammeln"
+        else if (levelUpViewModel.levelUpPossible){
+            setCurrentPlayerTier(levelUpViewModel.nextTierAsFigure);
+        }
+        else
+            document.getElementById("tier_update").innerHTML =
+                "Erreiche " + levelUpViewModel.nextTierPoints + " Gesamtpunkte um ein \"" + levelUpViewModel.nextTier + "\" zu werden! <br>Bis dahin kannst du beim Memory Punkte sammeln"
+    }).fail(function (data, status) {
+
+    });
+}
+
 
 
