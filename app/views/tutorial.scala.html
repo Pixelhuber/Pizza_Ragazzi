@@ -16,8 +16,9 @@
             <img id="video" src="" alt="tutorialGif"/>
             <div id="container_information">
                 <div id="description">Short description</div>
-                <button class= "button" id="nextButton" onclick=nextGif()>Got it</button>
+                <div id="currentPosition">position</div>
             </div>
+            <button class= "button" id="nextButton" onclick=nextGif()>Got it, next</button>
         </div>
         <script>
                 var index = 0;
@@ -36,6 +37,8 @@
                 function nextGif() {
                     document.getElementById("video").src = videos[index];
                     document.getElementById("description").innerText = descriptions[index];
+                    var position = index + 1;
+                    document.getElementById("currentPosition").innerText = "("+position+"/"+ videos.length+")";
                     index = index + 1;
                 }
         </script>
