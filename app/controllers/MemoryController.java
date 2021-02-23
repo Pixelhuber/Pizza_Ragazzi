@@ -1,7 +1,9 @@
 package controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import factory.MemoryFactory;
+import factory.UserFactory;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -12,11 +14,13 @@ import java.util.List;
 public class MemoryController extends Controller {
 
     MemoryFactory memoryFactory;
+    UserFactory userFactory;
 
     @Inject
-    public MemoryController(MemoryFactory memoryFactory) {
+    public MemoryController(MemoryFactory memoryFactory, UserFactory userFactory) {
 
         this.memoryFactory = memoryFactory;
+        this.userFactory = userFactory;
     }
 
     public Result getMemoryIngredients(Http.Request request) {
@@ -42,5 +46,24 @@ public class MemoryController extends Controller {
             e.printStackTrace();
         }
         return json;
+    }
+
+    public Result setCurrentPlayerTier(Http.Request request) {
+        JsonNode json = request.body().asJson();
+        String email = request.session().get("email").get();
+        if (json == null) {
+            return badRequest("Expecting Json data");
+        } else {
+            int newTier = json.findPath("newTier").asInt();
+            if (email.isEmpty()) {
+                return badRequest("usermail was empty");
+            }
+            UserFactory.User user = userFactory.getUserByEmail(email);
+            if (user == null) {
+                return badRequest("user co uld be fetched via mail");
+            }
+            user.setCurrentTier(newTier);
+            return ok("Tier successfully updated");
+        }
     }
 }

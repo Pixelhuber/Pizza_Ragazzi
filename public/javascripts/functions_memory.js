@@ -328,7 +328,7 @@ async function getCurrentPlayerTotalPoints() {
 }
 
 async function setCurrentPlayerTier(tier) {
-    fetch("/pizza_rush/setPlayerTier", {
+    fetch("/memory/setCurrentPlayerTier", {
         method: 'POST',
         body: JSON.stringify({
             newTier: tier
