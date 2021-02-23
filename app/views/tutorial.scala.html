@@ -39,6 +39,7 @@
                 }
 
                 function nextGif() {
+                    if(index+1>descriptions.length)index=0;
                     document.getElementById("video").src = videos[index];
                     document.getElementById("description").innerText = descriptions[index];
                     var position = index + 1;
