@@ -156,10 +156,6 @@ function updateUsernameInDatabaseAndSession(newUsername) {
 }
 
 async function uploadProfilePictureIntoDB(image) {
-
-    //let img = document.getElementById("profile-picture").files[0];
-    //console.log(img)
-    let imageFits = true;
     fetch('/profile/uploadProfilePicture',
         {
             method: 'POST',
