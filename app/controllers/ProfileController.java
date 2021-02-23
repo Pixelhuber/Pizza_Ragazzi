@@ -159,7 +159,6 @@ public class ProfileController extends Controller {
      *
      * @param request the request
      * @return the profile picture from database
-     * @throws IOException the io exception
      */
     public Result getProfilePictureFromDatabase(Http.Request request){
         String email = request.session().get("email").get();
@@ -187,7 +186,6 @@ public class ProfileController extends Controller {
      *
      * @param request the request
      * @return the friends data
-     * @throws IOException the io exception
      */
     public Result getFriendsData(Http.Request request){
         String email = request.session().get("email").get();
@@ -344,7 +342,6 @@ public class ProfileController extends Controller {
      *
      * @param request the request
      * @return the result
-     * @throws IOException the io exception
      */
     public Result friendGetProfilePictureFromDatabase(Http.Request request){
         String username = request.body().asJson().asText();
@@ -357,7 +354,6 @@ public class ProfileController extends Controller {
      *
      * @param request the request
      * @return the result
-     * @throws IOException the io exception
      */
     public Result friendFriendsData(Http.Request request){
         String username = request.body().asJson().asText();
