@@ -21,9 +21,6 @@ import java.util.List;
  */
 @Singleton
 public class PizzaRushFactory {
-    /**
-     * The Db.
-     */
     Database db;
 
     /**
@@ -41,7 +38,7 @@ public class PizzaRushFactory {
      * Gets ingredient by id.
      *
      * @param id the id
-     * @return the ingredient by id
+     * @return the ingredient
      */
 // WARNING: Returns non-specified Ingredients
     public Ingredient getIngredientById(int id) {
@@ -59,9 +56,9 @@ public class PizzaRushFactory {
     }
 
     /**
-     * Gets ingredients.
+     * Gets all ingredients.
      *
-     * @return the ingredients
+     * @return the ingredient-List
      */
 // Gets ALL Ingredients
     public List<Ingredient> getIngredients() {
@@ -76,10 +73,10 @@ public class PizzaRushFactory {
     }
 
     /**
-     * Gets ingredients.
+     * Gets ingredients for specific user.
      *
-     * @param email the email
-     * @return the ingredients
+     * @param email the email of the user
+     * @return the ingredient-List
      */
 // Gets available ingredients for specific User
     public List<Ingredient> getIngredients(String email) {
@@ -91,7 +88,11 @@ public class PizzaRushFactory {
         return result;
     }
 
-    // Gets ALL ChoppingIngredients
+    /**
+     * Gets all Chopping-ingredients.
+     *
+     * @return the ingredient-List
+     */
     private List<Ingredient> getChoppingIngredients() {
         return db.withConnection(conn -> {
             List<Ingredient> result = new ArrayList<>();
@@ -106,8 +107,11 @@ public class PizzaRushFactory {
             return result;
         });
     }
-
-    // Gets available ChoppingIngredients for specific User
+    /**
+     * Gets Chopping-ingredients for specific user.
+     *
+     * @return the ingredient-List
+     */
     private List<Ingredient> getChoppingIngredients(String email) {
         return db.withConnection(conn -> {
             List<Ingredient> result = new ArrayList<>();
@@ -124,8 +128,11 @@ public class PizzaRushFactory {
             return result;
         });
     }
-
-    // Gets ALL StampingIngredients
+    /**
+     * Gets all Stamping-ingredients.
+     *
+     * @return the ingredient-List
+     */
     private List<Ingredient> getStampingIngredients() {
         return db.withConnection(conn -> {
             List<Ingredient> result = new ArrayList<>();
@@ -140,7 +147,11 @@ public class PizzaRushFactory {
             return result;
         });
     }
-
+    /**
+     * Gets Stamping-ingredients for specific user.
+     *
+     * @return the ingredient-List
+     */
     // Gets available StampingIngredients for specific User
     private List<Ingredient> getStampingIngredients(String email) {
         return db.withConnection(conn -> {
@@ -160,9 +171,9 @@ public class PizzaRushFactory {
     }
 
     /**
-     * Gets pizzas.
+     * Gets all pizzas.
      *
-     * @return the pizzas
+     * @return Order-list
      */
 // Gets ALL Pizzas
     public List<Order> getPizzas() {
@@ -181,10 +192,10 @@ public class PizzaRushFactory {
     }
 
     /**
-     * Gets pizzas.
+     * Gets pizzas for specific user.
      *
      * @param email the email
-     * @return the pizzas
+     * @return the order list
      */
 // Gets available Pizzas for specific User
     public List<Order> getPizzas(String email) {
@@ -235,40 +246,15 @@ public class PizzaRushFactory {
      * The type Ingredient.
      */
     public class Ingredient {
-        /**
-         * The Id.
-         */
         int id;
-        /**
-         * The Name.
-         */
         String name; // https://gist.github.com/vikrum/4758434
-        /**
-         * The Picture raw.
-         */
         String picture_raw;
-        /**
-         * The Picture raw distraction.
-         */
         String picture_raw_distraction;
-        /**
-         * The Picture processed.
-         */
         String picture_processed;
-        /**
-         * The Picture baked.
-         */
         String picture_baked;
-        /**
-         * The Picture burnt.
-         */
         String picture_burnt;
 
         int zIndex;
-
-        /**
-         * The Tier.
-         */
         int tier;
 
 
@@ -390,21 +376,6 @@ public class PizzaRushFactory {
         public int getTier() {
             return tier;
         }
-
-
-        @Override
-        public String toString() {
-            return "Ingredient{" +
-                    "id=" + id +
-                    ", name='" + name + '\'' +
-                    ", picture_raw='" + picture_raw + '\'' +
-                    ", picture_raw_distractor='" + picture_raw_distraction + '\'' +
-                    ", picture_processed='" + picture_processed + '\'' +
-                    ", picture_baked='" + picture_baked + '\'' +
-                    ", picture_burnt='" + picture_burnt + '\'' +
-                    ", tier=" + tier +
-                    '}';
-        }
     }
 
     /**
@@ -412,25 +383,10 @@ public class PizzaRushFactory {
      */
     public class ChoppingIngredient extends Ingredient {
 
-        /**
-         * The Vertex x in percent.
-         */
         int vertex_x_inPercent;
-        /**
-         * The Vertex y in percent.
-         */
         int vertex_y_inPercent;
-        /**
-         * The Speed.
-         */
         int speed;
-        /**
-         * The Rotation.
-         */
         int rotation;
-        /**
-         * The Hits required.
-         */
         int hits_required;
 
         /**
@@ -444,7 +400,10 @@ public class PizzaRushFactory {
 
             setFlightBehaviorFromDatabase();
         }
-
+        /**
+         * sets the Flight-Behaviour; gets called only in constructor
+         *
+         */
         private void setFlightBehaviorFromDatabase() {
             db.withConnection(conn -> {
                 PreparedStatement stmt = conn.prepareStatement("SELECT * FROM FlightBehavior WHERE Ingredient_fk = ? ");
@@ -531,17 +490,8 @@ public class PizzaRushFactory {
      */
     public class StampingIngredient extends Ingredient {
 
-        /**
-         * The Display time.
-         */
         int display_time;
-        /**
-         * The Disabling time.
-         */
         int disabling_time;
-        /**
-         * The Hits required.
-         */
         int hits_required;
 
         /**
@@ -556,6 +506,10 @@ public class PizzaRushFactory {
             setStampBehaviorFromDatabase();
         }
 
+        /**
+         * sets Stamp-Behavior; gets called only in constructor
+         *
+         */
         private void setStampBehaviorFromDatabase() {
             db.withConnection(conn -> {
                 PreparedStatement stmt = conn.prepareStatement("SELECT * FROM StampBehavior WHERE Ingredient_fk = ? ");
@@ -620,25 +574,10 @@ public class PizzaRushFactory {
      * The type Order.
      */
     public class Order { //Ideale Pizza, also einfach Pizza aus Datenbank
-        /**
-         * The Id.
-         */
         int id;
-        /**
-         * The Name.
-         */
         String name;
-        /**
-         * The Points.
-         */
         int points;
-        /**
-         * The Order time.
-         */
         int order_time;
-        /**
-         * The Ingredients.
-         */
         List<Ingredient> ingredients;
 
         /**
@@ -655,6 +594,10 @@ public class PizzaRushFactory {
             this.ingredients = new ArrayList<>(setOrderIngredientsFromDatabase());
         }
 
+        /**
+         * Sets the ingredients; gets called only in constructor.
+         *
+         */
         private List<Ingredient> setOrderIngredientsFromDatabase() {
             return db.withConnection(conn -> {
                 List<Ingredient> result = new ArrayList<>();
