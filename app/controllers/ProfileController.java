@@ -24,20 +24,17 @@ import java.util.List;
  */
 public class ProfileController extends Controller {
 
-    private final AssetsFinder assetsFinder;
     private final FormFactory formFactory;
     private final UserFactory userFactory;
 
     /**
      * Instantiates a new Profile controller.
      *
-     * @param assetsFinder the assets finder
-     * @param formFactory  the form factory
-     * @param userFactory  the user factory
+     * @param formFactory the form factory
+     * @param userFactory the user factory
      */
     @Inject
-    public ProfileController(AssetsFinder assetsFinder, FormFactory formFactory, UserFactory userFactory) {
-        this.assetsFinder = assetsFinder;
+    public ProfileController(FormFactory formFactory, UserFactory userFactory) {
         this.formFactory = formFactory;
         this.userFactory = userFactory;
     }
@@ -249,10 +246,15 @@ public class ProfileController extends Controller {
         boolean successfull;
         if (newFriendUser != null) {
             successfull = user.addFriend(newFriendUser.getId());
-        } else return badRequest("username not valid");
+        } else {
+            return badRequest("username not valid");
+        }
 
-        if (successfull) return ok();
-        else return badRequest("username not valid");
+        if (successfull) {
+            return ok();
+        } else {
+            return badRequest("username not valid");
+        }
     }
 
     /**

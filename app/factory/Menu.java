@@ -44,26 +44,32 @@ public class Menu {
 
 
             ArrayList<String[]> rsAsList = new ArrayList<>();
-            while (rs.next())
+            while (rs.next()) {
                 rsAsList.add(new String[]{rs.getString("idTier"), rs.getString("name"), rs.getString("gesamtpunkte")});
+            }
 
             int iHighestPossibleTier = 0;
             for (int i = 0; i < rsAsList.size(); i++) {
                 String[] current = rsAsList.get(i);
 
-                if (Integer.parseInt(current[2]) < userTotalPoints)
+                if (Integer.parseInt(current[2]) < userTotalPoints) {
                     iHighestPossibleTier = i;
+                }
             }
 
             String[] highestPossibleTier = rsAsList.get(iHighestPossibleTier);
             boolean isLevelUpPossible = Integer.parseInt(rsAsList.get(iHighestPossibleTier)[0]) > userCurrentTier;
 
             if (isLevelUpPossible) // User can level up
+            {
                 return new LevelUpViewModel(true, highestPossibleTier[1], Integer.parseInt(highestPossibleTier[2]));
-            else if (iHighestPossibleTier < rsAsList.size() - 1) // User can't level up yet
+            } else if (iHighestPossibleTier < rsAsList.size() - 1) // User can't level up yet
+            {
                 return new LevelUpViewModel(false, rsAsList.get(iHighestPossibleTier + 1)[1], Integer.parseInt(rsAsList.get(iHighestPossibleTier + 1)[2]));
-            else // User already is highest level
+            } else // User already is highest level
+            {
                 return new LevelUpViewModel(false, "", 0);
+            }
         });
     }
 

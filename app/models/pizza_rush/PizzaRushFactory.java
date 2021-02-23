@@ -286,30 +286,35 @@ public class PizzaRushFactory {
             BufferedInputStream bis_raw = new BufferedInputStream(rs.getBinaryStream("picture_raw"));
             try {
                 this.picture_raw = encodeImageToString(ImageIO.read(bis_raw), "png");
+                bis_raw.close();
             } catch (IOException invalidProfilePicture) {
                 throw new ProfilePictureException("We had trouble getting \"picture_raw\"");
             }
             BufferedInputStream bis_raw_distraction = new BufferedInputStream(rs.getBinaryStream("picture_raw_distraction"));
             try {
                 this.picture_raw_distraction = encodeImageToString(ImageIO.read(bis_raw_distraction), "png");
+                bis_raw_distraction.close();
             } catch (IOException invalidProfilePicture) {
                 throw new ProfilePictureException("We had trouble getting \"picture_raw_distraction\"");
             }
             BufferedInputStream bis_processed = new BufferedInputStream(rs.getBinaryStream("picture_processed"));
             try {
                 this.picture_processed = encodeImageToString(ImageIO.read(bis_processed), "png");
+                bis_processed.close();
             } catch (IOException invalidProfilePicture) {
                 throw new ProfilePictureException("We had trouble getting \"picture_processed\"");
             }
             BufferedInputStream bis_baked = new BufferedInputStream(rs.getBinaryStream("picture_baked"));
             try {
                 this.picture_baked = encodeImageToString(ImageIO.read(bis_baked), "png");
+                bis_baked.close();
             } catch (IOException invalidProfilePicture) {
                 throw new ProfilePictureException("We had trouble getting \"picture_baked\"");
             }
             BufferedInputStream bis_burnt = new BufferedInputStream(rs.getBinaryStream("picture_burnt"));
             try {
                 this.picture_burnt = encodeImageToString(ImageIO.read(bis_burnt), "png");
+                bis_burnt.close();
             } catch (IOException invalidProfilePicture) {
                 throw new ProfilePictureException("We had trouble getting \"picture_burnt\"");
             }

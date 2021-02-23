@@ -37,10 +37,11 @@ public class MenuController extends Controller {
      */
     public Result checkForLevelUp(Http.Request request) {
         String email = null;
-        if (request.session().get("email").isPresent())
+        if (request.session().get("email").isPresent()) {
             email = request.session().get("email").get();
-        else
+        } else {
             return badRequest("Couldn't retrieve email from session");
+        }
 
         UserFactory.User user = userFactory.getUserByEmail(email);
 

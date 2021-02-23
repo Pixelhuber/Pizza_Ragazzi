@@ -69,12 +69,15 @@ public class UserFactory {
      */
 //TODO complete this
     public User createUser(String email, String name, String password) {
-        if (!email.matches("[a-zA-Z0-9._%+-]+[@]+[a-zA-Z0-9.-]+[.]+[a-zA-Z]{2,6}"))
+        if (!email.matches("[a-zA-Z0-9._%+-]+[@]+[a-zA-Z0-9.-]+[.]+[a-zA-Z]{2,6}")) {
             throw new InvalidEmailException("The e-mail " + email + " is not valid");
-        if (!isEmailAvailable(email))
+        }
+        if (!isEmailAvailable(email)) {
             throw new EmailAlreadyInUseException("The e-mail " + email + " is already in use");
-        if (!isUsernameAvailable(email))
+        }
+        if (!isUsernameAvailable(email)) {
             throw new UsernameAlreadyInUseException("The username " + name + " is already in use");
+        }
         return db.withConnection(conn -> {
             String sql = "INSERT INTO User (username, email, password, gesamtpunkte, highscore, Tier_idTier) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -108,8 +111,9 @@ public class UserFactory {
      * @return the user by email
      */
     public User getUserByEmail(String email) {
-        if (!email.matches("[a-zA-Z0-9._%+-]+[@]+[a-zA-Z0-9.-]+[.]+[a-zA-Z]{2,6}"))
+        if (!email.matches("[a-zA-Z0-9._%+-]+[@]+[a-zA-Z0-9.-]+[.]+[a-zA-Z]{2,6}")) {
             throw new InvalidEmailException("The e-mail \"" + email + "\" is not valid");
+        }
         return db.withConnection(conn -> {
             User user = null;
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM User WHERE email = ?");
@@ -267,12 +271,11 @@ public class UserFactory {
             this.totalPoints = rs.getInt("gesamtpunkte");
             this.highScore = rs.getInt("highscore");
             BufferedInputStream bis = new BufferedInputStream(rs.getBinaryStream("profilepicture"));
-            if (bis != null) {
-                try {
-                    profilePicture = ImageIO.read(bis);
-                } catch (IOException invalidProfilePicture) {
-                    throw new ProfilePictureException("We had trouble getting the profile picture");
-                }
+            try {
+                profilePicture = ImageIO.read(bis);
+                bis.close();
+            } catch (IOException invalidProfilePicture) {
+                throw new ProfilePictureException("We had trouble getting the profile picture");
             }
             this.currentTier = rs.getInt("Tier_idTier");
         }
@@ -317,7 +320,9 @@ public class UserFactory {
          * @return the boolean if it was successfull
          */
         public boolean addFriend(int id2) {
-            if (this.id == id2) return false;
+            if (this.id == id2) {
+                return false;
+            }
 
             List<User> allUsers = getAllUsers();
             List<User> friends = getFriends();
@@ -407,7 +412,9 @@ public class UserFactory {
          * @return the messages
          */
         public List<Message> getMessages(User user2) {
-            if (user2 == null) return null;
+            if (user2 == null) {
+                return null;
+            }
 
             List<User> friends = getFriends();
 

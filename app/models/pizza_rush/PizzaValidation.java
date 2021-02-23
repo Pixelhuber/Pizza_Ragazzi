@@ -22,8 +22,9 @@ public class PizzaValidation {
      * @param createdPizzaBakeStatus    the created pizza bake status
      */
     public PizzaValidation(int orderPoints, List<Integer> orderIngredientIds, List<Integer> createdPizzaIngredientIds, int createdPizzaBakeStatus) {
-        if (orderPoints == 0 || orderIngredientIds == null || createdPizzaIngredientIds == null)
+        if (orderPoints == 0 || orderIngredientIds == null || createdPizzaIngredientIds == null) {
             throw new NullPointerException("Parameter ist null");
+        }
         this.orderPoints = orderPoints;
         this.orderIngredientIds = orderIngredientIds;
         this.createdPizzaIngredientIds = createdPizzaIngredientIds;
