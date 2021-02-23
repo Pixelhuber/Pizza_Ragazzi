@@ -5,7 +5,7 @@ import factory.FactoryExceptions.EmailAlreadyInUseException;
 import factory.FactoryExceptions.InvalidEmailException;
 import factory.FactoryExceptions.ProfilePictureException;
 import factory.FactoryExceptions.UsernameAlreadyInUseException;
-import models.Achievement;
+
 import models.Message;
 import play.db.Database;
 
@@ -16,7 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.sql.*;
 import java.util.*;
-import java.util.Base64.Decoder;
+
 
 /**
  * The type User factory.
@@ -398,46 +398,6 @@ public class UserFactory {
 
         }
 
-        /**
-         * Gets achievements-List.
-         *
-         * @return the achievements
-         */
-        public List<Achievement> getAchievements() {
-            return db.withConnection(conn -> {
-                List<Achievement> result = new ArrayList<>();
-                String sql = "SELECT `Reward_idReward` FROM `User_has_Reward` WHERE User_idUser = ?";
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                stmt.setInt(1, this.id);
-                ResultSet rs = stmt.executeQuery();
-                while (rs.next()) {
-                    int achievementId = rs.getInt("Reward_idReward");
-                    result.add(getAchievementByAchievementId(achievementId));
-                }
-                stmt.close();
-                return result;
-            });
-        }
-
-        /**
-         * Gets achievement by achievement id.
-         *
-         * @param achievementId the achievement id
-         * @return the achievement by achievement id
-         */
-        public Achievement getAchievementByAchievementId(int achievementId) {
-            return db.withConnection(conn -> {
-                Achievement achievement = null;
-                PreparedStatement stmt = conn.prepareStatement("SELECT * FROM `Reward` WHERE idReward = ?");
-                stmt.setInt(1, achievementId);
-                ResultSet rs = stmt.executeQuery();
-                if (rs.next()) {
-                    achievement = new Achievement(rs);
-                }
-                stmt.close();
-                return achievement;
-            });
-        }
 
         /**
          * Gets messages-List from db sent to and retrieved from user2.

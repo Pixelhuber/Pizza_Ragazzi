@@ -1,22 +1,3 @@
-function displayAchievements(allAchievements) {
-    if (allAchievements !== 'undefined') {
-        // Display Achievements
-        allAchievements.forEach(function (item) {
-            const achievementDiv = document.createElement('div');
-            achievementDiv.textContent = item.name;
-            achievementDiv.setAttribute('class', 'achievementBox');
-
-            const descriptionSpan = document.createElement('span');
-            descriptionSpan.textContent = item.description;
-            descriptionSpan.setAttribute('class', 'achievementDescription');
-            achievementDiv.appendChild(descriptionSpan);
-
-            document.getElementById("achievements_table").appendChild(achievementDiv);
-        });
-        document.getElementById("loading_achievements").style.display = "none"; //loading achievements hiden
-
-    } else document.getElementById("loading_achievements").style.display = "none"; //loading achievements hiden, wenn Nutzer keine achievements hat
-}
 
 $(function () {
 
@@ -37,7 +18,7 @@ $(function () {
             usernameField.html(usernameInputField);
 
             // display field to change profile-picture
-            const selectFileButton = "<input style='font-size: 18px' id=\"file-upload\" type=\"file\" accept=\"image/jpeg\"/>"
+            const selectFileButton = "<input style='font-size: 18px' id=\"file-upload\" type=\"file\" accept=\"image/jpeg\" />"
             selectFile.html(selectFileButton);
             $("#file-upload").on('change', function () {
                 readURL(this);
@@ -91,7 +72,6 @@ function setup() {
     getMailFromDatabase();
     getTierFromDatabase();
     getProfilePicFromDatabase();
-    getAchievementsFromDatabase();
     getFriendsData();
 }
 
@@ -173,15 +153,6 @@ async function uploadProfilePictureIntoDB(image) {
         )
 }
 
-function getAchievementsFromDatabase() {
-    document.getElementById("loading_achievements").style.display = "block" //loading achievements anzeigen
-    $.get("/profile/getAchievements", function (data, status) {
-        displayAchievements(JSON.parse(data));
-    }).fail(function (data, status) {
-        alert("Couldn't retrieve achievements from database");
-    });
-}
-
 // Reads username from Database and updates html
 function getUsernameFromDatabase() {
     $.get("/getUsername", function (data, status) {
@@ -253,8 +224,6 @@ function setupInformationFromFriend(elm) {
         friendGetTierFromDatabase(name);
         friendGetProfilePicFromDatabase(name);
 
-        deleteOldAchievements();            //Achievements werden gelöscht, damit nur neue angezeigt werden
-        friendGetAchievementsFromDatabase(name);
 
         deleteOldFriendList();          //Liste wird gelöscht, damit nur neue angezeigt wird
         friendGetFriendsData(name);
@@ -269,7 +238,6 @@ function setupInformationFromFriend(elm) {
 }
 
 function backToMyProfile() {
-    deleteOldAchievements();         //Achievements werden gelöscht, damit nur die vom logged in user angezeigt werden
     deleteOldFriendList();          //FreundesListe wird gelöscht, damit nur die vom logged in user angezeigt werden
 
     setup();
@@ -319,24 +287,6 @@ function deleteOldFriendList() {
     }
 }
 
-//löscht Achievements um nur Achievements des Freundes zu sehen
-function deleteOldAchievements() {
-    var achievements = document.getElementById("achievements_table");
-    achievements.innerHTML = '';
-}
-
-function friendGetAchievementsFromDatabase(username) {
-    document.getElementById("loading_achievements").style.display = "block" //loading achievements anzeigen
-    fetch("/profile/friendGetAchievements", {
-        method: 'POST',
-        body: JSON.stringify(username),
-        headers: {
-            "Content-Type": "application/json"
-        },
-        credentials: 'include'
-    }).then(result => result.json())
-        .then(result => displayAchievements(result))
-}
 
 function friendGetUsernameFromDatabase(username) {
     fetch("/friendGetUsername", {

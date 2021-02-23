@@ -49,8 +49,6 @@ GET     /profile/getTierName            controllers.ProfileController.getTierNam
 
 GET     /profile/getProfilePic      controllers.ProfileController.getProfilePictureFromDatabase(request: Request)
 
-GET     /profile/getAchievements    controllers.ProfileController.getAchievementsFromDatabase(request: Request)
-
 POST    /profile/getMessages        controllers.ProfileController.getMessagesFromDatabase(request: Request)
 
 POST    /profile/sendMessage        controllers.ProfileController.sendMessage(request: Request)
@@ -64,7 +62,6 @@ POST    /profile/friendGetTierName        controllers.ProfileController.friendGe
 POST    /profile/friendGetTotalPoints     controllers.ProfileController.friendGetGesamtpunkteFromDatabase(request: Request)
 POST    /profile/friendGetHighScore       controllers.ProfileController.friendGetHighscoreFromDatabase(request: Request)
 POST    /profile/friendGetProfilePic      controllers.ProfileController.friendGetProfilePictureFromDatabase(request: Request)
-POST    /profile/friendGetAchievements    controllers.ProfileController.friendGetAchievementsFromDatabase(request: Request)
 POST    /friendGetFriendsData             controllers.ProfileController.friendFriendsData(request: Request)
 
 # Friendlist --------------------------------------------------------------------------

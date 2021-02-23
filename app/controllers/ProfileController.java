@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import factory.FactoryExceptions.ProfilePictureException;
 import factory.UserFactory;
-import models.Achievement;
 import models.Message;
 import play.data.Form;
 import play.data.FormFactory;
@@ -212,19 +211,6 @@ public class ProfileController extends Controller {
         return ok(Json.toJson(user.getFriendsData()));
     }
 
-    /**
-     * Gets Users achievements from database.
-     *
-     * @param request the request
-     * @return the achievements from database
-     */
-    public Result getAchievementsFromDatabase(Http.Request request) {
-        String email = request.session().get("email").get();
-        UserFactory.User user = userFactory.getUserByEmail(email);
-        List<Achievement> achievements = user.getAchievements();
-        String json = listToJson(achievements);
-        return ok(json);
-    }
 
     /**
      * Gets Users messages from database.
@@ -391,17 +377,5 @@ public class ProfileController extends Controller {
         return ok(Json.toJson(user.getFriendsData()));
     }
 
-    /**
-     * Gets Friends achievements from db
-     *
-     * @param request the request
-     * @return the result
-     */
-    public Result friendGetAchievementsFromDatabase(Http.Request request) {
-        String username = request.body().asJson().asText();
-        UserFactory.User user = userFactory.getUserByUsername(username);
-        List<Achievement> achievements = user.getAchievements();
-        String json = listToJson(achievements);
-        return ok(json);
-    }
+
 }
