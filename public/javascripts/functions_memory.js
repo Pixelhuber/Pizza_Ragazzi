@@ -247,6 +247,7 @@ class CardHandler {
     static checkGameOver(){
         if (Object.values(memoryCards).length == 0){
             updateTierInDatabase();
+            document.getElementById("tier_update").style.visibility = "block";
         }
     }
 
@@ -273,9 +274,14 @@ class CardHandler {
     }
 }
 
+function restartGame() {
+    window.location.reload(false);
+}
+
 // DATABASE STUFF -----------------------------------------------------------------------------------------------------
 
 async function createMemoryCards() {
+
     const ingredients = await getMemoryIngredients();
 
 
@@ -295,7 +301,47 @@ async function getMemoryIngredients() {
     return response.json();
 }
 
-function updateTierInDatabase(){
+async function updateTierInDatabase() {
+    let currentPoints = await getCurrentPlayerTotalPoints();
+    if (currentPoints < 5000) {
+    } else if (currentPoints < 10000) {
+        await setCurrentPlayerTier(2)
+    } else {
+        await setCurrentPlayerTier(3)
+    }
+
+}
+
+async function getCurrentPlayerTotalPoints() {
+    let returnedPoints = -1;
+    return await fetch("/profile/getTotalPoints")
+        .then(
+            result => result.text()
+        ).then(
+            result => {
+                returnedPoints = parseInt(result);
+                return returnedPoints;
+            }
+        ).catch((error) => {
+            console.error('Error:', error);
+        });
+}
+
+async function setCurrentPlayerTier(tier) {
+    fetch("/pizza_rush/setPlayerTier", {
+        method: 'POST',
+        body: JSON.stringify({
+            newTier: tier
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    }).then(result => result.text())
+        .then(data => {
+            let msg = data.toString();
+            console.log(msg);
+        })
 
 }
 

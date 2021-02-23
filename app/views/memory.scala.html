@@ -10,11 +10,17 @@
         <title>Memory</title>
     </head>
 
-    <body onload="  createMemoryCards()">
+    <body onload = "createMemoryCards()">
 
             <!--NAVIGATION BAR ------------->
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
             <!------------------------------>
+
+        <div id="tier_update">
+            <div id="tier_update_text">You reached a new tier!</div>
+            <button id="play_again" onclick="restartGame()">Play again</button>
+            <button onclick="location.href='menu'">Back to menu</button>
+        </div>
 
         <div id="memoryBox"></div>
 
