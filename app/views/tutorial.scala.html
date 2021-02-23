@@ -8,20 +8,36 @@
 
         <title>Tutorial</title>
     </head>
-    <body>
+    <body onload="start()">
             <!--NAVIGATION BAR ------------->
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
             <!------------------------------>
         <div id="tutorialWindow">
-            <img id="video" src="@assetsFinder.path("images/tutorial/getting-Ingredients.gif")" alt="tutorialGif"/>
+            <img id="video" src="" alt="tutorialGif"/>
             <div id="container_information">
                 <div id="description">Short description</div>
-                <button id="disableButton" onclick=disableTutorial()>Got it</button>
+                <button class= "button" id="nextButton" onclick=nextGif()>Got it</button>
             </div>
         </div>
-        <script>function disableTutorial() {
-            document.getElementById("tutorialWindow").style.display = "none";
-        }</script>
-    </body>
+        <script>
+                var index = 0;
+                var videos = [];
+                var descriptions = [];
 
+                function start() {
+                    videos.push("@assetsFinder.path("images/tutorial/getting-Ingredients.gif")")
+                    descriptions.push("Work with ingredients by clicking on them and then dragging them around");
+
+                    videos.push("@assetsFinder.path("images/LoadingGif_Pizza.gif")")
+                    descriptions.push("turn");
+                    nextGif();
+                }
+
+                function nextGif() {
+                    document.getElementById("video").src = videos[index];
+                    document.getElementById("description").innerText = descriptions[index];
+                    index = index + 1;
+                }
+        </script>
+    </body>
 </html>
