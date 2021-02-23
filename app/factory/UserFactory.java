@@ -262,7 +262,7 @@ public class UserFactory {
          * Instantiates a new User with ResultSet from db
          *
          * @param rs the ResultSet from db
-         * @throws SQLException
+         * @throws SQLException if profilepicture had an issue
          */
         private User(ResultSet rs) throws SQLException {
             this.id = rs.getInt("idUser");
@@ -612,9 +612,8 @@ public class UserFactory {
          * Gets profile picture src.
          *
          * @return the profile picture src
-         * @throws IOException the io exception
          */
-        public String getProfilePictureSrc() throws IOException {
+        public String getProfilePictureSrc(){
             String path = null;
             if (profilePicture != null) {
                 path = encodeToString(profilePicture, "jpg");

@@ -43,10 +43,9 @@ public class PizzaRushController extends Controller {
      *
      * @param request the request
      * @return the result
-     * @throws IOException the io exception
      */
 
-    public Result validatePizza(Http.Request request) throws IOException {
+    public Result validatePizza(Http.Request request){
         int orderPoints = 0;
         List<Integer> orderIngredientIds = null;
         List<Integer> createdPizzaIngredientIds = null;
@@ -93,8 +92,8 @@ public class PizzaRushController extends Controller {
     /**
      * private-methode helping getCurrentPointsFromSession()
      *
-     * @param session
-     * @return
+     * @param session the session
+     * @return the current points
      */
     private int getCurrentPointsFromSession(Http.Session session) {
         if (session.get("currentPizzaRushPoints").isPresent()) {
