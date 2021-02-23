@@ -389,7 +389,7 @@ public class UserFactory {
          * @return the friends data
          * @throws IOException the io exception
          */
-        public Map<String, String> getFriendsData() throws IOException {
+        public Map<String, String> getFriendsData(){
 
             List<User> users = getFriends();
 
@@ -645,6 +645,9 @@ public class UserFactory {
             return imageString;
         }
 
+        /**
+         * @param sourceData the profile pic as a string encoded in Base64
+         */
         public void updateProfilePicture(String sourceData) {
             db.withConnection(conn -> {
                 String sql = "UPDATE User SET profilepicture=? WHERE idUser = ?";

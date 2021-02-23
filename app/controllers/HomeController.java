@@ -112,6 +112,10 @@ public class HomeController extends Controller {
         }
     }
 
+    /**
+     * @param request the request
+     * @return the result
+     */
     public Result tutorial(Http.Request request) {
         if (request.session().get("email").isPresent()) // check if User is logged in
         {
