@@ -25,7 +25,7 @@ import java.util.*;
 @Singleton
 public class UserFactory {
 
-    private Database db;
+    private final Database db;
 
     /**
      * Instantiates a new User factory.
@@ -600,6 +600,15 @@ public class UserFactory {
         }
 
         /**
+         * Sets profile picture.
+         *
+         * @param profilePicture the profile picture
+         */
+        public void setProfilePicture(BufferedImage profilePicture) {
+            this.profilePicture = profilePicture;
+        }
+
+        /**
          * Gets profile picture src.
          *
          * @return the profile picture src
@@ -635,16 +644,6 @@ public class UserFactory {
                 e.printStackTrace();
             }
             return imageString;
-        }
-
-
-        /**
-         * Sets profile picture.
-         *
-         * @param profilePicture the profile picture
-         */
-        public void setProfilePicture(BufferedImage profilePicture) {
-            this.profilePicture = profilePicture;
         }
 
         public void updateProfilePicture(String sourceData) {

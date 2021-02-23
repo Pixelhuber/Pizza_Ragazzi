@@ -39,6 +39,13 @@ const existingDraggableIngredientInstances = [];
 // An "Ingredient" is only a definition of an ingredient without any behavior.
 class AbstractIngredient {
 
+    static picture_type = {
+        RAW: 1,
+        RAW_DISTRACTION: 2,
+        PROCESSED: 3,
+        BAKED: 4,
+        BURNT: 5
+    }
     // ATTRIBUTES --------------------
     id;
     name;
@@ -49,14 +56,6 @@ class AbstractIngredient {
     picture_burnt;
     zIndex;
 
-    static picture_type = {
-        RAW: 1,
-        RAW_DISTRACTION: 2,
-        PROCESSED: 3,
-        BAKED: 4,
-        BURNT: 5
-    }
-
     constructor(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt, zIndex) {
         this.id = id;
         this.name = name;
@@ -66,6 +65,18 @@ class AbstractIngredient {
         this.picture_baked = picture_baked;
         this.picture_burnt = picture_burnt;
         this.zIndex = zIndex;
+    }
+
+    //returns an instance of the ingredient with this name
+    static getInstanceByName(name) {
+        let ret = undefined
+
+        availableIngredients.forEach(function (item) {
+            if (name === item.name)
+                ret = item;
+        });
+
+        return ret;
     }
 
     createDraggableInstance() {
@@ -109,18 +120,6 @@ class AbstractIngredient {
     getId() {
         return this.id;
     }
-
-    //returns an instance of the ingredient with this name
-    static getInstanceByName(name) {
-        let ret = undefined
-
-        availableIngredients.forEach(function (item) {
-            if (name === item.name)
-                ret = item;
-        });
-
-        return ret;
-    }
 }
 
 class ChoppingIngredient extends AbstractIngredient {
@@ -148,17 +147,14 @@ class DraggableIngredientInstance extends AbstractIngredient {
 
     // ATTRIBUTES --------------------
 
-    draggable; // Actual draggable html-element
-
-    parentIngredient; // StampingIngredient or ChoppingIngredient
-
     static Status = {
         RAW: 1,
         PROCESSED: 3,
         BAKED: 4,
         BURNT: 5
     };
-
+    draggable; // Actual draggable html-element
+    parentIngredient; // StampingIngredient or ChoppingIngredient
     status;
     isDragEnabled;
 
@@ -264,19 +260,16 @@ class DraggablePizzaInstance extends Pizza {
 
     // ATTRIBUTES --------------------
 
-    draggable; // Actual draggable html-element
-
-    bakingTimeInSeconds; // required baking time
-    timeInOvenInMilliseconds = 0; // actual time spent in oven
-
-    isInOven;
-    isDragEnabled;
-
     static bakeStatus = {
         UNBAKED: 3,
         WELL: 4,
         BURNT: 5
     };
+    draggable; // Actual draggable html-element
+    bakingTimeInSeconds; // required baking time
+    timeInOvenInMilliseconds = 0; // actual time spent in oven
+    isInOven;
+    isDragEnabled;
     bakeStatus;
 
     constructor() {
@@ -830,6 +823,10 @@ class AudioPlayer {
 
 class AbstractCountdown {
 
+    durationInSeconds;
+    secondsPassed;
+    affectedObject;
+
     constructor(durationInSeconds, affectedObject) {
         this.durationInSeconds = durationInSeconds;
         this.secondsPassed = 0;
@@ -837,12 +834,6 @@ class AbstractCountdown {
         this.affectedObject = affectedObject;
 
     }
-
-    durationInSeconds;
-    secondsPassed;
-
-    affectedObject;
-
 
     // do not override this method
     startCountdown() {

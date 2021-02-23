@@ -32,6 +32,18 @@ public class PizzaValidation {
     }
 
     /**
+     * List equals boolean.
+     *
+     * @param <Integer> the type parameter
+     * @param list1     the list 1
+     * @param list2     the list 2
+     * @return the boolean
+     */
+    public static <Integer> boolean listEquals(List<Integer> list1, List<Integer> list2) {
+        return new HashSet<>(list1).equals(new HashSet<>(list2));
+    }
+
+    /**
      * Calculate points int.
      *
      * @return the int
@@ -42,13 +54,11 @@ public class PizzaValidation {
         if (pizzaEqualsOrder()) {
             switch (createdPizzaBakeStatus) {
                 case 3: // UNBAKED
+                case 5: // BURNT
                     points = (int) (points * 0.25);
                     break;
                 case 4: // WELL
                     //no negative Points since its baked
-                    break;
-                case 5: // BURNT
-                    points = (int) (points * 0.25);
                     break;
             }
         } else {
@@ -64,17 +74,5 @@ public class PizzaValidation {
      */
     public boolean pizzaEqualsOrder() {
         return listEquals(createdPizzaIngredientIds, orderIngredientIds);
-    }
-
-    /**
-     * List equals boolean.
-     *
-     * @param <Integer> the type parameter
-     * @param list1     the list 1
-     * @param list2     the list 2
-     * @return the boolean
-     */
-    public static <Integer> boolean listEquals(List<Integer> list1, List<Integer> list2) {
-        return new HashSet<>(list1).equals(new HashSet<>(list2));
     }
 }
