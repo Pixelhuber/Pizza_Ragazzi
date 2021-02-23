@@ -1,0 +1,18 @@
+#tutorialWindow{
+    z-index: 80;
+    border: 4px black solid;
+    background-color: white;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    opacity: 90%;
+    max-width: 500px;
+    max-height: 500px;
+}
+#video{
+    max-height: 80%;
+    max-width: 100%;
+}
+#container_information{
+    position: center;
+}

@@ -23,6 +23,8 @@ GET     /pizzaRush                      controllers.HomeController.pizzaRush(req
 
 GET     /menu                           controllers.HomeController.menu(request: Request)
 
+GET     /tutorial                       controllers.HomeController.tutorial(request: Request)
+
 
 # MENU -----------------------------------------------------------------------------
 

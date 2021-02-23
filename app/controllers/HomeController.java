@@ -111,4 +111,11 @@ public class HomeController extends Controller {
             return ok(login.render("Login", assetsFinder));
     }
 
+    public Result tutorial(Http.Request request) {
+        if (request.session().get("email").isPresent()) // check if User is logged in
+            return ok(tutorial.render(assetsFinder));
+        else
+            return ok(login.render("Login", assetsFinder));
+    }
+
 }

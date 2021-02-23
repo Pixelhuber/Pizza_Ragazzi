@@ -1,9 +1,27 @@
 @(implicit assetsFinder: AssetsFinder)
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="shortcut icon" type="image_path/png" href="@assetsFinder.path("images/favicon.png")">
+        <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_tutorial.css")">
 
-<link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_tutorial.css")">
+        <title>Tutorial</title>
+    </head>
+    <body>
+            <!--NAVIGATION BAR ------------->
+        <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
+            <!------------------------------>
+        <div id="tutorialWindow">
+            <img id="video" src="@assetsFinder.path("images/tutorial/getting-Ingredients.gif")" alt="tutorialGif"/>
+            <div id="container_information">
+                <div id="description">Short description</div>
+                <button id="disableButton" onclick=disableTutorial()>Got it</button>
+            </div>
+        </div>
+        <script>function disableTutorial() {
+            document.getElementById("tutorialWindow").style.display = "none";
+        }</script>
+    </body>
 
-    <div id="tutorialWindow">
-        <img id="video" src="" alt="tutorialGif"/>
-        <div id="description">this helps</div>
-        <button id="disableButton">Understood</button>
-    </div>
+</html>
