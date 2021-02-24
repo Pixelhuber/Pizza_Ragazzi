@@ -1052,7 +1052,7 @@ function manageRushCountdown(timerContainerId) {
                     AudioPlayer.round_lastFive();
 
                 // Display the result in the affectedObject
-                this.affectedObject.innerHTML = "TIME: " + minutes + ":" + seconds;
+                this.affectedObject.innerHTML = "Zeit: " + minutes + ":" + seconds;
 
 
             }
@@ -1064,8 +1064,8 @@ function manageRushCountdown(timerContainerId) {
 
                 pizzaRushRunning = false;
                 document.getElementById("startStop_overlay").style.visibility = "visible";
-                document.getElementById("startStop_overlay_text").innerHTML = "Round over!<br/>You scored " + await getCurrentPoints() + " Points";
-                document.getElementById("startStop_overlay_button").innerHTML = "Play Again!"
+                document.getElementById("startStop_overlay_text").innerHTML = "Runde vorbei!<br/>Du hast " + await getCurrentPoints() + " Punkte erreich!";
+                document.getElementById("startStop_overlay_button").innerHTML = "Nochmal spielen!"
 
                 this.affectedObject.innerHTML = "END";
                 await endGame();
@@ -1128,7 +1128,7 @@ function validatePizza(order, pizza) {
 }
 
 async function updateCurrentPoints() {
-    document.getElementById("currentlyDisplayedPoints").textContent = "POINTS: " + await getCurrentPoints();
+    document.getElementById("currentlyDisplayedPoints").textContent = "Punkte: " + await getCurrentPoints();
 }
 
 async function getCurrentPoints() {
