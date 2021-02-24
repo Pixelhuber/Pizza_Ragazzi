@@ -1537,13 +1537,21 @@ function startMiniGame(ingredientList) {
 
             onHit(callback) {
 
+
                 this.wasHitInThisThrow = true;
                 this.hits_left -= 1;
 
+                document.body.style.cursor= `url("/assets/images/cursors/hitmarker.cur"),auto`
+                setTimeout(resetCursor,250)
+                function resetCursor(){
+                    document.body.style.cursor= `url("/assets/images/cursors/knife.cur"),auto`
+                }
+                /*
                 window.requestAnimationFrame(function () {
                     context.fillStyle = '#79de43'
                     context.fillRect(0, 0, canvas.width, canvas.height);
                 });
+                 */
 
                 if (this.hits_left <= 0) {
 
@@ -1691,7 +1699,6 @@ function startMiniGame(ingredientList) {
             let y;
 
             canvas.onmousedown = startListening;
-
 
             function startListening(event) {
                 event = event || window.event;
@@ -1889,7 +1896,7 @@ function startMiniGame(ingredientList) {
                 this.endShow();
 
 
-                //document.body.style.cursor= `url("/assets/images/cursors/rollingPin.cur"),auto`; TODO change cursor to rolling pin and back
+                document.body.style.cursor= `url("/assets/images/cursors/hitmarker.cur"),auto`
                 this.hits_left -= 1;
 
                 if (this.hits_left <= 0) {
@@ -2132,9 +2139,14 @@ function startMiniGame(ingredientList) {
             let y;
 
             canvas.onmousedown = checkForHit;
-
+            //canvas.onmousedown.apply(document.body.style.cursor= `url("/assets/images/cursors/rollingPin.cur"),auto`);
+            canvas.onmouseup = switchCursorToNormal;
+            function switchCursorToNormal(event){
+                document.body.style.cursor= "auto";
+            }
 
             function checkForHit(event) {
+                document.body.style.cursor= `url("/assets/images/cursors/rollingPin.cur"),auto`;
                 if (moleHandler.isDisabled())
                     return;
 
@@ -2187,6 +2199,7 @@ function startMiniGame(ingredientList) {
 function stopMiniGame() {
     fruitNinjaRunning = false;
     whackAMoleRunning = false;
+    document.body.style.cursor= "auto";
 
     document.getElementById("miniGame_layer").style.visibility = "hidden";
 }
