@@ -1697,6 +1697,8 @@ function startMiniGame(ingredientList) {
                 event = event || window.event;
                 event.preventDefault();
 
+                document.body.style.cursor = url('/assets/images/teig.png', 'auto');
+
                 document.onmouseup = stopListening;
                 document.onmousemove = checkForHit;
             }
@@ -1704,6 +1706,8 @@ function startMiniGame(ingredientList) {
             function stopListening(event) {
                 document.onmouseup = null;
                 document.onmousemove = null;
+
+                document.body.style.cursor = "auto";
             }
 
             function checkForHit(event) {
