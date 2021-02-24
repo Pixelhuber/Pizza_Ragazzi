@@ -17,6 +17,7 @@ const gameProperties = {
     fruitNinja_minTimeBetweenThrows: 0.1,
     fruitNinja_xRange: 30,
     fruitNinja_yRange: 30,
+    fruitNinja_hitmarkerShowingTime: 250,
 
     whack_distractionChance_percent: 0,
     whack_maxIngredientsShownAtOnce: 4,
@@ -1542,7 +1543,7 @@ function startMiniGame(ingredientList) {
                 this.hits_left -= 1;
 
                 document.body.style.cursor= `url("/assets/images/cursors/hitmarker.cur"),auto`
-                setTimeout(resetCursor,250)
+                setTimeout(resetCursor,gameProperties.fruitNinja_hitmarkerShowingTime)
                 function resetCursor(){
                     document.body.style.cursor= `url("/assets/images/cursors/knife.cur"),auto`
                 }
