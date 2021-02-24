@@ -55,7 +55,7 @@ public class Menu {
             for (int i = 0; i < rsAsList.size(); i++) {
                 String[] current = rsAsList.get(i);
 
-                if (Integer.parseInt(current[2]) < userTotalPoints)
+                if (Integer.parseInt(current[2]) <= userTotalPoints)
                     iHighestPossibleTier = i;
             }
 

@@ -247,7 +247,7 @@ class CardHandler {
     static checkGameOver(){
         if (Object.values(memoryCards).length == 0){
             checkForLevelUp();
-            document.getElementById("tier_update").style.visibility = "block";
+            document.getElementById("end_screen").style.visibility = "block";
         }
     }
 
@@ -281,6 +281,8 @@ function restartGame() {
 // DATABASE STUFF -----------------------------------------------------------------------------------------------------
 
 async function createMemoryCards() {
+
+    document.getElementById("end_screen").style.visibility = "hidden";
 
     const ingredients = await getMemoryIngredients();
 
@@ -319,32 +321,39 @@ async function setCurrentPlayerTier(tier) {
 
 }
 
-function setupUserData() {
+async function setCurrentPlayerPoints() {
+    let currentPlayerTotalPoints = await getCurrentPlayerTotalPoints();
 
-    const username = document.getElementById("username");
-    const total_points = document.getElementById("total_points");
-    const tier_name = document.getElementById("tier_name");
+    fetch("/pizza_rush/setPlayerPoints", {
+        method: 'POST',
+        body: JSON.stringify({
+            newTotalPoints: currentPlayerTotalPoints + 100,                 //aktuell gibt jedes Memory 100 Punkte, könnte man abhängig vom Tier machen (200,300)
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: 'include'
+    }).then(result => result.text())
+        .then(data => {
+            let msg = data.toString();
+            console.log(msg);
+        })
 
-    $.get("/getUsername", function (data, status) {
-        username.innerHTML = data;
-    }).fail(function (data, status) {
-        username.innerHTML = "Error"
-        alert("Couldn't retrieve Username from session");
-    });
+}
 
-    $.get("/profile/getTierName", function (data, status) {
-        tier_name.innerHTML = data;
-    }).fail(function (data, status) {
-        tier_name.innerHTML = "Error"
-        alert("Couldn't retrieve Tier name from database");
-    });
-
-    $.get("/profile/getTotalPoints", function (data, status) {
-        total_points.innerHTML = "Gesamtpunkte: " + data;
-    }).fail(function (data, status) {
-        total_points.innerHTML = "Error"
-        alert("Couldn't retrieve Total points from database");
-    });
+async function getCurrentPlayerTotalPoints() {
+    let returnedPoints = -1;
+    return await fetch("/profile/getTotalPoints")
+        .then(
+            result => result.text()
+        ).then(
+            result => {
+                returnedPoints = parseInt(result);
+                return returnedPoints;
+            }
+        ).catch((error) => {
+            console.error('Error:', error);
+        });
 }
 
 function checkForLevelUp() {
@@ -354,15 +363,22 @@ function checkForLevelUp() {
 
         console.log(levelUpViewModel);
 
-        if(levelUpViewModel.nextTierPoints === 0)
-            document.getElementById("memory_description").innerHTML =
-                "Du hast bereits das höchste Tier!<br>Spiele Memory um Punkte zu sammeln"
-        else if (levelUpViewModel.levelUpPossible){
+        if(levelUpViewModel.nextTierPoints === 0){
+            document.getElementById("end_screen").style.visibility = "visible";
+            document.getElementById("end_screen_text").innerHTML =
+                "Du hast " + 100 + " Punkte gesammelt!"
+        } else if (levelUpViewModel.levelUpPossible){
             setCurrentPlayerTier(levelUpViewModel.nextTierAsFigure);
+            document.getElementById("end_screen").style.visibility = "visible";
+            document.getElementById("end_screen_text").innerHTML =
+                "Du hast ein neues Level erreicht! <br> Neuer Rang: " + "\"" + levelUpViewModel.nextTier + "\""
         }
-        else
-            document.getElementById("tier_update").innerHTML =
-                "Erreiche " + levelUpViewModel.nextTierPoints + " Gesamtpunkte um ein \"" + levelUpViewModel.nextTier + "\" zu werden! <br>Bis dahin kannst du beim Memory Punkte sammeln"
+        else {
+            setCurrentPlayerPoints();
+            document.getElementById("end_screen").style.visibility = "visible";
+            document.getElementById("end_screen_text").innerHTML =
+                "Du hast " + 100 + " Punkte gesammelt!"
+        }
     }).fail(function (data, status) {
 
     });
