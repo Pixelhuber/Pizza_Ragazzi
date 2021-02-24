@@ -1697,7 +1697,7 @@ function startMiniGame(ingredientList) {
                 event = event || window.event;
                 event.preventDefault();
 
-                document.body.style.cursor = url('/assets/images/teig.png', 'auto');
+                document.body.style.cursor= `url("/assets/images/cursors/knife.cur"),auto`;
 
                 document.onmouseup = stopListening;
                 document.onmousemove = checkForHit;
@@ -1889,7 +1889,7 @@ function startMiniGame(ingredientList) {
                 this.endShow();
 
 
-
+                //document.body.style.cursor= `url("/assets/images/cursors/rollingPin.cur"),auto`; TODO change cursor to rolling pin and back
                 this.hits_left -= 1;
 
                 if (this.hits_left <= 0) {
@@ -1910,7 +1910,6 @@ function startMiniGame(ingredientList) {
                     processedIngredients.push(this.draggableIngredient);
                     updateCounter();
                 } else {
-
                     AudioPlayer.ingredient_stamp();
                     console.log("Hit: " + this.draggableIngredient.name)
                 }
