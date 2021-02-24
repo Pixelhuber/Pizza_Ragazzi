@@ -1064,7 +1064,7 @@ function manageRushCountdown(timerContainerId) {
 
                 pizzaRushRunning = false;
                 document.getElementById("startStop_overlay").style.visibility = "visible";
-                document.getElementById("startStop_overlay_text").innerHTML = "Runde vorbei!<br/>Du hast " + await getCurrentPoints() + " Punkte erreich!";
+                document.getElementById("startStop_overlay_text").innerHTML = "Runde vorbei!<br/>Du hast " + await getCurrentPoints() + " Punkte erreicht!";
                 document.getElementById("startStop_overlay_button").innerHTML = "Nochmal spielen!"
 
                 this.affectedObject.innerHTML = "END";

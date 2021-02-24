@@ -18,7 +18,7 @@
                 <div id="description">Short description</div>
                 <div id="currentPosition">position</div>
             </div>
-            <button class= "button" id="nextButton" onclick=nextGif()>Got it !</button>
+            <button class= "button" id="nextButton" onclick=nextGif()>OK</button>
         </div>
         <script>
                 var index = 0;
@@ -27,13 +27,13 @@
 
                 function start() {
                     videos.push("@assetsFinder.path("images/tutorial/getting_Ingredients.gif")")
-                    descriptions.push("Work with ingredients by clicking on them and then dragging them around");
+                    descriptions.push("Erhalte eine Zutat indem du auf sie klickst und sie herumziehst");
 
                     videos.push("@assetsFinder.path("images/tutorial/correct_Processing.gif")")
-                    descriptions.push("To process Ingredients, you have to choose the fitting Method");
+                    descriptions.push("Ziehe Zutaten zur passenden Verarbeitungsmethode");
 
                     videos.push("@assetsFinder.path("images/tutorial/stomping_Ingredients.gif")")
-                    descriptions.push("Click on them in the minigame to process them");
+                    descriptions.push("Klicke auf das Minigame Icon um die Zutaten zu verarbeiten");
 
                     nextGif();
                 }
