@@ -30,9 +30,9 @@ public class PizzaValidation {
     }
 
     /**
-     * Calculate points int.
+     * Calculates points for provided pizza.
      *
-     * @return the int
+     * @return the int points
      */
 // Calculates how many points this pizza should get
     public int calculatePoints(){
@@ -56,7 +56,7 @@ public class PizzaValidation {
     }
 
     /**
-     * Pizza equals order boolean.
+     * Compares the provided pizza with the order.
      *
      * @return the boolean
      */
@@ -65,7 +65,7 @@ public class PizzaValidation {
     }
 
     /**
-     * List equals boolean.
+     * List equals.
      *
      * @param <Integer> the type parameter
      * @param list1     the list 1

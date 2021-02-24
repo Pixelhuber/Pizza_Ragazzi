@@ -1,0 +1,51 @@
+@(implicit assetsFinder: AssetsFinder)
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="shortcut icon" type="image_path/png" href="@assetsFinder.path("images/favicon.png")">
+        <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_tutorial.css")">
+
+        <title>Tutorial</title>
+    </head>
+    <body onload="start()">
+            <!--NAVIGATION BAR ------------->
+        <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
+            <!------------------------------>
+        <div id="tutorialWindow">
+            <img id="video" src="" alt="tutorialGif"/>
+            <div id="container_information">
+                <div id="description">Short description</div>
+                <div id="currentPosition">position</div>
+            </div>
+            <button class= "button" id="nextButton" onclick=nextGif()>OK</button>
+        </div>
+        <script>
+                var index = 0;
+                var videos = [];
+                var descriptions = [];
+
+                function start() {
+                    videos.push("@assetsFinder.path("images/tutorial/getting_Ingredients.gif")")
+                    descriptions.push("Erhalte eine Zutat indem du auf sie klickst und sie herumziehst");
+
+                    videos.push("@assetsFinder.path("images/tutorial/correct_Processing.gif")")
+                    descriptions.push("Ziehe Zutaten zur passenden Verarbeitungsmethode");
+
+                    videos.push("@assetsFinder.path("images/tutorial/stomping_Ingredients.gif")")
+                    descriptions.push("Klicke auf das Minigame Icon um die Zutaten zu verarbeiten");
+
+                    nextGif();
+                }
+
+                function nextGif() {
+                    if(index+1>descriptions.length)index=0;
+                    document.getElementById("video").src = videos[index];
+                    document.getElementById("description").innerText = descriptions[index];
+                    var position = index + 1;
+                    document.getElementById("currentPosition").innerText = "("+position+"/"+ videos.length+")";
+                    index = index + 1;
+                }
+        </script>
+    </body>
+</html>

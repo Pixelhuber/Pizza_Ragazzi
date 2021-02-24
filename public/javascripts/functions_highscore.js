@@ -7,13 +7,13 @@ function createHighscoreTable(tableData) {
     /*erstellt die Titel/Beschriftung*/
     var rowHead = document.createElement('tr');
     var cellHeadRank = document.createElement('th');
-    cellHeadRank.appendChild(document.createTextNode("Rank"));
+    cellHeadRank.appendChild(document.createTextNode("Rang"));
     rowHead.appendChild(cellHeadRank);
     var cellHeadName = document.createElement('th');
     cellHeadName.appendChild(document.createTextNode("Name"));
     rowHead.appendChild(cellHeadName);
     var cellHeadScore = document.createElement('th');
-    cellHeadScore.appendChild(document.createTextNode("Score"));
+    cellHeadScore.appendChild(document.createTextNode("Punkte"));
     rowHead.appendChild(cellHeadScore);
     tableHead.appendChild(rowHead);
 

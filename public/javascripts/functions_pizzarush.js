@@ -17,6 +17,7 @@ const gameProperties = {
     fruitNinja_minTimeBetweenThrows: 0.1,
     fruitNinja_xRange: 30,
     fruitNinja_yRange: 30,
+    fruitNinja_hitmarkerShowingTime: 250,
 
     whack_distractionChance_percent: 0,
     whack_maxIngredientsShownAtOnce: 4,
@@ -48,6 +49,7 @@ class AbstractIngredient {
     picture_processed;
     picture_baked;
     picture_burnt;
+    zIndex;
 
     static picture_type = {
         RAW: 1,
@@ -57,7 +59,7 @@ class AbstractIngredient {
         BURNT: 5
     }
 
-    constructor(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt) {
+    constructor(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt, zIndex) {
         this.id = id;
         this.name = name;
         this.picture_raw = picture_raw;
@@ -65,6 +67,7 @@ class AbstractIngredient {
         this.picture_processed = picture_processed;
         this.picture_baked = picture_baked;
         this.picture_burnt = picture_burnt;
+        this.zIndex = zIndex;
     }
 
     createDraggableInstance() {
@@ -96,30 +99,7 @@ class AbstractIngredient {
         ret.setAttribute('width', '110px');
         ret.setAttribute('height', '110px');
 
-        // TODO: Früher oder später müssen wir die z-Indexes der Ingredients in der Datenbank speichern
-        switch (this.name) {
-            case "Pomodoro":
-                ret.style.zIndex = "11";
-                break;
-            case "Formaggio":
-                ret.style.zIndex = "12";
-                break;
-            case "Salame":
-                ret.style.zIndex = "13";
-                break;
-            case "Prociutto":
-                ret.style.zIndex = "14";
-                break;
-            case "Paprica":
-                ret.style.zIndex = "15";
-                break;
-            case "Funghi":
-                ret.style.zIndex = "16";
-                break;
-            case "Ananas":
-                ret.style.zIndex = "17";
-                break;
-        }
+        ret.style.zIndex = this.zIndex;
 
         return ret;
     }
@@ -149,8 +129,8 @@ class ChoppingIngredient extends AbstractIngredient {
 
     flight_behavior;
 
-    constructor(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt, flight_behavior) {
-        super(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt);
+    constructor(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt, zIndex, flight_behavior) {
+        super(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt, zIndex);
         this.flight_behavior = flight_behavior;
     }
 }
@@ -159,8 +139,8 @@ class StampingIngredient extends AbstractIngredient {
 
     stamp_behavior;
 
-    constructor(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt, stamp_behavior) {
-        super(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt);
+    constructor(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt, zIndex, stamp_behavior) {
+        super(id, name, picture_raw, picture_raw_distraction, picture_processed, picture_baked, picture_burnt, zIndex);
         this.stamp_behavior = stamp_behavior;
     }
 }
@@ -913,14 +893,14 @@ async function setupAvailableIngredients() {
     ingredients.forEach(function (item) {// Json-Array in availableIngredients-Array
         if (item.hasOwnProperty("display_time")) {
             availableIngredients.push(
-                new StampingIngredient(item.id, item.name, item.picture_raw, item.picture_raw_distraction, item.picture_processed, item.picture_baked, item.picture_burnt, {
+                new StampingIngredient(item.id, item.name, item.picture_raw, item.picture_raw_distraction, item.picture_processed, item.picture_baked, item.picture_burnt, item.zIndex, {
                     disabling_time: item.disabling_time,
                     hits_required: item.hits_required,
                     display_time: item.display_time
                 }))
         } else {
             availableIngredients.push(
-                new ChoppingIngredient(item.id, item.name, item.picture_raw, item.picture_raw_distraction, item.picture_processed, item.picture_baked, item.picture_burnt, {
+                new ChoppingIngredient(item.id, item.name, item.picture_raw, item.picture_raw_distraction, item.picture_processed, item.picture_baked, item.picture_burnt, item.zIndex, {
                     vertex_x_inPercent: item.vertex_x_inPercent,
                     vertex_y_inPercent: item.vertex_y_inPercent,
                     speed: item.speed,
@@ -1072,7 +1052,7 @@ function manageRushCountdown(timerContainerId) {
                     AudioPlayer.round_lastFive();
 
                 // Display the result in the affectedObject
-                this.affectedObject.innerHTML = "TIME: " + minutes + ":" + seconds;
+                this.affectedObject.innerHTML = "Zeit: " + minutes + ":" + seconds;
 
 
             }
@@ -1084,8 +1064,8 @@ function manageRushCountdown(timerContainerId) {
 
                 pizzaRushRunning = false;
                 document.getElementById("startStop_overlay").style.visibility = "visible";
-                document.getElementById("startStop_overlay_text").innerHTML = "Round over!<br/>You scored " + await getCurrentPoints() + " Points";
-                document.getElementById("startStop_overlay_button").innerHTML = "Play Again!"
+                document.getElementById("startStop_overlay_text").innerHTML = "Runde vorbei!<br/>Du hast " + await getCurrentPoints() + " Punkte erreicht!";
+                document.getElementById("startStop_overlay_button").innerHTML = "Nochmal spielen!"
 
                 this.affectedObject.innerHTML = "END";
                 await endGame();
@@ -1148,7 +1128,7 @@ function validatePizza(order, pizza) {
 }
 
 async function updateCurrentPoints() {
-    document.getElementById("currentlyDisplayedPoints").textContent = "POINTS: " + await getCurrentPoints();
+    document.getElementById("currentlyDisplayedPoints").textContent = "Punkte: " + await getCurrentPoints();
 }
 
 async function getCurrentPoints() {
@@ -1556,10 +1536,23 @@ function startMiniGame(ingredientList) {
                 this.ingredientJuggler.ingredientsWaitingToBeThrown.push(this);
             }
 
-            onHit() {
+            onHit(callback) {
+
 
                 this.wasHitInThisThrow = true;
                 this.hits_left -= 1;
+
+                document.body.style.cursor= `url("/assets/images/cursors/hitmarker.cur"),auto`
+                setTimeout(resetCursor,gameProperties.fruitNinja_hitmarkerShowingTime)
+                function resetCursor(){
+                    document.body.style.cursor= `url("/assets/images/cursors/knife.cur"),auto`
+                }
+                /*
+                window.requestAnimationFrame(function () {
+                    context.fillStyle = '#79de43'
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+                });
+                 */
 
                 if (this.hits_left <= 0) {
 
@@ -1708,10 +1701,11 @@ function startMiniGame(ingredientList) {
 
             canvas.onmousedown = startListening;
 
-
             function startListening(event) {
                 event = event || window.event;
                 event.preventDefault();
+
+                document.body.style.cursor= `url("/assets/images/cursors/knife.cur"),auto`;
 
                 document.onmouseup = stopListening;
                 document.onmousemove = checkForHit;
@@ -1720,6 +1714,8 @@ function startMiniGame(ingredientList) {
             function stopListening(event) {
                 document.onmouseup = null;
                 document.onmousemove = null;
+
+                document.body.style.cursor = "auto";
             }
 
             function checkForHit(event) {
@@ -1731,8 +1727,9 @@ function startMiniGame(ingredientList) {
                 y = event.clientY - canvas_box.top;
 
                 ingredientJuggler.ingredientsCurrentlyInAir.forEach(function (item) {
-                    if (item.isHit(x, y))
+                    if (item.isHit(x, y)){
                         item.onHit();
+                    }
                 })
             }
         }
@@ -1899,6 +1896,8 @@ function startMiniGame(ingredientList) {
             onHit() {
                 this.endShow();
 
+
+                document.body.style.cursor= `url("/assets/images/cursors/hitmarker.cur"),auto`
                 this.hits_left -= 1;
 
                 if (this.hits_left <= 0) {
@@ -1919,7 +1918,6 @@ function startMiniGame(ingredientList) {
                     processedIngredients.push(this.draggableIngredient);
                     updateCounter();
                 } else {
-
                     AudioPlayer.ingredient_stamp();
                     console.log("Hit: " + this.draggableIngredient.name)
                 }
@@ -2142,9 +2140,14 @@ function startMiniGame(ingredientList) {
             let y;
 
             canvas.onmousedown = checkForHit;
-
+            //canvas.onmousedown.apply(document.body.style.cursor= `url("/assets/images/cursors/rollingPin.cur"),auto`);
+            canvas.onmouseup = switchCursorToNormal;
+            function switchCursorToNormal(event){
+                document.body.style.cursor= "auto";
+            }
 
             function checkForHit(event) {
+                document.body.style.cursor= `url("/assets/images/cursors/rollingPin.cur"),auto`;
                 if (moleHandler.isDisabled())
                     return;
 
@@ -2197,6 +2200,7 @@ function startMiniGame(ingredientList) {
 function stopMiniGame() {
     fruitNinjaRunning = false;
     whackAMoleRunning = false;
+    document.body.style.cursor= "auto";
 
     document.getElementById("miniGame_layer").style.visibility = "hidden";
 }

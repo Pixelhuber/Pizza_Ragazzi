@@ -29,7 +29,6 @@ public class PizzaRushController extends Controller {
     /**
      * Instantiates a new Pizza rush controller.
      *
-     * @param assetsFinder     the assets finder
      * @param pizzaRushFactory the pizza rush factory
      * @param userFactory      the user factory
      */
