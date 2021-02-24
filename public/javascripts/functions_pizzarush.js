@@ -1535,10 +1535,15 @@ function startMiniGame(ingredientList) {
                 this.ingredientJuggler.ingredientsWaitingToBeThrown.push(this);
             }
 
-            onHit() {
+            onHit(callback) {
 
                 this.wasHitInThisThrow = true;
                 this.hits_left -= 1;
+
+                window.requestAnimationFrame(function () {
+                    context.fillStyle = '#79de43'
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+                });
 
                 if (this.hits_left <= 0) {
 
@@ -1710,8 +1715,9 @@ function startMiniGame(ingredientList) {
                 y = event.clientY - canvas_box.top;
 
                 ingredientJuggler.ingredientsCurrentlyInAir.forEach(function (item) {
-                    if (item.isHit(x, y))
+                    if (item.isHit(x, y)){
                         item.onHit();
+                    }
                 })
             }
         }
@@ -1877,6 +1883,8 @@ function startMiniGame(ingredientList) {
 
             onHit() {
                 this.endShow();
+
+
 
                 this.hits_left -= 1;
 
