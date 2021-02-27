@@ -114,7 +114,7 @@ function checkIfRetrievedNewMessagesAndReturnThem(messages, user2Username) {
 }
 
 function refreshChat() {
-    var interval = window.setInterval(function () {
+    window.setInterval(function () {
         if (chatPartner !== undefined && chatPartner !== null && !viewOnly) {
             getMessagesFromDatabase(chatPartner, false);
         }

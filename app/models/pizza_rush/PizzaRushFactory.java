@@ -385,7 +385,7 @@ public class PizzaRushFactory {
 
         int vertex_x_inPercent;
         int vertex_y_inPercent;
-        int speed;
+        double speed;
         int rotation;
         int hits_required;
 
@@ -412,7 +412,7 @@ public class PizzaRushFactory {
                 while (rs.next()) {
                     this.vertex_x_inPercent = rs.getInt("vertex_x_inPercent");
                     this.vertex_y_inPercent = rs.getInt("vertex_y_inPercent");
-                    this.speed = rs.getInt("speed");
+                    this.speed = rs.getDouble("speed");
                     this.rotation = rs.getInt("rotation");
                     this.hits_required = rs.getInt("hits_required");
                 }
@@ -443,7 +443,7 @@ public class PizzaRushFactory {
          *
          * @return the speed
          */
-        public int getSpeed() {
+        public double getSpeed() {
             return speed;
         }
 
