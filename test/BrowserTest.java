@@ -17,13 +17,46 @@ public class BrowserTest extends WithBrowser {
         return Helpers.testBrowser(port);
     }
 
-    /**
-     * add your integration test here
-     * in this example we just check if the welcome page is being shown
-     */
+
     @Test
-    public void test() {
+    public void testLogin() {
         browser.goTo("http://localhost:" + play.api.test.Helpers.testServerPort());
+        assertTrue(browser.pageSource().contains("PIZZA RAGAZZI"));
+    }
+
+    @Test
+    public void testProfile() {
+        browser.goTo("http://localhost:" + play.api.test.Helpers.testServerPort() + "/profile");
+        assertTrue(browser.pageSource().contains("Your new application is ready."));
+    }
+
+    @Test
+    public void testCreateAccount() {
+        browser.goTo("http://localhost:" + play.api.test.Helpers.testServerPort() + "/createAccount");
+        assertTrue(browser.pageSource().contains("Your new application is ready."));
+    }
+
+    @Test
+    public void testPizzaRush() {
+        browser.goTo("http://localhost:" + play.api.test.Helpers.testServerPort() + "/pizzaRush");
+        assertTrue(browser.pageSource().contains("Your new application is ready."));
+    }
+
+    @Test
+    public void testMenu() {
+        browser.goTo("http://localhost:" + play.api.test.Helpers.testServerPort() + "/menu");
+        assertTrue(browser.pageSource().contains("Your new application is ready."));
+    }
+
+    @Test
+    public void testMemory() {
+        browser.goTo("http://localhost:" + play.api.test.Helpers.testServerPort() + "/memory");
+        assertTrue(browser.pageSource().contains("Your new application is ready."));
+    }
+
+    @Test
+    public void testTutorial() {
+        browser.goTo("http://localhost:" + play.api.test.Helpers.testServerPort() + "/tutorial");
         assertTrue(browser.pageSource().contains("Your new application is ready."));
     }
 }
