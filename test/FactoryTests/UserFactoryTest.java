@@ -12,9 +12,7 @@ import org.junit.Before;
 import play.db.Database;
 import play.db.Databases;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.*;
 
 
 public class UserFactoryTest {
@@ -40,63 +38,84 @@ public class UserFactoryTest {
     }
 
     @Test
-    public void createUserTest() {
-        UserFactory.User actualUser = userFactory.createUser("test@mail.lel", "testUser1", "test");
-        assertEquals(actualUser.getUsername(),"testUser1");
-        assertEquals(actualUser.getEmail(),"test@mail.lel");
-        assertEquals(actualUser.getTotalPoints(),0);
-        assertEquals(actualUser.getHighScore(),0);
-        assertEquals(actualUser.getCurrentTier(),0);
+    public void whenCreatingUser_ThenCorrectUserAttributes() {
+        UserFactory.User actualUser = userFactory.createUser("test@test.test", "testUser", "test");
+
+        assertEquals("testUser", actualUser.getUsername());
+        assertEquals("test@test.test", actualUser.getEmail());
+        assertEquals(0, actualUser.getTotalPoints());
+        assertEquals(0, actualUser.getHighScore());
+        assertEquals(1, actualUser.getCurrentTier());
+
+        userFactory.getUserByEmail("test@test.test").delete();
     }
 
     @Test
-    public void createUserTest2(){
+    public void whenCreatingUserWithSameEmail_ThenException(){
+        UserFactory.User arrangeUser = userFactory.createUser("test@test.test", "testUser", "test");
+
         Exception exception = assertThrows(EmailAlreadyInUseException.class, () -> {
-            UserFactory.User actualUser = userFactory.createUser("test@mail.lel", "testUser2", "test");
+            UserFactory.User actualUser = userFactory.createUser("test@test.test", "testUser2", "test");
         });
-        String expectedMessage = "The e-mail test@mail.lel is already in use";
+
+        String expectedMessage = "The e-mail test@test.test is already in use";
         String actualMessage = exception.getMessage();
-        assertEquals(expectedMessage,actualMessage);
+        assertEquals(expectedMessage, actualMessage);
+
+        userFactory.getUserByEmail("test@test.test").delete();
     }
 
     @Test
-    public void isEmailAvailableTest(){
-        boolean expected = true;
+    public void whenUnusedEmail_ThenEmailAvailable(){
         boolean actual = userFactory.isEmailAvailable("free@free.free");
-        assertEquals(expected,actual);
+
+        assertTrue(actual);
     }
 
     @Test
-    public void isEmailAvailableTest2(){
-        boolean expected = false;
-        boolean actual = userFactory.isEmailAvailable("test@mail.lel");
-        assertEquals(expected,actual);
+    public void whenUsedEmail_ThenEmailUnavailable(){
+        UserFactory.User arrangeUser = userFactory.createUser("test@test.test", "testUser", "test");
+
+        boolean actual = userFactory.isEmailAvailable("test@test.test");
+
+        assertFalse(actual);
+
+        userFactory.getUserByEmail("test@test.test").delete();
     }
 
     @Test
-    public void authenticateUserTest(){
-        UserFactory.User actualUser = userFactory.authenticateUser("test@test.lel","test");
-        assertEquals(actualUser.getUsername(),"testUser3");
-        assertEquals(actualUser.getEmail(),"test@test.lel");
-        assertEquals(actualUser.getTotalPoints(),0);
-        assertEquals(actualUser.getHighScore(),0);
-        assertEquals(actualUser.getCurrentTier(),0);
+    public void whenAuthenticatingUser_ThenCorrectUserAttributes(){
+        UserFactory.User arrangeUser = userFactory.createUser("test@test.test", "testUser", "test");
+
+        UserFactory.User actualUser = userFactory.authenticateUser("test@test.test","test");
+        assertEquals("testUser", actualUser.getUsername());
+        assertEquals("test@test.test", actualUser.getEmail());
+        assertEquals(0, actualUser.getTotalPoints());
+        assertEquals(0, actualUser.getHighScore());
+        assertEquals(1, actualUser.getCurrentTier());
+
+        userFactory.getUserByEmail("test@test.test").delete();
     }
 
     @Test
-    public void authenticateUserTest2(){
-        UserFactory.User actualUser = userFactory.authenticateUser("test@mail.lel","wrong");
-        UserFactory.User expectedUser = null;
-        assertEquals(actualUser,expectedUser);
+    public void whenAuthenticatingWrongUser_ThenNull(){
+        UserFactory.User arrangeUser = userFactory.createUser("test@test.test", "testUser", "test");
+
+        UserFactory.User actualUser = userFactory.authenticateUser("test@test.test","wrong");
+
+        assertNull(actualUser);
+
+        userFactory.getUserByEmail("test@test.test").delete();
     }
 
     @Test
-    public void deleteUserByEmailTest(){
-        userFactory.getUserByEmail("test@mail.lel").delete();
-        boolean expected = true;
-        boolean actual = userFactory.isEmailAvailable("test@mail.lel");
-        assertEquals(expected,actual);
+    public void whenDeletingExistingUser_ThenEmailAvailable(){
+        UserFactory.User arrangeUser = userFactory.createUser("test@test.test", "testUser", "test");
+
+        userFactory.getUserByEmail("test@test.test").delete();
+
+        boolean actual = userFactory.isEmailAvailable("test@test.test");
+
+        assertTrue(actual);
     }
-
-
 }

@@ -24,11 +24,6 @@ public class HighscoreController extends Controller {
         this.userFactory = userFactory;
     }
 
-/*    public Result getTableData() {
-        return ok(Json.toJson(highscoreData.getTableData()));
-    }
-}*/
-
     /**
      * Gets Highscore-table data.
      *
