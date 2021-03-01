@@ -16,7 +16,7 @@ public class BrowserTest extends WithBrowser {
     protected TestBrowser provideBrowser(int port) {
         return Helpers.testBrowser(port);
     }
-
+    //TODO https://www.playframework.com/documentation/2.8.x/JavaFunctionalTest
 
     @Test
     public void testLogin() {
