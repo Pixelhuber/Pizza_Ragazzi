@@ -321,13 +321,14 @@ async function setCurrentPlayerTier(tier) {
 
 }
 
-async function setCurrentPlayerPoints() {
+async function setCurrentPlayerPoints(earnedPoints) {
     let currentPlayerTotalPoints = await getCurrentPlayerTotalPoints();
+
 
     fetch("/pizza_rush/setPlayerPoints", {
         method: 'POST',
         body: JSON.stringify({
-            newTotalPoints: currentPlayerTotalPoints + 100,                 //aktuell gibt jedes Memory 100 Punkte, könnte man abhängig vom Tier machen (200,300)
+            newTotalPoints: currentPlayerTotalPoints + earnedPoints,                 //aktuell gibt jedes Memory 100 Punkte, könnte man abhängig vom Tier machen (200,300)
         }),
         headers: {
             "Content-Type": "application/json"
@@ -358,31 +359,34 @@ async function getCurrentPlayerTotalPoints() {
 
 function checkForLevelUp() {
 
+
     $.get("/menu/checkForLevelUp", function (data, status) {
         const levelUpViewModel = JSON.parse(data);
 
         console.log(levelUpViewModel);
 
-        if(levelUpViewModel.nextTierPoints === 0){
-            document.getElementById("end_screen").style.visibility = "visible";
-            document.getElementById("end_screen_text").innerHTML =
-                "Du hast " + 100 + " Punkte gesammelt!"
-        } else if (levelUpViewModel.levelUpPossible){
+        if (levelUpViewModel.levelUpPossible){
             setCurrentPlayerTier(levelUpViewModel.nextTierAsFigure);
             document.getElementById("end_screen").style.visibility = "visible";
             document.getElementById("end_screen_text").innerHTML =
                 "Du hast ein neues Level erreicht! <br> Neuer Rang: " + "\"" + levelUpViewModel.nextTier + "\""
-        }
-        else {
-            setCurrentPlayerPoints();
+        } else {
+            let earnedPoints;
+            if(levelUpViewModel.nextTierAsFigure === 5){
+                earnedPoints = 1000;
+            } else {
+                earnedPoints = levelUpViewModel.nextTierPoints/10;
+            }
+            setCurrentPlayerPoints(earnedPoints);
             document.getElementById("end_screen").style.visibility = "visible";
             document.getElementById("end_screen_text").innerHTML =
-                "Du hast " + 100 + " Punkte gesammelt!"
+                "Du hast " + earnedPoints + " Punkte gesammelt!"
         }
     }).fail(function (data, status) {
 
     });
 }
+
 
 
 
