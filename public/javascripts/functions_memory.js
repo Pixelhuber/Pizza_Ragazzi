@@ -106,9 +106,6 @@ class NameCard extends AbstractMemoryCard {
         const tmp = document.createElement('div');
         tmp.setAttribute('class', 'memoryCard');
         tmp.setAttribute('id', this.card_number);
-        //tmp.text = document.createElement('p');
-
-        //tmp.text.innerHTML = this.ingredient_name;
 
         tmp.appendChild(this.ingredient_picture);
         this.ingredient_picture.style.maxWidth = '40%';
@@ -128,7 +125,7 @@ class NameCard extends AbstractMemoryCard {
     // private
     hideContent() {
         this.ingredient_picture.style.display = "none";
-        document.getElementById(this.card_number).style.backgroundColor = "rgba(150, 150, 150, 0.5)";
+        document.getElementById(this.card_number).style.backgroundColor = "rgba(251, 192, 45, 0.3)";
     }
 }
 
@@ -174,7 +171,7 @@ class DescriptionCard extends AbstractMemoryCard {
     // private
     hideContent() {
         document.getElementById(String(this.card_number)).text.style.display = "none";
-        document.getElementById(this.card_number).style.backgroundColor = "rgba(150, 150, 150, 0.5)";
+        document.getElementById(this.card_number).style.backgroundColor = "rgba(251, 192, 45, 0.3)";
     }
 }
 
@@ -282,10 +279,7 @@ function restartGame() {
 
 async function createMemoryCards() {
 
-    document.getElementById("end_screen").style.visibility = "hidden";
-
     const ingredients = await getMemoryIngredients();
-
 
     ingredients.forEach(function (item) {
         const memoryIngredient = new MemoryIngredient(item.id, item.name, item.description, item.picture)
@@ -372,7 +366,7 @@ function checkForLevelUp() {
                 "Du hast ein neues Level erreicht! <br> Neuer Rang: " + "\"" + levelUpViewModel.nextTier + "\""
         } else {
             let earnedPoints;
-            if(levelUpViewModel.nextTierAsFigure === 5){
+            if(levelUpViewModel.nextTierPoints === -1){
                 earnedPoints = 1000;
             } else {
                 earnedPoints = levelUpViewModel.nextTierPoints/10;
@@ -386,6 +380,8 @@ function checkForLevelUp() {
 
     });
 }
+
+
 
 
 

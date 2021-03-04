@@ -64,7 +64,7 @@ public class Menu {
             else if (iHighestPossibleTier < rsAsList.size()-1) // User can't level up yet
                 return new LevelUpViewModel(false, rsAsList.get(iHighestPossibleTier+1)[1], Integer.parseInt(rsAsList.get(iHighestPossibleTier+1)[2]), userNextTier);
             else // User already is highest level
-                return new LevelUpViewModel(false, "", 0, userNextTier);
+                return new LevelUpViewModel(false, "", -1, userNextTier);
         });
     }
 
