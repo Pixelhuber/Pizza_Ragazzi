@@ -3,6 +3,7 @@ package controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import factory.MemoryFactory;
+import factory.Menu;
 import factory.UserFactory;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -15,12 +16,14 @@ public class MemoryController extends Controller {
 
     MemoryFactory memoryFactory;
     UserFactory userFactory;
+    Menu menu;
 
     @Inject
-    public MemoryController(MemoryFactory memoryFactory, UserFactory userFactory) {
+    public MemoryController(MemoryFactory memoryFactory, UserFactory userFactory, Menu menu) {
 
         this.memoryFactory = memoryFactory;
         this.userFactory = userFactory;
+        this.menu = menu;
     }
 
     public Result getMemoryIngredients(Http.Request request) {
@@ -30,11 +33,19 @@ public class MemoryController extends Controller {
         else
             return badRequest("Can't identify User: No E-Mail in session");
 
-        List<MemoryFactory.MemoryIngredient> ingredients = memoryFactory.getMemoryIngredients(email);
+        UserFactory.User user = userFactory.getUserByEmail(email);
+
+        List<MemoryFactory.MemoryIngredient> ingredients;
+
+        if (menu.checkForLevelUp(user).isLevelUpPossible()){
+            ingredients = memoryFactory.getMemoryIngredientsForNextTier(email);
+        } else {
+            ingredients = memoryFactory.getMemoryIngredients(email);
+        }
+
         String json = listToJson(ingredients);
         return ok(json);
     }
-
 
     // converts any list into Json
     public <T> String listToJson (List<T> list) {

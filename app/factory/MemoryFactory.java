@@ -43,6 +43,22 @@ public class MemoryFactory {
         });
     }
 
+    public List<MemoryIngredient> getMemoryIngredientsForNextTier(String email) {
+
+        return db.withConnection(conn -> {
+            List<MemoryIngredient> result = new ArrayList<>();
+            String sql = "SELECT idIngredient, name, description, picture_raw FROM Ingredient JOIN Memory M on Ingredient.idIngredient = M.Ingredient_fk WHERE Tier_idTier <= (SELECT Tier_idTier FROM `User` WHERE email = ?) + 1";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                result.add(new MemoryIngredient(rs));
+            }
+            stmt.close();
+            return result;
+        });
+    }
+
     public String encodeImageToString(BufferedImage image, String type) {
         String imageString = null;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();

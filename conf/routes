@@ -89,4 +89,4 @@ POST    /pizza_rush/setPlayerPoints                     controllers.PizzaRushCon
 # MEMORY -----------------------------------------------------------------------------------
 
 GET     /memory/getMemoryIngredients                    controllers.MemoryController.getMemoryIngredients(request: Request)
-POST    /memory/setCurrentPlayerTier controllers.MemoryController.setCurrentPlayerTier(request: Request)
+POST    /memory/setCurrentPlayerTier                    controllers.MemoryController.setCurrentPlayerTier(request: Request)
