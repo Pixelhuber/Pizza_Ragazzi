@@ -1,23 +1,23 @@
 
 const gameProperties = {
-    roundLength: 300,
+    roundLength: 150,
 
     maxTimeBetweenOrders: 30,
     orderDelay: 2,
     minOrdersActive: 2,
     ordersActiveWhenStarting: 2,
 
+    pizza_bakingTime: 5,
     pizza_timeUntilBurnt: 7, // additional to regular baking time
     pizza_timeUntilWarning: 4, // additional to regular baking time
-    pizza_bakingTime: 5,
 
     fruitNinja_distractionChance_percent: 20,
     fruitNinja_distractionDisablingTime: 5,
-    fruitNinja_maxIngredientsInAir: 10,
+    fruitNinja_maxIngredientsInAir: 5,
     fruitNinja_minTimeBetweenThrows: 0.1,
     fruitNinja_xRange: 30,
     fruitNinja_yRange: 30,
-    fruitNinja_hitmarkerShowingTime: 250,
+    fruitNinja_hitmarkerShowingTime: 0.25,
 
     whack_distractionChance_percent: 0,
     whack_maxIngredientsShownAtOnce: 4,
@@ -1538,12 +1538,11 @@ function startMiniGame(ingredientList) {
 
             onHit(callback) {
 
-
                 this.wasHitInThisThrow = true;
                 this.hits_left -= 1;
 
                 document.body.style.cursor= `url("/assets/images/cursors/hitmarker.cur"),auto`
-                setTimeout(resetCursor,gameProperties.fruitNinja_hitmarkerShowingTime)
+                setTimeout(resetCursor,gameProperties.fruitNinja_hitmarkerShowingTime*1000)
                 function resetCursor(){
                     document.body.style.cursor= `url("/assets/images/cursors/knife.cur"),auto`
                 }
@@ -1895,7 +1894,6 @@ function startMiniGame(ingredientList) {
 
             onHit() {
                 this.endShow();
-
 
                 document.body.style.cursor= `url("/assets/images/cursors/hitmarker.cur"),auto`
                 this.hits_left -= 1;

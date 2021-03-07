@@ -24,6 +24,8 @@ button{
     max-width: 500px;
     border: 4px black solid;
     background-color: white;
+
+    font-size: 1.2em;
 }
 
 button:hover{

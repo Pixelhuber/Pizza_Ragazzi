@@ -191,7 +191,7 @@ class CardHandler {
         if (numberFlippedCards > 2){
             this.hideAllCards();
             return true;                            //informiert toggleFlipped, ob alle Karten umgedreht wurden (dann muss aktuelle Karte nochmal umgedreht werden)
-        } else if (numberFlippedCards == 2){
+        } else if (numberFlippedCards === 2){
             this.checkPair();
         } else {
             return false;
