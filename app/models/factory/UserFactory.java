@@ -207,15 +207,20 @@ public class UserFactory {
      *
      * @return the string [ ] [ ]
      */
-    public String[][] getHighscoreData() {
+    public ArrayList<String[]> getHighscoreData() {
 
         List<UserFactory.User> users = getAllUsers();
+        users.sort(Comparator.comparing(User::getHighScore).reversed());
 
-        String[][] data = new String[users.size()][2];
+        ArrayList<String[]> data = new ArrayList<>();
 
-        for (int i = 0; i < users.size(); i++) {
-            data[i][0] = users.get(i).username;
-            data[i][1] = String.valueOf(users.get(i).getHighScore());
+        for (int i = 0; i < Math.min(users.size(), 10); i++) {
+            User current = users.get(i);
+
+            if (current.getHighScore() > 0) {
+                String[] entry = new String[]{current.getUsername(), String.valueOf(current.getHighScore())};
+                data.add(entry);
+            }
         }
         return data;
     }

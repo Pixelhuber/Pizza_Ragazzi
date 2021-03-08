@@ -1,4 +1,5 @@
 function createHighscoreTable(tableData) {
+
     /*Variablen für die einzelnen Tabellenbestandteile   */
     var table = document.createElement('table');
     var tableBody = document.createElement('tbody');
