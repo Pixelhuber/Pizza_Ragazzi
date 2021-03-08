@@ -1,6 +1,6 @@
-package models.pizza_rush;
+package models.factory;
 
-import factory.FactoryExceptions.ProfilePictureException;
+import models.factory.FactoryExceptions.ProfilePictureException;
 import play.db.Database;
 
 import javax.imageio.ImageIO;

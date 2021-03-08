@@ -1,4 +1,4 @@
-package factory.FactoryExceptions;
+package models.factory.FactoryExceptions;
 
 /**
  * The type Username already in use exception.

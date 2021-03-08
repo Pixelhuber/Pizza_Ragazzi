@@ -2,9 +2,9 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import factory.MemoryFactory;
-import factory.Menu;
-import factory.UserFactory;
+import models.factory.MemoryFactory;
+import models.LevelUp;
+import models.factory.UserFactory;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -16,14 +16,14 @@ public class MemoryController extends Controller {
 
     MemoryFactory memoryFactory;
     UserFactory userFactory;
-    Menu menu;
+    LevelUp levelUp;
 
     @Inject
-    public MemoryController(MemoryFactory memoryFactory, UserFactory userFactory, Menu menu) {
+    public MemoryController(MemoryFactory memoryFactory, UserFactory userFactory, LevelUp levelUp) {
 
         this.memoryFactory = memoryFactory;
         this.userFactory = userFactory;
-        this.menu = menu;
+        this.levelUp = levelUp;
     }
 
     public Result getMemoryIngredients(Http.Request request) {
@@ -37,7 +37,7 @@ public class MemoryController extends Controller {
 
         List<MemoryFactory.MemoryIngredient> ingredients;
 
-        if (menu.checkForLevelUp(user).isLevelUpPossible()){
+        if (levelUp.checkForLevelUp(user).isLevelUpPossible()){
             ingredients = memoryFactory.getMemoryIngredientsForNextTier(email);
         } else {
             ingredients = memoryFactory.getMemoryIngredients(email);

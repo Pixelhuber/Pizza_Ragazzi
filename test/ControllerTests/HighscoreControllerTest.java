@@ -1,7 +1,7 @@
 package ControllerTests;
 
 import controllers.HighscoreController;
-import factory.UserFactory;
+import models.factory.UserFactory;
 import org.junit.Before;
 import org.junit.Test;
 import play.mvc.Result;

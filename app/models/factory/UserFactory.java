@@ -1,10 +1,10 @@
-package factory;
+package models.factory;
 
 import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
-import factory.FactoryExceptions.EmailAlreadyInUseException;
-import factory.FactoryExceptions.InvalidEmailException;
-import factory.FactoryExceptions.ProfilePictureException;
-import factory.FactoryExceptions.UsernameAlreadyInUseException;
+import models.factory.FactoryExceptions.EmailAlreadyInUseException;
+import models.factory.FactoryExceptions.InvalidEmailException;
+import models.factory.FactoryExceptions.ProfilePictureException;
+import models.factory.FactoryExceptions.UsernameAlreadyInUseException;
 
 import models.Message;
 import play.db.Database;
@@ -24,7 +24,7 @@ import java.util.*;
 @Singleton
 public class UserFactory {
 
-    private Database db;
+    private final Database db;
 
     /**
      * Instantiates a new User factory.
@@ -66,7 +66,7 @@ public class UserFactory {
      * @param password the password
      * @return the user
      */
-//TODO complete this
+    //TODO complete this
     public User createUser(String email, String name, String password) {
         if (!email.matches("[a-zA-Z0-9._%+-]+[@]+[a-zA-Z0-9.-]+[.]+[a-zA-Z]{2,6}"))
             throw new InvalidEmailException("The e-mail " + email + " is not valid");
@@ -220,6 +220,8 @@ public class UserFactory {
         return data;
     }
 
+
+
     /**
      * The type User.
      */
@@ -266,12 +268,10 @@ public class UserFactory {
             this.totalPoints = rs.getInt("gesamtpunkte");
             this.highScore = rs.getInt("highscore");
             BufferedInputStream bis = new BufferedInputStream(rs.getBinaryStream("profilepicture"));
-            if (bis != null) {
-                try {
-                    profilePicture = ImageIO.read(bis);
-                } catch (IOException invalidProfilePicture) {
-                    throw new ProfilePictureException("We had trouble getting the profile picture");
-                }
+            try {
+                profilePicture = ImageIO.read(bis);
+            } catch (IOException invalidProfilePicture) {
+                throw new ProfilePictureException("We had trouble getting the profile picture");
             }
             this.currentTier = rs.getInt("Tier_idTier");
         }
@@ -280,7 +280,7 @@ public class UserFactory {
          * Updates the user if it already exists and creates it otherwise. Assumes an
          * autoincrement id column.
          */
-//TODO: add BufferedImage profilePicture
+        //TODO: add BufferedImage profilePicture
         public void save() {
             db.withConnection(conn -> {
                 String sql = "UPDATE User SET username = ?, email = ?, gesamtpunkte = ?, highscore = ?, Tier_idTier = ? WHERE idUser = ?";

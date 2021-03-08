@@ -1,34 +1,32 @@
-package factory;
+package models;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import models.factory.UserFactory;
 import play.db.Database;
-import scala.util.parsing.json.JSONObject;
-
 import javax.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
- * The type Menu.
+ * The type LevelUp.
+ * Contains functionality in context of the leveling up process
  */
-public class Menu {
-    Database db;
+public class LevelUp {
+
+    private final Database db;
 
     /**
-     * Instantiates a new Menu.
+     * Instantiates a new LevelUp.
      *
      * @param db the db
      */
     @Inject
-    public Menu(Database db) {
+    public LevelUp(Database db) {
         this.db = db;
     }
 
-
     /**
-     * Check for level up level up view model.
+     * Check for level up view model.
      *
      * @param user the user
      * @return the level up view model
@@ -62,16 +60,17 @@ public class Menu {
             if (isLevelUpPossible) // User can level up
                 return new LevelUpViewModel(true, highestPossibleTier[1], Integer.parseInt(highestPossibleTier[2]), userNextTier);
             else if (iHighestPossibleTier < rsAsList.size()-1) // User can't level up yet
-                return new LevelUpViewModel(false, rsAsList.get(iHighestPossibleTier+1)[1], Integer.parseInt(rsAsList.get(iHighestPossibleTier+1)[2]), userNextTier);
+                return new LevelUpViewModel(false, rsAsList.get(iHighestPossibleTier + 1)[1], Integer.parseInt(rsAsList.get(iHighestPossibleTier + 1)[2]), userNextTier);
             else // User already is highest level
                 return new LevelUpViewModel(false, "", -1, userNextTier);
         });
     }
 
     /**
-     * The type Level up view model.
+     * Contains relevant information about a potential Level-Up opportunity.
+     * If it is possible and if so, what the next tier is
      */
-    public class LevelUpViewModel {
+    public static class LevelUpViewModel {
 
         boolean isLevelUpPossible;
         String nextTier;

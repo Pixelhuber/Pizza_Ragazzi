@@ -1,10 +1,11 @@
-package models.pizza_rush;
+package models;
 
 import java.util.HashSet;
 import java.util.List;
 
 /**
  * The type Pizza validation.
+ * It is used for validating pizzas in "Pizza-Rush" mode
  */
 public class PizzaValidation {
 

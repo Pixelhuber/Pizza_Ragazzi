@@ -1,6 +1,6 @@
-package factory;
+package models.factory;
 
-import factory.FactoryExceptions.ProfilePictureException;
+import models.factory.FactoryExceptions.ProfilePictureException;
 import play.db.Database;
 
 import javax.imageio.ImageIO;
@@ -20,7 +20,7 @@ import java.util.List;
 @Singleton
 public class MemoryFactory {
 
-    private Database db;
+    private final Database db;
 
     @Inject
     public MemoryFactory(Database db) {

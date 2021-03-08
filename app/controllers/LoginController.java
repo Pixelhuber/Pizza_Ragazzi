@@ -1,12 +1,9 @@
 package controllers;
 
 
-import factory.UserFactory;
-import play.data.FormFactory;
+import models.factory.UserFactory;
 import play.mvc.*;
 import views.html.login;
-import play.libs.Json;
-import scala.util.parsing.json.JSON;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import javax.inject.Inject;

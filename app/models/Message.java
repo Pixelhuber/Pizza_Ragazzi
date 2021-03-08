@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 /**
  * The type Message.
+ * It represents a message, that two users can send each other
  */
 public class Message {
     private final int sender;

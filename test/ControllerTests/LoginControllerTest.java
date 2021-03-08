@@ -1,17 +1,15 @@
 package ControllerTests;
 
 import controllers.AssetsFinder;
-import controllers.HomeController;
 import controllers.LoginController;
 import controllers.routes;
-import factory.UserFactory;
+import models.factory.UserFactory;
 import org.junit.Before;
 import org.junit.Test;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.test.Helpers;
 import play.test.WithApplication;
-import play.mvc.Http.RequestBuilder;
 
 import static org.junit.Assert.assertEquals;
 import static play.mvc.Http.Status.OK;

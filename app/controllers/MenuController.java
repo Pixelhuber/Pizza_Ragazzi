@@ -1,8 +1,8 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import factory.Menu;
-import factory.UserFactory;
+import models.LevelUp;
+import models.factory.UserFactory;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -14,18 +14,18 @@ import javax.inject.Inject;
  */
 public class MenuController extends Controller {
 
-    private final Menu menu;
+    private final LevelUp levelUp;
     private final UserFactory userFactory;
 
     /**
      * Instantiates a new Menu controller.
      *
-     * @param menu        the menu
+     * @param levelUp        the menu
      * @param userFactory the user factory
      */
     @Inject
-    public MenuController(Menu menu, UserFactory userFactory) {
-        this.menu = menu;
+    public MenuController(LevelUp levelUp, UserFactory userFactory) {
+        this.levelUp = levelUp;
         this.userFactory = userFactory;
     }
 
@@ -44,7 +44,7 @@ public class MenuController extends Controller {
 
         UserFactory.User user = userFactory.getUserByEmail(email);
 
-        return ok(listToJson(menu.checkForLevelUp(user)));
+        return ok(listToJson(levelUp.checkForLevelUp(user)));
     }
 
 
@@ -55,7 +55,7 @@ public class MenuController extends Controller {
      * @return the string
      */
 // converts any list into Json
-    public String listToJson(Menu.LevelUpViewModel list) {
+    public String listToJson(LevelUp.LevelUpViewModel list) {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = "";
         try {

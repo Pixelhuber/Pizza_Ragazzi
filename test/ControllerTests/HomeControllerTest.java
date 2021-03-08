@@ -1,19 +1,14 @@
 package ControllerTests;
 
 import controllers.AssetsFinder;
-import controllers.HighscoreController;
 import controllers.HomeController;
 import controllers.routes;
-import factory.UserFactory;
 import org.junit.Before;
 import org.junit.Test;
-import play.api.test.FakeRequest;
-import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.test.Helpers;
 import play.test.WithApplication;
-import play.mvc.Http.RequestBuilder;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

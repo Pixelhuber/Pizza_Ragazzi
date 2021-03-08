@@ -1,8 +1,8 @@
 package FactoryTests;
 
 import com.google.common.collect.ImmutableMap;
-import factory.FactoryExceptions.EmailAlreadyInUseException;
-import factory.UserFactory;
+import models.factory.FactoryExceptions.EmailAlreadyInUseException;
+import models.factory.UserFactory;
 
 import org.junit.*;
 import org.junit.After;
@@ -29,7 +29,7 @@ public class UserFactoryTest {
                 ImmutableMap.of(
                         "username", "sopra-2020WS-team01",
                         "password", "M3vfDjc8"));
-        userFactory = new factory.UserFactory(database);
+        userFactory = new models.factory.UserFactory(database);
     }
 
     @After

@@ -1,10 +1,8 @@
 package controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import factory.FactoryExceptions.ProfilePictureException;
-import factory.UserFactory;
+import models.factory.FactoryExceptions.ProfilePictureException;
+import models.factory.UserFactory;
 import models.Message;
 import play.data.Form;
 import play.data.FormFactory;
@@ -13,23 +11,12 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
-import scala.Console;
 import viewmodels.UserViewModel;
 
 import javax.inject.Inject;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.Base64;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 
 /**
