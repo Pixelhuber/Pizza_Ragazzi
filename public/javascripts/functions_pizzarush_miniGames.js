@@ -916,9 +916,16 @@ function startMiniGame(ingredientList) {
             }
 
             drawInHole(holeNumber, image) {
+                let widthScaleFactor = 1
+                let heightScaleFactor = 1
+                if (image.width > image.height)
+                    heightScaleFactor = image.height/image.width;
+                else
+                    widthScaleFactor = image.width/image.height;
+
                 context.save();
                 context.translate(this.holeCoordinates[holeNumber][0], this.holeCoordinates[holeNumber][1]);
-                context.drawImage(image, -image.width / 2, -image.height / 2);
+                context.drawImage(image, -(this.holeSize*widthScaleFactor / 2), -(this.holeSize*heightScaleFactor / 2), this.holeSize*widthScaleFactor, this.holeSize*heightScaleFactor);
                 context.restore();
             }
         }
