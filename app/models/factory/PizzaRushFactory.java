@@ -40,7 +40,7 @@ public class PizzaRushFactory {
      * @param id the id
      * @return the ingredient
      */
-// WARNING: Returns non-specified Ingredients
+    // WARNING: Returns non-specified Ingredients (Ingredient.class)
     public Ingredient getIngredientById(int id) {
         return db.withConnection(conn -> {
             Ingredient ingredient = null;
@@ -60,7 +60,7 @@ public class PizzaRushFactory {
      *
      * @return the ingredient-List
      */
-// Gets ALL Ingredients
+    // Gets ALL Ingredients
     public List<Ingredient> getIngredients() {
         List<Ingredient> result = new ArrayList<>();
 
@@ -78,7 +78,7 @@ public class PizzaRushFactory {
      * @param email the email of the user
      * @return the ingredient-List
      */
-// Gets available ingredients for specific User
+    // Gets available ingredients for specific User
     public List<Ingredient> getIngredients(String email) {
         List<Ingredient> result = new ArrayList<>();
         result.addAll(getChoppingIngredients(email));
@@ -93,7 +93,7 @@ public class PizzaRushFactory {
      *
      * @return the ingredient-List
      */
-    private List<Ingredient> getChoppingIngredients() {
+    public List<Ingredient> getChoppingIngredients() {
         return db.withConnection(conn -> {
             List<Ingredient> result = new ArrayList<>();
             String sql = "SELECT * FROM `Ingredient` JOIN `FlightBehavior` FB on Ingredient.idIngredient = FB.Ingredient_fk";
@@ -107,6 +107,7 @@ public class PizzaRushFactory {
             return result;
         });
     }
+
     /**
      * Gets Chopping-ingredients for specific user.
      *
@@ -128,12 +129,13 @@ public class PizzaRushFactory {
             return result;
         });
     }
+
     /**
      * Gets all Stamping-ingredients.
      *
      * @return the ingredient-List
      */
-    private List<Ingredient> getStampingIngredients() {
+    public List<Ingredient> getStampingIngredients() {
         return db.withConnection(conn -> {
             List<Ingredient> result = new ArrayList<>();
             String sql = "SELECT * FROM `Ingredient` JOIN `StampBehavior` SB on Ingredient.idIngredient = SB.Ingredient_fk";
@@ -147,6 +149,7 @@ public class PizzaRushFactory {
             return result;
         });
     }
+
     /**
      * Gets Stamping-ingredients for specific user.
      *
@@ -175,7 +178,7 @@ public class PizzaRushFactory {
      *
      * @return Order-list
      */
-// Gets ALL Pizzas
+    // Gets ALL Pizzas
     public List<Order> getPizzas() {
         return db.withConnection(conn -> {
             List<Order> result = new ArrayList<>();
@@ -197,7 +200,7 @@ public class PizzaRushFactory {
      * @param email the email
      * @return the order list
      */
-// Gets available Pizzas for specific User
+    // Gets available Pizzas for specific User
     public List<Order> getPizzas(String email) {
         return db.withConnection(conn -> {
             List<Order> result = new ArrayList<>();
@@ -222,7 +225,7 @@ public class PizzaRushFactory {
      * @param type  the type
      * @return the string
      */
-    public String encodeImageToString(BufferedImage image, String type) {
+    public static String encodeImageToString(BufferedImage image, String type) {
         String imageString = null;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
@@ -245,7 +248,7 @@ public class PizzaRushFactory {
     /**
      * The type Ingredient.
      */
-    public class Ingredient {
+    public static class Ingredient {
         int id;
         String name; // https://gist.github.com/vikrum/4758434
         String picture_raw;
@@ -257,6 +260,8 @@ public class PizzaRushFactory {
         int zIndex;
         int tier;
 
+        public Ingredient() {
+        }
 
         /**
          * Instantiates a new Ingredient.
@@ -388,6 +393,9 @@ public class PizzaRushFactory {
         double speed;
         int rotation;
         int hits_required;
+
+        public ChoppingIngredient() {
+        }
 
         /**
          * Instantiates a new Chopping ingredient.

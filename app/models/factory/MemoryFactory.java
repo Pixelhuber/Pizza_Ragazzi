@@ -59,7 +59,7 @@ public class MemoryFactory {
         });
     }
 
-    public String encodeImageToString(BufferedImage image, String type) {
+    public static String encodeImageToString(BufferedImage image, String type) {
         String imageString = null;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
@@ -76,13 +76,22 @@ public class MemoryFactory {
         return imageString;
     }
 
-    public class MemoryIngredient {
+    // --------------------------------------------------------------------------------------
+
+    public static class MemoryIngredient {
 
         int id;
         String name;
         String description;
 
         String picture;
+
+        public MemoryIngredient(int id, String name, String description, String picture) {
+            this.id = id;
+            this.name = name;
+            this.description = description;
+            this.picture = picture;
+        }
 
         public MemoryIngredient (ResultSet rs) throws SQLException {
 

@@ -5,13 +5,14 @@ import models.factory.UserFactory;
 import org.junit.Before;
 import org.junit.Test;
 import play.mvc.Result;
-import play.test.WithApplication;
+import play.test.*;
 
 import static org.junit.Assert.assertEquals;
 import static play.mvc.Http.Status.OK;
 
 public class HighscoreControllerTest extends WithApplication {
-    HighscoreController highscoreController;
+
+    private HighscoreController highscoreController;
 
     @Before
     public void provideHighscoreController() {

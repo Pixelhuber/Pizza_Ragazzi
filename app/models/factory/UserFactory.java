@@ -203,9 +203,9 @@ public class UserFactory {
     }
 
     /**
-     * Get highscore data string [username] [highscore].
+     * Get a list of all highscore-entries.
      *
-     * @return the string [ ] [ ]
+     * @return ArrayList of String[]{username, highscore}
      */
     public ArrayList<String[]> getHighscoreData() {
 

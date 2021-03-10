@@ -42,6 +42,7 @@ public class LoginController extends Controller {
         } else {
             String email = json.findPath("email").textValue();
             String password = json.findPath("password").textValue();
+
             if (email == null || !email.matches("[a-zA-Z0-9._%+-]+[@]+[a-zA-Z0-9.-]+[.]+[a-zA-Z]{2,6}")) {
                 return badRequest("email is not valid");
             } else if(password == null || password.isEmpty()) {

@@ -1,4 +1,4 @@
-package FactoryTests;
+package ModelTests.FactoryTests;
 
 import com.google.common.collect.ImmutableMap;
 import models.factory.FactoryExceptions.EmailAlreadyInUseException;
@@ -41,13 +41,13 @@ public class UserFactoryTest {
     public void whenCreatingUser_ThenCorrectUserAttributes() {
         UserFactory.User actualUser = userFactory.createUser("test@test.test", "testUser", "test");
 
+        actualUser.delete();
+
         assertEquals("testUser", actualUser.getUsername());
         assertEquals("test@test.test", actualUser.getEmail());
         assertEquals(0, actualUser.getTotalPoints());
         assertEquals(0, actualUser.getHighScore());
         assertEquals(1, actualUser.getCurrentTier());
-
-        userFactory.getUserByEmail("test@test.test").delete();
     }
 
     @Test
@@ -62,7 +62,7 @@ public class UserFactoryTest {
         String actualMessage = exception.getMessage();
         assertEquals(expectedMessage, actualMessage);
 
-        userFactory.getUserByEmail("test@test.test").delete();
+        arrangeUser.delete();
     }
 
     @Test
@@ -73,14 +73,14 @@ public class UserFactoryTest {
     }
 
     @Test
-    public void whenUsedEmail_ThenEmailUnavailable(){
-        UserFactory.User arrangeUser = userFactory.createUser("test@test.test", "testUser", "test");
+    public void whenUsedEmail_ThenEmailUnavailable() {
+        UserFactory.User newUser = userFactory.createUser("test@test.test", "testUser", "test");
 
         boolean actual = userFactory.isEmailAvailable("test@test.test");
 
-        assertFalse(actual);
+        newUser.delete();
 
-        userFactory.getUserByEmail("test@test.test").delete();
+        assertFalse(actual);
     }
 
     @Test
@@ -94,7 +94,7 @@ public class UserFactoryTest {
         assertEquals(0, actualUser.getHighScore());
         assertEquals(1, actualUser.getCurrentTier());
 
-        userFactory.getUserByEmail("test@test.test").delete();
+        arrangeUser.delete();
     }
 
     @Test
@@ -103,16 +103,16 @@ public class UserFactoryTest {
 
         UserFactory.User actualUser = userFactory.authenticateUser("test@test.test","wrong");
 
-        assertNull(actualUser);
+        arrangeUser.delete();
 
-        userFactory.getUserByEmail("test@test.test").delete();
+        assertNull(actualUser);
     }
 
     @Test
     public void whenDeletingExistingUser_ThenEmailAvailable(){
         UserFactory.User arrangeUser = userFactory.createUser("test@test.test", "testUser", "test");
 
-        userFactory.getUserByEmail("test@test.test").delete();
+        arrangeUser.delete();
 
         boolean actual = userFactory.isEmailAvailable("test@test.test");
 

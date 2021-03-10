@@ -24,6 +24,7 @@ public class ViewTemplatesTest extends WithApplication {
         Content html = views.html.createAccount.render("CreateAccount", assetsFinder);
         assertThat("text/html").isEqualTo(html.contentType());
         assertThat(html.body()).contains("PIZZA RAGAZZI");
+        assertThat(html.body()).contains("PASSWORT WIEDERHOLEN");
     }
 
     @Test
@@ -52,6 +53,7 @@ public class ViewTemplatesTest extends WithApplication {
         Content html = views.html.login.render("Login", assetsFinder);
         assertThat("text/html").isEqualTo(html.contentType());
         assertThat(html.body()).contains("PIZZA RAGAZZI");
+        assertThat(html.body()).contains("ANMELDEN");
     }
 
     @Test
@@ -65,19 +67,24 @@ public class ViewTemplatesTest extends WithApplication {
     public void renderMenuTemplate() {
         Content html = views.html.menu.render("Menu", assetsFinder);
         assertThat("text/html").isEqualTo(html.contentType());
-        assertThat(html.body()).contains("Menu");
+        assertThat(html.body()).contains("Pizza Rush");
+        assertThat(html.body()).contains("Memory");
+        assertThat(html.body()).contains("Tutorial");
     }
 
     @Test
     public void renderNavbarTemplate() {
         Content html = views.html.navbar.render(assetsFinder);
         assertThat("text/html").isEqualTo(html.contentType());
-        assertThat(html.body()).contains("menu");
+        assertThat(html.body()).contains("Menü");
+        assertThat(html.body()).contains("Profil");
+        assertThat(html.body()).contains("Highscores");
+        assertThat(html.body()).contains("Logout");
     }
 
     @Test
     public void renderPizzarushTemplate() {
-        Content html = views.html.pizzarush.render("Navbar", assetsFinder);
+        Content html = views.html.pizzarush.render("Pizza-Rush", assetsFinder);
         assertThat("text/html").isEqualTo(html.contentType());
         assertThat(html.body()).contains("menu");
     }
@@ -87,6 +94,8 @@ public class ViewTemplatesTest extends WithApplication {
         Content html = views.html.profile.render("Profile", assetsFinder);
         assertThat("text/html").isEqualTo(html.contentType());
         assertThat(html.body()).contains("Profile");
+        assertThat(html.body()).contains("Freunde");
+        assertThat(html.body()).contains("Chat");
     }
 
     @Test

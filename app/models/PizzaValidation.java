@@ -9,10 +9,13 @@ import java.util.List;
  */
 public class PizzaValidation {
 
-    private final int orderPoints;
-    private final List<Integer> orderIngredientIds;
-    private final List<Integer> createdPizzaIngredientIds;
-    private final int createdPizzaBakeStatus;
+    private int orderPoints;
+    private List<Integer> orderIngredientIds;
+    private List<Integer> createdPizzaIngredientIds;
+    private int createdPizzaBakeStatus;
+
+    public PizzaValidation() {
+    }
 
     /**
      * Instantiates a new Pizza validation.
@@ -23,7 +26,7 @@ public class PizzaValidation {
      * @param createdPizzaBakeStatus    the created pizza bake status
      */
     public PizzaValidation(int orderPoints,List<Integer> orderIngredientIds,List<Integer> createdPizzaIngredientIds,int createdPizzaBakeStatus){
-        if(orderPoints==0||orderIngredientIds==null||createdPizzaIngredientIds==null)throw new NullPointerException("Parameter ist null");
+        if(orderIngredientIds==null||createdPizzaIngredientIds==null)throw new NullPointerException("Parameter ist null");
         this.orderPoints=orderPoints;
         this.orderIngredientIds=orderIngredientIds;
         this.createdPizzaIngredientIds=createdPizzaIngredientIds;
@@ -35,7 +38,7 @@ public class PizzaValidation {
      *
      * @return the int points
      */
-// Calculates how many points this pizza should get
+    // Calculates how many points this pizza should get
     public int calculatePoints(){
         int points=orderPoints;
         if(pizzaEqualsOrder()){
@@ -75,5 +78,38 @@ public class PizzaValidation {
      */
     public static <Integer> boolean listEquals(List<Integer> list1, List<Integer> list2) {
         return new HashSet<>(list1).equals(new HashSet<>(list2));
+    }
+
+
+    public int getOrderPoints() {
+        return orderPoints;
+    }
+
+    public void setOrderPoints(int orderPoints) {
+        this.orderPoints = orderPoints;
+    }
+
+    public List<Integer> getOrderIngredientIds() {
+        return orderIngredientIds;
+    }
+
+    public void setOrderIngredientIds(List<Integer> orderIngredientIds) {
+        this.orderIngredientIds = orderIngredientIds;
+    }
+
+    public List<Integer> getCreatedPizzaIngredientIds() {
+        return createdPizzaIngredientIds;
+    }
+
+    public void setCreatedPizzaIngredientIds(List<Integer> createdPizzaIngredientIds) {
+        this.createdPizzaIngredientIds = createdPizzaIngredientIds;
+    }
+
+    public int getCreatedPizzaBakeStatus() {
+        return createdPizzaBakeStatus;
+    }
+
+    public void setCreatedPizzaBakeStatus(int createdPizzaBakeStatus) {
+        this.createdPizzaBakeStatus = createdPizzaBakeStatus;
     }
 }
