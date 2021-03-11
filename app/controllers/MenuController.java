@@ -20,7 +20,7 @@ public class MenuController extends Controller {
     /**
      * Instantiates a new Menu controller.
      *
-     * @param levelUp        the menu
+     * @param levelUp     the menu
      * @param userFactory the user factory
      */
     @Inject
@@ -36,7 +36,7 @@ public class MenuController extends Controller {
      * @return the result
      */
     public Result checkForLevelUp(Http.Request request) {
-        String email = null;
+        String email;
         if (request.session().get("email").isPresent()) {
             email = request.session().get("email").get();
         } else {

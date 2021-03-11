@@ -1,9 +1,9 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import models.Message;
 import models.factory.FactoryExceptions.ProfilePictureException;
 import models.factory.UserFactory;
-import models.Message;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
@@ -160,7 +160,7 @@ public class ProfileController extends Controller {
      * @param request the request
      * @return the profile picture from database
      */
-    public Result getProfilePictureFromDatabase(Http.Request request){
+    public Result getProfilePictureFromDatabase(Http.Request request) throws IOException {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(Json.toJson(user.getProfilePictureSrc()));
@@ -187,7 +187,7 @@ public class ProfileController extends Controller {
      * @param request the request
      * @return the friends data
      */
-    public Result getFriendsData(Http.Request request){
+    public Result getFriendsData(Http.Request request) throws IOException {
         String email = request.session().get("email").get();
         UserFactory.User user = userFactory.getUserByEmail(email);
         return ok(Json.toJson(user.getFriendsData()));
@@ -198,9 +198,8 @@ public class ProfileController extends Controller {
      * Gets Users messages from database.
      *
      * @param request the request
-     * @return the messages from database
+     * @return gibt Messages mit bestimmtem Freund zurück
      */
-//gibt Messages mit bestimmtem Freund zurück
     public Result getMessagesFromDatabase(Http.Request request) {
         String email = request.session().get("email").get();
         String username = request.body().asJson().asText();
@@ -343,7 +342,7 @@ public class ProfileController extends Controller {
      * @param request the request
      * @return the result
      */
-    public Result friendGetProfilePictureFromDatabase(Http.Request request){
+    public Result friendGetProfilePictureFromDatabase(Http.Request request) throws IOException {
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
         return ok(Json.toJson(user.getProfilePictureSrc()));
@@ -355,7 +354,7 @@ public class ProfileController extends Controller {
      * @param request the request
      * @return the result
      */
-    public Result friendFriendsData(Http.Request request){
+    public Result friendFriendsData(Http.Request request) throws IOException {
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
         return ok(Json.toJson(user.getFriendsData()));

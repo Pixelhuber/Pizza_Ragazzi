@@ -2,8 +2,8 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import models.factory.MemoryFactory;
 import models.LevelUp;
+import models.factory.MemoryFactory;
 import models.factory.UserFactory;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -37,7 +37,7 @@ public class MemoryController extends Controller {
 
         List<MemoryFactory.MemoryIngredient> ingredients;
 
-        if (levelUp.checkForLevelUp(user).isLevelUpPossible()){
+        if (levelUp.checkForLevelUp(user).isLevelUpPossible()) {
             ingredients = memoryFactory.getMemoryIngredientsForNextTier(email);
         } else {
             ingredients = memoryFactory.getMemoryIngredients(email);
@@ -48,12 +48,12 @@ public class MemoryController extends Controller {
     }
 
     // converts any list into Json
-    public <T> String listToJson (List<T> list) {
+    public <T> String listToJson(List<T> list) {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = "";
         try {
             json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return json;

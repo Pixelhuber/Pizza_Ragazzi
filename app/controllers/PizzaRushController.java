@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
-import models.factory.UserFactory;
-import models.factory.PizzaRushFactory;
 import models.PizzaValidation;
+import models.factory.PizzaRushFactory;
+import models.factory.UserFactory;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -43,10 +43,9 @@ public class PizzaRushController extends Controller {
      *
      * @param request the request
      * @return the result
-     * @throws IOException the io exception
      */
-//TODO fertig übersetzen
-    public Result validatePizza(Http.Request request) throws IOException {
+
+    public Result validatePizza(Http.Request request) {
         int orderPoints = 0;
         List<Integer> orderIngredientIds = null;
         List<Integer> createdPizzaIngredientIds = null;
@@ -93,8 +92,8 @@ public class PizzaRushController extends Controller {
     /**
      * private-methode helping getCurrentPointsFromSession()
      *
-     * @param session
-     * @return
+     * @param session die Session
+     * @return die aus der Session ausgelesenen Punkte als int
      */
     private int getCurrentPointsFromSession(Http.Session session) {
         if (session.get("currentPizzaRushPoints").isPresent()) {
@@ -118,7 +117,7 @@ public class PizzaRushController extends Controller {
             return badRequest("Expecting Json data");
         } else {
             int newTotalPoints = json.findPath("newTotalPoints").asInt();
-            int newHighscore= json.findPath("newHighscore").asInt();
+            int newHighscore = json.findPath("newHighscore").asInt();
             if (email.isEmpty()) {
                 return badRequest("usermail was empty");
             }
