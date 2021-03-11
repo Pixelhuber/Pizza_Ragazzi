@@ -35,8 +35,7 @@ public class HomeController extends Controller {
      * @return the result
      */
     public Result index(Http.Request request) {
-        if (request.session().get("email").isPresent()) // check if User is logged in
-        {
+        if (checkIfLoggedIn(request)) {
             return ok(pizzarush.render("Login", assetsFinder));
         } else {
             return ok(login.render("Login", assetsFinder));
@@ -50,7 +49,7 @@ public class HomeController extends Controller {
      * @return the result
      */
     public Result highscore(Http.Request request) {
-        if (request.session().get("email").isPresent()){ // check if User is logged in
+        if (checkIfLoggedIn(request)) {
             return ok(highscore.render("Highscores", assetsFinder));
         } else {
             return ok(login.render("Login", assetsFinder));
@@ -64,7 +63,7 @@ public class HomeController extends Controller {
      * @return the result
      */
     public Result profile(Http.Request request) {
-        if (request.session().get("email").isPresent()){ // check if User is logged in
+        if (checkIfLoggedIn(request)) {
             return ok(profile.render("Profile", assetsFinder));
         } else {
             return ok(login.render("Login", assetsFinder));
@@ -78,8 +77,7 @@ public class HomeController extends Controller {
      * @return the result
      */
     public Result menu(Http.Request request) {
-        if (request.session().get("email").isPresent()) // check if User is logged in
-        {
+        if (checkIfLoggedIn(request)) {
             return ok(menu.render("Menu", assetsFinder));
         } else {
             return ok(login.render("Login", assetsFinder));
@@ -102,9 +100,7 @@ public class HomeController extends Controller {
      * @return the result
      */
     public Result pizzaRush(Http.Request request) {
-        if (request.session().get("email").isPresent()) // check if User is logged in
-
-        {
+        if (checkIfLoggedIn(request)) {
             return ok(pizzarush.render("Pizza-Rush", assetsFinder));
         } else {
             return ok(login.render("Login", assetsFinder));
@@ -116,8 +112,7 @@ public class HomeController extends Controller {
      * @return Result with either the Memory or Loginpage
      */
     public Result memory(Http.Request request) {
-        if (request.session().get("email").isPresent()) // check if User is logged in
-        {
+        if (checkIfLoggedIn(request)) {
             return ok(memory.render("Memory", assetsFinder));
         } else {
             return ok(login.render("Login", assetsFinder));
@@ -129,12 +124,19 @@ public class HomeController extends Controller {
      * @return with either the tutorial or Loginpage
      */
     public Result tutorial(Http.Request request) {
-        if (request.session().get("email").isPresent()) // check if User is logged in
-        {
+        if (checkIfLoggedIn(request)) {
             return ok(tutorial.render(assetsFinder));
         } else {
             return ok(login.render("Login", assetsFinder));
         }
+    }
+
+    /**
+     * @param request the request
+     * @return boolean if the user is logged in or not
+     */
+    public boolean checkIfLoggedIn(Http.Request request) {// check if User is logged in
+        return request.session().get("email").isPresent();
     }
 
 }
