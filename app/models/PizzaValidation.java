@@ -25,47 +25,13 @@ public class PizzaValidation {
      * @param createdPizzaIngredientIds the created pizza ingredient ids
      * @param createdPizzaBakeStatus    the created pizza bake status
      */
-    public PizzaValidation(int orderPoints,List<Integer> orderIngredientIds,List<Integer> createdPizzaIngredientIds,int createdPizzaBakeStatus){
-        if(orderIngredientIds==null||createdPizzaIngredientIds==null)throw new NullPointerException("Parameter ist null");
-        this.orderPoints=orderPoints;
-        this.orderIngredientIds=orderIngredientIds;
-        this.createdPizzaIngredientIds=createdPizzaIngredientIds;
-        this.createdPizzaBakeStatus=createdPizzaBakeStatus;
-    }
-
-    /**
-     * Calculates points for provided pizza.
-     *
-     * @return the int points
-     */
-    // Calculates how many points this pizza should get
-    public int calculatePoints(){
-        int points=orderPoints;
-        if(pizzaEqualsOrder()){
-            switch(createdPizzaBakeStatus){
-                case 3: // UNBAKED
-                    points = (int)(points * 0.25);
-                    break;
-                case 4: // WELL
-                    //no negative Points since its baked
-                    break;
-                case 5: // BURNT
-                    points = (int)(points * 0.25);
-                    break;
-            }
-        } else {
-            points = 0;
-        }
-        return points;
-    }
-
-    /**
-     * Compares the provided pizza with the order.
-     *
-     * @return the boolean
-     */
-    public boolean pizzaEqualsOrder (){
-        return listEquals(createdPizzaIngredientIds,orderIngredientIds);
+    public PizzaValidation(int orderPoints, List<Integer> orderIngredientIds, List<Integer> createdPizzaIngredientIds, int createdPizzaBakeStatus) {
+        if (orderIngredientIds == null || createdPizzaIngredientIds == null)
+            throw new NullPointerException("Parameter ist null");
+        this.orderPoints = orderPoints;
+        this.orderIngredientIds = orderIngredientIds;
+        this.createdPizzaIngredientIds = createdPizzaIngredientIds;
+        this.createdPizzaBakeStatus = createdPizzaBakeStatus;
     }
 
     /**
@@ -80,6 +46,38 @@ public class PizzaValidation {
         return new HashSet<>(list1).equals(new HashSet<>(list2));
     }
 
+    /**
+     * Calculates points for provided pizza.
+     *
+     * @return the int points
+     */
+    // Calculates how many points this pizza should get
+    public int calculatePoints() {
+        int points = orderPoints;
+        if (pizzaEqualsOrder()) {
+            switch (createdPizzaBakeStatus) {
+                case 3: // UNBAKED
+                case 5: // BURNT
+                    points = (int) (points * 0.25);
+                    break;
+                case 4: // WELL
+                    //no negative Points since its baked
+                    break;
+            }
+        } else {
+            points = 0;
+        }
+        return points;
+    }
+
+    /**
+     * Compares the provided pizza with the order.
+     *
+     * @return the boolean
+     */
+    public boolean pizzaEqualsOrder() {
+        return listEquals(createdPizzaIngredientIds, orderIngredientIds);
+    }
 
     public int getOrderPoints() {
         return orderPoints;

@@ -2,6 +2,7 @@ package models;
 
 import models.factory.UserFactory;
 import play.db.Database;
+
 import javax.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,7 +35,7 @@ public class LevelUp {
     public LevelUpViewModel checkForLevelUp(UserFactory.User user) {
         int userTotalPoints = user.getTotalPoints();
         int userCurrentTier = user.getCurrentTier();
-        int userNextTier = userCurrentTier+1;
+        int userNextTier = userCurrentTier + 1;
 
         return db.withConnection(conn -> {
             String sql = "SELECT * FROM Tier";
@@ -59,7 +60,7 @@ public class LevelUp {
 
             if (isLevelUpPossible) // User can level up
                 return new LevelUpViewModel(true, highestPossibleTier[1], Integer.parseInt(highestPossibleTier[2]), userNextTier);
-            else if (iHighestPossibleTier < rsAsList.size()-1) // User can't level up yet
+            else if (iHighestPossibleTier < rsAsList.size() - 1) // User can't level up yet
                 return new LevelUpViewModel(false, rsAsList.get(iHighestPossibleTier + 1)[1], Integer.parseInt(rsAsList.get(iHighestPossibleTier + 1)[2]), userNextTier);
             else // User already is highest level
                 return new LevelUpViewModel(false, "", -1, userNextTier);
@@ -118,6 +119,7 @@ public class LevelUp {
         public int getNextTierPoints() {
             return nextTierPoints;
         }
+
         public int getNextTierAsFigure() {
             return nextTierAsFigure;
         }
