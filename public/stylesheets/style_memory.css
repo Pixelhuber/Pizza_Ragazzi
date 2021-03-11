@@ -1,19 +1,19 @@
-*{
+* {
     font-family: "Arial Black", sans-serif;
 }
 
-body{
+body {
     display: flex;
     align-items: center;
 
     height: 95vh;
 }
 
-.memoryCard > p{
+.memoryCard > p {
     margin: 20px;
 }
 
-.memoryCard{
+.memoryCard {
 
     box-sizing: border-box;
     cursor: pointer;
@@ -33,7 +33,7 @@ body{
     border: 1px solid black;
 }
 
-#memoryBox{
+#memoryBox {
 
     display: flex;
     flex-wrap: wrap;
@@ -51,7 +51,7 @@ body{
     font-size: 1.2em;
 }
 
-#end_screen{
+#end_screen {
     position: fixed; /* Sit on top of the page content */
     display: flex; /* Hidden by default */
     visibility: hidden;
@@ -62,11 +62,11 @@ body{
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.8); /* Black background with 50% opacity */
+    background-color: rgba(0, 0, 0, 0.8); /* Black background with 50% opacity */
     z-index: 90; /* Specify a stack order in case you're using a different order for other elements */
 }
 
-#end_screen_text{
+#end_screen_text {
     text-align: center;
     font-size: 3em;
     color: white;
@@ -74,7 +74,7 @@ body{
 }
 
 
-#end_screen > button{
+#end_screen > button {
     font-size: 2em;
     text-transform: uppercase;
 
@@ -89,7 +89,7 @@ body{
     cursor: pointer;
 }
 
-#end_screen > button:hover{
+#end_screen > button:hover {
 
     background-color: white;
     color: black;

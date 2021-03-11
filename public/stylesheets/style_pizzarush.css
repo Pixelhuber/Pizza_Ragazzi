@@ -1,4 +1,4 @@
-*{
+* {
     font-family: "Arial Black", sans-serif;
 }
 
@@ -7,13 +7,13 @@ body {
     min-width: 800px;
 }
 
-section{
+section {
     display: flex;
 
     height: 77vh;
 }
 
-#upper_container{
+#upper_container {
     display: flex;
 
     width: 100%;
@@ -21,14 +21,14 @@ section{
     margin: 20px 0 20px 0;
 }
 
-#oven_container{
+#oven_container {
     flex: 3;
     display: flex;
     justify-content: center;
     align-items: flex-end;
 }
 
-#left_upper_container{
+#left_upper_container {
     flex: 1;
     display: flex;
     justify-content: flex-end;
@@ -40,7 +40,7 @@ section{
     font-size: 0.8em;
 }
 
-#right_upper_container{
+#right_upper_container {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -53,24 +53,24 @@ section{
     font-size: 0.8em;
 }
 
-#workSurface{
+#workSurface {
     display: flex;
     flex-flow: column;
     flex: 3;
 }
 
-#ingredientSurface{
+#ingredientSurface {
     flex: 6;
 
     background: rgba(150, 150, 150, 0.2);
 }
 
-#lowerSurfaces{
+#lowerSurfaces {
     display: flex;
     flex: 4;
 }
 
-#cuttingSurface{
+#cuttingSurface {
     width: 100%;
     background: rgba(150, 150, 150, 0.2);
     margin: 10px 5px 0 0;
@@ -80,17 +80,17 @@ section{
     justify-content: flex-end;
 }
 
-#smashingSurface{
+#smashingSurface {
     width: 100%;
     background: rgba(150, 150, 150, 0.2);
-    margin: 10px 0 0 5px ;
+    margin: 10px 0 0 5px;
 
     display: flex;
     align-items: center;
     justify-content: flex-end;
 }
 
-.scroll_container{
+.scroll_container {
     overflow-x: hidden;
     overflow-y: scroll;
 
@@ -100,7 +100,7 @@ section{
 
 /* INGREDIENT SECTION ----------------------------------------------------------------------------------*/
 
-#ingredientSection{
+#ingredientSection {
     flex: 1;
     min-width: 200px;
     margin: 0 20px 0 20px;
@@ -109,11 +109,11 @@ section{
     flex-flow: column;
 }
 
-.ingredientSectionItem{
+.ingredientSectionItem {
 
 }
 
-.ingredientSectionItem > img{
+.ingredientSectionItem > img {
     height: 30px;
     width: auto;
 
@@ -123,7 +123,7 @@ section{
 
 /* ORDER SECTION ----------------------------------------------------------------------------------*/
 
-#orderSection{
+#orderSection {
     flex: 1;
     min-width: 200px;
     margin: 0 20px 0 20px;
@@ -132,13 +132,13 @@ section{
     flex-flow: column;
 }
 
-.order{
+.order {
     position: relative;
 
     height: 3.5em;
 }
 
-.order > p{
+.order > p {
     position: absolute;
     top: auto;
     bottom: auto;
@@ -146,7 +146,7 @@ section{
     padding-left: 5px;
 }
 
-.order > div{
+.order > div {
     border-top: 4px solid black;
     border-bottom: 4px solid black;
 }
@@ -154,11 +154,11 @@ section{
 
 /* SINGLE ELEMENTS ----------------------------------------------------------------------------------*/
 
-.unclickable{
+.unclickable {
     pointer-events: none;
 }
 
-.box{
+.box {
     display: flex;
     align-items: center;
 
@@ -168,44 +168,45 @@ section{
     border: 4px solid black;
 }
 
-.box:hover{
+.box:hover {
     background-color: rgba(150, 150, 150, 0.2);
 }
 
-.draggable{
+.draggable {
     position: absolute;
     z-index: 10;
     cursor: move;
 }
 
 /* all draggableIngredients */
-img.draggable{
+img.draggable {
     height: 110px;
     width: 110px;
     object-fit: contain;
 }
+
 /* all draggable pizzas */
-div.draggable{
+div.draggable {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 /* Impasto should be a little bigger */
-.draggable > img:nth-child(1){
+.draggable > img:nth-child(1) {
     height: 125px;
     width: 125px;
     object-fit: contain;
 }
 
 /* ingredients on pizzas */
-div.draggable > img{
+div.draggable > img {
     height: 110px;
     width: 110px;
     object-fit: contain;
 }
 
-.oven{
+.oven {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -213,22 +214,22 @@ div.draggable > img{
     padding: 5px;
 }
 
-.oven > img{
+.oven > img {
     height: auto;
     width: 100%;
     max-width: 160px;
 }
 
-#rushCountdown{
+#rushCountdown {
 
 }
 
-#trash{
+#trash {
     width: 40%;
     min-width: 100px;
 }
 
-#trash > img{
+#trash > img {
     padding: 10px;
 
     width: 100%;
@@ -245,21 +246,21 @@ div.draggable > img{
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.7); /* Black background with 50% opacity */
+    background-color: rgba(0, 0, 0, 0.7); /* Black background with 50% opacity */
     z-index: 90; /* Specify a stack order in case you're using a different order for other elements */
 }
 
-#startStop_overlay_text{
+#startStop_overlay_text {
     text-align: center;
     font-size: 3em;
     color: white;
 }
 
 
-#startStop_overlay > button{
+#startStop_overlay > button {
     font-size: 2em;
     text-transform: uppercase;
-    
+
     width: 30vw;
     height: 10vh;
     margin-top: 20px;
@@ -271,13 +272,13 @@ div.draggable > img{
     cursor: pointer;
 }
 
-#startStop_overlay > button:hover{
+#startStop_overlay > button:hover {
 
     background-color: white;
     color: black;
 }
 
-.miniGameButton{
+.miniGameButton {
     position: relative;
     right: 30px;
 
@@ -286,7 +287,7 @@ div.draggable > img{
 
 }
 
-#recipeList{
+#recipeList {
     z-index: 80;
     position: absolute;
     float: right;
@@ -308,7 +309,7 @@ div.draggable > img{
     text-transform: uppercase;
 }
 
-#recipeList > div{
+#recipeList > div {
     display: none;
     flex-direction: column;
     justify-content: flex-start;
@@ -316,7 +317,7 @@ div.draggable > img{
     padding: 20px;
 }
 
-#recipeList > div > div{
+#recipeList > div > div {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -326,12 +327,12 @@ div.draggable > img{
     margin-bottom: 5px;
 }
 
-#recipeList > div > div > h2{
+#recipeList > div > div > h2 {
     text-transform: uppercase;
     margin: 0;
 }
 
-#recipeList > div > div > div{
+#recipeList > div > div > div {
     font-family: Arial, sans-serif;
     text-transform: none;
 
@@ -341,7 +342,7 @@ div.draggable > img{
 
 /* MINI GAMES ----------------------------------------------------------------------------------*/
 
-#miniGame_layer{
+#miniGame_layer {
     visibility: hidden;
 
     position: absolute;
@@ -355,7 +356,7 @@ div.draggable > img{
     align-items: center;
 }
 
-#miniGame_window{
+#miniGame_window {
     display: flex;
 
     width: 75vw;
@@ -369,13 +370,13 @@ div.draggable > img{
     border: 4px solid black;
 }
 
-#miniGame_playArea{
+#miniGame_playArea {
     flex: 4;
 
     outline: 2px solid black;
 }
 
-#miniGame_sideBar{
+#miniGame_sideBar {
     flex: 1;
 
     max-width: 180px;
@@ -384,7 +385,7 @@ div.draggable > img{
     display: block;
 }
 
-#miniGame_sideBar_counter{
+#miniGame_sideBar_counter {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -395,7 +396,7 @@ div.draggable > img{
     margin-bottom: 30px;
 }
 
-#miniGame_sideBar_closeButton{
+#miniGame_sideBar_closeButton {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -405,33 +406,31 @@ div.draggable > img{
     text-transform: uppercase;
 }
 
-#miniGame_sideBar_closeButton:hover{
+#miniGame_sideBar_closeButton:hover {
     background: black;
 
     color: white;
 }
 
 .miniGameButton:hover {
-    -webkit-filter: drop-shadow(2px 2px 0 black)
-    drop-shadow(-2px -2px 0 black);
-    filter: drop-shadow(2px 2px 0 black)
-    drop-shadow(-2px -2px 0 black);
+    -webkit-filter: drop-shadow(2px 2px 0 black) drop-shadow(-2px -2px 0 black);
+    filter: drop-shadow(2px 2px 0 black) drop-shadow(-2px -2px 0 black);
 }
 
 /* SPECIAL ----------------------------------------------------------------------------------*/
 
 #loading {
-     width: 100%;
-     height: 100%;
-     top: 0;
-     left: 0;
-     position: fixed;
-     display: block;
-     opacity: 1;
-     background-color: #fff;
-     z-index: 95;
-     text-align: center;
- }
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    display: block;
+    opacity: 1;
+    background-color: #fff;
+    z-index: 95;
+    text-align: center;
+}
 
 #loading_image {
     position: absolute;
@@ -443,14 +442,14 @@ div.draggable > img{
 }
 
 @keyframes load {
-    0%{
+    0% {
         opacity: 0.08;
         /*         font-size: 10px; */
         /* 				font-weight: 400; */
         filter: blur(3px);
         letter-spacing: 3px;
     }
-    100%{
+    100% {
         /*         opacity: 1; */
         /*         font-size: 12px; */
         /* 				font-weight:600; */
@@ -475,8 +474,8 @@ div.draggable > img{
 }
 
 ::-webkit-scrollbar {
-     width: 10px;
- }
+    width: 10px;
+}
 
 /* Track */
 ::-webkit-scrollbar-track {
