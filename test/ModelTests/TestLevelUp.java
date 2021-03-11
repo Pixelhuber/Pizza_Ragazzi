@@ -2,32 +2,24 @@ package ModelTests;
 
 import com.google.common.collect.ImmutableMap;
 import models.LevelUp;
-import models.PizzaValidation;
 import models.factory.UserFactory;
-import org.junit.*;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-import play.db.ConnectionCallable;
 import play.db.Database;
 import play.db.Databases;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.*;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class TestLevelUp {
-
-    private Database database;
-    private UserFactory userFactory;
-    private LevelUp levelUp;
 
     private final int TIER_ONE = 1;
     private final int ENOUGH_FOR_TIER_TWO = 2000;
     private final int NOT_ENOUGH_FOR_TIER_TWO = 1999;
+    private Database database;
+    private UserFactory userFactory;
+    private LevelUp levelUp;
 
     @Before
     public void setupDatabase() {

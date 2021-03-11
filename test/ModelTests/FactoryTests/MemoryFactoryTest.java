@@ -7,7 +7,8 @@ import org.mockito.Mockito;
 import play.db.ConnectionCallable;
 import play.db.Database;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class MemoryFactoryTest {
 
