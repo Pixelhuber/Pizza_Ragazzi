@@ -1,4 +1,3 @@
-
 const gameProperties = {
     roundLength: 150,
 
@@ -87,8 +86,8 @@ async function getAvailablePizzas() {
 
 async function loadGameElements() {
     const music = new Audio('/assets/sounds/tarantella_napoletana.mp3');
-    music.loop=true;
-    music.volume=0.01;
+    music.loop = true;
+    music.volume = 0.01;
     await music.play();
 
     await setupAvailableIngredients();
@@ -136,11 +135,11 @@ function loadOvens() {
 
 function loadRecipeList() {
     const recipeList = document.getElementById("recipeList");
-    recipeList.onmouseenter = function (){
+    recipeList.onmouseenter = function () {
         expanded.style.display = "flex";
         // recipeList.innerText = "";
     };
-    recipeList.onmouseleave = function (){
+    recipeList.onmouseleave = function () {
         expanded.style.display = "none";
         // recipeList.innerText = "recipes"
     };

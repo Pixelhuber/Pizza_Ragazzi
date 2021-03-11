@@ -1,4 +1,3 @@
-
 let fruitNinjaRunning = false;
 let whackAMoleRunning = false;
 
@@ -312,7 +311,7 @@ function startMiniGame(ingredientList) {
                 this.ingredientJuggler.ingredientsWaitingToBeThrown.splice(index, 1);
 
                 // tell juggler to either throw yourself OR a distraction
-                if (Math.random() < gameProperties.fruitNinja_distractionChance_percent/100)
+                if (Math.random() < gameProperties.fruitNinja_distractionChance_percent / 100)
                     this.ingredientJuggler.ingredientsCurrentlyInAir.push(this.createDistraction());
                 else
                     this.ingredientJuggler.ingredientsCurrentlyInAir.push(this);
@@ -332,11 +331,13 @@ function startMiniGame(ingredientList) {
                 this.wasHitInThisThrow = true;
                 this.hits_left -= 1;
 
-                document.body.style.cursor= `url("/assets/images/cursors/hitmarker.cur"),auto`
-                setTimeout(resetCursor,gameProperties.fruitNinja_hitmarkerShowingTime*1000)
-                function resetCursor(){
-                    document.body.style.cursor= `url("/assets/images/cursors/knife.cur"),auto`
+                document.body.style.cursor = `url("/assets/images/cursors/hitmarker.cur"),auto`
+                setTimeout(resetCursor, gameProperties.fruitNinja_hitmarkerShowingTime * 1000)
+
+                function resetCursor() {
+                    document.body.style.cursor = `url("/assets/images/cursors/knife.cur"),auto`
                 }
+
                 /*
                 window.requestAnimationFrame(function () {
                     context.fillStyle = '#79de43'
@@ -364,7 +365,7 @@ function startMiniGame(ingredientList) {
 
             createDistraction() {
 
-                return new DistractionThrower(this, gameProperties.fruitNinja_distractionDisablingTime*1000);
+                return new DistractionThrower(this, gameProperties.fruitNinja_distractionDisablingTime * 1000);
             }
         }
 
@@ -458,7 +459,7 @@ function startMiniGame(ingredientList) {
 
                 this.lastTimestamp = timestamp;
 
-                if ((timestamp - this.timestampLastThrow) > this.minTimeBetweenThrows*1000)
+                if ((timestamp - this.timestampLastThrow) > this.minTimeBetweenThrows * 1000)
                     if (this.ingredientsWaitingToBeThrown.length > 0 &&
                         this.ingredientsCurrentlyInAir.length < this.maxIngredientsInAir) {
                         const randomIndex = Math.floor(Math.random() * this.ingredientsWaitingToBeThrown.length);
@@ -468,7 +469,7 @@ function startMiniGame(ingredientList) {
 
                 const copy = [...this.ingredientsCurrentlyInAir];
 
-                copy.forEach(function (item, index, array) {
+                copy.forEach(function (item) {
                     item.step();
                 });
             }
@@ -495,7 +496,7 @@ function startMiniGame(ingredientList) {
                 event = event || window.event;
                 event.preventDefault();
 
-                document.body.style.cursor= `url("/assets/images/cursors/knife.cur"),auto`;
+                document.body.style.cursor = `url("/assets/images/cursors/knife.cur"),auto`;
 
                 document.onmouseup = stopListening;
                 document.onmousemove = checkForHit;
@@ -517,7 +518,7 @@ function startMiniGame(ingredientList) {
                 y = event.clientY - canvas_box.top;
 
                 ingredientJuggler.ingredientsCurrentlyInAir.forEach(function (item) {
-                    if (item.isHit(x, y)){
+                    if (item.isHit(x, y)) {
                         item.onHit();
                     }
                 })
@@ -668,7 +669,7 @@ function startMiniGame(ingredientList) {
                 this.moleHandler.ingredientsWaitingToBeShown.splice(index, 1);
 
                 // tell MoleHandler to either show yourself OR a distraction
-                if (Math.random() < gameProperties.whack_distractionChance_percent/100)
+                if (Math.random() < gameProperties.whack_distractionChance_percent / 100)
                     this.moleHandler.ingredientsCurrentlyShown.push(this.createDistraction());
                 else
                     this.moleHandler.ingredientsCurrentlyShown.push(this);
@@ -686,7 +687,7 @@ function startMiniGame(ingredientList) {
             onHit() {
                 this.endShow();
 
-                document.body.style.cursor= `url("/assets/images/cursors/hitmarker.cur"),auto`
+                document.body.style.cursor = `url("/assets/images/cursors/hitmarker.cur"),auto`
                 this.hits_left -= 1;
 
                 if (this.hits_left <= 0) {
@@ -840,7 +841,7 @@ function startMiniGame(ingredientList) {
 
                 const copy = [...this.ingredientsCurrentlyShown];
 
-                copy.forEach(function (item, index, array) {
+                copy.forEach(function (item) {
                     item.step(timestamp);
                 });
             }
@@ -919,13 +920,13 @@ function startMiniGame(ingredientList) {
                 let widthScaleFactor = 1
                 let heightScaleFactor = 1
                 if (image.width > image.height)
-                    heightScaleFactor = image.height/image.width;
+                    heightScaleFactor = image.height / image.width;
                 else
-                    widthScaleFactor = image.width/image.height;
+                    widthScaleFactor = image.width / image.height;
 
                 context.save();
                 context.translate(this.holeCoordinates[holeNumber][0], this.holeCoordinates[holeNumber][1]);
-                context.drawImage(image, -(this.holeSize*widthScaleFactor / 2), -(this.holeSize*heightScaleFactor / 2), this.holeSize*widthScaleFactor, this.holeSize*heightScaleFactor);
+                context.drawImage(image, -(this.holeSize * widthScaleFactor / 2), -(this.holeSize * heightScaleFactor / 2), this.holeSize * widthScaleFactor, this.holeSize * heightScaleFactor);
                 context.restore();
             }
         }
@@ -938,12 +939,13 @@ function startMiniGame(ingredientList) {
             canvas.onmousedown = checkForHit;
             //canvas.onmousedown.apply(document.body.style.cursor= `url("/assets/images/cursors/rollingPin.cur"),auto`);
             canvas.onmouseup = switchCursorToNormal;
-            function switchCursorToNormal(event){
-                document.body.style.cursor= "auto";
+
+            function switchCursorToNormal(event) {
+                document.body.style.cursor = "auto";
             }
 
             function checkForHit(event) {
-                document.body.style.cursor= `url("/assets/images/cursors/rollingPin.cur"),auto`;
+                document.body.style.cursor = `url("/assets/images/cursors/rollingPin.cur"),auto`;
                 if (moleHandler.isDisabled())
                     return;
 
@@ -966,7 +968,7 @@ function startMiniGame(ingredientList) {
         const moleHandler = new MoleHandler(
             ingredientList,
             9,
-            gameProperties.whack_minTimeBetweenShows*1000,
+            gameProperties.whack_minTimeBetweenShows * 1000,
             gameProperties.whack_maxIngredientsShownAtOnce);
 
         addHitListener(moleHandler);
@@ -996,7 +998,7 @@ function startMiniGame(ingredientList) {
 function stopMiniGame() {
     fruitNinjaRunning = false;
     whackAMoleRunning = false;
-    document.body.style.cursor= "auto";
+    document.body.style.cursor = "auto";
 
     document.getElementById("miniGame_layer").style.visibility = "hidden";
 }
