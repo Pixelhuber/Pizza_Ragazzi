@@ -14,7 +14,6 @@ import play.mvc.Results;
 import viewmodels.UserViewModel;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 

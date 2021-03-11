@@ -61,7 +61,7 @@ public class PizzaRushController extends Controller {
             createdPizzaBakeStatus = request.body().asJson().get("createdPizzaBakeStatus").asInt();
 
         } catch (IOException JsonListTo) {
-            System.out.println("Das übergebene Json konnte nicht in eine Liste übersetzt werden");
+            JsonListTo.printStackTrace();
         }
         PizzaValidation validation = new PizzaValidation(orderPoints, orderIngredientIds, createdPizzaIngredientIds, createdPizzaBakeStatus);
 
@@ -149,10 +149,11 @@ public class PizzaRushController extends Controller {
      */
     public Result getAvailableIngredients(Http.Request request) {
         String email;
-        if (request.session().get("email").isPresent())
+        if (request.session().get("email").isPresent()) {
             email = request.session().get("email").get();
-        else
+        } else {
             return badRequest("Can't identify User: No E-Mail in session");
+        }
 
         List<PizzaRushFactory.Ingredient> ingredients = pizzaRushFactory.getIngredients(email);
         String json = listToJson(ingredients);
@@ -167,10 +168,11 @@ public class PizzaRushController extends Controller {
      */
     public Result getAvailablePizzas(Http.Request request) {
         String email;
-        if (request.session().get("email").isPresent())
+        if (request.session().get("email").isPresent()) {
             email = request.session().get("email").get();
-        else
+        } else {
             return badRequest("Can't identify User: No E-Mail in session");
+        }
 
         List<PizzaRushFactory.Order> orders = pizzaRushFactory.getPizzas(email);
         String json = listToJson(orders);
