@@ -125,7 +125,7 @@ public class HomeController extends Controller {
      */
     public Result tutorial(Http.Request request) {
         if (checkIfLoggedIn(request)) {
-            return ok(tutorial.render(assetsFinder));
+            return ok(tutorial.render("Tutorial", assetsFinder));
         } else {
             return ok(login.render("Login", assetsFinder));
         }
