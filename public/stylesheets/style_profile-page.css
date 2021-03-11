@@ -9,7 +9,7 @@
     padding: 1%;
     margin: 1%;
     border: 4px black solid;
-    background-color: white;
+    background-color: #eaeaea;
 
     text-align: center;
     max-height: 70vh;
@@ -22,7 +22,7 @@
     padding: 1%;
     margin: 1%;
     border: 4px black solid;
-    background-color: white;
+    background-color: #eaeaea;
 }
 
 .right_div {
@@ -31,7 +31,7 @@
     padding: 1%;
     margin: 1%;
     border: 4px black solid;
-    background-color: white;
+    background-color: #eaeaea;
 }
 
 .wrap:after {
