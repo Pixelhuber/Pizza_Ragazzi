@@ -7,7 +7,9 @@ import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,6 +35,29 @@ public class PizzaRushFactory {
         this.db = db;
     }
 
+    /**
+     * Encode image to string string.
+     *
+     * @param image the image
+     * @param type  the type
+     * @return the string
+     */
+    public static String encodeImageToString(BufferedImage image, String type) {
+        String imageString = null;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+        try {
+            ImageIO.write(image, type, bos);
+            byte[] imageBytes = bos.toByteArray();
+
+            imageString = "data:image/" + type + ";base64," + Base64.getEncoder().encodeToString(imageBytes);
+
+            bos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return imageString;
+    }
 
     /**
      * Gets ingredient by id.
@@ -218,31 +243,6 @@ public class PizzaRushFactory {
     }
 
 
-    /**
-     * Encode image to string string.
-     *
-     * @param image the image
-     * @param type  the type
-     * @return the string
-     */
-    public static String encodeImageToString(BufferedImage image, String type) {
-        String imageString = null;
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
-        try {
-            ImageIO.write(image, type, bos);
-            byte[] imageBytes = bos.toByteArray();
-
-            imageString = "data:image/" + type + ";base64," + Base64.getEncoder().encodeToString(imageBytes);
-
-            bos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return imageString;
-    }
-
-
     // CLASSES --------------------------------------------------------------------------------------------------------
 
     /**
@@ -408,9 +408,9 @@ public class PizzaRushFactory {
 
             setFlightBehaviorFromDatabase();
         }
+
         /**
          * sets the Flight-Behaviour; gets called only in constructor
-         *
          */
         private void setFlightBehaviorFromDatabase() {
             db.withConnection(conn -> {
@@ -516,7 +516,6 @@ public class PizzaRushFactory {
 
         /**
          * sets Stamp-Behavior; gets called only in constructor
-         *
          */
         private void setStampBehaviorFromDatabase() {
             db.withConnection(conn -> {
@@ -604,7 +603,6 @@ public class PizzaRushFactory {
 
         /**
          * Sets the ingredients; gets called only in constructor.
-         *
          */
         private List<Ingredient> setOrderIngredientsFromDatabase() {
             return db.withConnection(conn -> {

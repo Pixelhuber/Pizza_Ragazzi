@@ -27,38 +27,6 @@ public class MemoryFactory {
         this.db = db;
     }
 
-    public List<MemoryIngredient> getMemoryIngredients(String email) {
-
-        return db.withConnection(conn -> {
-            List<MemoryIngredient> result = new ArrayList<>();
-            String sql = "SELECT idIngredient, name, description, picture_raw FROM Ingredient JOIN Memory M on Ingredient.idIngredient = M.Ingredient_fk WHERE Tier_idTier <= (SELECT Tier_idTier FROM `User` WHERE email = ?)";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()){
-                result.add(new MemoryIngredient(rs));
-            }
-            stmt.close();
-            return result;
-        });
-    }
-
-    public List<MemoryIngredient> getMemoryIngredientsForNextTier(String email) {
-
-        return db.withConnection(conn -> {
-            List<MemoryIngredient> result = new ArrayList<>();
-            String sql = "SELECT idIngredient, name, description, picture_raw FROM Ingredient JOIN Memory M on Ingredient.idIngredient = M.Ingredient_fk WHERE Tier_idTier <= (SELECT Tier_idTier FROM `User` WHERE email = ?) + 1";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()){
-                result.add(new MemoryIngredient(rs));
-            }
-            stmt.close();
-            return result;
-        });
-    }
-
     public static String encodeImageToString(BufferedImage image, String type) {
         String imageString = null;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -74,6 +42,38 @@ public class MemoryFactory {
             e.printStackTrace();
         }
         return imageString;
+    }
+
+    public List<MemoryIngredient> getMemoryIngredients(String email) {
+
+        return db.withConnection(conn -> {
+            List<MemoryIngredient> result = new ArrayList<>();
+            String sql = "SELECT idIngredient, name, description, picture_raw FROM Ingredient JOIN Memory M on Ingredient.idIngredient = M.Ingredient_fk WHERE Tier_idTier <= (SELECT Tier_idTier FROM `User` WHERE email = ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                result.add(new MemoryIngredient(rs));
+            }
+            stmt.close();
+            return result;
+        });
+    }
+
+    public List<MemoryIngredient> getMemoryIngredientsForNextTier(String email) {
+
+        return db.withConnection(conn -> {
+            List<MemoryIngredient> result = new ArrayList<>();
+            String sql = "SELECT idIngredient, name, description, picture_raw FROM Ingredient JOIN Memory M on Ingredient.idIngredient = M.Ingredient_fk WHERE Tier_idTier <= (SELECT Tier_idTier FROM `User` WHERE email = ?) + 1";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                result.add(new MemoryIngredient(rs));
+            }
+            stmt.close();
+            return result;
+        });
     }
 
     // --------------------------------------------------------------------------------------
@@ -93,7 +93,7 @@ public class MemoryFactory {
             this.picture = picture;
         }
 
-        public MemoryIngredient (ResultSet rs) throws SQLException {
+        public MemoryIngredient(ResultSet rs) throws SQLException {
 
             this.id = rs.getInt("idIngredient");
             this.name = rs.getString("name");
@@ -131,26 +131,26 @@ public class MemoryFactory {
      */
     /*public class LevelUpViewModel {
 
-        *//**
-         * The Is level up possible.
-         *//*
+     *//**
+     * The Is level up possible.
+     *//*
         boolean isLevelUpPossible;
         *//**
-         * The Next tier.
-         *//*
+     * The Next tier.
+     *//*
         String nextTier;
         *//**
-         * The Next tier points.
-         *//*
+     * The Next tier points.
+     *//*
         int nextTierPoints;
 
         *//**
-         * Instantiates a new Level up view model.
-         *
-         * @param isLevelUpPossible the is level up possible
-         * @param nextTier          the next tier
-         * @param nextTierPoints    the next tier points
-         *//*
+     * Instantiates a new Level up view model.
+     *
+     * @param isLevelUpPossible the is level up possible
+     * @param nextTier          the next tier
+     * @param nextTierPoints    the next tier points
+     *//*
         public LevelUpViewModel(boolean isLevelUpPossible, String nextTier, int nextTierPoints) {
             this.isLevelUpPossible = isLevelUpPossible;
             this.nextTier = nextTier;
@@ -158,28 +158,28 @@ public class MemoryFactory {
         }
 
         *//**
-         * Is level up possible boolean.
-         *
-         * @return the boolean
-         *//*
+     * Is level up possible boolean.
+     *
+     * @return the boolean
+     *//*
         public boolean isLevelUpPossible() {
             return isLevelUpPossible;
         }
 
         *//**
-         * Gets next tier.
-         *
-         * @return the next tier
-         *//*
+     * Gets next tier.
+     *
+     * @return the next tier
+     *//*
         public String getNextTier() {
             return nextTier;
         }
 
         *//**
-         * Gets next tier points.
-         *
-         * @return the next tier points
-         *//*
+     * Gets next tier points.
+     *
+     * @return the next tier points
+     *//*
         public int getNextTierPoints() {
             return nextTierPoints;
         }
