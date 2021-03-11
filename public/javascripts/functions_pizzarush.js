@@ -936,7 +936,7 @@ async function getAvailablePizzas() {
 async function loadGameElements() {
     var music = new Audio('/assets/sounds/tarantella_napoletana.mp3');
     music.loop=true;
-    music.volume=0.005;
+    music.volume=0.01;
     await music.play();
     await setupAvailableIngredients();
     await setupAvailablePizzas();
