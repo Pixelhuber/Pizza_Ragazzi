@@ -1,4 +1,4 @@
-package models.factory.FactoryExceptions;
+package models.factory.factoryExceptions;
 
 /**
  * The type Profile picture exception.

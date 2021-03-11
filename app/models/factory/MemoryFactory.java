@@ -1,6 +1,6 @@
 package models.factory;
 
-import models.factory.FactoryExceptions.ProfilePictureException;
+import models.factory.factoryExceptions.ProfilePictureException;
 import play.db.Database;
 
 import javax.imageio.ImageIO;

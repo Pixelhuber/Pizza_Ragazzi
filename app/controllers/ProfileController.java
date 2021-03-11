@@ -2,7 +2,7 @@ package controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.Message;
-import models.factory.FactoryExceptions.ProfilePictureException;
+import models.factory.factoryExceptions.ProfilePictureException;
 import models.factory.UserFactory;
 import play.data.Form;
 import play.data.FormFactory;

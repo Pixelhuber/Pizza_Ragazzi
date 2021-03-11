@@ -2,10 +2,10 @@ package models.factory;
 
 import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import models.Message;
-import models.factory.FactoryExceptions.EmailAlreadyInUseException;
-import models.factory.FactoryExceptions.InvalidEmailException;
-import models.factory.FactoryExceptions.ProfilePictureException;
-import models.factory.FactoryExceptions.UsernameAlreadyInUseException;
+import models.factory.factoryExceptions.EmailAlreadyInUseException;
+import models.factory.factoryExceptions.InvalidEmailException;
+import models.factory.factoryExceptions.ProfilePictureException;
+import models.factory.factoryExceptions.UsernameAlreadyInUseException;
 import play.db.Database;
 
 import javax.imageio.ImageIO;

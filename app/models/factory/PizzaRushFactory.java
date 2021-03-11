@@ -1,6 +1,6 @@
 package models.factory;
 
-import models.factory.FactoryExceptions.ProfilePictureException;
+import models.factory.factoryExceptions.ProfilePictureException;
 import play.db.Database;
 
 import javax.imageio.ImageIO;
@@ -393,9 +393,6 @@ public class PizzaRushFactory {
         double speed;
         int rotation;
         int hits_required;
-
-        public ChoppingIngredient() {
-        }
 
         /**
          * Instantiates a new Chopping ingredient.
