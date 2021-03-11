@@ -83,7 +83,7 @@ public class LoginController extends Controller {
             } else if(password == null || password.isEmpty()) {
                 return badRequest("password is empty");
             }else if (!password.equals(password2)){
-                return badRequest("password does not match password2");
+                return badRequest("passwords do not match!");
             }else if (!userFactory.isEmailAvailable(email)){
                 return badRequest("email already in use");
             }else if (!userFactory.isUsernameAvailable(username)){

@@ -6,21 +6,29 @@ import controllers.LoginController;
 import models.factory.UserFactory;
 import org.junit.Before;
 import org.junit.Test;
+import play.api.http.MediaRange;
+import play.api.mvc.Request;
+import play.core.j.JavaResultExtractor;
+import play.i18n.Lang;
+import play.libs.typedmap.TypedKey;
+import play.libs.typedmap.TypedMap;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.test.Helpers;
 import play.test.WithApplication;
 import org.mockito.Mockito;
 
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static play.mvc.Http.Status.OK;
-import static play.test.Helpers.GET;
-import static play.test.Helpers.route;
 
 import static org.mockito.Mockito.*;
+import static play.test.Helpers.*;
 
 public class LoginControllerTest extends WithApplication {
 
@@ -51,16 +59,21 @@ public class LoginControllerTest extends WithApplication {
     public void testAuthenticate() {
         Http.Request fakeRequest = mock(Http.Request.class);
 
+        Http.RequestBody mockedBody = mock(Http.RequestBody.class);
+
         JsonNode mockedJsonNode = mock(JsonNode.class);
         //when(mockedJsonNode.isNull()).thenReturn(false);
-        when(mockedJsonNode.findPath(anyString())).thenReturn(any());
         when(mockedJsonNode.findPath("email").textValue()).thenReturn(VALID_EMAIL);
         when(mockedJsonNode.findPath("password").textValue()).thenReturn(VALID_PASSWORD);
 
-        when(fakeRequest.body().asJson()).thenReturn(mockedJsonNode);
+        when(mockedBody.asJson()).thenReturn(mockedJsonNode);
+
+        when(fakeRequest.body()).thenReturn(mockedBody);
 
         //Result result = route(app, request);
         Result result = loginController.authenticate(fakeRequest);
+
+        System.out.println("------------------------------" + contentAsString(result));
 
         assertEquals(OK, result.status());
         assertEquals("application/json", result.contentType().get());
@@ -72,11 +85,11 @@ public class LoginControllerTest extends WithApplication {
         Result result = route(app, request);
 
         assertEquals(OK, result.status());
-        assertEquals("application/json", result.contentType().get());
+        assertEquals("text/html", result.contentType().get());
     }
 
     @Test
-    public void testCreateAccount() {
+    public void testCreateAccount_whenNoRequestBody_thenBadRequest() {
         Map<String, String> testSession = new HashMap<>();
         testSession.put("username", "test");
         testSession.put("email", VALID_EMAIL);
@@ -84,14 +97,15 @@ public class LoginControllerTest extends WithApplication {
         testSession.put("password2", "test");
 
         Http.RequestBuilder requestBuilder = Helpers.fakeRequest().bodyForm(testSession);
-
         //Http.RequestBuilder request = Helpers.fakeRequest().method(GET).uri("/login/authenticate");
 
         //Result result = route(app, request);
         Result result = loginController.createAccount(requestBuilder.build());
 
-        assertEquals(OK, result.status());
-        assertEquals("application/json", result.contentType().get());
-    }
+        String actualResponse = contentAsString(result);
+        String expectedResponse = "Expecting Json data";
 
+        assertEquals(BAD_REQUEST, result.status());
+        assertEquals(expectedResponse, actualResponse);
+    }
 }
