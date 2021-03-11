@@ -8,9 +8,8 @@
     width: 33%;
     padding: 1%;
     margin: 1%;
+    border: 4px black solid;
     background-color: #eaeaea;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border-radius: 10px;
 
     text-align: center;
     max-height: 70vh;
@@ -22,9 +21,8 @@
     width: 20%;
     padding: 1%;
     margin: 1%;
+    border: 4px black solid;
     background-color: #eaeaea;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border-radius: 10px;
 }
 
 .right_div {
@@ -32,9 +30,8 @@
     width: 33%;
     padding: 1%;
     margin: 1%;
+    border: 4px black solid;
     background-color: #eaeaea;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border-radius: 10px;
 }
 
 .wrap:after {
