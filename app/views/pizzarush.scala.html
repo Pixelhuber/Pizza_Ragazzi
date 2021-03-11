@@ -20,7 +20,7 @@
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
             <!------------------------------>
         <audio id="background_music">
-            <source src="/assets/sounds/tarantella_napoletana.mp3">
+            <source src="@routes.Assets.versioned("sounds/tarantella_napoletana.mp3")">
             Your browser does not support the audio element.
         </audio>
 
@@ -85,11 +85,11 @@
 
                 <div id="lowerSurfaces">
                     <div id="cuttingSurface">
-                        <input class="miniGameButton" id="startFruitNinja" onclick="startFromChoppingTable()" type="image" src="/assets/images/knife.png" alt="StartCutting"/>
+                        <input class="miniGameButton" id="startFruitNinja" onclick="startFromChoppingTable()" type="image" src="@routes.Assets.versioned("images/knife.png")" alt="StartCutting"/>
                     </div>
 
                     <div id="smashingSurface">
-                        <input class="miniGameButton" id="startWhackAMole" onclick="startFromStampingTable()" type="image" src="/assets/images/rollingpin.png" alt="StartChomping"/>
+                        <input class="miniGameButton" id="startWhackAMole" onclick="startFromStampingTable()" type="image" src="@routes.Assets.versioned("images/rollingpin.png")" alt="StartChomping"/>
                     </div>
                 </div>
             </div>
@@ -105,7 +105,7 @@
                 </div>
 
                 <div id="trash" class="box">
-                    <img src="/assets/images/trash_icon.svg" alt="trashIcon">
+                    <img src="@routes.Assets.versioned("images/trash_icon.svg")" alt="trashIcon">
                 </div>
 
             </div>
