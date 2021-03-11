@@ -208,7 +208,7 @@ function setupInformationFromFriend(elm) {
     if (document.getElementById("editProfileButton").innerText === "Speichern") {  //gegen seltenen Bug: während dem Editieren des Profiles das Profil eines Freundes anschauen
         alert("Bitte erst Profil speichern!")
     } else if (!viewOnly) {        //Funktion wird nur ausgeführt, wenn man auf dem eigenen Profil ist
-        var name = elm.childNodes[1].innerHTML;  //childnodes[1] gibt das "name" child von friend
+        const name = elm.childNodes[1].innerHTML;  //childnodes[1] gibt das "name" child von friend
 
         friendGetUsernameFromDatabase(name);
         friendGetGesamtpunkteFromDatabase(name);
@@ -274,8 +274,8 @@ function showSensibleStuff() {
 
 //löscht Freundesliste um nur Freundesliste des Freundes zu sehen
 function deleteOldFriendList() {
-    var friendList = document.getElementsByClassName("friend-list");
-    for (i = 0; i < friendList.length; i++) {
+    const friendList = document.getElementsByClassName("friend-list");
+    for (let i = 0; i < friendList.length; i++) {
         friendList.item(i).remove();
     }
 }

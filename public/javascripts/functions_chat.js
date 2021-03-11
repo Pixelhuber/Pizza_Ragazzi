@@ -1,5 +1,5 @@
-var chatPartner;
-var chatMessages;
+let chatPartner;
+let chatMessages;
 
 function setupChatStuff(username) {
     if (username !== chatPartner) {    //nur wenn neuer Name eingegeben wurde, wird gefetcht
@@ -58,7 +58,7 @@ function appendSentMessageToChat(message, time) {
     content.textContent = message;
 
     const timeSpan = document.createElement('span');
-    var date = new Date(time);
+    const date = new Date(time);
     timeSpan.textContent = date.toLocaleTimeString() + " " + date.toLocaleDateString();
 
     container.setAttribute('class', 'container darker');
@@ -71,7 +71,7 @@ function appendSentMessageToChat(message, time) {
 
 function appendRetrievedMessageToChat(messages, user2Username) {
     if (messages != null && messages !== 'undefined') {
-        var newMessages = checkIfRetrievedNewMessagesAndReturnThem(messages, user2Username); //gibt Neue retrieved messages zurück
+        const newMessages = checkIfRetrievedNewMessagesAndReturnThem(messages, user2Username); //gibt Neue retrieved messages zurück
 
         if (newMessages.length > 0) {      //wenn neue Message eingetroffen ist
             chatMessages = messages;   //message-Array aktualisieren
@@ -84,7 +84,7 @@ function appendRetrievedMessageToChat(messages, user2Username) {
                 content.textContent = item.message_text;
 
                 const timeSpan = document.createElement('span');
-                var date = new Date(item.time)
+                const date = new Date(item.time);
                 timeSpan.textContent = date.toLocaleTimeString() + " " + date.toLocaleDateString();
 
                 container.setAttribute('class', 'container');
@@ -103,9 +103,9 @@ function appendRetrievedMessageToChat(messages, user2Username) {
 }
 
 function checkIfRetrievedNewMessagesAndReturnThem(messages, user2Username) {
-    var newMessagesRetrieved = [];
+    const newMessagesRetrieved = [];
 
-    for (var i = chatMessages.length; i < messages.length; i++) {
+    for (let i = chatMessages.length; i < messages.length; i++) {
         if (messages[i].senderName.toLowerCase() === user2Username.toLowerCase()) {
             newMessagesRetrieved.push(messages[i]);
         }
@@ -142,7 +142,7 @@ function displayChatMessages(messages, user2Username) {
             content.textContent = item.message_text;
 
             const timeSpan = document.createElement('span');
-            var date = new Date(item.time)
+            const date = new Date(item.time);
             timeSpan.textContent = date.toLocaleTimeString() + " " + date.toLocaleDateString();
 
             if (item.senderName.toLowerCase() === user2Username.toLowerCase()) {  //falls ausgewählter Freund Nachricht gesendet hat

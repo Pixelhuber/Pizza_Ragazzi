@@ -1,19 +1,19 @@
 function createHighscoreTable(tableData) {
 
     /*Variablen für die einzelnen Tabellenbestandteile   */
-    var table = document.createElement('table');
-    var tableBody = document.createElement('tbody');
-    var tableHead = document.createElement('thead');
+    const table = document.createElement('table');
+    const tableBody = document.createElement('tbody');
+    const tableHead = document.createElement('thead');
 
     /*erstellt die Titel/Beschriftung*/
-    var rowHead = document.createElement('tr');
-    var cellHeadRank = document.createElement('th');
+    const rowHead = document.createElement('tr');
+    const cellHeadRank = document.createElement('th');
     cellHeadRank.appendChild(document.createTextNode("Rang"));
     rowHead.appendChild(cellHeadRank);
-    var cellHeadName = document.createElement('th');
+    const cellHeadName = document.createElement('th');
     cellHeadName.appendChild(document.createTextNode("Name"));
     rowHead.appendChild(cellHeadName);
-    var cellHeadScore = document.createElement('th');
+    const cellHeadScore = document.createElement('th');
     cellHeadScore.appendChild(document.createTextNode("Punkte"));
     rowHead.appendChild(cellHeadScore);
     tableHead.appendChild(rowHead);
@@ -33,14 +33,14 @@ function createHighscoreTable(tableData) {
 
     /*Iteriert über das 2D Array*/
     tableData.forEach(function (rowData, index) {
-        var row = document.createElement('tr');
+        const row = document.createElement('tr');
 
-        var cellRank = document.createElement('th');
+        const cellRank = document.createElement('th');
         cellRank.appendChild(document.createTextNode(index + 1));
         row.appendChild(cellRank);
 
         rowData.forEach(function (cellData) {
-            var cell = document.createElement('td');
+            const cell = document.createElement('td');
             cell.appendChild(document.createTextNode(cellData));
             row.appendChild(cell);
         });
