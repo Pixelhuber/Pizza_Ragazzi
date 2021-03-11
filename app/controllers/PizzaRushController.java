@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
-import factory.UserFactory;
-import models.pizza_rush.PizzaRushFactory;
-import models.pizza_rush.PizzaValidation;
+import models.factory.UserFactory;
+import models.factory.PizzaRushFactory;
+import models.PizzaValidation;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -43,9 +43,10 @@ public class PizzaRushController extends Controller {
      *
      * @param request the request
      * @return the result
+     * @throws IOException the io exception
      */
-
-    public Result validatePizza(Http.Request request){
+//TODO fertig übersetzen
+    public Result validatePizza(Http.Request request) throws IOException {
         int orderPoints = 0;
         List<Integer> orderIngredientIds = null;
         List<Integer> createdPizzaIngredientIds = null;
@@ -61,7 +62,7 @@ public class PizzaRushController extends Controller {
             createdPizzaBakeStatus = request.body().asJson().get("createdPizzaBakeStatus").asInt();
 
         } catch (IOException JsonListTo) {
-            JsonListTo.printStackTrace();
+            System.out.println("Das übergebene Json konnte nicht in eine Liste übersetzt werden");
         }
         PizzaValidation validation = new PizzaValidation(orderPoints, orderIngredientIds, createdPizzaIngredientIds, createdPizzaBakeStatus);
 
@@ -92,8 +93,8 @@ public class PizzaRushController extends Controller {
     /**
      * private-methode helping getCurrentPointsFromSession()
      *
-     * @param session the session
-     * @return the current points
+     * @param session
+     * @return
      */
     private int getCurrentPointsFromSession(Http.Session session) {
         if (session.get("currentPizzaRushPoints").isPresent()) {
@@ -117,7 +118,7 @@ public class PizzaRushController extends Controller {
             return badRequest("Expecting Json data");
         } else {
             int newTotalPoints = json.findPath("newTotalPoints").asInt();
-            int newHighscore = json.findPath("newHighscore").asInt();
+            int newHighscore= json.findPath("newHighscore").asInt();
             if (email.isEmpty()) {
                 return badRequest("usermail was empty");
             }
@@ -149,11 +150,10 @@ public class PizzaRushController extends Controller {
      */
     public Result getAvailableIngredients(Http.Request request) {
         String email;
-        if (request.session().get("email").isPresent()) {
+        if (request.session().get("email").isPresent())
             email = request.session().get("email").get();
-        } else {
+        else
             return badRequest("Can't identify User: No E-Mail in session");
-        }
 
         List<PizzaRushFactory.Ingredient> ingredients = pizzaRushFactory.getIngredients(email);
         String json = listToJson(ingredients);
@@ -168,11 +168,10 @@ public class PizzaRushController extends Controller {
      */
     public Result getAvailablePizzas(Http.Request request) {
         String email;
-        if (request.session().get("email").isPresent()) {
+        if (request.session().get("email").isPresent())
             email = request.session().get("email").get();
-        } else {
+        else
             return badRequest("Can't identify User: No E-Mail in session");
-        }
 
         List<PizzaRushFactory.Order> orders = pizzaRushFactory.getPizzas(email);
         String json = listToJson(orders);

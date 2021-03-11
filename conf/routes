@@ -23,6 +23,8 @@ GET     /pizzaRush                      controllers.HomeController.pizzaRush(req
 
 GET     /menu                           controllers.HomeController.menu(request: Request)
 
+GET     /memory                         controllers.HomeController.memory(request: Request)
+
 GET     /tutorial                       controllers.HomeController.tutorial(request: Request)
 
 
@@ -83,3 +85,8 @@ POST    /pizza_rush/reset_points                        controllers.PizzaRushCon
 GET     /pizza_rush/getAvailableIngredients             controllers.PizzaRushController.getAvailableIngredients(request: Request)
 GET     /pizza_rush/getAvailablePizzas                  controllers.PizzaRushController.getAvailablePizzas(request: Request)
 POST    /pizza_rush/setPlayerPoints                     controllers.PizzaRushController.setPlayerPoints(request: Request)
+
+# MEMORY -----------------------------------------------------------------------------------
+
+GET     /memory/getMemoryIngredients                    controllers.MemoryController.getMemoryIngredients(request: Request)
+POST    /memory/setCurrentPlayerTier                    controllers.MemoryController.setCurrentPlayerTier(request: Request)

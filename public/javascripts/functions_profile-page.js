@@ -131,7 +131,6 @@ function updateUsernameInDatabaseAndSession(newUsername) {
             console.log(msg);
         }
     );
-    alert("Session and Database updated!");
 }
 
 async function uploadProfilePictureIntoDB(image) {

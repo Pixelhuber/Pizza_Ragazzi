@@ -13,6 +13,7 @@ lazy val root = (project in file("."))
       // Testing libraries for dealing with CompletionStage...
       "org.assertj" % "assertj-core" % "3.14.0" % Test,
       "org.awaitility" % "awaitility" % "4.0.1" % Test,
+      "org.mockito" % "mockito-core" % "3.7.0" % Test,
     ),
     javacOptions ++= Seq(
       "-encoding", "UTF-8",
@@ -24,3 +25,4 @@ lazy val root = (project in file("."))
     // Make verbose tests
     testOptions in Test := Seq(Tests.Argument(TestFrameworks.JUnit, "-a", "-v"))
   )
+

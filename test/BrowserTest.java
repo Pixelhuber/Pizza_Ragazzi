@@ -1,9 +1,15 @@
 import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import play.Application;
 import play.test.Helpers;
 import play.test.TestBrowser;
 import play.test.WithBrowser;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static play.test.Helpers.*;
 
@@ -16,15 +22,26 @@ public class BrowserTest extends WithBrowser {
     protected TestBrowser provideBrowser(int port) {
         return Helpers.testBrowser(port);
     }
+    //TODO https://www.playframework.com/documentation/2.8.x/JavaFunctionalTest
 
-    /**
-     * add your integration test here
-     * in this example we just check if the welcome page is being shown
-     */
     @Test
-    public void test() {
-        browser.goTo("http://localhost:" + play.api.test.Helpers.testServerPort());
-        assertTrue(browser.pageSource().contains("Your new application is ready."));
+    public void testLogin() {
+        browser.goTo("http://localhost:" + play.api.test.Helpers.testServerPort() + "/");
+
+        assertTrue(browser.pageSource().contains("PIZZA RAGAZZI"));
+        assertTrue(browser.pageSource().contains("PASSWORT"));
     }
 
+    @Test
+    public void testCreateAccountFromLogin() {
+        // First, go to Login
+        browser.goTo("http://localhost:" + play.api.test.Helpers.testServerPort() + "/createAccount");
+
+        // Click on "Account erstellen"
+        WebDriver driver = browser.getDriver();
+        driver.findElement(By.id("createAccount_button")).click();
+
+        // Create Account Page is shown
+        assertTrue(browser.pageSource().contains("PASSWORT WIEDERHOLEN")); // this field is unique to this page
+    }
 }

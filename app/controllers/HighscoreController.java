@@ -1,6 +1,6 @@
 package controllers;
 
-import factory.UserFactory;
+import models.factory.UserFactory;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -22,11 +22,6 @@ public class HighscoreController extends Controller {
     public HighscoreController(UserFactory userFactory) {
         this.userFactory = userFactory;
     }
-
-/*    public Result getTableData() {
-        return ok(Json.toJson(highscoreData.getTableData()));
-    }
-}*/
 
     /**
      * Gets Highscore-table data.

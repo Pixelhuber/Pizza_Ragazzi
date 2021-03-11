@@ -7,7 +7,10 @@
         <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_pizzarush.css")">
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.js"></script>
-        <script type="text/javascript" src="@routes.Assets.versioned("javascripts/functions_pizzarush.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("javascripts/functions_pizzarush_classes.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("javascripts/functions_pizzarush_general.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("javascripts/functions_pizzarush_miniGames.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.versioned("javascripts/functions_pizzarush_utility.js")"></script>
 
         <title>Pizza-Rush</title>
     </head>
@@ -18,14 +21,14 @@
             <!------------------------------>
         <div id="loading">
             <img id="loading_image" alt="Loading Pictures..." src=@routes.Assets.versioned("images/LoadingGif_Pizza.gif")>
-            <div id="loading_text">Loading Pictures...</div>
+            <div id="loading_text">Lade Pizzasimulation...</div>
         </div>
 
         <div id="startStop_overlay">
 
-            <div id="startStop_overlay_text">Welcome to Pizzarush!</div>
-            <button id="startStop_overlay_button" onclick="manageRushCountdown('rushCountdown')">Start game</button>
-            <button onclick="location.href = 'menu'">Back to menu</button>
+                <div id="startStop_overlay_text">Wilkommen bei Pizzarush</div>
+                <button id="startStop_overlay_button" onclick="manageRushCountdown('rushCountdown')">Starte das Spiel</button>
+                <button onclick="location.href='menu'">Zurück zum Menü</button>
 
         </div>
 
@@ -36,7 +39,7 @@
                 </div>
                 <div id="miniGame_sideBar">
                     <div id="miniGame_sideBar_counter"></div>
-                    <button id="miniGame_sideBar_closeButton" onclick="stopMiniGame()">End Game</button>
+                    <button id="miniGame_sideBar_closeButton" onclick="stopMiniGame()">Stoppe Verarbeitung</button>
                 </div>
             </div>
         </div>
@@ -44,7 +47,7 @@
         <div id="pizza_layer"> </div>
         <div id="ingredient_layer"> </div>
 
-        <div id="recipeList">recipes</div>
+        <div id="recipeList">Ricetta</div>
 
         <div id="upper_container">
             <div id="left_upper_container">
@@ -77,11 +80,11 @@
 
                 <div id="lowerSurfaces">
                     <div id="cuttingSurface">
-                        <input class="miniGameButton" id="startFruitNinja" onclick="startFromChoppingTable()" type="image" src="/assets/images/knife.png" alt="fruitNinjaKnife"/>
+                        <input class="miniGameButton" id="startFruitNinja" onclick="startFromChoppingTable()" type="image" src="/assets/images/knife.png"/>
                     </div>
 
                     <div id="smashingSurface">
-                        <input class="miniGameButton" id="startWhackAMole" onclick="startFromStampingTable()" type="image" src="/assets/images/rollingpin.png" alt="whackAMoleWood"/>
+                        <input class="miniGameButton" id="startWhackAMole" onclick="startFromStampingTable()" type="image" src="/assets/images/rollingpin.png"/>
                     </div>
                 </div>
             </div>
@@ -97,7 +100,7 @@
                 </div>
 
                 <div id="trash" class="box">
-                    <img src="/assets/images/trash_icon.svg" alt="trashIcon">
+                    <img src="/assets/images/trash_icon.svg">
                 </div>
 
             </div>

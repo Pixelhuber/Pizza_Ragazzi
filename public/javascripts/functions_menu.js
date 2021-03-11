@@ -70,7 +70,7 @@ function checkForLevelUp() {
 
         console.log(levelUpViewModel);
 
-        if (levelUpViewModel.nextTierPoints === 0)
+        if (levelUpViewModel.nextTierPoints === -1)
             document.getElementById("memory_description").innerHTML =
                 "Du hast bereits das höchste Tier!<br>Spiele Memory um Punkte zu sammeln"
         else if (levelUpViewModel.levelUpPossible) {
