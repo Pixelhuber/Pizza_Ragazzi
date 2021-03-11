@@ -73,11 +73,11 @@ public class LevelUp {
      */
     public static class LevelUpViewModel {
 
-        boolean isLevelUpPossible;
-        String nextTier;
-        int nextTierPoints;
+        final boolean isLevelUpPossible;
+        final String nextTier;
+        final int nextTierPoints;
 
-        int nextTierAsFigure;
+        final int nextTierAsFigure;
 
         /**
          * Instantiates a new Level up view model.

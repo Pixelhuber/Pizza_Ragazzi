@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Singleton
 public class PizzaRushFactory {
-    Database db;
+    final Database db;
 
     /**
      * Instantiates a new Pizza rush factory.

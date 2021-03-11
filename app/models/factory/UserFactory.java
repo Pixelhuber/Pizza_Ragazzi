@@ -386,9 +386,8 @@ public class UserFactory {
          * Gets friends-Map with profilePictureSource and username.
          *
          * @return the friends data
-         * @throws IOException the io exception
          */
-        public Map<String, String> getFriendsData() throws IOException {
+        public Map<String, String> getFriendsData() {
 
             List<User> users = getFriends();
 

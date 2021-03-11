@@ -14,9 +14,9 @@ import java.util.List;
 
 public class MemoryController extends Controller {
 
-    MemoryFactory memoryFactory;
-    UserFactory userFactory;
-    LevelUp levelUp;
+    final MemoryFactory memoryFactory;
+    final UserFactory userFactory;
+    final LevelUp levelUp;
 
     @Inject
     public MemoryController(MemoryFactory memoryFactory, UserFactory userFactory, LevelUp levelUp) {
