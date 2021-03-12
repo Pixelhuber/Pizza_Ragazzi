@@ -1,18 +1,18 @@
 
 const gameProperties = {
-    roundLength: 150,
+    roundLength: 240,
 
     maxTimeBetweenOrders: 30,
     orderDelay: 2,
     minOrdersActive: 2,
     ordersActiveWhenStarting: 2,
 
-    pizza_bakingTime: 5,
-    pizza_timeUntilBurnt: 7, // additional to regular baking time
+    pizza_bakingTime: 10,
+    pizza_timeUntilBurnt: 8, // additional to regular baking time
     pizza_timeUntilWarning: 4, // additional to regular baking time
 
     fruitNinja_distractionChance_percent: 20,
-    fruitNinja_distractionDisablingTime: 5,
+    fruitNinja_distractionDisablingTime: 2,
     fruitNinja_maxIngredientsInAir: 5,
     fruitNinja_minTimeBetweenThrows: 0.1,
     fruitNinja_xRange: 30,
