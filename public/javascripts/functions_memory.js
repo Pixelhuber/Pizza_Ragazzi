@@ -366,10 +366,11 @@ function checkForLevelUp() {
                 "Du hast ein neues Level erreicht! <br> Neuer Rang: " + "\"" + levelUpViewModel.nextTier + "\""
         } else {
             let earnedPoints;
+            let balancingFactor = 0.05;
             if(levelUpViewModel.nextTierPoints === -1){
-                earnedPoints = 1000;
+                earnedPoints = levelUpViewModel.currentTierPoints*0.02;
             } else {
-                earnedPoints = levelUpViewModel.nextTierPoints/10;
+                earnedPoints = (levelUpViewModel.nextTierPoints-levelUpViewModel.currentTierPoints)*balancingFactor;
             }
             setCurrentPlayerPoints(earnedPoints);
             document.getElementById("end_screen").style.visibility = "visible";
