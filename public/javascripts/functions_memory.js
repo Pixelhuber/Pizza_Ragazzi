@@ -281,10 +281,24 @@ async function createMemoryCards() {
 
     const ingredients = await getMemoryIngredients();
 
+    const uniqueIngredients = [];
+
+    for (let i = 0; i < ingredients.length; i++) {
+        if (uniqueIngredients.includes(ingredients[i].name)){
+            ingredients.splice(i);
+            break;
+        }
+        uniqueIngredients.push(ingredients[i].name);
+    }
+
     ingredients.forEach(function (item) {
+        /*if(uniqueIngredients.includes(item)){
+            ingredients.splice(ingredients.indexOf(item))
+        }*/
         const memoryIngredient = new MemoryIngredient(item.id, item.name, item.description, item.picture)
         memoryCards.push(AbstractMemoryCard.createNameCard(memoryIngredient));
         memoryCards.push(AbstractMemoryCard.createFactCard(memoryIngredient));
+        //uniqueIngredients.push(item);
     })
     CardHandler.shuffle();
 }
