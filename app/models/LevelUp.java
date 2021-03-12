@@ -54,11 +54,15 @@ public class LevelUp {
                     iHighestPossibleTier = i;
             }
 
-            String[] highestPossibleTier = rsAsList.get(iHighestPossibleTier);
+            String[] nextPossibleTier = rsAsList.get(iHighestPossibleTier);
             boolean isLevelUpPossible = Integer.parseInt(rsAsList.get(iHighestPossibleTier)[0]) > userCurrentTier;
 
+            if(isLevelUpPossible){
+                nextPossibleTier = rsAsList.get(userNextTier-1);
+            }
+
             if (isLevelUpPossible) // User can level up
-                return new LevelUpViewModel(true, highestPossibleTier[1], Integer.parseInt(highestPossibleTier[2]), userNextTier);
+                return new LevelUpViewModel(true, nextPossibleTier[1], Integer.parseInt(nextPossibleTier[2]), userNextTier);
             else if (iHighestPossibleTier < rsAsList.size()-1) // User can't level up yet
                 return new LevelUpViewModel(false, rsAsList.get(iHighestPossibleTier + 1)[1], Integer.parseInt(rsAsList.get(iHighestPossibleTier + 1)[2]), userNextTier);
             else // User already is highest level
