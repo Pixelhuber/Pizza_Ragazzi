@@ -295,19 +295,19 @@ async function createMemoryCards() {
     CardHandler.shuffle();
 }
 
-function removeDuplicates(ingredients){
+function removeDuplicates(ingredients) {
     const uniqueIngredients = [];
 
     for (let i = 0; i < ingredients.length; i++) {                      //checks the ingredients array for duplicates
         if (uniqueIngredients.includes(ingredients[i].name)) {
             if (Math.random() > 0.4) {                                  //random decision which of the duplicates to delete
-                ingredients.splice(i,1);
+                ingredients.splice(i, 1);
                 i--;
                 continue;
             } else {
                 for (let j = 0; j < ingredients.length; j++) {
-                    if (ingredients[j].name == ingredients[i].name) {
-                        ingredients.splice(j,1);
+                    if (ingredients[j].name === ingredients[i].name) {
+                        ingredients.splice(j, 1);
                         i--;
                         break;
                     }

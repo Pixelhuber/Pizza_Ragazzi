@@ -35,7 +35,7 @@ public class LevelUp {
     public LevelUpViewModel checkForLevelUp(UserFactory.User user) {
         int userTotalPoints = user.getTotalPoints();
         int userCurrentTier = user.getCurrentTier();
-        int userNextTier = userCurrentTier+1;
+        int userNextTier = userCurrentTier + 1;
 
         return db.withConnection(conn -> {
             String sql = "SELECT * FROM Tier";
@@ -56,16 +56,16 @@ public class LevelUp {
             }
 
             String[] nextPossibleTier = rsAsList.get(iHighestPossibleTier);
-            String[] currentTier = rsAsList.get(userCurrentTier-1);
+            String[] currentTier = rsAsList.get(userCurrentTier - 1);
             boolean isLevelUpPossible = Integer.parseInt(rsAsList.get(iHighestPossibleTier)[0]) > userCurrentTier;
 
-            if(isLevelUpPossible){
-                nextPossibleTier = rsAsList.get(userNextTier-1);
+            if (isLevelUpPossible) {
+                nextPossibleTier = rsAsList.get(userNextTier - 1);
             }
 
             if (isLevelUpPossible) // User can level up
                 return new LevelUpViewModel(true, nextPossibleTier[1], Integer.parseInt(nextPossibleTier[2]), userNextTier, Integer.parseInt(currentTier[2]));
-            else if (iHighestPossibleTier < rsAsList.size()-1) // User can't level up yet
+            else if (iHighestPossibleTier < rsAsList.size() - 1) // User can't level up yet
                 return new LevelUpViewModel(false, rsAsList.get(iHighestPossibleTier + 1)[1], Integer.parseInt(rsAsList.get(iHighestPossibleTier + 1)[2]), userNextTier, Integer.parseInt(currentTier[2]));
             else // User already is highest level
                 return new LevelUpViewModel(false, "", -1, userNextTier, Integer.parseInt(currentTier[2]));
@@ -92,7 +92,6 @@ public class LevelUp {
          * @param nextTierPoints    the points needed to achieve next tier
          * @param nextTierAsFigure  the next tier as figure
          * @param currentTierPoints the points needed to achieve current tier
-         *
          */
         public LevelUpViewModel(boolean isLevelUpPossible, String nextTier, int nextTierPoints, int nextTierAsFigure, int currentTierPoints) {
             this.isLevelUpPossible = isLevelUpPossible;

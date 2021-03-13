@@ -33,7 +33,7 @@ body {
     border: 1px solid black;
 }
 
-#memoryBox{
+#memoryBox {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
