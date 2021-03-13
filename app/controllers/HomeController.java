@@ -108,6 +108,8 @@ public class HomeController extends Controller {
     }
 
     /**
+     * Renders the Memory-page
+     *
      * @param request Html request
      * @return Result with either the Memory or Loginpage
      */
@@ -120,6 +122,8 @@ public class HomeController extends Controller {
     }
 
     /**
+     * Renders the Tutorial-Popup
+     *
      * @param request Html request
      * @return with either the tutorial or Loginpage
      */
