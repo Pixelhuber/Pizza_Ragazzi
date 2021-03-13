@@ -136,6 +136,8 @@ public class HomeController extends Controller {
     }
 
     /**
+     * Checks if a User is currently logged in
+     *
      * @param request the request
      * @return boolean if the user is logged in or not
      */
