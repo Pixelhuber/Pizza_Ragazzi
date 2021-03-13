@@ -360,8 +360,8 @@ div.draggable > img{
 
     width: 75vw;
     height: 75vh;
-    min-height: 500px;
-    min-width: 600px;
+    /*min-height: 500px;
+    min-width: 600px;*/
 
     padding: 20px;
 

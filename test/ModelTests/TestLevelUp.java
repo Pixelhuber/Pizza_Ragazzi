@@ -26,8 +26,8 @@ public class TestLevelUp {
     private LevelUp levelUp;
 
     private final int TIER_ONE = 1;
-    private final int ENOUGH_FOR_TIER_TWO = 2000;
-    private final int NOT_ENOUGH_FOR_TIER_TWO = 1999;
+    private final int ENOUGH_FOR_TIER_TWO = 1500;
+    private final int NOT_ENOUGH_FOR_TIER_TWO = 1499;
 
     @Before
     public void setupDatabase() {

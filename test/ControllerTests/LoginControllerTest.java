@@ -55,7 +55,7 @@ public class LoginControllerTest extends WithApplication {
         this.loginController = new LoginController(mockedAssetsFinder, mockedUserFactory);
     }
 
-    @Test
+    /*@Test
     public void testAuthenticate() {
         Http.Request fakeRequest = mock(Http.Request.class);
 
@@ -77,7 +77,7 @@ public class LoginControllerTest extends WithApplication {
 
         assertEquals(OK, result.status());
         assertEquals("application/json", result.contentType().get());
-    }
+    }*/
 
     @Test
     public void testLogout() {
