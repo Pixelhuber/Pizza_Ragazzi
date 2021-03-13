@@ -281,16 +281,44 @@ function restartGame() {
 
 async function createMemoryCards() {
 
-    const ingredients = await getMemoryIngredients();
+    let ingredients = await getMemoryIngredients();
+
+    ingredients = removeDuplicates(ingredients);
 
     ingredients.forEach(function (item) {
+
         const memoryIngredient = new MemoryIngredient(item.id, item.name, item.description, item.picture)
         memoryCards.push(AbstractMemoryCard.createNameCard(memoryIngredient));
         memoryCards.push(AbstractMemoryCard.createFactCard(memoryIngredient));
+
     })
     CardHandler.shuffle();
 }
 
+function removeDuplicates(ingredients){
+    const uniqueIngredients = [];
+
+    for (let i = 0; i < ingredients.length; i++) {                      //checks the ingredients array for duplicates
+        if (uniqueIngredients.includes(ingredients[i].name)) {
+            if (Math.random() > 0.4) {                                  //random decision which of the duplicates to delete
+                ingredients.splice(i,1);
+                i--;
+                continue;
+            } else {
+                for (let j = 0; j < ingredients.length; j++) {
+                    if (ingredients[j].name == ingredients[i].name) {
+                        ingredients.splice(j,1);
+                        i--;
+                        break;
+                    }
+                }
+                continue;
+            }
+        }
+        uniqueIngredients.push(ingredients[i].name);
+    }
+    return ingredients;
+}
 
 async function getMemoryIngredients() {
 
@@ -367,10 +395,11 @@ function checkForLevelUp() {
                 "Du hast ein neues Level erreicht! <br> Neuer Rang: " + "\"" + levelUpViewModel.nextTier + "\""
         } else {
             let earnedPoints;
+            let balancingFactor = 0.05;
             if (levelUpViewModel.nextTierPoints === -1) {
-                earnedPoints = 1000;
+                earnedPoints = levelUpViewModel.currentTierPoints * 0.02;
             } else {
-                earnedPoints = levelUpViewModel.nextTierPoints / 10;
+                earnedPoints = (levelUpViewModel.nextTierPoints - levelUpViewModel.currentTierPoints) * balancingFactor;
             }
             setCurrentPlayerPoints(earnedPoints);
             document.getElementById("end_screen").style.visibility = "visible";
