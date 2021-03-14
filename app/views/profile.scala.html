@@ -15,10 +15,11 @@
         <script type="text/javascript" src=@routes.Assets.versioned("javascripts/functions_friendlist.js")></script>
         <script type="text/javascript" src=@routes.Assets.versioned("javascripts/functions_chat.js")></script>
 
-        <title>Profile-Page</title>
+        <title>@title</title>
     </head>
 
-    <body id="body" onload="setup(); refreshChat();">
+    <body id="body" onload="setup();
+    refreshChat();">
             <!--Navigation bar-->
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
             <!--end of Navigation bar-->
@@ -61,11 +62,13 @@
                 <br>
                 <input id="chatWithWhoInput" type="text" placeholder="Nutzernamen eingeben...">
                 <button id="chatWithWhoButton">Bestätigen</button>
-                <br><br>
+                <br>
+                <br>
                 <div id="loading_messages" class="loading"></div>
                 <div id="chatMessages_div">
                 </div>
                 <br>
+                <label for="sendMessageInput"></label>
                 <input id="sendMessageInput" type="text" placeholder="Nachricht schreiben...">
                 <button id="sendMessageButton">Senden</button>
             </div>

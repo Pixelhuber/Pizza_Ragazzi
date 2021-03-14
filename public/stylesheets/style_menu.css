@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
-*{
+* {
     font-family: "Arial Black", sans-serif;
 }
 
-.container{
+.container {
     position: absolute;
     left: 50%;
     top: 50%;
@@ -17,7 +17,7 @@
     transform: translate(-50%, -50%);
 }
 
-button{
+button {
     flex: 3;
 
     height: 100%;
@@ -28,14 +28,14 @@ button{
     font-size: 1.2em;
 }
 
-button:hover{
+button:hover {
     color: white;
     background-color: black;
     cursor: pointer;
     border-color: black;
 }
 
-.container > div{
+.container > div {
     display: flex;
     align-items: center;
     width: 50vw;
@@ -50,7 +50,7 @@ button:hover{
     margin-left: 50px;
 }
 
-#user_data{
+#user_data {
     position: absolute;
     float: right;
     display: flex;
@@ -63,10 +63,10 @@ button:hover{
     cursor: pointer;
 }
 
-#user_data:hover{
+#user_data:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-#username{
+#username {
     font-size: 1.8em;
 }

@@ -33,6 +33,7 @@ class MemoryIngredient {
 
 class AbstractMemoryCard {
 
+    static card_count = 0;
     card_number;
     memoryIngredient;
     gameElement;
@@ -44,8 +45,6 @@ class AbstractMemoryCard {
         this.memoryIngredient = memoryIngredient;
         this.isFlipped = false;
     }
-
-    static card_count = 0;
 
     static createNameCard(memoryIngredient) {
         this.card_count++;
@@ -79,7 +78,8 @@ class AbstractMemoryCard {
     }
 
 
-    createGameElement() {} // wird in Unterklassen spezifiziert
+    createGameElement() {
+    } // wird in Unterklassen spezifiziert
 }
 
 class NameCard extends AbstractMemoryCard {
@@ -116,6 +116,7 @@ class NameCard extends AbstractMemoryCard {
 
         this.hideContent();
     }
+
     // private
     showContent() {
         this.ingredient_picture.style.display = "block";
@@ -188,10 +189,10 @@ class CardHandler {
                 numberFlippedCards++;
         })
 
-        if (numberFlippedCards > 2){
+        if (numberFlippedCards > 2) {
             this.hideAllCards();
             return true;                            //informiert toggleFlipped, ob alle Karten umgedreht wurden (dann muss aktuelle Karte nochmal umgedreht werden)
-        } else if (numberFlippedCards === 2){
+        } else if (numberFlippedCards === 2) {
             this.checkPair();
         } else {
             return false;
@@ -199,7 +200,7 @@ class CardHandler {
     }
 
     static flipCard(number) {
-        memoryCards[number-1].toggleFlipped();
+        memoryCards[number - 1].toggleFlipped();
 
     }
 
@@ -209,23 +210,24 @@ class CardHandler {
         })
     }
 
-    static checkPair(){
+    static checkPair() {
         let indicesOfFlippedCards = this.getIndicesOfFlippedCards();
-        if (memoryCards[indicesOfFlippedCards[0]].memoryIngredient.name == memoryCards[indicesOfFlippedCards[1]].memoryIngredient.name){
+        if (memoryCards[indicesOfFlippedCards[0]].memoryIngredient.name === memoryCards[indicesOfFlippedCards[1]].memoryIngredient.name) {
             this.removePair(indicesOfFlippedCards);
         }
     }
 
-    static getIndicesOfFlippedCards(){
+    static getIndicesOfFlippedCards() {
         let indicesOfFlippedCards = [];
-        memoryCards.forEach(function (item,index) {
-            if (item.isFlipped){
+        memoryCards.forEach(function (item, index) {
+            if (item.isFlipped) {
                 indicesOfFlippedCards.push(index)
             }
         })
         return indicesOfFlippedCards;
     }
-    static removePair(indicesOfFlippedCards){
+
+    static removePair(indicesOfFlippedCards) {
         document.getElementById(memoryCards[indicesOfFlippedCards[0]].card_number).style.borderColor = "green";
         document.getElementById(memoryCards[indicesOfFlippedCards[0]].card_number).style.borderWidth = "thick";
 
@@ -241,8 +243,8 @@ class CardHandler {
         this.checkGameOver();
     }
 
-    static checkGameOver(){
-        if (Object.values(memoryCards).length == 0){
+    static checkGameOver() {
+        if (Object.values(memoryCards).length === 0) {
             checkForLevelUp();
             document.getElementById("end_screen").style.visibility = "block";
         }
@@ -251,11 +253,11 @@ class CardHandler {
     static shuffle() {
         let memoryBox = document.getElementById("memoryBox");
         let divArray = Array.prototype.slice.call(memoryBox.getElementsByClassName('memoryCard'));
-        divArray.forEach(function(item){
+        divArray.forEach(function (item) {
             memoryBox.removeChild(item);
         })
         this.shuffleDivArray(divArray);
-        divArray.forEach(function(item){
+        divArray.forEach(function (item) {
             memoryBox.appendChild(item);
         })
     }
@@ -279,17 +281,44 @@ function restartGame() {
 
 async function createMemoryCards() {
 
-    const ingredients = await getMemoryIngredients();
+    let ingredients = await getMemoryIngredients();
+
+    ingredients = removeDuplicates(ingredients);
 
     ingredients.forEach(function (item) {
+
         const memoryIngredient = new MemoryIngredient(item.id, item.name, item.description, item.picture)
         memoryCards.push(AbstractMemoryCard.createNameCard(memoryIngredient));
         memoryCards.push(AbstractMemoryCard.createFactCard(memoryIngredient));
+
     })
     CardHandler.shuffle();
 }
 
+function removeDuplicates(ingredients) {
+    const uniqueIngredients = [];
 
+    for (let i = 0; i < ingredients.length; i++) {                      //checks the ingredients array for duplicates
+        if (uniqueIngredients.includes(ingredients[i].name)) {
+            if (Math.random() > 0.4) {                                  //random decision which of the duplicates to delete
+                ingredients.splice(i, 1);
+                i--;
+                continue;
+            } else {
+                for (let j = 0; j < ingredients.length; j++) {
+                    if (ingredients[j].name === ingredients[i].name) {
+                        ingredients.splice(j, 1);
+                        i--;
+                        break;
+                    }
+                }
+                continue;
+            }
+        }
+        uniqueIngredients.push(ingredients[i].name);
+    }
+    return ingredients;
+}
 
 async function getMemoryIngredients() {
 
@@ -359,17 +388,18 @@ function checkForLevelUp() {
 
         console.log(levelUpViewModel);
 
-        if (levelUpViewModel.levelUpPossible){
+        if (levelUpViewModel.levelUpPossible) {
             setCurrentPlayerTier(levelUpViewModel.nextTierAsFigure);
             document.getElementById("end_screen").style.visibility = "visible";
             document.getElementById("end_screen_text").innerHTML =
                 "Du hast ein neues Level erreicht! <br> Neuer Rang: " + "\"" + levelUpViewModel.nextTier + "\""
         } else {
             let earnedPoints;
-            if(levelUpViewModel.nextTierPoints === -1){
-                earnedPoints = 1000;
+            let balancingFactor = 0.05;
+            if (levelUpViewModel.nextTierPoints === -1) {
+                earnedPoints = levelUpViewModel.currentTierPoints * 0.02;
             } else {
-                earnedPoints = levelUpViewModel.nextTierPoints/10;
+                earnedPoints = (levelUpViewModel.nextTierPoints - levelUpViewModel.currentTierPoints) * balancingFactor;
             }
             setCurrentPlayerPoints(earnedPoints);
             document.getElementById("end_screen").style.visibility = "visible";

@@ -1,4 +1,4 @@
-var viewOnly = false;           //falls Profil vom Freund angeklickt wird ist dieses Attribut true
+let viewOnly = false;           //falls Profil vom Freund angeklickt wird ist dieses Attribut true
 
 function getFriendsData() {
     document.getElementById("loading_friends").style.display = "block" //loading friends anzeigen
@@ -23,10 +23,10 @@ function friendGetFriendsData(username) {
 }
 
 function createFriendlist(data) {
-    var list = document.createElement(`ul`);
+    const list = document.createElement(`ul`);
     list.className = `friend-list`;
-    for (var userName in data) {
-        var friend = document.createElement(`li`);
+    for (let userName in data) {
+        const friend = document.createElement(`li`);
         friend.className = `friend`;
         friend.onclick = function () {
             setupInformationFromFriend(this)
@@ -38,18 +38,18 @@ function createFriendlist(data) {
             endHoverEffect(this)
         };
 
-        var image = document.createElement(`img`)
+        const image = document.createElement(`img`);
         if (data[userName] != null) {
             image.src = data[userName]
         } else image.src = "assets/images/profile-icon.png"
 
         //Element erstellen, um HoverText anzuzeigen
-        var hoverText = document.createElement(`div`);
+        const hoverText = document.createElement(`div`);
         hoverText.className = `hoverText`;
         hoverText.innerHTML = "Profil anschauen";
         hoverText.style.display = "none";
 
-        var name = document.createElement(`div`);
+        const name = document.createElement(`div`);
         name.className = `name`;
         name.innerHTML = userName;
         friend.appendChild(image)
@@ -84,7 +84,7 @@ function endHoverEffect(elm) {
 }
 
 function addFriend() {
-    var username = document.getElementById("addFriendInput").value;
+    const username = document.getElementById("addFriendInput").value;
 
     fetch("/profile/addFriend", {
         method: 'POST',

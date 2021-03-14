@@ -1,4 +1,4 @@
-@(implicit assetsFinder: AssetsFinder)
+@(title: String)(implicit assetsFinder: AssetsFinder)
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -6,7 +6,7 @@
         <link rel="shortcut icon" type="image_path/png" href="@assetsFinder.path("images/favicon.png")">
         <link rel="stylesheet" type="text/css" href="@assetsFinder.path("stylesheets/style_tutorial.css")">
 
-        <title>Tutorial</title>
+        <title>@title</title>
     </head>
     <body onload="start()">
             <!--NAVIGATION BAR ------------->
@@ -18,12 +18,16 @@
                 <div id="description">Short description</div>
                 <div id="currentPosition">position (0/0)</div>
             </div>
-            <button class= "button" id="nextButton" onclick=nextGif()>OK</button>
+            <div id="buttonContainer">
+                <button class="button" id="nextButton" onclick=nextGif()>OK</button>
+                <button class="button" id="backToMenuButton" onclick="window.location.href = `@routes.HomeController.menu()`">
+                    Zum Menü</button>
+            </div>
         </div>
         <script>
-                var index = 0;
-                var videos = [];
-                var descriptions = [];
+                let index = 0;
+                const videos = [];
+                const descriptions = [];
 
                 function start() {
                     videos.push("@assetsFinder.path("images/tutorial/getting_ingredients.gif")")
@@ -33,10 +37,10 @@
                     descriptions.push("Ziehe Zutaten zur passenden Verarbeitungsmethode \nTipp. Du kannst so viele Zutaten gleichzeitig bearbeiten wie du willst!");
 
                     videos.push("@assetsFinder.path("images/tutorial/stomping_ingredients.gif")")
-                    descriptions.push("Klicke schnell auf die Zutaten um sie zu stampfen\nTipp: Stampfe mehrere Zutaten gleichzeitig, sie bilden die Basis für die fast alle Pizzen!");
+                    descriptions.push("Klicke schnell auf die Zutaten um sie zu stampfen\nTipp: Stampfe mehrere Zutaten gleichzeitig, sie bilden die Basis für fast alle Pizzen!");
 
                     videos.push("@assetsFinder.path("images/tutorial/cutting_ingredients.gif")")
-                    descriptions.push("Fahre mit gedrückter Maustaste über die Zutaten um sie zu schneiden\nTipp: Pass auf die faulen Zutaten auf, wenn du sie erwischt musst du warten!")
+                    descriptions.push("Fahre mit gedrückter Maustaste über die Zutaten um sie zu schneiden\nTipp: Pass auf die faulen Zutaten auf, wenn du sie erwischst musst du warten!")
 
                     videos.push("@assetsFinder.path("images/tutorial/combine_ingredients.gif")")
                     descriptions.push("Ziehe Zutaten auf einen ausgerollten Teig, um ihn zu belegen")
@@ -57,12 +61,21 @@
                 }
 
                 function nextGif() {
-                    if(index+1>descriptions.length)index=0;
-                    document.getElementById("video").src = videos[index];
-                    document.getElementById("description").innerText = descriptions[index];
-                    var position = index + 1;
-                    document.getElementById("currentPosition").innerText = "("+position+"/"+ videos.length+")";
-                    index++;
+                    if (index + 1 > descriptions.length) {
+                        index = 0;
+                        document.getElementById("backToMenuButton").style.display = "block";
+                        document.getElementById("description").innerText = "Super, jetzt kennst du alle Grundlagen\nKlicke auf OK falls du dir das Tutorial nochmal ansehen möchtest!"
+                        document.getElementById("video").src = "@assetsFinder.path("images/rotating_pizza.gif")"
+                        document.getElementById("currentPosition").style.display = "none";
+                    } else {
+                        document.getElementById("currentPosition").style.display = "block";
+                        document.getElementById("backToMenuButton").style.display = "none";
+                        document.getElementById("video").src = videos[index];
+                        document.getElementById("description").innerText = descriptions[index];
+                        const position = index + 1;
+                        document.getElementById("currentPosition").innerText = "(" + position + "/" + videos.length + ")";
+                        index++;
+                    }
                 }
         </script>
     </body>

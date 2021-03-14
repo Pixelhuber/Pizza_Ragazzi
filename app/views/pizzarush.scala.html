@@ -12,7 +12,7 @@
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/functions_pizzarush_miniGames.js")"></script>
         <script type="text/javascript" src="@routes.Assets.versioned("javascripts/functions_pizzarush_utility.js")"></script>
 
-        <title>Pizza-Rush</title>
+        <title>@title</title>
     </head>
 
     <body onload="loadGameElements()">
@@ -20,7 +20,7 @@
         <div id="nav-placeholder">@navbar.render(assetsFinder)</div>
             <!------------------------------>
         <audio id="background_music">
-            <source src="/assets/sounds/tarantella_napoletana.mp3">
+            <source src="@routes.Assets.versioned("sounds/tarantella_napoletana.mp3")">
             Your browser does not support the audio element.
         </audio>
 
@@ -31,9 +31,9 @@
 
         <div id="startStop_overlay">
 
-                <div id="startStop_overlay_text">Wilkommen bei Pizzarush</div>
-                <button id="startStop_overlay_button" onclick="manageRushCountdown('rushCountdown')">Starte das Spiel</button>
-                <button onclick="location.href='menu'">Zurück zum Menü</button>
+            <div id="startStop_overlay_text">Wilkommen bei Pizzarush</div>
+            <button id="startStop_overlay_button" onclick="manageRushCountdown('rushCountdown')">Starte das Spiel</button>
+            <button onclick="location.href = 'menu'">Zurück zum Menü</button>
 
         </div>
 
@@ -85,11 +85,11 @@
 
                 <div id="lowerSurfaces">
                     <div id="cuttingSurface">
-                        <input class="miniGameButton" id="startFruitNinja" onclick="startFromChoppingTable()" type="image" src="/assets/images/knife.png"/>
+                        <input class="miniGameButton" id="startFruitNinja" onclick="startFromChoppingTable()" type="image" src="@routes.Assets.versioned("images/knife.png")" alt="StartCutting"/>
                     </div>
 
                     <div id="smashingSurface">
-                        <input class="miniGameButton" id="startWhackAMole" onclick="startFromStampingTable()" type="image" src="/assets/images/rollingpin.png"/>
+                        <input class="miniGameButton" id="startWhackAMole" onclick="startFromStampingTable()" type="image" src="@routes.Assets.versioned("images/rollingpin.png")" alt="StartChomping"/>
                     </div>
                 </div>
             </div>
@@ -105,7 +105,7 @@
                 </div>
 
                 <div id="trash" class="box">
-                    <img src="/assets/images/trash_icon.svg">
+                    <img src="@routes.Assets.versioned("images/trash_icon.svg")" alt="trashIcon">
                 </div>
 
             </div>

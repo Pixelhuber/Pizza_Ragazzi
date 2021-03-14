@@ -1,19 +1,20 @@
 package models.factory;
 
 import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
-import models.factory.FactoryExceptions.EmailAlreadyInUseException;
-import models.factory.FactoryExceptions.InvalidEmailException;
-import models.factory.FactoryExceptions.ProfilePictureException;
-import models.factory.FactoryExceptions.UsernameAlreadyInUseException;
-
 import models.Message;
+import models.factory.factoryExceptions.EmailAlreadyInUseException;
+import models.factory.factoryExceptions.InvalidEmailException;
+import models.factory.factoryExceptions.ProfilePictureException;
+import models.factory.factoryExceptions.UsernameAlreadyInUseException;
 import play.db.Database;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 
@@ -226,7 +227,6 @@ public class UserFactory {
     }
 
 
-
     /**
      * The type User.
      */
@@ -264,7 +264,7 @@ public class UserFactory {
          * Instantiates a new User with ResultSet from db
          *
          * @param rs the ResultSet from db
-         * @throws SQLException
+         * @throws SQLException if result set doesnt contain values
          */
         private User(ResultSet rs) throws SQLException {
             this.id = rs.getInt("idUser");
@@ -386,9 +386,8 @@ public class UserFactory {
          * Gets friends-Map with profilePictureSource and username.
          *
          * @return the friends data
-         * @throws IOException the io exception
          */
-        public Map<String, String> getFriendsData() throws IOException {
+        public Map<String, String> getFriendsData() {
 
             List<User> users = getFriends();
 
@@ -597,12 +596,20 @@ public class UserFactory {
         }
 
         /**
+         * Sets profile picture.
+         *
+         * @param profilePicture the profile picture
+         */
+        public void setProfilePicture(BufferedImage profilePicture) {
+            this.profilePicture = profilePicture;
+        }
+
+        /**
          * Gets profile picture src.
          *
          * @return the profile picture src
-         * @throws IOException the io exception
          */
-        public String getProfilePictureSrc() throws IOException {
+        public String getProfilePictureSrc() {
             String path = null;
             if (profilePicture != null) {
                 path = encodeToString(profilePicture, "jpg");
@@ -634,24 +641,14 @@ public class UserFactory {
             return imageString;
         }
 
-
-        /**
-         * Sets profile picture.
-         *
-         * @param profilePicture the profile picture
-         */
-        public void setProfilePicture(BufferedImage profilePicture) {
-            this.profilePicture = profilePicture;
-        }
-
         public void updateProfilePicture(String sourceData) {
             db.withConnection(conn -> {
                 String sql = "UPDATE User SET profilepicture=? WHERE idUser = ?";
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 try {
                     var imageData = sourceData.split("base64,")[1];
-                    byte[] bytes= Base64.getMimeDecoder().decode(imageData);
-                    stmt.setBytes(1,bytes);
+                    byte[] bytes = Base64.getMimeDecoder().decode(imageData);
+                    stmt.setBytes(1, bytes);
                     stmt.setInt(2, this.id);
                 } catch (MysqlDataTruncation large) {
                     large.printStackTrace();

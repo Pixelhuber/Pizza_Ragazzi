@@ -1,14 +1,11 @@
 package ModelTests.FactoryTests;
 
 import com.google.common.collect.ImmutableMap;
-import models.factory.FactoryExceptions.EmailAlreadyInUseException;
+import models.factory.factoryExceptions.EmailAlreadyInUseException;
 import models.factory.UserFactory;
-
-import org.junit.*;
 import org.junit.After;
 import org.junit.Before;
-
-
+import org.junit.Test;
 import play.db.Database;
 import play.db.Databases;
 
@@ -51,7 +48,7 @@ public class UserFactoryTest {
     }
 
     @Test
-    public void whenCreatingUserWithSameEmail_ThenException(){
+    public void whenCreatingUserWithSameEmail_ThenException() {
         UserFactory.User arrangeUser = userFactory.createUser("test@test.test", "testUser", "test");
 
         Exception exception = assertThrows(EmailAlreadyInUseException.class, () -> {
@@ -66,7 +63,7 @@ public class UserFactoryTest {
     }
 
     @Test
-    public void whenUnusedEmail_ThenEmailAvailable(){
+    public void whenUnusedEmail_ThenEmailAvailable() {
         boolean actual = userFactory.isEmailAvailable("free@free.free");
 
         assertTrue(actual);
@@ -84,10 +81,10 @@ public class UserFactoryTest {
     }
 
     @Test
-    public void whenAuthenticatingUser_ThenCorrectUserAttributes(){
+    public void whenAuthenticatingUser_ThenCorrectUserAttributes() {
         UserFactory.User arrangeUser = userFactory.createUser("test@test.test", "testUser", "test");
 
-        UserFactory.User actualUser = userFactory.authenticateUser("test@test.test","test");
+        UserFactory.User actualUser = userFactory.authenticateUser("test@test.test", "test");
         assertEquals("testUser", actualUser.getUsername());
         assertEquals("test@test.test", actualUser.getEmail());
         assertEquals(0, actualUser.getTotalPoints());
@@ -98,10 +95,10 @@ public class UserFactoryTest {
     }
 
     @Test
-    public void whenAuthenticatingWrongUser_ThenNull(){
+    public void whenAuthenticatingWrongUser_ThenNull() {
         UserFactory.User arrangeUser = userFactory.createUser("test@test.test", "testUser", "test");
 
-        UserFactory.User actualUser = userFactory.authenticateUser("test@test.test","wrong");
+        UserFactory.User actualUser = userFactory.authenticateUser("test@test.test", "wrong");
 
         arrangeUser.delete();
 
@@ -109,7 +106,7 @@ public class UserFactoryTest {
     }
 
     @Test
-    public void whenDeletingExistingUser_ThenEmailAvailable(){
+    public void whenDeletingExistingUser_ThenEmailAvailable() {
         UserFactory.User arrangeUser = userFactory.createUser("test@test.test", "testUser", "test");
 
         arrangeUser.delete();

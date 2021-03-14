@@ -20,7 +20,7 @@ public class MenuController extends Controller {
     /**
      * Instantiates a new Menu controller.
      *
-     * @param levelUp        the menu
+     * @param levelUp     the menu
      * @param userFactory the user factory
      */
     @Inject
@@ -36,11 +36,12 @@ public class MenuController extends Controller {
      * @return the result
      */
     public Result checkForLevelUp(Http.Request request) {
-        String email = null;
-        if (request.session().get("email").isPresent())
+        String email;
+        if (request.session().get("email").isPresent()) {
             email = request.session().get("email").get();
-        else
+        } else {
             return badRequest("Couldn't retrieve email from session");
+        }
 
         UserFactory.User user = userFactory.getUserByEmail(email);
 

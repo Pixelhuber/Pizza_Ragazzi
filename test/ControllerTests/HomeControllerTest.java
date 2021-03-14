@@ -2,7 +2,6 @@ package ControllerTests;
 
 import controllers.AssetsFinder;
 import controllers.HomeController;
-import controllers.routes;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -12,9 +11,7 @@ import play.test.Helpers;
 import play.test.WithApplication;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static play.mvc.Http.Status.OK;
-import static play.test.Helpers.route;
 
 public class HomeControllerTest extends WithApplication {
     private HomeController homeController;
