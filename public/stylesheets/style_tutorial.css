@@ -36,11 +36,11 @@
     font-size: 30px;
 }
 
-#backToMenuButton{
+#backToMenuButton {
     display: none;
 }
 
-#buttonContainer{
+#buttonContainer {
     display: inline-flex;
 }
 
