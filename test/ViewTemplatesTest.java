@@ -88,7 +88,7 @@ public class ViewTemplatesTest extends WithApplication {
 
     @Test
     public void renderTutorialTemplate() {
-        Content html = views.html.tutorial.render(assetsFinder);
+        Content html = views.html.tutorial.render("Tutorial", assetsFinder);
         assertThat("text/html").isEqualTo(html.contentType());
         assertThat(html.body()).contains("Tutorial");
     }
