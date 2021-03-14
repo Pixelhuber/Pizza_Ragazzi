@@ -1,8 +1,8 @@
 package ModelTests.FactoryTests;
 
 import com.google.common.collect.ImmutableMap;
-import models.factory.factoryExceptions.EmailAlreadyInUseException;
 import models.factory.UserFactory;
+import models.factory.factoryExceptions.EmailAlreadyInUseException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
