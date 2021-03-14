@@ -16,7 +16,7 @@ public class TestLevelUp {
 
     private final int TIER_ONE = 1;
     private final int ENOUGH_FOR_TIER_TWO = 2000;
-    private final int NOT_ENOUGH_FOR_TIER_TWO = 1999;
+    private final int NOT_ENOUGH_FOR_TIER_TWO = 1499;
     private Database database;
     private UserFactory userFactory;
     private LevelUp levelUp;
