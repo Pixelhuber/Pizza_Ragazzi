@@ -36,6 +36,14 @@
     font-size: 30px;
 }
 
+#backToMenuButton{
+    display: none;
+}
+
+#buttonContainer{
+    display: inline-flex;
+}
+
 .button {
     text-align: center;
     text-transform: uppercase;
@@ -47,6 +55,7 @@
     padding: 20px;
     width: 200px;
     overflow: hidden;
+    margin: 20px;
 }
 
 .button:hover {

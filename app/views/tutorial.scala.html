@@ -18,7 +18,11 @@
                 <div id="description">Short description</div>
                 <div id="currentPosition">position (0/0)</div>
             </div>
-            <button class= "button" id="nextButton" onclick=nextGif()>OK</button>
+            <div id="buttonContainer">
+                <button class="button" id="nextButton" onclick=nextGif()>OK</button>
+                <button class="button" id="backToMenuButton" onclick="window.location.href = `@routes.HomeController.menu()`">
+                    Zum Menü</button>
+            </div>
         </div>
         <script>
                 let index = 0;
@@ -57,12 +61,21 @@
                 }
 
                 function nextGif() {
-                    if (index + 1 > descriptions.length) index = 0;
-                    document.getElementById("video").src = videos[index];
-                    document.getElementById("description").innerText = descriptions[index];
-                    const position = index + 1;
-                    document.getElementById("currentPosition").innerText = "(" + position + "/" + videos.length + ")";
-                    index++;
+                    if (index + 1 > descriptions.length) {
+                        index = 0;
+                        document.getElementById("backToMenuButton").style.display = "block";
+                        document.getElementById("description").innerText = "Super, jetzt kennst du alle Grundlagen\nKlicke auf OK falls du dir das Tutorial nochmal ansehen möchtest!"
+                        document.getElementById("video").src = "@assetsFinder.path("images/rotating_pizza.gif")"
+                        document.getElementById("currentPosition").style.display = "none";
+                    } else {
+                        document.getElementById("currentPosition").style.display = "block";
+                        document.getElementById("backToMenuButton").style.display = "none";
+                        document.getElementById("video").src = videos[index];
+                        document.getElementById("description").innerText = descriptions[index];
+                        const position = index + 1;
+                        document.getElementById("currentPosition").innerText = "(" + position + "/" + videos.length + ")";
+                        index++;
+                    }
                 }
         </script>
     </body>
