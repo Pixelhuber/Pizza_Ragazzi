@@ -171,21 +171,6 @@ public class ProfileController extends Controller {
     }
 
     /**
-     * Gets Users password from session.
-     *
-     * @param request the request
-     * @return the password from session
-     */
-    public Result getPasswordFromSession(Http.Request request) { //TODO: unused
-
-        return request
-                .session()
-                .get("password") // Sucht nach dem Wert in der Session, der unter dem Key "password" abgelegt ist
-                .map(Results::ok)
-                .orElseGet(Results::notFound);
-    }
-
-    /**
      * Gets Users specific Friends Data (ProfilePic and Username).
      *
      * @param request the request

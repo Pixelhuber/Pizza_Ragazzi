@@ -104,10 +104,9 @@ public class LoginController extends Controller {
     /**
      * Logs out the user from current session and renders Login-page
      *
-     * @param request the request
      * @return the result
      */
-    public Result logout(Http.Request request) {
+    public Result logout() {
         return ok(login.render("Login", assetsFinder)).withNewSession();
     }
 

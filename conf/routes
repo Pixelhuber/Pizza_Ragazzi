@@ -75,7 +75,7 @@ GET         /getFriendsData                            controllers.ProfileContro
 POST        /login/authenticate                        controllers.LoginController.authenticate(request: Request)
 POST        /login/createAccount                       controllers.LoginController.createAccount(request: Request)
 # LOGOUT
-GET         /logout                                    controllers.LoginController.logout(request: Request)
+GET         /logout                                    controllers.LoginController.logout()
 
 # PIZZA-RUSH -----------------------------------------------------------------------
 
