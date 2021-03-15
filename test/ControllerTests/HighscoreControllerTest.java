@@ -5,7 +5,7 @@ import models.factory.UserFactory;
 import org.junit.Before;
 import org.junit.Test;
 import play.mvc.Result;
-import play.test.*;
+import play.test.WithApplication;
 
 import static org.junit.Assert.assertEquals;
 import static play.mvc.Http.Status.OK;

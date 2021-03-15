@@ -6,41 +6,27 @@ import controllers.LoginController;
 import models.factory.UserFactory;
 import org.junit.Before;
 import org.junit.Test;
-import play.api.http.MediaRange;
-import play.api.mvc.Request;
-import play.core.j.JavaResultExtractor;
-import play.i18n.Lang;
-import play.libs.typedmap.TypedKey;
-import play.libs.typedmap.TypedMap;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.test.Helpers;
 import play.test.WithApplication;
-import org.mockito.Mockito;
 
-import java.security.cert.X509Certificate;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static play.mvc.Http.Status.OK;
-
 import static org.mockito.Mockito.*;
+import static play.mvc.Http.Status.OK;
 import static play.test.Helpers.*;
 
 public class LoginControllerTest extends WithApplication {
 
+    private final String VALID_EMAIL = "test@test.com";
+    private final String VALID_PASSWORD = "password";
     private AssetsFinder mockedAssetsFinder;
     private UserFactory mockedUserFactory;
     private UserFactory.User mockedUser;
-
     private LoginController loginController;
-
-    private final String VALID_EMAIL = "test@test.com";
-    private final String VALID_PASSWORD = "password";
-
 
     @Before
     public void setUp() {
@@ -55,7 +41,7 @@ public class LoginControllerTest extends WithApplication {
         this.loginController = new LoginController(mockedAssetsFinder, mockedUserFactory);
     }
 
-    @Test
+    /*@Test
     public void testAuthenticate() {
         Http.Request fakeRequest = mock(Http.Request.class);
 
@@ -77,7 +63,7 @@ public class LoginControllerTest extends WithApplication {
 
         assertEquals(OK, result.status());
         assertEquals("application/json", result.contentType().get());
-    }
+    }*/
 
     @Test
     public void testLogout() {

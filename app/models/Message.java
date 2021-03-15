@@ -10,10 +10,10 @@ import java.sql.SQLException;
 public class Message {
     private final int sender;
     private final int receiver;
-    private String senderName;
-    private String receiverName;
     private final String time;
     private final String message_text;
+    private String senderName;
+    private String receiverName;
 
     /**
      * Instantiates a new Message.
@@ -26,24 +26,6 @@ public class Message {
         this.receiver = rs.getInt("receiver");
         this.time = rs.getString("time");
         this.message_text = rs.getString("message_text");
-    }
-
-    /**
-     * Sets sender name.
-     *
-     * @param senderName the sender name
-     */
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
-    }
-
-    /**
-     * Sets receiver name.
-     *
-     * @param receiverName the receiver name
-     */
-    public void setReceiverName(String receiverName) {
-        this.receiverName = receiverName;
     }
 
     /**
@@ -74,12 +56,30 @@ public class Message {
     }
 
     /**
+     * Sets sender name.
+     *
+     * @param senderName the sender name
+     */
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    /**
      * Gets receiver name.
      *
      * @return the receiver name
      */
     public String getReceiverName() {
         return receiverName;
+    }
+
+    /**
+     * Sets receiver name.
+     *
+     * @param receiverName the receiver name
+     */
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
     }
 
     /**

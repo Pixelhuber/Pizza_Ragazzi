@@ -1,4 +1,3 @@
-
 // drag functionality
 function makeDraggable(element) {
     let diff_x = 0, diff_y = 0, x = 0, y = 0;
@@ -70,8 +69,7 @@ function makeDraggable(element) {
 
         const activeOrders = OrderHandler.getInstance().activeOrders;
 
-        activeOrders.forEach(function (item, index, array) {
-
+        activeOrders.forEach(function (item) {
             if (checkOverlap(element.draggable, item.gameElement)) {
 
                 OrderHandler.getInstance().notifyDelivered(item, element);
@@ -89,7 +87,7 @@ function makeDraggable(element) {
     }
 
     function checkIfDraggedInOven() {
-        ovenList.forEach(function (item, index, array) {
+        ovenList.forEach(function (item) {
 
             if (checkOverlap(element.draggable, item.gameElement.image)) {
 

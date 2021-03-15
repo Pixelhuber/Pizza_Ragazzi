@@ -1,9 +1,10 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import models.factory.FactoryExceptions.ProfilePictureException;
-import models.factory.UserFactory;
 import models.Message;
+import models.factory.UserFactory;
+import models.factory.factoryExceptions.InvalidEmailException;
+import models.factory.factoryExceptions.ProfilePictureException;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
@@ -14,7 +15,6 @@ import play.mvc.Results;
 import viewmodels.UserViewModel;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -24,22 +24,33 @@ import java.util.List;
  */
 public class ProfileController extends Controller {
 
-    private final AssetsFinder assetsFinder;
     private final FormFactory formFactory;
     private final UserFactory userFactory;
 
     /**
      * Instantiates a new Profile controller.
      *
-     * @param assetsFinder the assets finder
-     * @param formFactory  the form factory
-     * @param userFactory  the user factory
+     * @param formFactory the form factory
+     * @param userFactory the user factory
      */
     @Inject
-    public ProfileController(AssetsFinder assetsFinder, FormFactory formFactory, UserFactory userFactory) {
-        this.assetsFinder = assetsFinder;
+    public ProfileController(FormFactory formFactory, UserFactory userFactory) {
         this.formFactory = formFactory;
         this.userFactory = userFactory;
+    }
+
+    /**
+     * @param request the html request
+     * @return the current logged in User from the email stored in the session
+     */
+    public UserFactory.User getCurrentUser(Http.Request request) {
+        String email;
+        if (request.session().get("email").isPresent()) {
+            email = request.session().get("email").get();
+            return userFactory.getUserByEmail(email);
+        } else {
+            throw new InvalidEmailException("There is no email of the current logged in User stored in the session");
+        }
     }
 
     /**
@@ -48,13 +59,11 @@ public class ProfileController extends Controller {
      * @param request the request
      * @return the username
      */
-// Sets the username to the value in the request-body
     public Result setUsername(Http.Request request) {
         Form<UserViewModel> form = formFactory.form(UserViewModel.class); // Ein ViewModel gibt quasi die Form vor, wie aus einem request gelesen werden soll (dafür auch das Package "ViewModels" :))
         UserViewModel userViewModel = form.bindFromRequest(request).get();
 
-        String email = request.session().get("email").get();
-        UserFactory.User user = userFactory.getUserByEmail(email);
+        UserFactory.User user = getCurrentUser(request);
         user.setUsername(userViewModel.getUsername());
 
         return ok(userViewModel.getUsername()).addingToSession(request, "username", userViewModel.getUsername()); // Speichert den Username in der Session unter dem Key "username"
@@ -66,14 +75,13 @@ public class ProfileController extends Controller {
      * @param request the request
      * @return the result with ok-Status if successfull, else badRequest with ProfilePictureException-message
      */
-    public Result setProfilePicture(Http.Request request){
-        String email = request.session().get("email").get();
-        UserFactory.User user = userFactory.getUserByEmail(email);
+    public Result setProfilePicture(Http.Request request) {
+        UserFactory.User user = getCurrentUser(request);
 
         String image = request.body().asJson().get("img").toString();
-        try{
+        try {
             user.updateProfilePicture(image);
-        }catch (ProfilePictureException e){
+        } catch (ProfilePictureException e) {
             return badRequest(e.getMessage());
         }
         //user.setProfilePicture(image);
@@ -102,9 +110,8 @@ public class ProfileController extends Controller {
      * @param request the request
      * @return result
      */
-    public Result getUsernameFromDatabase(Http.Request request){
-        String email = request.session().get("email").get();
-        UserFactory.User user = userFactory.getUserByEmail(email);
+    public Result getUsernameFromDatabase(Http.Request request) {
+        UserFactory.User user = getCurrentUser(request);
         return ok(user.getUsername());
     }
 
@@ -114,10 +121,8 @@ public class ProfileController extends Controller {
      * @param request the request
      * @return the email from database
      */
-//evtl getEmailFromSession verwenden oder getUsername
     public Result getEmailFromDatabase(Http.Request request) {
-        String email = request.session().get("email").get();
-        UserFactory.User user = userFactory.getUserByEmail(email);
+        UserFactory.User user = getCurrentUser(request);
         return ok(user.getEmail());
     }
 
@@ -128,8 +133,7 @@ public class ProfileController extends Controller {
      * @return the gesamtpunkte from database
      */
     public Result getGesamtpunkteFromDatabase(Http.Request request) {
-        String email = request.session().get("email").get();
-        UserFactory.User user = userFactory.getUserByEmail(email);
+        UserFactory.User user = getCurrentUser(request);
         return ok(Integer.toString(user.getTotalPoints()));
     }
 
@@ -140,8 +144,7 @@ public class ProfileController extends Controller {
      * @return the highscore from database
      */
     public Result getHighscoreFromDatabase(Http.Request request) {
-        String email = request.session().get("email").get();
-        UserFactory.User user = userFactory.getUserByEmail(email);
+        UserFactory.User user = getCurrentUser(request);
         return ok(Integer.toString(user.getHighScore()));
     }
 
@@ -152,8 +155,7 @@ public class ProfileController extends Controller {
      * @return the tier name from database
      */
     public Result getTierNameFromDatabase(Http.Request request) {
-        String email = request.session().get("email").get();
-        UserFactory.User user = userFactory.getUserByEmail(email);
+        UserFactory.User user = getCurrentUser(request);
         return ok(user.getNameFromTierId());
     }
 
@@ -162,11 +164,9 @@ public class ProfileController extends Controller {
      *
      * @param request the request
      * @return the profile picture from database
-     * @throws IOException the io exception
      */
-    public Result getProfilePictureFromDatabase(Http.Request request) throws IOException {
-        String email = request.session().get("email").get();
-        UserFactory.User user = userFactory.getUserByEmail(email);
+    public Result getProfilePictureFromDatabase(Http.Request request) {
+        UserFactory.User user = getCurrentUser(request);
         return ok(Json.toJson(user.getProfilePictureSrc()));
     }
 
@@ -190,11 +190,9 @@ public class ProfileController extends Controller {
      *
      * @param request the request
      * @return the friends data
-     * @throws IOException the io exception
      */
-    public Result getFriendsData(Http.Request request) throws IOException {
-        String email = request.session().get("email").get();
-        UserFactory.User user = userFactory.getUserByEmail(email);
+    public Result getFriendsData(Http.Request request) {
+        UserFactory.User user = getCurrentUser(request);
         return ok(Json.toJson(user.getFriendsData()));
     }
 
@@ -203,13 +201,11 @@ public class ProfileController extends Controller {
      * Gets Users messages from database.
      *
      * @param request the request
-     * @return the messages from database
+     * @return gibt Messages mit bestimmtem Freund zurück
      */
-//gibt Messages mit bestimmtem Freund zurück
     public Result getMessagesFromDatabase(Http.Request request) {
-        String email = request.session().get("email").get();
         String username = request.body().asJson().asText();
-        UserFactory.User user1 = userFactory.getUserByEmail(email);
+        UserFactory.User user1 = getCurrentUser(request);
         UserFactory.User user2 = userFactory.getUserByUsername(username);
         List<Message> messages = user1.getMessages(user2);
         String json = listToJson(messages);
@@ -223,8 +219,7 @@ public class ProfileController extends Controller {
      * @return the result
      */
     public Result sendMessage(Http.Request request) {
-        String email = request.session().get("email").get();
-        UserFactory.User sender = userFactory.getUserByEmail(email);
+        UserFactory.User sender = getCurrentUser(request);
         UserFactory.User receiver = userFactory.getUserByUsername(request.body().asJson().get("receiver").asText());
         String message_text = request.body().asJson().get("message_text").asText();
         long time = request.body().asJson().get("time").asLong();
@@ -240,19 +235,23 @@ public class ProfileController extends Controller {
      * @return the result with ok-Status if successfull else badRequest
      */
     public Result addFriend(Http.Request request) {
-        String email = request.session().get("email").get();
-        UserFactory.User user = userFactory.getUserByEmail(email);
+        UserFactory.User user = getCurrentUser(request);
 
         String newFriendUsername = request.body().asJson().asText();
         UserFactory.User newFriendUser = userFactory.getUserByUsername(newFriendUsername);
 
-        boolean successfull;
+        boolean successful;
         if (newFriendUser != null) {
-            successfull = user.addFriend(newFriendUser.getId());
-        } else return badRequest("username not valid");
+            successful = user.addFriend(newFriendUser.getId());
+        } else {
+            return badRequest("username not valid");
+        }
 
-        if (successfull) return ok();
-        else return badRequest("username not valid");
+        if (successful) {
+            return ok();
+        } else {
+            return badRequest("username not valid");
+        }
     }
 
     /**
@@ -263,17 +262,16 @@ public class ProfileController extends Controller {
      * @return the string
      */
 //macht aus einer beliebigen Liste ein Json
-    public <T> String listToJson (List<T> list) {
+    public <T> String listToJson(List<T> list) {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = "";
         try {
             json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(list);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return json;
     }
-
 
 
     //AB HIER METHODEN ZUM ANSCHAUEN DES PROFILS EINES FREUNDES
@@ -284,7 +282,7 @@ public class ProfileController extends Controller {
      * @param request the request
      * @return Result result
      */
-    public Result friendGetUsernameFromDatabase(Http.Request request){
+    public Result friendGetUsernameFromDatabase(Http.Request request) {
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
         return ok(user.getUsername());
@@ -343,9 +341,8 @@ public class ProfileController extends Controller {
      *
      * @param request the request
      * @return the result
-     * @throws IOException the io exception
      */
-    public Result friendGetProfilePictureFromDatabase(Http.Request request) throws IOException {
+    public Result friendGetProfilePictureFromDatabase(Http.Request request) {
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
         return ok(Json.toJson(user.getProfilePictureSrc()));
@@ -356,13 +353,10 @@ public class ProfileController extends Controller {
      *
      * @param request the request
      * @return the result
-     * @throws IOException the io exception
      */
-    public Result friendFriendsData(Http.Request request) throws IOException{
+    public Result friendFriendsData(Http.Request request) {
         String username = request.body().asJson().asText();
         UserFactory.User user = userFactory.getUserByUsername(username);
         return ok(Json.toJson(user.getFriendsData()));
     }
-
-
 }

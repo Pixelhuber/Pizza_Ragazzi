@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * A functional test starts a Play application for every test.
- *
+ * <p>
  * https://www.playframework.com/documentation/latest/JavaFunctionalTest
  */
 public class ViewTemplatesTest extends WithApplication {
@@ -27,12 +27,6 @@ public class ViewTemplatesTest extends WithApplication {
         assertThat(html.body()).contains("PASSWORT WIEDERHOLEN");
     }
 
-    @Test
-    public void renderFriendlistTemplate() {
-        Content html = views.html.friendlist.render(assetsFinder);
-        assertThat("text/html").isEqualTo(html.contentType());
-        assertThat(html.body()).contains("friendlist");
-    }
 
     @Test
     public void renderHighscoreTemplate() {
@@ -41,12 +35,6 @@ public class ViewTemplatesTest extends WithApplication {
         assertThat(html.body()).contains("Highscores");
     }
 
-    @Test
-    public void renderIndexTemplate() {
-        Content html = views.html.index.render("index", assetsFinder);
-        assertThat("text/html").isEqualTo(html.contentType());
-        assertThat(html.body()).contains("Welcome to Play");
-    }
 
     @Test
     public void renderLoginTemplate() {
@@ -100,7 +88,7 @@ public class ViewTemplatesTest extends WithApplication {
 
     @Test
     public void renderTutorialTemplate() {
-        Content html = views.html.tutorial.render(assetsFinder);
+        Content html = views.html.tutorial.render("Tutorial", assetsFinder);
         assertThat("text/html").isEqualTo(html.contentType());
         assertThat(html.body()).contains("Tutorial");
     }
