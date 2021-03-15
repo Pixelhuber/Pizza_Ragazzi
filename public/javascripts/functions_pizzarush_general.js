@@ -1,3 +1,4 @@
+
 const gameProperties = {
     roundLength: 240,
 
@@ -10,9 +11,9 @@ const gameProperties = {
     pizza_timeUntilBurnt: 8, // additional to regular baking time
     pizza_timeUntilWarning: 4, // additional to regular baking time
 
-    fruitNinja_distractionChance_percent: 20,
-    fruitNinja_distractionDisablingTime: 2,
-    fruitNinja_maxIngredientsInAir: 5,
+    fruitNinja_distractionChance_percent: 12,
+    fruitNinja_distractionDisablingTime: 2.5,
+    fruitNinja_maxIngredientsInAir: 4,
     fruitNinja_minTimeBetweenThrows: 0.1,
     fruitNinja_xRange: 30,
     fruitNinja_yRange: 30,
@@ -86,8 +87,8 @@ async function getAvailablePizzas() {
 
 async function loadGameElements() {
     const music = new Audio('/assets/sounds/tarantella_napoletana.mp3');
-    music.loop = true;
-    music.volume = 0.01;
+    music.loop=true;
+    music.volume=0.01;
     await music.play();
 
     await setupAvailableIngredients();
@@ -135,11 +136,11 @@ function loadOvens() {
 
 function loadRecipeList() {
     const recipeList = document.getElementById("recipeList");
-    recipeList.onmouseenter = function () {
+    recipeList.onmouseenter = function (){
         expanded.style.display = "flex";
         // recipeList.innerText = "";
     };
-    recipeList.onmouseleave = function () {
+    recipeList.onmouseleave = function (){
         expanded.style.display = "none";
         // recipeList.innerText = "recipes"
     };
