@@ -86,7 +86,7 @@ class NameCard extends AbstractMemoryCard {
 
     //card_number
     //MemoryIngredient  |
-    //gameElement       |   <- die Attribute werden geerbt, kannst du hier auch ganz normal benutzen
+    //gameElement       |
     //isFlipped         |
     ingredient_name;
     ingredient_picture; // <img>
@@ -133,7 +133,7 @@ class NameCard extends AbstractMemoryCard {
 class DescriptionCard extends AbstractMemoryCard {
 
     //MemoryIngredient  |
-    //gameElement       |   <- die Attribute werden geerbt, kannst du hier auch ganz normal benutzen
+    //gameElement       |
     //isFlipped         |
     ingredient_description;
 
@@ -397,7 +397,7 @@ function checkForLevelUp() {
             let earnedPoints;
             let balancingFactor = 0.05;
             if (levelUpViewModel.nextTierPoints === -1) {
-                earnedPoints = levelUpViewModel.currentTierPoints * 0.02;
+                earnedPoints = levelUpViewModel.currentTierPoints * balancingFactor;
             } else {
                 earnedPoints = (levelUpViewModel.nextTierPoints - levelUpViewModel.currentTierPoints) * balancingFactor;
             }
