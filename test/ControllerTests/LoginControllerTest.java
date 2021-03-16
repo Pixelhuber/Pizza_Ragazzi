@@ -67,8 +67,7 @@ public class LoginControllerTest extends WithApplication {
 
     @Test
     public void testLogout() {
-        Http.RequestBuilder request = Helpers.fakeRequest().method(GET).uri("/logout");
-        Result result = route(app, request);
+        Result result = loginController.logout();
 
         assertEquals(OK, result.status());
         assertEquals("text/html", result.contentType().get());
