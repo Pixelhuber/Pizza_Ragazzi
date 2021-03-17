@@ -351,7 +351,8 @@ async function setCurrentPlayerPoints(earnedPoints) {
     fetch("/pizza_rush/setPlayerPoints", {
         method: 'POST',
         body: JSON.stringify({
-            newTotalPoints: currentPlayerTotalPoints + earnedPoints,                 //aktuell gibt jedes Memory 100 Punkte, könnte man abhängig vom Tier machen (200,300)
+            newTotalPoints: currentPlayerTotalPoints + earnedPoints,            //aktuell gibt jedes Memory 100 Punkte, könnte man abhängig vom Tier machen (200,300)
+            newHighscore: await getCurrentPlayerHighscore()
         }),
         headers: {
             "Content-Type": "application/json"
@@ -362,7 +363,21 @@ async function setCurrentPlayerPoints(earnedPoints) {
             let msg = data.toString();
             console.log(msg);
         })
+}
 
+async function getCurrentPlayerHighscore() {
+    let returnedPoints = -1;
+    return await fetch("/profile/getHighScore")
+        .then(
+            result => result.text()
+        ).then(
+            result => {
+                returnedPoints = parseInt(result);
+                return returnedPoints;
+            }
+        ).catch((error) => {
+            console.error('Error:', error);
+        });
 }
 
 async function getCurrentPlayerTotalPoints() {
